@@ -5,5 +5,6 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: 'Glrk UI',
     },
+    githubUrl: "https://github.com/glRajkumar/ui"
   };
 }
