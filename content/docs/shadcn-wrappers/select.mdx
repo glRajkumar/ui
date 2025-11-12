@@ -21,37 +21,82 @@ npx shadcn@latest add @glrk-ui/select
 <Tab value="Manual">
 
 ```tsx title="ui/select.tsx"
+type itemProps = {
+  option: allowedPrimitiveT | optionT
+  className?: string
+}
+
+function Item({ option, className }: itemProps) {
+  const isPrimitive = isAllowedPrimitive(option)
+  const val = isPrimitive ? option : option.value
+
+  if (val === "---") return <SelectSeparator className={className} />
+
+  return (
+    <SelectItem
+      value={`${val}`}
+      className={cn(className, !isPrimitive && option.className)}
+    >
+      {isPrimitive ? `${option}` : option.label}
+    </SelectItem>
+  )
+}
+
 type props = {
   options: optionsT
   placeholder?: string
+  triggerCls?: string
+  contentCls?: string
+  groupCls?: string
+  itemCls?: string
 }
 function SelectWrapper({
-  options,
-  placeholder,
+  options, placeholder,
+  triggerCls, contentCls, groupCls, itemCls,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root> & props) {
   return (
     <Select {...props}>
-      <SelectTrigger>
+      <SelectTrigger className={triggerCls}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
-      <SelectContent>
+      <SelectContent className={contentCls}>
         {
-          options.map(option => (
-            <SelectItem
-              key={typeof option === "object" ? `${option.value}` : `${option}`}
-              value={typeof option === "object" ? `${option.value}` : `${option}`}
-            >
-              {typeof option === "object" ? option.label : option}
-            </SelectItem>
-          ))
+          options.map((option, i) => {
+            if (typeof option === "object" && "group" in option) {
+              return (
+                <SelectGroup key={option.group} className={cn(groupCls, option.className)}>
+                  <SelectLabel className="pb-0.5">{option.group}</SelectLabel>
+
+                  {option.options.map((grOpts, j) => (
+                    <Item
+                      key={`${option.group}-item-${j}`}
+                      option={grOpts}
+                      className={cn("pl-4", itemCls)}
+                    />
+                  ))}
+                </SelectGroup>
+              )
+            }
+
+            const key = isAllowedPrimitive(option)
+              ? `${option}-${i}`
+              : `${option.value}-${i}`
+
+            return (
+              <Item
+                key={key}
+                option={option}
+                className={itemCls}
+              />
+            )
+          })
         }
       </SelectContent>
     </Select>
   )
 }
-
 ```
 
 add `SelectWrapper` at the export block.

@@ -3,11 +3,18 @@ type readOnlyChildren = Readonly<{
   children: React.ReactNode;
 }>
 
-type primitiveT = string | number | boolean
+type allowedPrimitiveT = string | number | boolean
 
-type objT = Record<string, primitiveT>
-
-type optionsT = readonly (primitiveT | {
+type optionT = {
   label: string
-  value: primitiveT
-})[]
+  value: allowedPrimitiveT
+  className?: string
+}
+
+type groupT = {
+  group: string
+  options: (allowedPrimitiveT | optionT)[]
+  className?: string
+}
+
+type optionsT = (allowedPrimitiveT | optionT | groupT)[]
