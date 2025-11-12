@@ -2,50 +2,89 @@
 title: Select Wrapper
 ---
 
-## Select
+import SelectExample from "@/components/examples/select";
 
-## Getting Started
+<SelectExample />
+
+### Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
 
 ```npm
-npm i fumadocs-ui fumadocs-core
+npx shadcn@latest add @glrk-ui/select
 ```
 
-### Root Layout
+</Tab>
 
-Wrap the entire application inside [Root Provider](/docs/ui/layouts/root-provider), and add required styles to `body`.
+<Tab value="Manual">
 
-```tsx title="app/layout.tsx"
-import { RootProvider } from 'fumadocs-ui/provider/next';
-import type { ReactNode } from 'react';
-
-export default function Layout({ children }: { children: ReactNode }) {
+```tsx title="ui/select.tsx"
+type props = {
+  options: optionsT
+  placeholder?: string
+}
+function SelectWrapper({
+  options,
+  placeholder,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Root> & props) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        // required styles [!code ++]
-        className="flex flex-col min-h-screen"
-      >
-        <RootProvider>{children}</RootProvider>
-      </body>
-    </html>
-  );
+    <Select {...props}>
+      <SelectTrigger>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+
+      <SelectContent>
+        {
+          options.map(option => (
+            <SelectItem
+              key={typeof option === "object" ? `${option.value}` : `${option}`}
+              value={typeof option === "object" ? `${option.value}` : `${option}`}
+            >
+              {typeof option === "object" ? option.label : option}
+            </SelectItem>
+          ))
+        }
+      </SelectContent>
+    </Select>
+  )
+}
+
+```
+
+add `SelectWrapper` at the export block.
+
+```tsx
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+/* [!code ++:1] */
+  SelectWrapper,
 }
 ```
 
-### Styles
+</Tab>
 
-Add the following Tailwind CSS styles to `global.css`.
+</Tabs>
 
-```css title="global.css"
-@import 'tailwindcss';
-/* [!code --:2] */
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
+
+### Usage
+
+```tsx
+import { SelectWrapper } from "@/components/ui/select"
 ```
 
-> It doesn't come with a default font, you may choose one from `next/font`.
-
-<Tabs className="plain-tabs" items={['Javascript', 'Rust']} defaultIndex={1}>
-  <Tab value="Javascript">Javascript is weird</Tab>
-  <Tab value="Rust">Rust is fast</Tab>
-</Tabs>
+```tsx
+const data = ["Data 1", "Data 2"]
+<SelectWrapper options={data} />
+```

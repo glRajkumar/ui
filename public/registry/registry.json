@@ -1,20 +1,25 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "glrk",
-  "homepage": "https://glrk.dev",
+  "homepage": "https://ui.glrk.dev",
   "items": [
     {
-      "name": "hello-world",
-      "type": "registry:component",
-      "title": "Hello World",
-      "description": "A simple hello world component",
+      "name": "select",
+      "type": "registry:ui",
+      "title": "SelectWrapper",
+      "description": "Select componet with wrapper",
       "registryDependencies": [
-        "button"
+        "select"
       ],
       "files": [
         {
-          "path": "registry/hello-world.tsx",
-          "type": "registry:component"
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "components/ui/select.tsx",
+          "type": "registry:ui"
         }
       ]
     }

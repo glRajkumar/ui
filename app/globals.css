@@ -162,7 +162,8 @@
     @apply p-1;
   }
 
-  & > div[role="tablist"] {
+  & > div[role="tablist"],
+  & > div[role="tabpanel"] {
     @apply px-0;
   }
 }
