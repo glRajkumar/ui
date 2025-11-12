@@ -154,3 +154,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+.plain-tabs {
+  @apply border-0 bg-background;
+
+  button {
+    @apply p-1;
+  }
+
+  & > div[role="tablist"] {
+    @apply px-0;
+  }
+}

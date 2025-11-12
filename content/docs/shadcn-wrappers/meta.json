@@ -1,0 +1,11 @@
+{
+  "title": "Shadcn Wrappers",
+  "description": "Wrappers for shadcn components",
+  "icon": "Blocks",
+  "root": true,
+  "pages": [
+    "---Introduction---",
+    "index",
+    "select"
+  ]
+}
