@@ -4,7 +4,7 @@ import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
-import { cn, isAllowedPrimitive } from "@/lib/utils"
+import { cn, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
 
 function Select({
   ...props
@@ -182,18 +182,19 @@ type itemProps = {
 }
 
 function Item({ option, className, indicatorAt }: itemProps) {
-  const isPrimitive = isAllowedPrimitive(option)
-  const val = isPrimitive ? option : option.value
+  const value = getValue(option)
+  const label = getLabel(option)
+  const optCls = isOption(option) ? option.className : undefined
 
-  if (val === "---") return <SelectSeparator className={className} />
+  if (isSeparator(value)) return <SelectSeparator className={className} />
 
   return (
     <SelectItem
-      value={`${val}`}
-      className={cn(className, !isPrimitive && option.className)}
+      value={`${value}`}
+      className={cn(className, optCls)}
       indicatorAt={indicatorAt}
     >
-      {isPrimitive ? `${option}` : option.label}
+      {typeof label === "object" ? label : `${label}`}
     </SelectItem>
   )
 }
@@ -222,7 +223,7 @@ function SelectWrapper({
       <SelectContent className={contentCls}>
         {
           options.map((option, i) => {
-            if (typeof option === "object" && "group" in option) {
+            if (isGroup(option)) {
               return (
                 <SelectGroup key={option.group} className={cn(groupCls, option.className)}>
                   <SelectLabel className="pb-0.5">{option.group}</SelectLabel>
@@ -239,13 +240,9 @@ function SelectWrapper({
               )
             }
 
-            const key = isAllowedPrimitive(option)
-              ? `${option}-${i}`
-              : `${option.value}-${i}`
-
             return (
               <Item
-                key={key}
+                key={`i-${i}`}
                 option={option}
                 className={itemCls}
                 indicatorAt={indicatorAt}

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react"
 
-import { cn, isAllowedPrimitive } from "@/lib/utils"
+import { cn, extractText, filteredOptions, findOptionByValue, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
 import { useElementWidth } from "@/hooks/use-element"
 
 import {
@@ -19,49 +19,20 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
-const isGroup = (item: allowedPrimitiveT | optionT | groupT): item is groupT => !!item && typeof item === "object" && "group" in item
-const isOption = (item: allowedPrimitiveT | optionT): item is optionT => !!item && typeof item === "object" && "value" in item
-const isSeparator = (item: allowedPrimitiveT | optionT) => item === "---"
-
-const getValue = (item: allowedPrimitiveT | optionT) => isOption(item) ? item.value : item
-const getLabel = (item: allowedPrimitiveT | optionT) => isOption(item) ? item.label : item
-
-const extractText = (node: any): string => {
-  if (node === null || node === undefined) return ""
-  if (isAllowedPrimitive(node)) return String(node)
-  if (Array.isArray(node)) return node.map(extractText).join(" ")
-  if (node.props?.children) return extractText(node.props.children)
-  return ""
-}
-
-const findOptionByValue = (options: optionsT, value: allowedPrimitiveT) => {
-  for (const item of options) {
-    if (isGroup(item)) {
-      const found = item.options.find((opt) => getValue(opt) === value)
-      if (found) return found
-    } else if (!isSeparator(item) && getValue(item) === value) {
-      return item
-    }
-  }
-  return ""
-}
-
 type ItemProps = {
   option: allowedPrimitiveT | optionT
   selected: boolean
-  indicatorAt: indicatorAt
-  onSelect: (value: allowedPrimitiveT) => void
   className?: string
+  indicatorAt?: indicatorAt
+  onSelect: (value: allowedPrimitiveT) => void
 }
 
-function Item({ option, selected, indicatorAt, onSelect, className }: ItemProps) {
-  if (isSeparator(option)) {
-    return <CommandSeparator className={className} />
-  }
-
+function Item({ option, selected, indicatorAt = "right", onSelect, className }: ItemProps) {
   const value = getValue(option)
   const label = getLabel(option)
   const optCls = isOption(option) ? option.className : undefined
+
+  if (isSeparator(value)) return <CommandSeparator className={className} />
 
   return (
     <CommandItem
@@ -83,6 +54,7 @@ function Item({ option, selected, indicatorAt, onSelect, className }: ItemProps)
 }
 
 type base = {
+  id?: string
   options: optionsT
   isLoading?: boolean
   placeholder?: string
@@ -101,17 +73,15 @@ type comboboxProps = base & {
 }
 
 function Combobox({
+  id,
   value = "",
   options = [],
   placeholder = "",
   emptyMessage = "",
   isLoading = false,
   canCreateNew = false,
-  indicatorAt = "right",
-  triggerCls,
-  contentCls,
-  groupCls,
-  itemCls,
+  indicatorAt,
+  triggerCls, contentCls, groupCls, itemCls,
   onValueChange = () => { },
 }: comboboxProps) {
   const { ref, width } = useElementWidth<HTMLButtonElement>()
@@ -120,16 +90,8 @@ function Combobox({
   const [open, setOpen] = useState(false)
 
   const selectedOption = findOptionByValue(options, value)
-  const filtered = options
-    .map((item) => {
-      if (isGroup(item)) {
-        const filtered = item.options.filter((opt) => extractText(getLabel(opt)).toLowerCase().includes(query.toLowerCase()))
-        return filtered.length ? { ...item, options: filtered } : null
-      }
-      if (isSeparator(item)) return item
-      return extractText(getLabel(item)).toLowerCase().includes(query.toLowerCase()) ? item : null
-    })
-    .filter(v => v !== null) as optionsT
+  const filtered = filteredOptions(options, query)
+  const label = getLabel(selectedOption)
 
   const showCreate =
     canCreateNew &&
@@ -140,12 +102,11 @@ function Combobox({
         : extractText(getLabel(o)) === query
     )
 
-  const label = getLabel(selectedOption)
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           ref={ref}
           variant="outline"
           role="combobox"
@@ -258,21 +219,21 @@ function ButtonLabel({
 }: btnLableProps) {
   const labelOf = (val: allowedPrimitiveT) => {
     const found = findOptionByValue(options, val)
-    if (!found) return val.toString()
-    const l = getLabel(found)
-    return typeof l === "boolean" ? l.toString() : l
+    if (!found) return `${val}`
+    const label = getLabel(found)
+    return typeof label === "object" ? label : `${label}`
   }
 
   if (isLoading)
     return (
       <>
         <Loader2 className="size-4 animate-spin" />
-        <span>Loading...</span>
+        Loading...
       </>
     )
 
   if (value.length === 0) {
-    return placeholder ? <span className="text-muted-foreground">{placeholder}</span> : null
+    return placeholder
   }
 
   if (value.length <= 2) {
@@ -300,16 +261,14 @@ type multiSelectComboboxProps = base & {
 }
 
 function MultiSelectCombobox({
+  id,
   value = [],
   options = [],
   placeholder = "",
   emptyMessage = "",
   isLoading = false,
-  indicatorAt = "right",
-  triggerCls,
-  contentCls,
-  groupCls,
-  itemCls,
+  indicatorAt,
+  triggerCls, contentCls, groupCls, itemCls,
   onValueChange = () => { },
 }: multiSelectComboboxProps) {
   const { ref, width } = useElementWidth<HTMLButtonElement>()
@@ -317,27 +276,17 @@ function MultiSelectCombobox({
   const [query, setQuery] = useState("")
   const [open, setOpen] = useState(false)
 
+  const filtered = filteredOptions(options, query)
+
   const toggle = (v: allowedPrimitiveT) => {
     onValueChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v])
   }
-
-  const filtered = options
-    .map((item) => {
-      if (isGroup(item)) {
-        const filtered = item.options.filter((opt) =>
-          extractText(getLabel(opt)).toLowerCase().includes(query.toLowerCase())
-        )
-        return filtered.length ? { ...item, options: filtered } : null
-      }
-      if (isSeparator(item)) return item
-      return extractText(getLabel(item)).toLowerCase().includes(query.toLowerCase()) ? item : null
-    })
-    .filter(v => v !== null) as optionsT
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           ref={ref}
           role="combobox"
           variant="outline"
