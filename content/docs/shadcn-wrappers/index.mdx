@@ -1,16 +1,29 @@
 ---
 title: Introduction
+description: A streamlined approach to using Shadcn UI components with type-safe wrappers and flexible option handling
 ---
 
-## Introduction
+# Shadcn Component Wrappers
 
-Shadcn is excellent for UI design system. But we often calling whole components without our own wrappers (using individual components in composible manner). Most of the time we won't need to do that. This project is the example for setting up wrappers. You can still can use current shadcn component as it is when needed for complex UI.
+## Overview
 
-## Setup
+Shadcn UI provides an excellent foundation for building design systems, but directly importing and composing individual components throughout your application can lead to verbose, repetitive code. This guide demonstrates a wrapper-based approach that simplifies component usage while maintaining the flexibility to use native Shadcn components when needed for complex UI scenarios.
 
-### Type support
+## Key Benefits
 
-```ts generam.d.ts
+- **Reduced Boilerplate**: Eliminate repetitive component composition patterns
+- **Type Safety**: Built-in TypeScript support for common value types
+- **Consistent API**: Standardized interface across similar components
+- **Flexibility**: Preserve access to native Shadcn components for advanced use cases
+
+---
+
+## Type Definitions
+
+### Core Types
+
+The wrapper system supports three primitive value types that cover the majority of form and selection use cases:
+```ts title="generam.d.ts"
 type allowedPrimitiveT = string | number | boolean
 
 type optionT = {
@@ -30,11 +43,18 @@ type optionsT = (allowedPrimitiveT | optionT | groupT)[]
 type indicatorAt = "right" | "left"
 ```
 
-Intentionaly used `string` | `number` | `boolean` primitive values only. As most of the time we wont use other primitive value. For empty valy we can use `""` empty string or we can remove the property. Or you can update the code as your wish.
+### Design Rationale
 
-### Utilities
+**Primitive Type Restriction**: The system intentionally limits allowed values to `string`, `number`, and `boolean`. These types handle the vast majority of form scenarios.
 
-```ts lib/utils.ts
+**Empty Values**: Use empty strings (`""`) for empty values, or omit the property entirely. Extend the type system as needed for your specific requirements.
+
+---
+
+## Utility Functions
+
+### Type Guards and Parsers
+```ts title="lib/utils.ts"
 export function isAllowedPrimitive(value: unknown): value is allowedPrimitiveT {
   return ["string", "number", "boolean"].includes(typeof value)
 }
@@ -52,56 +72,89 @@ export function parseAllowedPrimitive(value: allowedPrimitiveT): allowedPrimitiv
 }
 ```
 
-### Options structure
+**`isAllowedPrimitive`**: Type guard for runtime validation of primitive values
+
+**`parseAllowedPrimitive`**: Intelligently parses string values back to their appropriate primitive types, enabling seamless type conversion in controlled components
+
+---
+
+## Options Configuration
+
+### Flexible Option Formats
+
+The wrapper system supports multiple option formats to accommodate different use cases:
 
 ```tsx
 const options: optionsT = [
+  // Simple primitive values (label equals value)
   "Data 1",
   false,
   12,
-  "---", // for separator
+  
+  // Visual separator
+  "---",
+  
+  // Object format with custom label
   {
-    label: "Obj 1", // if Lable - Value are not same
+    label: "Obj 1",
     value: "obj-1", 
   },
+  
+  // Object with custom styling
   {
     label: "Obj 2",
     value: "obj-2",
     className: "bg-red-50",
   },
+  
+  // Rich content with React nodes
   {
     value: "apple",
-    label: <><Apple /> Apple</> // can pass ReactNode
+    label: <><Apple className="mr-2" /> Apple</>
   },
+  
   "---",
+  
+  // Grouped options
   {
-    group: "Group 1", // For grouping
+    group: "Group 1",
     options: [
       "grp 1",
       21,
       true,
-      { value: "banana", label: <><Banana /> Banana</> }
+      { value: "banana", label: <><Banana className="mr-2" /> Banana</> }
     ],
   },
+  
+  // Grouped options with styling
   {
     group: "Group 2",
-    options: [
-      "grp 2",
-      22
-    ],
+    options: ["grp 2", 22],
     className: "bg-amber-50",
   },
 ]
 ```
 
-## Value Conversion
+### Option Format Guidelines
 
-All shadcn controlled components uses value as string. We will internally convert to `allowedPrimitiveT` to string as the key and value.
+- **Primitive values**: Use directly when the display label matches the value
+- **Separators**: Use `"---"` string for visual separation between items
+- **Object format**: Use when you need custom labels, styling, or rich content
+- **Grouped options**: Organize related options under labeled groups
+- **Custom styling**: Apply Tailwind classes via `className` for visual distinction
 
-Example for controlled component flow with `SelectWrapper`:
+---
+
+## Value Conversion Pattern
+
+### Understanding String Conversion
+
+Shadcn's controlled components use string values internally. The wrapper system handles conversion between strings and primitive types transparently.
+
+### Implementation Patterns
 
 ```tsx
-// ❌ This will cause TypeScript errors
+// ❌ Incorrect: Type mismatch
 const [value, setValue] = useState(true)
 
 <SelectWrapper
@@ -109,7 +162,7 @@ const [value, setValue] = useState(true)
   onValueChange={setValue}
 />
 
-// ✅ Convert to string
+// ✅ Correct: Convert to string
 const [value, setValue] = useState("true")
 
 <SelectWrapper
@@ -117,7 +170,7 @@ const [value, setValue] = useState("true")
   onValueChange={setValue}
 />
 
-// ✅ Or handle conversion (preserve primitive type as it is, using parseAllowedPrimitive utility function)
+// ✅ Recommended: Preserve primitive types
 const [value, setValue] = useState<allowedPrimitiveT>(true)
 
 <SelectWrapper
@@ -125,3 +178,16 @@ const [value, setValue] = useState<allowedPrimitiveT>(true)
   onValueChange={v => setValue(parseAllowedPrimitive(v))}
 />
 ```
+
+### Best Practices
+
+1. **String State**: Simplest approach for string-only values
+2. **Primitive State with Conversion**: Use `parseAllowedPrimitive` to maintain type fidelity
+3. **Template Literals**: Use `` `${value}` `` for type-safe string conversion
+4. **Type Annotations**: Explicitly type state as `allowedPrimitiveT` when using conversion
+
+---
+
+### Next Steps
+
+With this foundation in place, you can create wrapper components for common Shadcn UI elements. Checkout custom wrappers.

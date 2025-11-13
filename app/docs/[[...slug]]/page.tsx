@@ -1,26 +1,36 @@
-import { source } from '@/lib/source';
-import {
-  DocsBody,
-  DocsDescription,
-  DocsPage,
-  DocsTitle,
-} from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import { getMDXComponents } from '@/mdx-components';
-import type { Metadata } from 'next';
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { notFound } from 'next/navigation';
+
+import type { Metadata } from 'next';
+
+import { getMDXComponents } from '@/mdx-components';
+import { source } from '@/lib/source';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
   const page = source.getPage(params.slug);
+
   if (!page) notFound();
 
   const MDX = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
+    <DocsPage
+      toc={page.data.toc}
+      full={page.data.full}
+      tableOfContent={{
+        style: 'clerk',
+      }}
+    >
+      {
+        page.data.title !== "Introduction" &&
+        <>
+          <DocsTitle className='-mb-4'>{page.data.title}</DocsTitle>
+          <DocsDescription className='mb-0'>{page.data.description}</DocsDescription>
+        </>
+      }
+
       <DocsBody>
         <MDX
           components={getMDXComponents({

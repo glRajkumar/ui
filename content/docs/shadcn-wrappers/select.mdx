@@ -1,14 +1,15 @@
 ---
 title: Select Wrapper
+description: A simplified wrapper for Shadcn Select with flexible option handling and automatic type conversion
 ---
 
 import { SelectEx } from "@/components/examples";
 
 <SelectEx />
 
-### Installation
+## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
 
 <Tab value="CLI">
 
@@ -99,7 +100,7 @@ function SelectWrapper({
 }
 ```
 
-add `SelectWrapper` at the export block.
+Add `isAllowedPrimitive` from `@/lib/utils` and add `SelectWrapper` at the export block.
 
 ```tsx
 export {
@@ -120,20 +121,106 @@ export {
 
 </Tab>
 
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-select
+```
+
+Copy and paste the following code into your project.
+
+### general.d.ts
+<include cwd meta='title="types/general.d.ts"'>
+  ./types/general.d.ts
+</include>
+
+### utils.ts
+<include cwd meta='title="lib/utils.ts"'>
+  ./lib/utils.ts
+</include>
+
+### select.tsx
+<include cwd meta='title="ui/select.tsx"'>
+  ./components/ui/select.tsx
+</include>
+
+### Done
+You can now use `SelectWrapper`
+
+</div>
+</section>
+</Tab>
 </Tabs>
 
 
-### Usage
+## Usage
 
+### Basic
 ```tsx
 import { SelectWrapper } from "@/components/ui/select"
+
+export function BasicSelect() {
+  return (
+    <SelectWrapper
+      options={["Option 1", "Option 2", "Option 3"]}
+      placeholder="Select an option"
+    />
+  )
+}
 ```
 
+### Controlled
 ```tsx
-<SelectWrapper options={data} />
+import { useState } from "react"
+import { SelectWrapper } from "@/components/ui/select"
+import { parseAllowedPrimitive } from "@/lib/utils"
+
+export function ControlledSelect1() {
+  const [value, setValue] = useState("apple")
+
+  return (
+    <SelectWrapper
+      value={value}
+      onValueChange={setValue}
+      options={["apple", "banana", "orange"]}
+    />
+  )
+}
+
+export function ControlledSelect2() {
+  const [value, setValue] = useState<allowedPrimitiveT>("apple")
+
+  return (
+    <SelectWrapper
+      value={`${value}`}
+      onValueChange={(v) => setValue(parseAllowedPrimitive(v))}
+      options={["apple", 10, false]}
+    />
+  )
+}
 ```
 
-### Props Details
+### Custom Styling
+```tsx
+export function ComplexSelect() {
+  return (
+    <SelectWrapper
+      options={["Small", "Medium", "Large", {}]}
+      placeholder="Select size"
+      triggerCls="w-[200px] bg-slate-50"
+      contentCls="min-w-[200px]"
+      itemCls="cursor-pointer hover:bg-slate-100"
+      groupCls="py-2"
+    />
+  )
+}
+```
+
+## Reference
 
 <AutoTypeTable 
 name="SelectWrapper" 
@@ -155,9 +242,16 @@ type={`export interface SelectWrapper {
    * \`\`\`tsx
    * const options = [
    *   "Simple string",
+      *   42,
+   *   true,
+   *   "---",
    *   { label: "Custom", value: "custom" },
-   *   { group: "Fruits", options: ["Apple", "Banana"] }
-   * ];
+   *   { label: <><Icon />Banana</>, value: "banana" },
+   *   { 
+   *      group: "Fruits", 
+   *      options: ["Apple", "Banana"] 
+   *   },
+   * ]
    * \`\`\`
    */
   options: (string | number | boolean | { label: React.ReactNode; value: string | number | boolean; className?: string } | { group: string; options: Array<any>; className?: string })[];
@@ -199,36 +293,12 @@ type={`export interface SelectWrapper {
    * Note: Individual options can override this with their own \`className\`
    */
   itemCls?: string;
-
-  /**
-   * Controlled value for the select (must be string)
-   * 
-   * **Important**: All values are converted to strings internally.
-   * If using numbers or booleans, convert them:
-   * 
-   * \`\`\`tsx
-   * value={String(myBooleanValue)}
-   * \`\`\`
-   */
-  value?: string;
-
-  /**
-   * Callback fired when the selection changes
-   * 
-   * @param value - The selected value as a string
-   * 
-   * \`\`\`tsx
-   * onValueChange={(v) => {
-   *   console.log("Selected:", v);
-   *   setValue(v);
-   * }}
-   * \`\`\`
-   */
-  onValueChange?: (value: string) => void;
 }`} 
 />
 
-### Related Components
+Pproperties from `React.ComponentProps<typeof SelectPrimitive.Root>` can be passed like `open`, `value`, `onValueChange`, etc.
+
+## Related Components
 
 - [Shadcn Select](https://ui.shadcn.com/docs/components/select)
 - [Radix UI Select](https://www.radix-ui.com/primitives/docs/components/select)
