@@ -1,46 +1,38 @@
-import { Apple, Banana } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+
+import { parseAllowedPrimitive } from "@/lib/utils";
+import { options } from "./data";
 
 import { SelectWrapper } from "@/components/ui/select";
-import Wrapper from "./wrapper";
 
-function SelectExample() {
-  const options: optionsT = [
-    "Data 1",
-    false,
-    12,
-    "---",
-    {
-      label: "Obj 1",
-      value: "obj-1",
-    },
-    {
-      label: "Obj 2",
-      value: "obj-2",
-      className: "bg-red-50",
-    },
-    { value: "apple", label: <><Apple /> Apple</> },
-    "---",
-    {
-      group: "Group 1",
-      options: ["grp 1", 21, true, { value: "banana", label: <><Banana /> Banana</> }],
-    },
-    {
-      group: "Group 2",
-      options: ["grp 2", 22],
-      className: "bg-amber-50",
-    },
-  ]
+export function SelectExample() {
+  const [val, setVal] = useState<allowedPrimitiveT>(true)
 
   return (
-    <Wrapper>
+    <>
       <SelectWrapper
-        triggerCls="w-40"
         options={options}
-        indicatorAt="left"
-        contentCls="max-h-40"
+        triggerCls="w-40"
+        placeholder="Uncontrolled"
       />
-    </Wrapper>
+
+      <SelectWrapper
+        options={options}
+        triggerCls="w-40"
+        indicatorAt="left"
+        placeholder="Select Item"
+        contentCls="max-h-80"
+      />
+
+      <SelectWrapper
+        options={options}
+        triggerCls="w-40"
+        placeholder="Controlled"
+        value={`${val}`}
+        onValueChange={v => setVal(parseAllowedPrimitive(v))}
+      />
+    </>
   )
 }
-
-export default SelectExample

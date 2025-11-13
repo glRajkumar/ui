@@ -199,6 +199,7 @@ function Item({ option, className, indicatorAt }: itemProps) {
 }
 
 type props = {
+  id?: string
   options: optionsT
   placeholder?: string
   indicatorAt?: indicatorAt
@@ -208,13 +209,13 @@ type props = {
   itemCls?: string
 }
 function SelectWrapper({
-  options, placeholder, indicatorAt,
+  id, options, placeholder, indicatorAt,
   triggerCls, contentCls, groupCls, itemCls,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root> & props) {
   return (
     <Select {...props}>
-      <SelectTrigger className={triggerCls}>
+      <SelectTrigger id={id} className={triggerCls}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 

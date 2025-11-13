@@ -9,7 +9,7 @@ export function isAllowedPrimitive(value: unknown): value is allowedPrimitiveT {
   return ["string", "number", "boolean"].includes(typeof value)
 }
 
-export function parsePrimitive(value: allowedPrimitiveT): allowedPrimitiveT {
+export function parseAllowedPrimitive(value: allowedPrimitiveT): allowedPrimitiveT {
   if (typeof value !== "string") return value
 
   const trimmed = value.trim()
