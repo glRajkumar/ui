@@ -103,18 +103,20 @@ function SelectLabel({
 function SelectItem({
   className,
   children,
+  indicatorAt = "right",
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Item>) {
+}: React.ComponentProps<typeof SelectPrimitive.Item> & { indicatorAt?: indicatorAt }) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
-        className
+        "focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        className,
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
       )}
       {...props}
     >
-      <span className="absolute right-2 flex size-3.5 items-center justify-center">
+      <span className={cn("absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
         <SelectPrimitive.ItemIndicator>
           <CheckIcon className="size-4" />
         </SelectPrimitive.ItemIndicator>
@@ -176,9 +178,10 @@ function SelectScrollDownButton({
 type itemProps = {
   option: allowedPrimitiveT | optionT
   className?: string
+  indicatorAt?: indicatorAt
 }
 
-function Item({ option, className }: itemProps) {
+function Item({ option, className, indicatorAt }: itemProps) {
   const isPrimitive = isAllowedPrimitive(option)
   const val = isPrimitive ? option : option.value
 
@@ -188,6 +191,7 @@ function Item({ option, className }: itemProps) {
     <SelectItem
       value={`${val}`}
       className={cn(className, !isPrimitive && option.className)}
+      indicatorAt={indicatorAt}
     >
       {isPrimitive ? `${option}` : option.label}
     </SelectItem>
@@ -197,13 +201,14 @@ function Item({ option, className }: itemProps) {
 type props = {
   options: optionsT
   placeholder?: string
+  indicatorAt?: indicatorAt
   triggerCls?: string
   contentCls?: string
   groupCls?: string
   itemCls?: string
 }
 function SelectWrapper({
-  options, placeholder,
+  options, placeholder, indicatorAt,
   triggerCls, contentCls, groupCls, itemCls,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root> & props) {
@@ -226,6 +231,7 @@ function SelectWrapper({
                       key={`${option.group}-item-${j}`}
                       option={grOpts}
                       className={cn("pl-4", itemCls)}
+                      indicatorAt={indicatorAt}
                     />
                   ))}
                 </SelectGroup>
@@ -241,6 +247,7 @@ function SelectWrapper({
                 key={key}
                 option={option}
                 className={itemCls}
+                indicatorAt={indicatorAt}
               />
             )
           })

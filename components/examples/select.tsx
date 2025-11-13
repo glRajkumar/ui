@@ -1,3 +1,5 @@
+import { Apple, Banana } from "lucide-react";
+
 import { SelectWrapper } from "@/components/ui/select";
 import Wrapper from "./wrapper";
 
@@ -16,10 +18,11 @@ function SelectExample() {
       value: "obj-2",
       className: "bg-red-50",
     },
+    { value: "apple", label: <><Apple /> Apple</> },
     "---",
     {
       group: "Group 1",
-      options: ["grp 1", 21, true],
+      options: ["grp 1", 21, true, { value: "banana", label: <><Banana /> Banana</> }],
     },
     {
       group: "Group 2",
@@ -33,6 +36,8 @@ function SelectExample() {
       <SelectWrapper
         triggerCls="w-40"
         options={options}
+        indicatorAt="left"
+        contentCls="max-h-40"
       />
     </Wrapper>
   )

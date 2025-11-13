@@ -6,7 +6,7 @@ type readOnlyChildren = Readonly<{
 type allowedPrimitiveT = string | number | boolean
 
 type optionT = {
-  label: string
+  label: React.ReactNode
   value: allowedPrimitiveT
   className?: string
 }
@@ -18,3 +18,5 @@ type groupT = {
 }
 
 type optionsT = (allowedPrimitiveT | optionT | groupT)[]
+
+type indicatorAt = "right" | "left"
