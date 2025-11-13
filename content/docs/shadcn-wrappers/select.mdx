@@ -132,3 +132,103 @@ import { SelectWrapper } from "@/components/ui/select"
 ```tsx
 <SelectWrapper options={data} />
 ```
+
+### Props Details
+
+<AutoTypeTable 
+name="SelectWrapper" 
+type={`export interface SelectWrapper {
+  /**
+   * Optional ID for the select trigger element
+   */
+  id?: string;
+
+  /**
+   * Array of options - can be primitives, objects, or groups
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
+   * - Groups: \`{ group: string, options: Array, className?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Simple string",
+   *   { label: "Custom", value: "custom" },
+   *   { group: "Fruits", options: ["Apple", "Banana"] }
+   * ];
+   * \`\`\`
+   */
+  options: (string | number | boolean | { label: React.ReactNode; value: string | number | boolean; className?: string } | { group: string; options: Array<any>; className?: string })[];
+
+  /**
+   * Placeholder text displayed when no value is selected
+   */
+  placeholder?: string;
+
+  /**
+   * Position of the checkmark indicator in select items
+   * 
+   * @default "right"
+   */
+  indicatorAt?: "left" | "right";
+
+  /**
+   * Additional CSS classes for the select trigger button
+   * 
+   * \`\`\`tsx
+   * triggerCls="w-64 bg-white"
+   * \`\`\`
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes for the dropdown content container
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to individual select items
+   * 
+   * Note: Individual options can override this with their own \`className\`
+   */
+  itemCls?: string;
+
+  /**
+   * Controlled value for the select (must be string)
+   * 
+   * **Important**: All values are converted to strings internally.
+   * If using numbers or booleans, convert them:
+   * 
+   * \`\`\`tsx
+   * value={String(myBooleanValue)}
+   * \`\`\`
+   */
+  value?: string;
+
+  /**
+   * Callback fired when the selection changes
+   * 
+   * @param value - The selected value as a string
+   * 
+   * \`\`\`tsx
+   * onValueChange={(v) => {
+   *   console.log("Selected:", v);
+   *   setValue(v);
+   * }}
+   * \`\`\`
+   */
+  onValueChange?: (value: string) => void;
+}`} 
+/>
+
+### Related Components
+
+- [Shadcn Select](https://ui.shadcn.com/docs/components/select)
+- [Radix UI Select](https://www.radix-ui.com/primitives/docs/components/select)

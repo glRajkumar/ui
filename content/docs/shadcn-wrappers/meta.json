@@ -4,7 +4,6 @@
   "icon": "Blocks",
   "root": true,
   "pages": [
-    "---Introduction---",
     "index",
     "select"
   ]

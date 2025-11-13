@@ -4,3 +4,124 @@ title: Introduction
 
 ## Introduction
 
+Shadcn is excellent for UI design system. But we often calling whole components without our own wrappers (using individual components in composible manner). Most of the time we won't need to do that. This project is the example for setting up wrappers. You can still can use current shadcn component as it is when needed for complex UI.
+
+## Setup
+
+### Type support
+
+```ts generam.d.ts
+type allowedPrimitiveT = string | number | boolean
+
+type optionT = {
+  label: React.ReactNode
+  value: allowedPrimitiveT
+  className?: string
+}
+
+type groupT = {
+  group: string
+  options: (allowedPrimitiveT | optionT)[]
+  className?: string
+}
+
+type optionsT = (allowedPrimitiveT | optionT | groupT)[]
+
+type indicatorAt = "right" | "left"
+```
+
+Intentionaly used `string` | `number` | `boolean` primitive values only. As most of the time we wont use other primitive value. For empty valy we can use `""` empty string or we can remove the property. Or you can update the code as your wish.
+
+### Utilities
+
+```ts lib/utils.ts
+export function isAllowedPrimitive(value: unknown): value is allowedPrimitiveT {
+  return ["string", "number", "boolean"].includes(typeof value)
+}
+
+export function parseAllowedPrimitive(value: allowedPrimitiveT): allowedPrimitiveT {
+  if (typeof value !== "string") return value
+
+  const trimmed = value.trim()
+
+  if (trimmed === "true") return true
+  if (trimmed === "false") return false
+  if (/^-?\d+(\.\d+)?$/.test(trimmed)) return Number(trimmed)
+
+  return trimmed
+}
+```
+
+### Options structure
+
+```tsx
+const options: optionsT = [
+  "Data 1",
+  false,
+  12,
+  "---", // for separator
+  {
+    label: "Obj 1", // if Lable - Value are not same
+    value: "obj-1", 
+  },
+  {
+    label: "Obj 2",
+    value: "obj-2",
+    className: "bg-red-50",
+  },
+  {
+    value: "apple",
+    label: <><Apple /> Apple</> // can pass ReactNode
+  },
+  "---",
+  {
+    group: "Group 1", // For grouping
+    options: [
+      "grp 1",
+      21,
+      true,
+      { value: "banana", label: <><Banana /> Banana</> }
+    ],
+  },
+  {
+    group: "Group 2",
+    options: [
+      "grp 2",
+      22
+    ],
+    className: "bg-amber-50",
+  },
+]
+```
+
+## Value Conversion
+
+All shadcn controlled components uses value as string. We will internally convert to `allowedPrimitiveT` to string as the key and value.
+
+Example for controlled component flow with `SelectWrapper`:
+
+```tsx
+// ❌ This will cause TypeScript errors
+const [value, setValue] = useState(true)
+
+<SelectWrapper
+  value={value}
+  onValueChange={setValue}
+/>
+
+// ✅ Convert to string
+const [value, setValue] = useState("true")
+
+<SelectWrapper
+  value={value}
+  onValueChange={setValue}
+/>
+
+// ✅ Or handle conversion (preserve primitive type as it is, using parseAllowedPrimitive utility function)
+const [value, setValue] = useState<allowedPrimitiveT>(true)
+
+<SelectWrapper
+  value={`${value}`}
+  onValueChange={v => setValue(parseAllowedPrimitive(v))}
+/>
+```
