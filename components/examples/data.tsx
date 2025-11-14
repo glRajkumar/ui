@@ -45,3 +45,33 @@ export async function asyncOptions({ n, delayBy = 5000 }: { n?: number, delayBy?
   await delay(delayBy)
   return generateOptions(n)
 }
+
+export const dropdownOptions = [
+  { label: "New File", value: "new", shortcut: "Ctrl+N" },
+  "Save",
+  12,
+  { label: <><Banana /> Banana</>, value: "banana" },
+  "---",
+  {
+    group: "Settings",
+    options: [
+      { label: "Appearance", value: "appearance" },
+      22,
+      true
+    ],
+  },
+
+  {
+    submenu: "More",
+    options: [
+      { label: <><Apple /> Apple</>, value: "apple" },
+      {
+        group: "Tools",
+        options: [
+          { label: "Formatter", value: "formatter" },
+          false,
+        ],
+      },
+    ],
+  },
+]

@@ -6,6 +6,7 @@
   "pages": [
     "index",
     "combobox",
+    "dropdown",
     "select"
   ]
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn, getLabel, getValue, isSeparator } from "@/lib/utils"
+import { cn, getLabel, getValue, isSeparator, parseAllowedPrimitive } from "@/lib/utils"
 
 import {
   DropdownMenu,
@@ -77,13 +77,12 @@ function isInputSubMenu(option: any): option is inputSubMenuT {
 }
 
 type ItemProps = {
-  inset?: boolean
   option: dropdownOptionT
   className?: string
   onSelect?: () => void
 }
 
-function Item({ option, className, inset, onSelect }: ItemProps) {
+function Item({ option, className, onSelect }: ItemProps) {
   const value = getValue(option)
   const label = getLabel(option)
 
@@ -95,7 +94,6 @@ function Item({ option, className, inset, onSelect }: ItemProps) {
   return (
     <DropdownMenuItem
       {...opt}
-      inset={inset}
       onSelect={onSelect}
       className={cn(className, opt?.className)}
     >
@@ -127,7 +125,6 @@ function SubMenu({ submenu, itemCls, groupCls, onSelect }: SubMenuProps) {
                 <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
                 {option.options.map((grOpt, j) => (
                   <Item
-                    inset
                     key={`${option.group}-item-${j}`}
                     option={grOpt}
                     className={itemCls}
@@ -199,7 +196,6 @@ function DropdownWrapper({
                     key={`${option.group}-item-${j}`}
                     option={grOpt}
                     className={itemCls}
-                    inset
                     onSelect={() => onSelect?.(getValue(grOpt))}
                   />
                 ))}
@@ -243,7 +239,10 @@ type CheckboxItemProps = {
 
 function CheckboxItem({ option, className, checked = false, onCheckedChange = () => { } }: CheckboxItemProps) {
   const label = getLabel(option)
+  const value = getValue(option)
   const disabled = (option as any)?.disabled
+
+  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
 
   return (
     <DropdownMenuCheckboxItem
@@ -285,7 +284,7 @@ function CheckboxSubMenu({ submenu, itemCls, groupCls, checkedValues = [], onChe
                     <CheckboxItem
                       key={`${v}-${j}`}
                       option={grOpt}
-                      className={cn("pl-4", itemCls)}
+                      className={itemCls}
                       checked={checkedValues.includes(v)}
                       onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
                     />
@@ -374,7 +373,7 @@ function DropdownCheckboxWrapper({
                     <CheckboxItem
                       key={`${v}-${j}`}
                       option={grOpt}
-                      className={cn("pl-4", itemCls)}
+                      className={itemCls}
                       checked={checkedValues.includes(v)}
                       onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
                     />
@@ -423,6 +422,8 @@ function RadioItem({ option, className }: RadioItemProps) {
   const label = getLabel(option)
   const disabled = (option as any)?.disabled
 
+  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
+
   return (
     <DropdownMenuRadioItem
       value={`${value}`}
@@ -461,7 +462,7 @@ function RadioSubMenu({ submenu, itemCls, groupCls, value = "", onValueChange = 
                     <RadioItem
                       key={`${getValue(grOpt)}-${j}`}
                       option={grOpt}
-                      className={cn("pl-4", itemCls)}
+                      className={itemCls}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -534,7 +535,7 @@ function DropdownRadioWrapper({
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
+        <DropdownMenuRadioGroup value={`${value}`} onValueChange={v => onValueChange(parseAllowedPrimitive(v))}>
           {options.map((option, i) => {
             if (isInputGroup(option)) {
               return (
@@ -544,7 +545,7 @@ function DropdownRadioWrapper({
                     <RadioItem
                       key={`${getValue(grOpt)}-${j}`}
                       option={grOpt}
-                      className={cn("pl-4", itemCls)}
+                      className={itemCls}
                     />
                   ))}
                 </DropdownMenuGroup>
@@ -559,7 +560,7 @@ function DropdownRadioWrapper({
                   itemCls={itemCls}
                   groupCls={groupCls}
                   value={value}
-                  onValueChange={onValueChange}
+                  onValueChange={v => onValueChange(parseAllowedPrimitive(v))}
                 />
               )
             }
