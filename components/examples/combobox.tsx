@@ -23,7 +23,7 @@ export function ComboboxExample() {
 
       <MultiSelectCombobox
         options={options}
-        placeholder="Select item"
+        placeholder="Multi-Select item"
         triggerCls="w-40"
       />
 

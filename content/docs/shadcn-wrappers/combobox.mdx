@@ -6,3 +6,406 @@ description: A simplified wrapper for Shadcn Select with flexible option handlin
 import { ComboboxEx } from "@/components/examples";
 
 <ComboboxEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/combobox
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+The Combobox is built using a composition of the `<Popover />`, `<Badge />`, `<Button />` and the `<Command />` components.
+
+See installation instructions for the components from shadcn.
+
+<include cwd meta='title="ui/combobox.tsx"'>
+  ./components/ui/combobox.tsx
+</include>
+
+Update `<Command />` component.
+
+```tsx
+function CommandLoading({
+  className,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Loading>) {
+  return (
+    <CommandPrimitive.Loading
+      data-slot="command-loading"
+      className={cn(
+        "flex items-center justify-center min-h-20 text-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+```
+
+Add `CommandLoading` at the export block.
+
+```tsx
+export {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+/* [!code ++:1] */
+  CommandLoading,
+}
+```
+
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-slot @radix-ui/react-popover cmdk
+```
+
+Copy and paste the following code into your project.
+
+### general.d.ts
+<include cwd meta='title="types/general.d.ts"'>
+  ./types/general.d.ts
+</include>
+
+### utils.ts
+<include cwd meta='title="lib/utils.ts"'>
+  ./lib/utils.ts
+</include>
+
+### badge.tsx
+<include cwd meta='title="ui/badge.tsx"'>
+  ./components/ui/badge.tsx
+</include>
+
+### button.tsx
+<include cwd meta='title="ui/button.tsx"'>
+  ./components/ui/button.tsx
+</include>
+
+### popover.tsx
+<include cwd meta='title="ui/popover.tsx"'>
+  ./components/ui/popover.tsx
+</include>
+
+### command.tsx
+<include cwd meta='title="ui/command.tsx"'>
+  ./components/ui/command.tsx
+</include>
+
+### combobox.tsx
+<include cwd meta='title="ui/combobox.tsx"'>
+  ./components/ui/combobox.tsx
+</include>
+
+### Done
+You can now use `Combobox`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { Combobox, MultiSelectCombobox } from "@/components/ui/combobox"
+
+export function Basic() {
+  return (
+    <>
+      <Combobox
+        options={["Option 1", "Option 2", "Option 3"]}
+        placeholder="Select an option"
+      />
+      
+      <MultiSelectCombobox
+        options={["Option 1", "Option 2", "Option 3"]}
+        placeholder="Select an option"
+      />
+    </>
+  )
+}
+```
+
+### Controlled
+```tsx
+import { useState } from "react"
+import { Combobox, MultiSelectCombobox } from "@/components/ui/combobox"
+
+export function Controlled() {
+  const [values, setValues] = useState<allowedPrimitiveT[]>([])
+  const [value, setValue] = useState<allowedPrimitiveT>("")
+
+  return (
+    <>
+      <Combobox
+        options={["Option 1", "Option 2", "Option 3"]}
+        placeholder="Select an option"
+        value={value}
+        onValueChange={setValue}
+      />
+      
+      <MultiSelectCombobox
+        options={["Option 1", "Option 2", "Option 3"]}
+        placeholder="Select an option"
+        value={values}
+        onValueChange={setValues}
+      />
+    </>
+  )
+}
+
+export function Async() {
+  const { data: options, isLoading } = useAsyncOptions()
+  
+  return (
+    <Combobox
+      options={options || []}
+      isLoading={isLoading}
+    />
+  )
+}
+```
+
+### Custom Styling
+```tsx
+export function Styled() {
+  return (
+    <Combobox
+      options={["Small", "Medium", "Large"]}
+      placeholder="Select size"
+      triggerCls="w-[200px] bg-slate-50"
+      contentCls="min-w-[200px]"
+      itemCls="cursor-pointer hover:bg-slate-100"
+      groupCls="py-2"
+    />
+  )
+}
+```
+
+## Reference
+
+<AutoTypeTable 
+name="Shared" 
+type={`export interface Shared {
+  /**
+   * Optional ID for the combobox trigger element
+   */
+  id?: string;
+
+  /**
+   * Array of options - can be primitives, objects, or groups
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
+   * - Groups: \`{ group: string, options: Array, className?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Simple string",
+   *   42,
+   *   true,
+   *   "---",
+   *   { label: "Custom", value: "custom" },
+   *   { label: <><Icon />With Icon</>, value: "icon" },
+   *   { 
+   *     group: "Category", 
+   *     options: ["Option 1", "Option 2"] 
+   *   },
+   * ]
+   * \`\`\`
+   */
+  options: (string | number | boolean | { label: React.ReactNode; value: string | number | boolean; className?: string } | { group: string; options: Array<any>; className?: string })[];
+
+  /**
+   * Loading state - shows spinner and disables search
+   * 
+   * @default false
+   */
+  isLoading?: boolean;
+
+  /**
+   * Placeholder text displayed when no value is selected
+   * 
+   * @default ""
+   */
+  placeholder?: string;
+
+  /**
+   * Message displayed when search returns no results
+   * 
+   * @default "No options found"
+   */
+  emptyMessage?: string;
+
+    /**
+   * Position of the checkmark indicator in select items
+   * 
+   * @default "right"
+   */
+  indicatorAt?: "left" | "right";
+
+  /**
+   * Additional CSS classes for the combobox trigger button
+   * 
+   * \`\`\`tsx
+   * triggerCls="w-[300px] justify-start"
+   * \`\`\`
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes for the dropdown content container
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to individual items
+   * 
+   * Note: Individual options can override this with their own \`className\`
+   */
+  itemCls?: string;
+
+  /**
+   * Controlled search query state
+   * 
+   * \`\`\`tsx
+   * const [query, setQuery] = useState("");
+   * <Combobox query={query} onQueryChange={setQuery} />
+   * \`\`\`
+   */
+  query?: string;
+
+  /**
+   * Callback fired when the search query changes
+   * 
+   * @param query - The updated search query string
+   */
+  onQueryChange?: (query: string) => void;
+
+  /**
+   * Controlled open/closed state of the dropdown
+   * 
+   * \`\`\`tsx
+   * const [open, setOpen] = useState(false);
+   * <Combobox open={open} onOpenChange={setOpen} />
+   * \`\`\`
+   */
+  open?: boolean;
+
+  /**
+   * Callback fired when the dropdown open state changes
+   * 
+   * @param open - Whether the dropdown is open
+   */
+  onOpenChange?: (open: boolean) => void;
+}`}
+/>
+
+<AutoTypeTable 
+name="Combobox" 
+type={`export interface Combobox {
+  /**
+   * Enables creating new option to Combobox. Update options if added new item.
+   * 
+   * Shows "Create: {query}" option when search query doesn't match existing options
+   * 
+   * @default false
+   */
+  canCreateNew?: boolean;
+
+  /**
+   * Controlled value - the currently selected option value
+   * 
+   * \`\`\`tsx
+   * const [value, setValue] = useState<string>("");
+   * <Combobox value={value} onValueChange={setValue} />
+   * \`\`\`
+   */
+  value?: string | number | boolean;
+
+  /**
+   * Callback fired when the selected value changes
+   * 
+   * @param value - The newly selected value
+   */
+  onValueChange?: (value: string | number | boolean) => void;
+}`}
+/>
+
+<AutoTypeTable 
+name="MultiSelectCombobox" 
+type={`export interface MultiSelectCombobox {
+  /**
+   * Maximum number of selected items to display as individual badges
+   * 
+   * When selection count exceeds this number, shows "{count} selected" instead
+   * 
+   * \`\`\`tsx
+   * // Shows "Apple", "Banana" badges
+   * maxVisibleCount={2} value={["apple", "banana"]}
+   * 
+   * // Shows "3 selected" badge
+   * maxVisibleCount={2} value={["apple", "banana", "cherry"]}
+   * \`\`\`
+   * 
+   * @default 2
+   */
+  maxVisibleCount?: number;
+
+  /**
+   * Controlled value - array of currently selected option values
+   * 
+   * \`\`\`tsx
+   * const [values, setValues] = useState<string[]>([]);
+   * <MultiSelectCombobox value={values} onValueChange={setValues} />
+   * \`\`\`
+   */
+  value?: (string | number | boolean)[];
+
+  /**
+   * Callback fired when the selected values change
+   * 
+   * Automatically toggles selection: adds if not present, removes if already selected
+   * 
+   * @param values - The updated array of selected values
+   */
+  onValueChange?: (values: (string | number | boolean)[]) => void;
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Combobox](https://ui.shadcn.com/docs/components/combobox)
+- [Shadcn Command](https://ui.shadcn.com/docs/components/command)
+- [Shadcn Popover](https://ui.shadcn.com/docs/components/popover)
+- [CMDK](https://github.com/dip/cmdk)

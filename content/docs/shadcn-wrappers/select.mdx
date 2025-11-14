@@ -166,7 +166,7 @@ You can now use `SelectWrapper`
 ```tsx
 import { SelectWrapper } from "@/components/ui/select"
 
-export function BasicSelect() {
+export function Basic() {
   return (
     <SelectWrapper
       options={["Option 1", "Option 2", "Option 3"]}
@@ -182,7 +182,7 @@ import { useState } from "react"
 import { SelectWrapper } from "@/components/ui/select"
 import { parseAllowedPrimitive } from "@/lib/utils"
 
-export function ControlledSelect1() {
+export function Controlled() {
   const [value, setValue] = useState("apple")
 
   return (
@@ -194,7 +194,7 @@ export function ControlledSelect1() {
   )
 }
 
-export function ControlledSelect2() {
+export function Controlled2() {
   const [value, setValue] = useState<allowedPrimitiveT>("apple")
 
   return (
@@ -209,10 +209,10 @@ export function ControlledSelect2() {
 
 ### Custom Styling
 ```tsx
-export function ComplexSelect() {
+export function Styled() {
   return (
     <SelectWrapper
-      options={["Small", "Medium", "Large", {}]}
+      options={["Small", "Medium", "Large"]}
       placeholder="Select size"
       triggerCls="w-[200px] bg-slate-50"
       contentCls="min-w-[200px]"
