@@ -42,8 +42,6 @@ type dropdownSubMenuT = {
 type dropdownOptionsT = (dropdownOptionT | dropdownGroupT | dropdownSubMenuT)[]
 
 type inputOptionT = allowedPrimitiveT | optionT | (optionT & {
-  label: React.ReactNode
-  value: string
   disabled?: boolean
 })
 
