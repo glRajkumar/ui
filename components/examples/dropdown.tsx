@@ -25,7 +25,7 @@ export function DropdownExample() {
       <DropdownCheckboxWrapper
         options={dropdownOptions}
         label="Select Something"
-        checkedValues={checked}
+        checked={checked}
         onCheckedChange={(value, isChecked) => {
           setChecked((prev) =>
             isChecked
@@ -42,7 +42,6 @@ export function DropdownExample() {
       <DropdownRadioWrapper
         value={val}
         options={dropdownOptions}
-        label="Select Something"
         onValueChange={setVal}
       >
         <Button variant="outline">

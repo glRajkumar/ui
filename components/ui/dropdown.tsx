@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState } from "react"
 import { cn, getLabel, getValue, isSeparator, parseAllowedPrimitive } from "@/lib/utils"
 
 import {
@@ -35,7 +35,8 @@ type dropdownGroupT = {
 type dropdownSubMenuT = {
   submenu: string
   options: (dropdownOptionT | dropdownGroupT)[]
-  className?: string
+  triggerCls?: string
+  contentCls?: string
 }
 
 type dropdownOptionsT = (dropdownOptionT | dropdownGroupT | dropdownSubMenuT)[]
@@ -55,7 +56,8 @@ type inputGroupT = {
 type inputSubMenuT = {
   submenu: string
   options: (inputOptionT | inputGroupT)[]
-  className?: string
+  triggerCls?: string
+  contentCls?: string
 }
 
 type inputOptionsT = (inputOptionT | inputGroupT | inputSubMenuT)[]
@@ -113,11 +115,11 @@ type SubMenuProps = {
 function SubMenu({ submenu, itemCls, groupCls, onSelect }: SubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={cn(itemCls, submenu.className)}>
+      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent>
+      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
         {submenu.options.map((option, i) => {
           if (isDropdownGroup(option)) {
             return (
@@ -261,18 +263,18 @@ type CheckboxSubMenuProps = {
   itemCls?: string
   groupCls?: string
 
-  checkedValues?: allowedPrimitiveT[]
+  checked?: allowedPrimitiveT[]
   onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void
 }
 
-function CheckboxSubMenu({ submenu, itemCls, groupCls, checkedValues = [], onCheckedChange = () => { } }: CheckboxSubMenuProps) {
+function CheckboxSubMenu({ submenu, itemCls, groupCls, checked = [], onCheckedChange = () => { } }: CheckboxSubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={cn(itemCls, submenu.className)}>
+      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent>
+      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
         {submenu.options.map((option, i) => {
           if (isInputGroup(option)) {
             return (
@@ -285,7 +287,7 @@ function CheckboxSubMenu({ submenu, itemCls, groupCls, checkedValues = [], onChe
                       key={`${v}-${j}`}
                       option={grOpt}
                       className={itemCls}
-                      checked={checkedValues.includes(v)}
+                      checked={checked.includes(v)}
                       onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
                     />
                   )
@@ -301,7 +303,7 @@ function CheckboxSubMenu({ submenu, itemCls, groupCls, checkedValues = [], onChe
                 submenu={option}
                 itemCls={itemCls}
                 groupCls={groupCls}
-                checkedValues={checkedValues}
+                checked={checked}
                 onCheckedChange={onCheckedChange}
               />
             )
@@ -313,7 +315,7 @@ function CheckboxSubMenu({ submenu, itemCls, groupCls, checkedValues = [], onChe
               key={`${v}-${i}`}
               option={option}
               className={itemCls}
-              checked={checkedValues.includes(v)}
+              checked={checked.includes(v)}
               onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
             />
           )
@@ -332,7 +334,7 @@ type DropdownCheckboxWrapperProps = {
   groupCls?: string
   contentProps?: React.ComponentProps<typeof DropdownMenuContent>
 
-  checkedValues?: allowedPrimitiveT[]
+  checked?: allowedPrimitiveT[]
   onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void
 } & React.ComponentProps<typeof DropdownMenu>
 
@@ -345,10 +347,19 @@ function DropdownCheckboxWrapper({
   itemCls,
   groupCls,
 
-  checkedValues = [],
-  onCheckedChange = () => { },
+  checked: o_checked,
+  onCheckedChange: o_onCheckedChange,
   ...props
 }: DropdownCheckboxWrapperProps) {
+  const [i_checked, setIChecked] = useState<allowedPrimitiveT[]>([])
+
+  function i_Checked(v: allowedPrimitiveT, c: boolean) {
+    setIChecked(prev => !c ? prev.filter(p => p !== v) : [...prev, v])
+  }
+
+  const checked = o_checked ?? i_checked
+  const onCheckedChange = o_onCheckedChange ?? i_Checked
+
   return (
     <DropdownMenu {...props}>
       <DropdownMenuTrigger asChild>
@@ -374,7 +385,7 @@ function DropdownCheckboxWrapper({
                       key={`${v}-${j}`}
                       option={grOpt}
                       className={itemCls}
-                      checked={checkedValues.includes(v)}
+                      checked={checked.includes(v)}
                       onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
                     />
                   )
@@ -390,7 +401,7 @@ function DropdownCheckboxWrapper({
                 submenu={option}
                 itemCls={itemCls}
                 groupCls={groupCls}
-                checkedValues={checkedValues}
+                checked={checked}
                 onCheckedChange={onCheckedChange}
               />
             )
@@ -402,7 +413,7 @@ function DropdownCheckboxWrapper({
               key={`${v}-${i}`}
               option={option}
               className={itemCls}
-              checked={checkedValues.includes(v)}
+              checked={checked.includes(v)}
               onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
             />
           )
@@ -447,11 +458,11 @@ type RadioSubMenuProps = {
 function RadioSubMenu({ submenu, itemCls, groupCls, value = "", onValueChange = () => { } }: RadioSubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={cn(itemCls, submenu.className)}>
+      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent>
+      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
         <DropdownMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
           {submenu.options.map((option, i) => {
             if (isInputGroup(option)) {
@@ -518,10 +529,15 @@ function DropdownRadioWrapper({
   groupCls,
   contentProps,
 
-  value = "",
-  onValueChange = () => { },
+  value: o_value,
+  onValueChange: o_onValueChange,
   ...props
 }: DropdownRadioWrapperProps) {
+  const [i_value, setIValue] = useState<allowedPrimitiveT>("")
+
+  const value = o_value ?? i_value
+  const onValueChange = o_onValueChange ?? setIValue
+
   return (
     <DropdownMenu {...props}>
       <DropdownMenuTrigger asChild>
