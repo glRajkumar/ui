@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 
+import { useAsyncOptions } from "@/hooks/use-options";
 import { options } from "./data";
 
 import { Combobox, MultiSelectCombobox } from "@/components/ui/combobox";
-import { useAsyncOptions } from "@/hooks/use-options";
 
-function Asyncs() {
+export function ComboboxExample() {
   const { data: list, isLoading } = useAsyncOptions()
 
   const [values, setValues] = useState<allowedPrimitiveT[]>([])
@@ -16,47 +16,34 @@ function Asyncs() {
   return (
     <>
       <Combobox
-        value={value}
-        options={list || []}
-        isLoading={isLoading}
-        onValueChange={setValue}
+        options={options}
+        placeholder="Select item"
         triggerCls="w-40"
       />
 
       <MultiSelectCombobox
-        value={values}
-        options={list || []}
-        isLoading={isLoading}
-        onValueChange={setValues}
+        options={options}
         placeholder="Select item"
         triggerCls="w-40"
       />
-    </>
-  )
-}
 
-export function ComboboxExample() {
-  const [values, setValues] = useState<allowedPrimitiveT[]>([])
-  const [value, setValue] = useState<allowedPrimitiveT>(true)
-
-  return (
-    <>
       <Combobox
         value={value}
-        options={options}
+        options={list || []}
+        isLoading={isLoading}
         onValueChange={setValue}
+        placeholder="Select item"
         triggerCls="w-40"
       />
 
       <MultiSelectCombobox
         value={values}
-        options={options}
+        options={list || []}
+        isLoading={isLoading}
         onValueChange={setValues}
         placeholder="Select item"
         triggerCls="w-40"
       />
-
-      <Asyncs />
     </>
   )
 }

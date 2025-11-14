@@ -60,11 +60,17 @@ type base = {
   isLoading?: boolean
   placeholder?: string
   emptyMessage?: string
+
   indicatorAt?: indicatorAt
   triggerCls?: string
   contentCls?: string
   groupCls?: string
   itemCls?: string
+
+  open?: boolean
+  onOpenChange?: (v: boolean) => void
+  query?: string
+  onQueryChange?: (v: string) => void
 }
 
 type comboboxProps = base & {
@@ -75,19 +81,40 @@ type comboboxProps = base & {
 
 function Combobox({
   id,
-  value = "",
   options = [],
   isLoading = false,
   placeholder = "",
   emptyMessage = "",
   canCreateNew = false,
-  indicatorAt, triggerCls, contentCls, groupCls, itemCls,
-  onValueChange = () => { },
+
+  indicatorAt,
+  triggerCls,
+  contentCls,
+  groupCls,
+  itemCls,
+
+  value: o_value,
+  onValueChange: o_onValueChange,
+
+  query: o_query,
+  onQueryChange: o_onQueryChange,
+
+  open: o_open,
+  onOpenChange: o_onOpenChange,
 }: comboboxProps) {
   const { ref, width } = useElementWidth<HTMLButtonElement>()
 
-  const [query, setQuery] = useState("")
-  const [open, setOpen] = useState(false)
+  const [i_value, setIValue] = useState("")
+  const [i_query, setIQuery] = useState("")
+  const [i_open, setIOpen] = useState(false)
+
+  const value = o_value ?? i_value
+  const query = o_query ?? i_query
+  const open = o_open ?? i_open
+
+  const onValueChange = o_onValueChange ?? setIValue
+  const onQueryChange = o_onQueryChange ?? setIQuery
+  const onOpenChange = o_onOpenChange ?? setIOpen
 
   const selectedOption = findOptionByValue(options, value)
   const filtered = filteredOptions(options, query)
@@ -102,8 +129,13 @@ function Combobox({
         : extractText(getLabel(o)) === query
     )
 
+  function onSelect(v: allowedPrimitiveT) {
+    onValueChange(v as string)
+    onOpenChange(false)
+  }
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button
           id={id}
@@ -140,7 +172,7 @@ function Combobox({
             <CommandInput
               placeholder="Search..."
               value={query}
-              onValueChange={setQuery}
+              onValueChange={onQueryChange}
             />
           }
 
@@ -172,12 +204,9 @@ function Combobox({
                         key={`g-${i}-${j}`}
                         option={opt}
                         selected={getValue(opt) === value}
-                        onSelect={(v) => {
-                          onValueChange(v)
-                          setOpen(false)
-                        }}
-                        indicatorAt={indicatorAt}
+                        onSelect={onSelect}
                         className={itemCls}
+                        indicatorAt={indicatorAt}
                       />
                     ))}
                   </CommandGroup>
@@ -189,10 +218,7 @@ function Combobox({
                   key={`i-${i}`}
                   option={item}
                   selected={getValue(item) === value}
-                  onSelect={(v) => {
-                    onValueChange(v)
-                    setOpen(false)
-                  }}
+                  onSelect={onSelect}
                   indicatorAt={indicatorAt}
                   className={cn("mx-1", itemCls)}
                 />
@@ -205,8 +231,8 @@ function Combobox({
                   value={`__create-${query}`}
                   onSelect={() => {
                     onValueChange(query)
-                    setQuery("")
-                    setOpen(false)
+                    onQueryChange("")
+                    onOpenChange(false)
                   }}
                 >
                   <Plus className="mr-2 h-4 w-4" /> Create: {query}
@@ -280,28 +306,49 @@ type multiSelectComboboxProps = base & {
 
 function MultiSelectCombobox({
   id,
-  value = [],
   options = [],
   isLoading = false,
   placeholder = "",
   emptyMessage = "",
-  indicatorAt, maxVisibleCount,
-  triggerCls, contentCls, groupCls, itemCls,
-  onValueChange = () => { },
+
+  maxVisibleCount,
+  indicatorAt,
+  triggerCls,
+  contentCls,
+  groupCls,
+  itemCls,
+
+  value: o_value,
+  onValueChange: o_onValueChange,
+
+  query: o_query,
+  onQueryChange: o_onQueryChange,
+
+  open: o_open,
+  onOpenChange: o_onOpenChange,
 }: multiSelectComboboxProps) {
   const { ref, width } = useElementWidth<HTMLButtonElement>()
 
-  const [query, setQuery] = useState("")
-  const [open, setOpen] = useState(false)
+  const [i_value, setIValue] = useState<allowedPrimitiveT[]>([])
+  const [i_query, setIQuery] = useState("")
+  const [i_open, setIOpen] = useState(false)
+
+  const value = o_value ?? i_value
+  const query = o_query ?? i_query
+  const open = o_open ?? i_open
+
+  const onValueChange = o_onValueChange ?? setIValue
+  const onQueryChange = o_onQueryChange ?? setIQuery
+  const onOpenChange = o_onOpenChange ?? setIOpen
 
   const filtered = filteredOptions(options, query)
 
-  const toggle = (v: allowedPrimitiveT) => {
+  const onSelect = (v: allowedPrimitiveT) => {
     onValueChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v])
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button
           id={id}
@@ -332,7 +379,7 @@ function MultiSelectCombobox({
             <CommandInput
               placeholder="Search..."
               value={query}
-              onValueChange={setQuery}
+              onValueChange={onQueryChange}
             />
           }
 
@@ -364,7 +411,7 @@ function MultiSelectCombobox({
                         key={`g-${i}-${j}`}
                         option={opt}
                         selected={value.includes(getValue(opt))}
-                        onSelect={toggle}
+                        onSelect={onSelect}
                         indicatorAt={indicatorAt}
                         className={itemCls}
                       />
@@ -378,7 +425,7 @@ function MultiSelectCombobox({
                   key={`i-${i}`}
                   option={item}
                   selected={value.includes(getValue(item))}
-                  onSelect={toggle}
+                  onSelect={onSelect}
                   indicatorAt={indicatorAt}
                   className={cn("mx-1 mb-1", itemCls)}
                 />
