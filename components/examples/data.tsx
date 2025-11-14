@@ -1,4 +1,5 @@
 import { Apple, Banana } from "lucide-react";
+import { delay } from "@/utils";
 
 export const options: optionsT = [
   "Data 1",
@@ -37,3 +38,10 @@ export const options: optionsT = [
     className: "bg-amber-50",
   },
 ]
+
+export const generateOptions = (n: number = 20) => new Array(n).fill(0).map((_, i) => `Data ${i + 1}`)
+
+export async function asyncOptions({ n, delayBy = 5000 }: { n?: number, delayBy?: number } = {}) {
+  await delay(delayBy)
+  return generateOptions(n)
+}

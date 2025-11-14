@@ -25,7 +25,7 @@ function Wrapper({ children, path: filePath }: props) {
       </TabsList>
 
       <TabsContent value="preview">
-        <div className="flex items-center justify-center gap-4 min-h-96 p-4 border rounded-sm shadow">
+        <div className="flex items-center justify-center content-center gap-4 flex-wrap min-h-96 p-4 border rounded-sm shadow">
           {children}
         </div>
       </TabsContent>

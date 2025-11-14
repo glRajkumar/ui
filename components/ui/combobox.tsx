@@ -13,6 +13,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandLoading,
   CommandSeparator,
 } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -32,7 +33,7 @@ function Item({ option, selected, indicatorAt = "right", onSelect, className }: 
   const label = getLabel(option)
   const optCls = isOption(option) ? option.className : undefined
 
-  if (isSeparator(value)) return <CommandSeparator className={className} />
+  if (isSeparator(value)) return <CommandSeparator className={cn("my-0.5", className, "mx-0")} />
 
   return (
     <CommandItem
@@ -76,12 +77,11 @@ function Combobox({
   id,
   value = "",
   options = [],
+  isLoading = false,
   placeholder = "",
   emptyMessage = "",
-  isLoading = false,
   canCreateNew = false,
-  indicatorAt,
-  triggerCls, contentCls, groupCls, itemCls,
+  indicatorAt, triggerCls, contentCls, groupCls, itemCls,
   onValueChange = () => { },
 }: comboboxProps) {
   const { ref, width } = useElementWidth<HTMLButtonElement>()
@@ -108,8 +108,8 @@ function Combobox({
         <Button
           id={id}
           ref={ref}
-          variant="outline"
           role="combobox"
+          variant="outline"
           className={cn("font-normal", triggerCls, {
             "text-muted-foreground": !value && value !== false,
           })}
@@ -135,22 +135,37 @@ function Combobox({
 
       <PopoverContent className={cn("p-0", contentCls)} style={{ width: width ? `${width}px` : "auto" }}>
         <Command shouldFilter={false}>
-          <CommandInput
-            placeholder="Search..."
-            value={query}
-            onValueChange={setQuery}
-          />
+          {
+            !isLoading &&
+            <CommandInput
+              placeholder="Search..."
+              value={query}
+              onValueChange={setQuery}
+            />
+          }
 
-          <CommandList>
-            <CommandEmpty>{emptyMessage || "No options found"}</CommandEmpty>
+          <CommandList className="py-1">
+            {
+              isLoading &&
+              <CommandLoading>
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin size-4" /> Loading...
+                </span>
+              </CommandLoading>
+            }
 
-            {filtered.map((item, i) => {
+            {
+              !isLoading &&
+              <CommandEmpty>{emptyMessage || "No options found"}</CommandEmpty>
+            }
+
+            {!isLoading && filtered.map((item, i) => {
               if (isGroup(item)) {
                 return (
                   <CommandGroup
                     key={item.group}
                     heading={item.group}
-                    className={cn(groupCls, item.className)}
+                    className={cn("[&_[cmdk-group-heading]]:pb-0.5", groupCls, item.className)}
                   >
                     {item.options.map((opt, j) => (
                       <Item
@@ -179,7 +194,7 @@ function Combobox({
                     setOpen(false)
                   }}
                   indicatorAt={indicatorAt}
-                  className={itemCls}
+                  className={cn("mx-1", itemCls)}
                 />
               )
             })}
@@ -210,12 +225,14 @@ type btnLableProps = {
   options: optionsT
   isLoading?: boolean
   placeholder?: string
+  maxVisibleCount?: number
 }
 function ButtonLabel({
   value,
   options,
   isLoading,
   placeholder,
+  maxVisibleCount = 2,
 }: btnLableProps) {
   const labelOf = (val: allowedPrimitiveT) => {
     const found = findOptionByValue(options, val)
@@ -236,7 +253,7 @@ function ButtonLabel({
     return placeholder
   }
 
-  if (value.length <= 2) {
+  if (value.length <= maxVisibleCount) {
     return (
       <>
         {value.map((v) => (
@@ -257,6 +274,7 @@ function ButtonLabel({
 
 type multiSelectComboboxProps = base & {
   value?: allowedPrimitiveT[]
+  maxVisibleCount?: number
   onValueChange?: (v: allowedPrimitiveT[]) => void
 }
 
@@ -264,10 +282,10 @@ function MultiSelectCombobox({
   id,
   value = [],
   options = [],
+  isLoading = false,
   placeholder = "",
   emptyMessage = "",
-  isLoading = false,
-  indicatorAt,
+  indicatorAt, maxVisibleCount,
   triggerCls, contentCls, groupCls, itemCls,
   onValueChange = () => { },
 }: multiSelectComboboxProps) {
@@ -300,6 +318,7 @@ function MultiSelectCombobox({
             options={options}
             isLoading={isLoading}
             placeholder={placeholder}
+            maxVisibleCount={maxVisibleCount}
           />
 
           <ChevronsUpDown className="ml-auto size-4 opacity-50" />
@@ -308,18 +327,37 @@ function MultiSelectCombobox({
 
       <PopoverContent className={cn("p-0", contentCls)} style={{ width: width ? `${width}px` : "auto" }}>
         <Command shouldFilter={false}>
-          <CommandInput placeholder="Search..." value={query} onValueChange={setQuery} />
+          {
+            !isLoading &&
+            <CommandInput
+              placeholder="Search..."
+              value={query}
+              onValueChange={setQuery}
+            />
+          }
 
-          <CommandList>
-            <CommandEmpty>{emptyMessage || "No options found"}</CommandEmpty>
+          <CommandList className="py-1">
+            {
+              isLoading &&
+              <CommandLoading>
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin size-4" /> Loading...
+                </span>
+              </CommandLoading>
+            }
 
-            {filtered.map((item, i) => {
+            {
+              !isLoading &&
+              <CommandEmpty>{emptyMessage || "No options found"}</CommandEmpty>
+            }
+
+            {!isLoading && filtered.map((item, i) => {
               if (isGroup(item)) {
                 return (
                   <CommandGroup
                     key={item.group}
                     heading={item.group}
-                    className={cn(groupCls, item.className)}
+                    className={cn("[&_[cmdk-group-heading]]:pb-0.5", groupCls, item.className)}
                   >
                     {item.options.map((opt, j) => (
                       <Item
@@ -342,7 +380,7 @@ function MultiSelectCombobox({
                   selected={value.includes(getValue(item))}
                   onSelect={toggle}
                   indicatorAt={indicatorAt}
-                  className={itemCls}
+                  className={cn("mx-1 mb-1", itemCls)}
                 />
               )
             })}
