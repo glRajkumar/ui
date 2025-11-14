@@ -1,3 +1,6 @@
+"use client"
+
+import * as React from "react"
 import { cn, getLabel, getValue, isSeparator } from "@/lib/utils"
 
 import {
@@ -17,45 +20,45 @@ import {
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
 
-type dropdownOptionT = optionT & {
-  shortcut?: string
+type dropdownOptionT = allowedPrimitiveT | optionT | (optionT & {
   variant?: "default" | "destructive"
+  shortcut?: string
   disabled?: boolean
-  onSelect?: () => void
-}
+})
 
 type dropdownGroupT = {
   group: string
-  options: (allowedPrimitiveT | dropdownOptionT)[]
+  options: dropdownOptionT[]
   className?: string
 }
 
 type dropdownSubMenuT = {
   submenu: string
-  options: (allowedPrimitiveT | dropdownOptionT | dropdownGroupT)[]
+  options: (dropdownOptionT | dropdownGroupT)[]
   className?: string
 }
 
-type dropdownOptionsT = (
-  | allowedPrimitiveT
-  | dropdownOptionT
-  | dropdownGroupT
-  | dropdownSubMenuT
-)[]
+type dropdownOptionsT = (dropdownOptionT | dropdownGroupT | dropdownSubMenuT)[]
 
-type checkboxOptionT = {
-  label: React.ReactNode
-  value: string
-  checked: boolean
-  disabled?: boolean
-  onCheckedChange?: (checked: boolean) => void
-}
-
-type radioOptionT = {
+type inputOptionT = allowedPrimitiveT | optionT | (optionT & {
   label: React.ReactNode
   value: string
   disabled?: boolean
+})
+
+type inputGroupT = {
+  group: string
+  options: inputOptionT[]
+  className?: string
 }
+
+type inputSubMenuT = {
+  submenu: string
+  options: (inputOptionT | inputGroupT)[]
+  className?: string
+}
+
+type inputOptionsT = (inputOptionT | inputGroupT | inputSubMenuT)[]
 
 function isDropdownGroup(option: any): option is dropdownGroupT {
   return option && typeof option === "object" && "group" in option
@@ -65,35 +68,36 @@ function isSubMenu(option: any): option is dropdownSubMenuT {
   return option && typeof option === "object" && "submenu" in option
 }
 
-function isDropdownOption(option: any): option is dropdownOptionT {
-  return option && typeof option === "object" && "value" in option
+function isInputGroup(option: any): option is inputGroupT {
+  return option && typeof option === "object" && "group" in option
+}
+
+function isInputSubMenu(option: any): option is inputSubMenuT {
+  return option && typeof option === "object" && "submenu" in option
 }
 
 type ItemProps = {
-  option: allowedPrimitiveT | dropdownOptionT
-  className?: string
   inset?: boolean
+  option: dropdownOptionT
+  className?: string
+  onSelect?: () => void
 }
 
-function Item({ option, className, inset }: ItemProps) {
+function Item({ option, className, inset, onSelect }: ItemProps) {
   const value = getValue(option)
   const label = getLabel(option)
 
   if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
 
-  const opt = isDropdownOption(option) ? option : undefined
+  const opt: any = typeof option === "object" ? option : {}
   const shortcut = opt?.shortcut
-  const variant = opt?.variant
-  const disabled = opt?.disabled
-  const onSelect = opt?.onSelect
 
   return (
     <DropdownMenuItem
-      className={cn(className, opt?.className)}
+      {...opt}
       inset={inset}
-      variant={variant}
-      disabled={disabled}
       onSelect={onSelect}
+      className={cn(className, opt?.className)}
     >
       {typeof label === "object" ? label : `${label}`}
       {shortcut && <DropdownMenuShortcut>{shortcut}</DropdownMenuShortcut>}
@@ -105,9 +109,10 @@ type SubMenuProps = {
   submenu: dropdownSubMenuT
   itemCls?: string
   groupCls?: string
+  onSelect?: (value: allowedPrimitiveT) => void
 }
 
-function SubMenu({ submenu, itemCls, groupCls }: SubMenuProps) {
+function SubMenu({ submenu, itemCls, groupCls, onSelect }: SubMenuProps) {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger className={cn(itemCls, submenu.className)}>
@@ -122,10 +127,11 @@ function SubMenu({ submenu, itemCls, groupCls }: SubMenuProps) {
                 <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
                 {option.options.map((grOpt, j) => (
                   <Item
+                    inset
                     key={`${option.group}-item-${j}`}
                     option={grOpt}
                     className={itemCls}
-                    inset
+                    onSelect={() => onSelect?.(getValue(grOpt))}
                   />
                 ))}
               </DropdownMenuGroup>
@@ -133,10 +139,25 @@ function SubMenu({ submenu, itemCls, groupCls }: SubMenuProps) {
           }
 
           if (isSubMenu(option)) {
-            return <SubMenu key={`submenu-${i}`} submenu={option} itemCls={itemCls} groupCls={groupCls} />
+            return (
+              <SubMenu
+                key={`submenu-${i}`}
+                submenu={option}
+                itemCls={itemCls}
+                groupCls={groupCls}
+                onSelect={onSelect}
+              />
+            )
           }
 
-          return <Item key={`item-${i}`} option={option} className={itemCls} />
+          return (
+            <Item
+              key={`item-${i}`}
+              option={option}
+              className={itemCls}
+              onSelect={() => onSelect?.(getValue(option))}
+            />
+          )
         })}
       </DropdownMenuSubContent>
     </DropdownMenuSub>
@@ -144,25 +165,27 @@ function SubMenu({ submenu, itemCls, groupCls }: SubMenuProps) {
 }
 
 type DropdownWrapperProps = {
-  trigger: React.ReactNode
+  children: React.ReactNode
   options: dropdownOptionsT
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>
-  groupCls?: string
   itemCls?: string
-}
+  groupCls?: string
+  contentProps?: React.ComponentProps<typeof DropdownMenuContent>
+  onSelect?: (value: allowedPrimitiveT) => void
+} & React.ComponentProps<typeof DropdownMenu>
 
 function DropdownWrapper({
-  trigger,
+  children,
   options,
-  contentProps,
-  groupCls,
   itemCls,
+  groupCls,
+  contentProps,
+  onSelect,
   ...props
-}: React.ComponentProps<typeof DropdownMenu> & DropdownWrapperProps) {
+}: DropdownWrapperProps) {
   return (
     <DropdownMenu {...props}>
       <DropdownMenuTrigger asChild>
-        {trigger}
+        {children}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent {...contentProps}>
@@ -177,6 +200,7 @@ function DropdownWrapper({
                     option={grOpt}
                     className={itemCls}
                     inset
+                    onSelect={() => onSelect?.(getValue(grOpt))}
                   />
                 ))}
               </DropdownMenuGroup>
@@ -184,97 +208,370 @@ function DropdownWrapper({
           }
 
           if (isSubMenu(option)) {
-            return <SubMenu key={`submenu-${i}`} submenu={option} itemCls={itemCls} groupCls={groupCls} />
+            return (
+              <SubMenu
+                key={`submenu-${i}`}
+                submenu={option}
+                itemCls={itemCls}
+                groupCls={groupCls}
+                onSelect={onSelect}
+              />
+            )
           }
 
-          return <Item key={`item-${i}`} option={option} className={itemCls} />
+          return (
+            <Item
+              key={`item-${i}`}
+              option={option}
+              className={itemCls}
+              onSelect={() => onSelect?.(getValue(option))}
+            />
+          )
         })}
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
 
-type DropdownCheckboxWrapperProps = {
-  trigger: React.ReactNode
-  options: checkboxOptionT[]
-  label?: string
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>
-  itemCls?: string
+type CheckboxItemProps = {
+  option: inputOptionT
+  className?: string
+
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
 }
 
+function CheckboxItem({ option, className, checked = false, onCheckedChange = () => { } }: CheckboxItemProps) {
+  const label = getLabel(option)
+  const disabled = (option as any)?.disabled
+
+  return (
+    <DropdownMenuCheckboxItem
+      checked={checked}
+      disabled={disabled}
+      className={className}
+      onCheckedChange={onCheckedChange}
+    >
+      {typeof label === "object" ? label : `${label}`}
+    </DropdownMenuCheckboxItem>
+  )
+}
+
+type CheckboxSubMenuProps = {
+  submenu: inputSubMenuT
+  itemCls?: string
+  groupCls?: string
+
+  checkedValues?: allowedPrimitiveT[]
+  onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void
+}
+
+function CheckboxSubMenu({ submenu, itemCls, groupCls, checkedValues = [], onCheckedChange = () => { } }: CheckboxSubMenuProps) {
+  return (
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger className={cn(itemCls, submenu.className)}>
+        {submenu.submenu}
+      </DropdownMenuSubTrigger>
+
+      <DropdownMenuSubContent>
+        {submenu.options.map((option, i) => {
+          if (isInputGroup(option)) {
+            return (
+              <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                {option.options.map((grOpt, j) => {
+                  const v = getValue(grOpt)
+                  return (
+                    <CheckboxItem
+                      key={`${v}-${j}`}
+                      option={grOpt}
+                      className={cn("pl-4", itemCls)}
+                      checked={checkedValues.includes(v)}
+                      onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+                    />
+                  )
+                })}
+              </DropdownMenuGroup>
+            )
+          }
+
+          if (isInputSubMenu(option)) {
+            return (
+              <CheckboxSubMenu
+                key={`submenu-${i}`}
+                submenu={option}
+                itemCls={itemCls}
+                groupCls={groupCls}
+                checkedValues={checkedValues}
+                onCheckedChange={onCheckedChange}
+              />
+            )
+          }
+
+          const v = getValue(option)
+          return (
+            <CheckboxItem
+              key={`${v}-${i}`}
+              option={option}
+              className={itemCls}
+              checked={checkedValues.includes(v)}
+              onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+            />
+          )
+        })}
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  )
+}
+
+type DropdownCheckboxWrapperProps = {
+  children: React.ReactNode
+  options: inputOptionsT
+
+  label?: string
+  itemCls?: string
+  groupCls?: string
+  contentProps?: React.ComponentProps<typeof DropdownMenuContent>
+
+  checkedValues?: allowedPrimitiveT[]
+  onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void
+} & React.ComponentProps<typeof DropdownMenu>
+
 function DropdownCheckboxWrapper({
-  trigger,
+  children,
   options,
+
   label,
   contentProps,
   itemCls,
+  groupCls,
+
+  checkedValues = [],
+  onCheckedChange = () => { },
   ...props
-}: React.ComponentProps<typeof DropdownMenu> & DropdownCheckboxWrapperProps) {
+}: DropdownCheckboxWrapperProps) {
   return (
     <DropdownMenu {...props}>
       <DropdownMenuTrigger asChild>
-        {trigger}
+        {children}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent {...contentProps}>
-        {label && <DropdownMenuLabel>{label}</DropdownMenuLabel>}
-        {label && <DropdownMenuSeparator />}
-        {options.map((option, i) => (
-          <DropdownMenuCheckboxItem
-            key={option.value}
-            checked={option.checked}
-            onCheckedChange={option.onCheckedChange}
-            disabled={option.disabled}
-            className={itemCls}
-          >
-            {option.label}
-          </DropdownMenuCheckboxItem>
-        ))}
+        {label && (
+          <>
+            <DropdownMenuLabel>{label}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        {options.map((option, i) => {
+          if (isInputGroup(option)) {
+            return (
+              <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                {option.options.map((grOpt, j) => {
+                  const v = getValue(grOpt)
+                  return (
+                    <CheckboxItem
+                      key={`${v}-${j}`}
+                      option={grOpt}
+                      className={cn("pl-4", itemCls)}
+                      checked={checkedValues.includes(v)}
+                      onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+                    />
+                  )
+                })}
+              </DropdownMenuGroup>
+            )
+          }
+
+          if (isInputSubMenu(option)) {
+            return (
+              <CheckboxSubMenu
+                key={`submenu-${i}`}
+                submenu={option}
+                itemCls={itemCls}
+                groupCls={groupCls}
+                checkedValues={checkedValues}
+                onCheckedChange={onCheckedChange}
+              />
+            )
+          }
+
+          const v = getValue(option)
+          return (
+            <CheckboxItem
+              key={`${v}-${i}`}
+              option={option}
+              className={itemCls}
+              checked={checkedValues.includes(v)}
+              onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+            />
+          )
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
 
-type DropdownRadioWrapperProps = {
-  trigger: React.ReactNode
-  options: radioOptionT[]
-  value: string
-  onValueChange: (value: string) => void
-  label?: string
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>
-  itemCls?: string
+type RadioItemProps = {
+  option: inputOptionT
+  className?: string
 }
 
+function RadioItem({ option, className }: RadioItemProps) {
+  const value = getValue(option)
+  const label = getLabel(option)
+  const disabled = (option as any)?.disabled
+
+  return (
+    <DropdownMenuRadioItem
+      value={`${value}`}
+      disabled={disabled}
+      className={className}
+    >
+      {typeof label === "object" ? label : `${label}`}
+    </DropdownMenuRadioItem>
+  )
+}
+
+type RadioSubMenuProps = {
+  submenu: inputSubMenuT
+  itemCls?: string
+  groupCls?: string
+
+  value?: allowedPrimitiveT
+  onValueChange?: (value: allowedPrimitiveT) => void
+}
+
+function RadioSubMenu({ submenu, itemCls, groupCls, value = "", onValueChange = () => { } }: RadioSubMenuProps) {
+  return (
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger className={cn(itemCls, submenu.className)}>
+        {submenu.submenu}
+      </DropdownMenuSubTrigger>
+
+      <DropdownMenuSubContent>
+        <DropdownMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
+          {submenu.options.map((option, i) => {
+            if (isInputGroup(option)) {
+              return (
+                <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                  <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                  {option.options.map((grOpt, j) => (
+                    <RadioItem
+                      key={`${getValue(grOpt)}-${j}`}
+                      option={grOpt}
+                      className={cn("pl-4", itemCls)}
+                    />
+                  ))}
+                </DropdownMenuGroup>
+              )
+            }
+
+            if (isInputSubMenu(option)) {
+              return (
+                <RadioSubMenu
+                  key={`submenu-${i}`}
+                  submenu={option}
+                  itemCls={itemCls}
+                  groupCls={groupCls}
+                  value={value}
+                  onValueChange={onValueChange}
+                />
+              )
+            }
+
+            return (
+              <RadioItem
+                key={`${getValue(option)}-${i}`}
+                option={option}
+                className={itemCls}
+              />
+            )
+          })}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  )
+}
+
+type DropdownRadioWrapperProps = {
+  children: React.ReactNode
+  options: inputOptionsT
+
+  label?: string
+  itemCls?: string
+  groupCls?: string
+  contentProps?: React.ComponentProps<typeof DropdownMenuContent>
+
+  value?: allowedPrimitiveT
+  onValueChange?: (value: allowedPrimitiveT) => void
+} & React.ComponentProps<typeof DropdownMenu>
+
 function DropdownRadioWrapper({
-  trigger,
+  children,
   options,
-  value,
-  onValueChange,
+
   label,
-  contentProps,
   itemCls,
+  groupCls,
+  contentProps,
+
+  value = "",
+  onValueChange = () => { },
   ...props
-}: React.ComponentProps<typeof DropdownMenu> & DropdownRadioWrapperProps) {
+}: DropdownRadioWrapperProps) {
   return (
     <DropdownMenu {...props}>
       <DropdownMenuTrigger asChild>
-        {trigger}
+        {children}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent {...contentProps}>
-        {label && <DropdownMenuLabel>{label}</DropdownMenuLabel>}
-        {label && <DropdownMenuSeparator />}
-        <DropdownMenuRadioGroup value={value} onValueChange={onValueChange}>
-          {options.map((option) => (
-            <DropdownMenuRadioItem
-              key={option.value}
-              value={option.value}
-              disabled={option.disabled}
-              className={itemCls}
-            >
-              {option.label}
-            </DropdownMenuRadioItem>
-          ))}
+        {label && (
+          <>
+            <DropdownMenuLabel>{label}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        <DropdownMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
+          {options.map((option, i) => {
+            if (isInputGroup(option)) {
+              return (
+                <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                  <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                  {option.options.map((grOpt, j) => (
+                    <RadioItem
+                      key={`${getValue(grOpt)}-${j}`}
+                      option={grOpt}
+                      className={cn("pl-4", itemCls)}
+                    />
+                  ))}
+                </DropdownMenuGroup>
+              )
+            }
+
+            if (isInputSubMenu(option)) {
+              return (
+                <RadioSubMenu
+                  key={`submenu-${i}`}
+                  submenu={option}
+                  itemCls={itemCls}
+                  groupCls={groupCls}
+                  value={value}
+                  onValueChange={onValueChange}
+                />
+              )
+            }
+
+            return (
+              <RadioItem
+                key={`${getValue(option)}-${i}`}
+                option={option}
+                className={itemCls}
+              />
+            )
+          })}
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -289,6 +586,8 @@ export {
   type dropdownGroupT,
   type dropdownSubMenuT,
   type dropdownOptionsT,
-  type checkboxOptionT,
-  type radioOptionT,
+  type inputOptionT,
+  type inputGroupT,
+  type inputSubMenuT,
+  type inputOptionsT,
 }
