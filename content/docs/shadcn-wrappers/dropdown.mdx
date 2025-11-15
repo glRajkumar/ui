@@ -257,7 +257,7 @@ type={`export interface DropdownWrapper {
   groupCls?: string;
 
   /**
-   * Props passed to the DropdownMenuContent component
+   * ...contentProps: All properties from Radix UI DropdownMenu Content can be passed directly.
    * 
    * \`\`\`tsx
    * contentProps={{ 
@@ -266,7 +266,7 @@ type={`export interface DropdownWrapper {
    * }}
    * \`\`\`
    */
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>;
+  contentProps: DropdownMenuPrimitive.Content;
 
   /**
    * Callback fired when an option is selected
@@ -343,9 +343,9 @@ type={`export interface DropdownCheckboxWrapper {
   groupCls?: string;
 
   /**
-   * Props passed to the DropdownMenuContent component
+   * ...contentProps: All properties from Radix UI DropdownMenu Content can be passed directly.
    */
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>;
+  contentProps: DropdownMenuPrimitive.Content;
 
   /**
    * Controlled state: array of checked values
@@ -438,9 +438,9 @@ type={`export interface DropdownRadioWrapper {
   groupCls?: string;
 
   /**
-   * Props passed to the DropdownMenuContent component
+   * ...contentProps: All properties from Radix UI DropdownMenu Content can be passed directly.
    */
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>;
+  contentProps: DropdownMenuPrimitive.Content;
 
   /**
    * Controlled state: the currently selected value

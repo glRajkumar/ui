@@ -1,0 +1,159 @@
+---
+title: Tooltip
+description: A simplified wrapper for Shadcn Tooltip with flexible option handling and automatic type conversion
+---
+
+import { TooltipEx } from "@/components/examples";
+
+<TooltipEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/tooltip
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `tooltip` component.
+
+```tsx title="ui/tooltip.tsx"
+type TooltipWrapperProps = {
+  trigger: React.ReactNode
+  triggerCls?: string
+  description: React.ReactNode
+  descriptionCls?: string
+  contentProps?: Omit<React.ComponentProps<typeof TooltipPrimitive.Content>, "className">
+} & Omit<React.ComponentProps<typeof TooltipPrimitive.Provider>, "children">
+
+function TooltipWrapper({
+  trigger,
+  triggerCls,
+  description,
+  descriptionCls,
+  contentProps,
+}: TooltipWrapperProps) {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        className={cn(triggerCls)}
+        asChild={typeof trigger !== "string"}
+      >
+        {trigger}
+      </TooltipTrigger>
+
+      <TooltipContent {...contentProps} className={cn(descriptionCls)}>
+        {description}
+      </TooltipContent>
+    </Tooltip>
+  )
+}
+```
+
+Updated `TooltipWrapper` in the export block.
+
+```tsx
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+// [!code focus] [!code ++:1]
+  TooltipWrapper,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-tooltip
+```
+
+### tooltip.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/tooltip.tsx"'>
+  ./components/ui/tooltip.tsx
+</include>
+
+### Done
+You can now use `TooltipWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { TooltipWrapper } from "@/components/ui/tooltip";
+
+export function Basic() {
+  return (
+     <TooltipWrapper
+      trigger="Hover"
+      description="Some tooltip description"
+    />
+  )
+}
+```
+
+## Reference
+
+#### TooltipWrapper
+<AutoTypeTable 
+name="TooltipWrapper" 
+type={`export interface TooltipWrapper {
+    /**
+   * Content displayed in the clickable trigger button
+   * Can be a string or any React element
+   */
+  trigger: React.ReactNode;
+
+  /**
+   * Optional CSS classes for this specific accordion trigger
+   */
+  triggerCls?: string;
+
+  /**
+   * Description of the tooltip. 
+   */
+  description: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the description
+   */
+  descriptionCls?: string;
+
+  /**
+   * ...contentProps: All properties from Radix UI Tooltip Content can be passed directly.
+   */
+  contentProps: TooltipPrimitive.Content;
+
+  /**
+   * ...otherProps: All properties from Radix UI Tooltip Root can be passed directly.
+   */
+  otherProps: TooltipPrimitive.Root
+}
+`} 
+/>
+
+## Related Components
+
+- [Shadcn Tooltip](https://ui.shadcn.com/docs/components/tooltip)
+- [Radix UI Tooltip](https://www.radix-ui.com/primitives/docs/components/tooltip)

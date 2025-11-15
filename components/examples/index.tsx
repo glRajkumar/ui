@@ -2,6 +2,7 @@ import { AlertDialogExample } from "./alert-dialog";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
+import { TooltipExample } from "./tooltip";
 import { SelectExample } from "./select";
 import { DialogExample } from "./dialog";
 import { DrawerExample } from "./drawer";
@@ -77,6 +78,14 @@ export function SheetEx() {
   return (
     <Wrapper path="/components/examples/sheet.tsx">
       <SheetExample />
+    </Wrapper>
+  )
+}
+
+export function TooltipEx() {
+  return (
+    <Wrapper path="/components/examples/tooltip.tsx">
+      <TooltipExample />
     </Wrapper>
   )
 }

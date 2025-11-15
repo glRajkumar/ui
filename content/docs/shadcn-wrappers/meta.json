@@ -13,6 +13,7 @@
     "drawer",
     "dropdown",
     "select",
-    "sheet"
+    "sheet",
+    "tooltip"
   ]
 }

@@ -58,4 +58,41 @@ function TooltipContent({
   )
 }
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+type TooltipWrapperProps = {
+  trigger: React.ReactNode
+  triggerCls?: string
+  description: React.ReactNode
+  descriptionCls?: string
+  contentProps?: Omit<React.ComponentProps<typeof TooltipPrimitive.Content>, "className">
+} & Omit<React.ComponentProps<typeof TooltipPrimitive.Provider>, "children">
+
+function TooltipWrapper({
+  trigger,
+  triggerCls,
+  description,
+  descriptionCls,
+  contentProps,
+}: TooltipWrapperProps) {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        className={cn(triggerCls)}
+        asChild={typeof trigger !== "string"}
+      >
+        {trigger}
+      </TooltipTrigger>
+
+      <TooltipContent {...contentProps} className={cn(descriptionCls)}>
+        {description}
+      </TooltipContent>
+    </Tooltip>
+  )
+}
+
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  TooltipWrapper,
+}
