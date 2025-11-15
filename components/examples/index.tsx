@@ -1,3 +1,4 @@
+import { AlertDialogExample } from "./alert-dialog";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
@@ -32,6 +33,14 @@ export function AccordionEx() {
   return (
     <Wrapper path="/components/examples/accordion.tsx">
       <AccordionExample />
+    </Wrapper>
+  )
+}
+
+export function AlertDialogEx() {
+  return (
+    <Wrapper path="/components/examples/alert-dialog.tsx">
+      <AlertDialogExample />
     </Wrapper>
   )
 }

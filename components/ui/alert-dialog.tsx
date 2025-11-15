@@ -142,6 +142,118 @@ function AlertDialogCancel({
   )
 }
 
+type AlertDialogFooterWrapperProps = {
+  cancelText?: React.ReactNode
+  actionText?: React.ReactNode
+  footerCls?: string
+  actionCls?: string
+  cancelCls?: string
+  onConfirm?: () => void
+  onCancel?: () => void
+}
+
+function AlertDialogFooterWrapper({
+  cancelText,
+  actionText,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onConfirm = () => { },
+  onCancel = () => { },
+}: AlertDialogFooterWrapperProps) {
+  return (
+    <AlertDialogFooter className={footerCls}>
+      {
+        cancelText &&
+        <AlertDialogCancel
+          onClick={onCancel}
+          className={cancelCls}
+          asChild={typeof cancelText !== "string"}
+        >
+          {cancelText}
+        </AlertDialogCancel>
+      }
+
+      {
+        actionText &&
+        <AlertDialogAction
+          onClick={onConfirm}
+          className={actionCls}
+          asChild={typeof actionText !== "string"}
+        >
+          {actionText}
+        </AlertDialogAction>
+      }
+    </AlertDialogFooter>
+  )
+}
+
+type AlertDialogWrapperProps = {
+  title?: React.ReactNode
+  trigger?: React.ReactNode
+  children?: React.ReactNode
+  description?: React.ReactNode
+  descriptionCls?: string
+  contentCls?: string
+  headerCls?: string
+  titleCls?: string
+  hasFooter?: boolean
+} & AlertDialogFooterWrapperProps
+
+function AlertDialogWrapper({
+  trigger,
+  title = "Are you absolutely sure?",
+  description = "This action cannot be undone. This will permanently remove your data from our servers.",
+  children,
+  contentCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+
+  cancelText = "Cancel",
+  actionText = "Confirm",
+  footerCls,
+  actionCls,
+  cancelCls,
+  onConfirm,
+  onCancel,
+  ...props
+}: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
+  return (
+    <AlertDialog {...props}>
+      {trigger &&
+        <AlertDialogTrigger asChild={typeof trigger !== "string"}>{trigger}</AlertDialogTrigger>
+      }
+
+      <AlertDialogContent className={contentCls}>
+        <AlertDialogHeader className={headerCls}>
+          <AlertDialogTitle className={titleCls}>{title}</AlertDialogTitle>
+          {description && (
+            <AlertDialogDescription className={descriptionCls}>
+              {description}
+            </AlertDialogDescription>
+          )}
+        </AlertDialogHeader>
+
+        {children}
+
+        {
+          (!!cancelText || !!actionText) &&
+          <AlertDialogFooterWrapper
+            cancelText={cancelText}
+            actionText={actionText}
+            footerCls={footerCls}
+            actionCls={actionCls}
+            cancelCls={cancelCls}
+            onConfirm={onConfirm}
+            onCancel={onCancel}
+          />
+        }
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
 export {
   AlertDialog,
   AlertDialogPortal,
@@ -154,4 +266,6 @@ export {
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
+  AlertDialogWrapper,
+  AlertDialogFooterWrapper,
 }
