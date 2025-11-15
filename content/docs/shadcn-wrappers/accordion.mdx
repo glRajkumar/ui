@@ -1,0 +1,321 @@
+---
+title: Accordion
+description: A simplified wrapper for Shadcn Accordion with flexible option handling and automatic type conversion
+---
+
+import { AccordionEx } from "@/components/examples";
+
+<AccordionEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/accordion
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+```tsx title="ui/accordion.tsx"
+type accordionItemT = {
+  value: string
+  trigger: React.ReactNode
+  content: React.ReactNode
+  className?: string
+  triggerCls?: string
+  contentCls?: string
+  disabled?: boolean
+}
+
+type accordionItemsT = accordionItemT[]
+
+type accordionWrapperProps = {
+  items: accordionItemsT
+  itemCls?: string
+  triggerCls?: string
+  contentCls?: string
+  type?: "single" | "multiple"
+  collapsible?: boolean
+} & Omit<
+  AccordionPrimitive.AccordionSingleProps | AccordionPrimitive.AccordionMultipleProps,
+  "type" | "collapsible"
+>
+
+function AccordionWrapper({
+  items,
+  itemCls,
+  triggerCls,
+  contentCls,
+  type = "single",
+  collapsible = true,
+  ...props
+}: accordionWrapperProps) {
+  const rootProps =
+    type === "single"
+      ? ({ type: "single", collapsible, ...props } as AccordionPrimitive.AccordionSingleProps)
+      : ({ type: "multiple", ...props } as AccordionPrimitive.AccordionMultipleProps)
+
+  return (
+    <Accordion {...rootProps}>
+      {items.map((item) => (
+        <AccordionItem
+          key={item.value}
+          value={item.value}
+          className={cn(itemCls, item.className)}
+          disabled={item.disabled}
+        >
+          <AccordionTrigger className={cn("items-center justify-start gap-2 [&_.arrow]:ml-auto", triggerCls, item.triggerCls)}>
+            {item.trigger}
+          </AccordionTrigger>
+
+          <AccordionContent className={cn(contentCls, item.contentCls)}>
+            {item.content}
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  )
+}
+```
+
+Update following changes in `AccordionTrigger` component.
+
+```tsx
+function AccordionTrigger({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {
+  return (
+    <AccordionPrimitive.Header className="flex">
+      <AccordionPrimitive.Trigger
+        data-slot="accordion-trigger"
+        className={cn(
+          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180", // [!code --]
+          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>.arrow]:rotate-180", // [!code ++]
+          className
+        )}
+        {...props}
+      >
+        {children}
+        // [!code --]
+        <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+         // [!code ++] [!code word:arrow]
+        <ChevronDownIcon className="arrow text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  )
+}
+```
+
+Updated `[&[data-state=open]>svg]:rotate-180` to `[&[data-state=open]>.arrow]:rotate-180` in `AccordionPrimitive.Trigger` className and added new className `arrow` in `ChevronDownIcon` svg.
+
+```tsx
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+/* [!code ++:3] */
+  AccordionWrapper,
+  type accordionItemT,
+  type accordionItemsT,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-accordion
+```
+
+Copy and paste the following code into your project.
+
+### accordion.tsx
+<include cwd meta='title="ui/accordion.tsx"'>
+  ./components/ui/accordion.tsx
+</include>
+
+### Done
+You can now use `AccordionWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { AccordionWrapper } from "@/components/ui/accordion";
+
+export function Basic() {
+  return (
+    <AccordionWrapper
+      items={[
+       { value: "item 1", trigger: "Item 1", content: "Item 1 content" },
+       { value: "item 2", trigger: "Item 2", content: "Item 2 content" },
+       { value: "item 3", trigger: <><Apple /> Item 2</>, content: <>Item 2 content</> },
+      ]}
+    />
+  )
+}
+```
+
+## Reference
+
+#### `accordionItemT`
+<AutoTypeTable 
+name="accordionItemT" 
+type={`export type accordionItemT = {
+  /**
+   * Unique identifier for the accordion item
+   * Used for controlling which items are open/closed
+   */
+  value: string;
+
+  /**
+   * Content displayed in the clickable trigger button
+   * Can be a string or any React element
+   */
+  trigger: React.ReactNode;
+
+  /**
+   * Content displayed when the accordion item is expanded
+   * Can be a string or any React element
+   */
+  content: React.ReactNode;
+
+  /**
+   * Optional CSS classes for this specific accordion item
+   */
+  className?: string;
+
+  /**
+   * Optional CSS classes for this specific accordion trigger
+   */
+  triggerCls?: string;
+
+  /**
+   * Optional CSS classes for this specific accordion content panel
+   */
+  contentCls?: string;
+
+  /**
+   * Whether this accordion item is disabled
+   * Disabled items cannot be opened or closed
+   */
+  disabled?: boolean;
+}
+`} 
+/>
+
+#### `AccordionWrapper`
+<AutoTypeTable 
+name="AccordionWrapper" 
+type={`export interface AccordionWrapper {
+  /**
+   * Array of accordion items to render
+   * Each item contains the value, trigger, content, and optional styling
+   * 
+   * \`\`\`tsx
+   * const items = [
+   *   {
+   *     value: "item-1",
+   *     trigger: "What is React?",
+   *     content: "React is a JavaScript library...",
+   *   },
+   *   {
+   *     value: "item-2",
+   *     trigger: <><Icon />Custom Trigger</>,
+   *     content: <div>Rich content here</div>,
+   *     disabled: true,
+   *   }
+   * ]
+   * \`\`\`
+   */
+  items: accordionItemsT;
+
+  /**
+   * Additional CSS classes applied to all accordion items
+   * Individual items can override this with their own \`className\`
+   * 
+   * \`\`\`tsx
+   * itemCls="border-b"
+   * \`\`\`
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to all accordion triggers
+   * Individual items can override this with their own \`triggerCls\`
+   * 
+   * Note: Default classes include flex alignment and arrow positioning
+   * 
+   * \`\`\`tsx
+   * triggerCls="font-semibold text-lg"
+   * \`\`\`
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes applied to all accordion content panels
+   * Individual items can override this with their own \`contentCls\`
+   * 
+   * \`\`\`tsx
+   * contentCls="text-gray-600 pt-4"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+  /**
+   * Controls accordion behavior
+   * 
+   * - \`"single"\`: Only one item can be open at a time
+   * - \`"multiple"\`: Multiple items can be open simultaneously
+   * 
+   * @default "single"
+   * 
+   * \`\`\`tsx
+   * type="multiple"
+   * \`\`\`
+   */
+  type?: "single" | "multiple";
+
+  /**
+   * Whether an open item can be collapsed by clicking its trigger again
+   * Only applies when type is "single"
+   * 
+   * @default true
+   * 
+   * \`\`\`tsx
+   * collapsible={false} // User must always have one item open
+   * \`\`\`
+   */
+  collapsible?: boolean;
+
+  /**
+   * ...AccordionPrimitiveProps: All properties from Radix UI Accordion Root can be passed directly.
+   */
+  AccordionPrimitiveProps: AccordionPrimitive.Root
+}
+`} 
+/>
+
+## Related Components
+
+- [Shadcn Accordion](https://ui.shadcn.com/docs/components/accordion)
+- [Radix UI Accordion](https://www.radix-ui.com/primitives/docs/components/accordion)

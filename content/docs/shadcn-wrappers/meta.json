@@ -5,6 +5,7 @@
   "root": true,
   "pages": [
     "index",
+    "accordion",
     "combobox",
     "dropdown",
     "select"

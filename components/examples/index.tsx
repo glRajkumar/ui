@@ -1,3 +1,4 @@
+import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
 import { SelectExample } from "./select";
@@ -23,6 +24,14 @@ export function DropdownEx() {
   return (
     <Wrapper path="/components/examples/dropdown.tsx">
       <DropdownExample />
+    </Wrapper>
+  )
+}
+
+export function AccordionEx() {
+  return (
+    <Wrapper path="/components/examples/accordion.tsx">
+      <AccordionExample />
     </Wrapper>
   )
 }
