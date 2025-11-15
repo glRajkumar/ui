@@ -9,8 +9,9 @@
     "accordion",
     "card",
     "combobox",
-    "dropdown",
     "dialog",
+    "drawer",
+    "dropdown",
     "select"
   ]
 }

@@ -4,6 +4,7 @@ import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
+import { Button } from "./button"
 
 function Drawer({
   ...props
@@ -121,6 +122,120 @@ function DrawerDescription({
   )
 }
 
+type DrawerFooterWrapperProps = {
+  cancel?: React.ReactNode
+  action?: React.ReactNode
+  footerCls?: string
+  actionCls?: string
+  cancelCls?: string
+  onAction?: () => void
+  onCancel?: () => void
+}
+
+function DrawerFooterWrapper({
+  cancel,
+  action,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onAction = () => { },
+  onCancel = () => { },
+}: DrawerFooterWrapperProps) {
+  return (
+    <DrawerFooter className={footerCls}>
+      {
+        cancel &&
+        <DrawerClose asChild>
+          <Button
+            variant="secondary"
+            onClick={onCancel}
+            className={cn("border", cancelCls)}
+            asChild={typeof cancel !== "string"}
+          >
+            {cancel}
+          </Button>
+        </DrawerClose>
+      }
+
+      {
+        action &&
+        <Button
+          onClick={onAction}
+          className={actionCls}
+          asChild={typeof action !== "string"}
+        >
+          {action}
+        </Button>
+      }
+    </DrawerFooter>
+  )
+}
+
+type DrawerWrapperProps = {
+  title?: React.ReactNode
+  trigger?: React.ReactNode
+  children?: React.ReactNode
+  description?: React.ReactNode
+  descriptionCls?: string
+  contentCls?: string
+  headerCls?: string
+  titleCls?: string
+} & DrawerFooterWrapperProps
+
+function DrawerWrapper({
+  trigger,
+  title,
+  description,
+  children,
+  contentCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+
+  cancel = "Cancel",
+  action,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onAction,
+  onCancel,
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Root> & DrawerWrapperProps) {
+  return (
+    <Drawer {...props}>
+      {trigger &&
+        <DrawerTrigger asChild={typeof trigger !== "string"}>{trigger}</DrawerTrigger>
+      }
+
+      <DrawerContent className={contentCls}>
+        <DrawerHeader className={headerCls}>
+          <DrawerTitle className={titleCls}>{title}</DrawerTitle>
+          {description && (
+            <DrawerDescription className={descriptionCls}>
+              {description}
+            </DrawerDescription>
+          )}
+        </DrawerHeader>
+
+        {children}
+
+        {
+          (!!cancel || !!action) &&
+          <DrawerFooterWrapper
+            cancel={cancel}
+            action={action}
+            footerCls={footerCls}
+            actionCls={actionCls}
+            cancelCls={cancelCls}
+            onAction={onAction}
+            onCancel={onCancel}
+          />
+        }
+      </DrawerContent>
+    </Drawer>
+  )
+}
+
 export {
   Drawer,
   DrawerPortal,
@@ -132,4 +247,6 @@ export {
   DrawerFooter,
   DrawerTitle,
   DrawerDescription,
+  DrawerWrapper,
+  DrawerFooterWrapper,
 }

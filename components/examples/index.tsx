@@ -4,6 +4,7 @@ import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
 import { SelectExample } from "./select";
 import { DialogExample } from "./dialog";
+import { DrawerExample } from "./drawer";
 import { CardExample } from "./card";
 import Wrapper from "../wrapper";
 
@@ -59,6 +60,14 @@ export function DialogEx() {
   return (
     <Wrapper path="/components/examples/dialog.tsx">
       <DialogExample />
+    </Wrapper>
+  )
+}
+
+export function DrawerEx() {
+  return (
+    <Wrapper path="/components/examples/drawer.tsx">
+      <DrawerExample />
     </Wrapper>
   )
 }
