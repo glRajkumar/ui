@@ -1,0 +1,346 @@
+---
+title: Tabs
+description: A simplified wrapper for Shadcn Tabs with flexible option handling and automatic type conversion
+---
+
+import { TabsEx } from "@/components/examples";
+
+<TabsEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/tabs
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `tabs` component.
+
+```tsx title="ui/tabs.tsx"
+type tabItemT = {
+  value: string
+  label: React.ReactNode
+  content: React.ReactNode
+  disabled?: boolean
+  triggerCls?: string
+  contentCls?: string
+}
+
+type tabItemsT = tabItemT[]
+type tabsWrapperProps = {
+  tabs: tabItemsT
+  listCls?: string
+  triggerCls?: string
+  contentCls?: string
+}
+
+function TabsWrapper({
+  tabs,
+  listCls,
+  triggerCls,
+  contentCls,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Root> & tabsWrapperProps) {
+  return (
+    <Tabs {...props}>
+      <TabsList className={listCls}>
+        {tabs.map((tab) => (
+          <TabsTrigger
+            key={tab.value}
+            value={tab.value}
+            disabled={tab.disabled}
+            className={cn(triggerCls, tab.triggerCls)}
+          >
+            {tab.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+
+      {tabs.map((tab) => (
+        <TabsContent
+          key={tab.value}
+          value={tab.value}
+          className={cn(contentCls, tab.contentCls)}
+        >
+          {tab.content}
+        </TabsContent>
+      ))}
+    </Tabs>
+  )
+}
+```
+
+Updated `TabsWrapper` in the export block.
+
+```tsx
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+// [!code focus:3] [!code ++:3]
+  TabsWrapper,
+  type tabItemT,
+  type tabItemsT,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-tabs
+```
+
+### tabs.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/tabs.tsx"'>
+  ./components/ui/tabs.tsx
+</include>
+
+### Done
+You can now use `TabsWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { TabsWrapper } from "@/components/ui/tabs";
+
+export function Basic() {
+  return (
+     <TabsWrapper
+      tabs={[
+        {
+          value: "overview",
+          label: "Overview",
+          content: "Over content",
+        },
+        {
+          value: "details",
+          label: <><User /> Details</>,
+          content: (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Details</h3>
+              <p>More detailed information here.</p>
+            </div>
+          ),
+        },
+      ]}
+    />
+  )
+}
+```
+
+### Controlled
+```tsx
+import { useState } from "react"
+import { TabsWrapper } from "@/components/tabs-wrapper"
+
+function ControlledTabs() {
+  const [activeTab, setActiveTab] = useState("profile")
+
+  const tabs = [
+    {
+      value: "profile",
+      label: "Profile",
+      content: <ProfileForm />,
+    },
+    {
+      value: "account",
+      label: "Account",
+      content: <AccountSettings />,
+    },
+    {
+      value: "security",
+      label: "Security",
+      content: <SecuritySettings />,
+    },
+  ]
+
+  return (
+    <div>
+      <div className="mb-4 text-sm text-gray-600">
+        Current tab: {activeTab}
+      </div>
+      
+      <TabsWrapper
+        tabs={tabs}
+        value={activeTab}
+        onValueChange={setActiveTab}
+      />
+    </div>
+  )
+}
+```
+
+### Custom Styling
+```tsx
+import { TabsWrapper } from "@/components/tabs-wrapper"
+
+function StyledTabs() {
+  const tabs = [
+    {
+      value: "code",
+      label: "Code",
+      content: (
+        <pre className="bg-gray-900 text-gray-100 p-4 rounded-md">
+          <code>function hello() {`{\n  console.log("Hello")\n}`}</code>
+        </pre>
+      ),
+      contentCls: "mt-0",
+    },
+    {
+      value: "preview",
+      label: "Preview",
+      content: (
+        <div className="border rounded-md p-4">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded">
+            Hello Button
+          </button>
+        </div>
+      ),
+      contentCls: "mt-0",
+    },
+  ]
+
+  return (
+    <TabsWrapper
+      tabs={tabs}
+      defaultValue="code"
+      listCls="bg-gray-100 p-1 rounded-t-lg"
+      triggerCls="data-[state=active]:bg-white data-[state=active]:shadow-sm"
+      contentCls="border border-t-0 rounded-b-lg p-4"
+    />
+  )
+}
+```
+
+## Reference
+
+#### tabItemT
+<AutoTypeTable 
+name="tabItemT" 
+type={`export type tabItemT = {
+  /**
+   * Unique identifier for the tab
+   * Used to control which tab is active
+   */
+  value: string;
+
+  /**
+   * Label displayed in the tab trigger button
+   * Can be a string or any React element
+   */
+  label: React.ReactNode;
+
+  /**
+   * Content displayed when this tab is active
+   * Can be any React element
+   */
+  content: React.ReactNode;
+
+  /**
+   * Whether this tab is disabled
+   * Disabled tabs cannot be selected
+   */
+  disabled?: boolean;
+
+  /**
+   * Optional CSS classes for this specific tab trigger
+   */
+  triggerCls?: string;
+
+  /**
+   * Optional CSS classes for this specific tab content panel
+   */
+  contentCls?: string;
+}`} 
+/>
+
+#### TabsWrapper
+<AutoTypeTable 
+name="TabsWrapper" 
+type={`export interface TabsWrapper {
+  /**
+   * Array of tab items to render
+   * Each item contains the value, label, content, and optional styling
+   * 
+   * \`\`\`tsx
+   * const tabs = [
+   *   {
+   *     value: "overview",
+   *     label: "Overview",
+   *     content: <div>Overview content</div>,
+   *   },
+   *   {
+   *     value: "settings",
+   *     label: <><SettingsIcon />Settings</>,
+   *     content: <SettingsPanel />,
+   *     disabled: true,
+   *   }
+   * ]
+   * \`\`\`
+   */
+  tabs: tabItemsT
+
+  /**
+   * Additional CSS classes for the tabs list container
+   * The list contains all the tab triggers
+   * 
+   * \`\`\`tsx
+   * listCls="bg-gray-100 p-1 rounded-lg"
+   * \`\`\`
+   */
+  listCls?: string;
+
+  /**
+   * Additional CSS classes applied to all tab triggers
+   * Individual tabs can override this with their own \`triggerCls\`
+   * 
+   * \`\`\`tsx
+   * triggerCls="font-semibold text-sm"
+   * \`\`\`
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes applied to all tab content panels
+   * Individual tabs can override this with their own \`contentCls\`
+   * 
+   * \`\`\`tsx
+   * contentCls="mt-6 p-4 border rounded-md"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+ /**
+   * ...otherProps: All properties from Radix UI Tabs Root can be passed directly.
+   */
+  otherProps: TabsPrimitive.Root
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Tabs](https://ui.shadcn.com/docs/components/tabs)
+- [Radix UI Tabs](https://www.radix-ui.com/primitives/docs/components/tabs)

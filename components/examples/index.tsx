@@ -8,6 +8,7 @@ import { DialogExample } from "./dialog";
 import { DrawerExample } from "./drawer";
 import { SheetExample } from "./sheet";
 import { CardExample } from "./card";
+import { TabsExample } from "./tabs";
 import Wrapper from "../wrapper";
 
 export function SelectEx() {
@@ -86,6 +87,14 @@ export function TooltipEx() {
   return (
     <Wrapper path="/components/examples/tooltip.tsx">
       <TooltipExample />
+    </Wrapper>
+  )
+}
+
+export function TabsEx() {
+  return (
+    <Wrapper path="/components/examples/tabs.tsx">
+      <TabsExample />
     </Wrapper>
   )
 }
