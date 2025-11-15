@@ -1,8 +1,442 @@
 ---
-title: Alert Dialog Wrapper
+title: Alert Dialog
 description: A simplified wrapper for Shadcn Alert Dialog with flexible option handling and automatic type conversion
 ---
 
 import { AlertDialogEx } from "@/components/examples";
 
 <AlertDialogEx />
+
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/alert-dialog
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `alert-dialog` component.
+
+```tsx title="ui/alert-dialog.tsx"
+
+type AlertDialogFooterWrapperProps = {
+  cancelText?: React.ReactNode
+  actionText?: React.ReactNode
+  footerCls?: string
+  actionCls?: string
+  cancelCls?: string
+  onConfirm?: () => void
+  onCancel?: () => void
+}
+
+function AlertDialogFooterWrapper({
+  cancelText,
+  actionText,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onConfirm = () => { },
+  onCancel = () => { },
+}: AlertDialogFooterWrapperProps) {
+  return (
+    <AlertDialogFooter className={footerCls}>
+      {
+        cancelText &&
+        <AlertDialogCancel
+          onClick={onCancel}
+          className={cancelCls}
+          asChild={typeof cancelText !== "string"}
+        >
+          {cancelText}
+        </AlertDialogCancel>
+      }
+
+      {
+        actionText &&
+        <AlertDialogAction
+          onClick={onConfirm}
+          className={actionCls}
+          asChild={typeof actionText !== "string"}
+        >
+          {actionText}
+        </AlertDialogAction>
+      }
+    </AlertDialogFooter>
+  )
+}
+
+type AlertDialogWrapperProps = {
+  title?: React.ReactNode
+  trigger?: React.ReactNode
+  children?: React.ReactNode
+  description?: React.ReactNode
+  descriptionCls?: string
+  contentCls?: string
+  headerCls?: string
+  titleCls?: string
+  hasFooter?: boolean
+} & AlertDialogFooterWrapperProps
+
+function AlertDialogWrapper({
+  trigger,
+  title = "Are you absolutely sure?",
+  description = "This action cannot be undone. This will permanently remove your data from our servers.",
+  children,
+  contentCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+
+  cancelText = "Cancel",
+  actionText = "Confirm",
+  footerCls,
+  actionCls,
+  cancelCls,
+  onConfirm,
+  onCancel,
+  ...props
+}: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
+  return (
+    <AlertDialog {...props}>
+      {trigger &&
+        <AlertDialogTrigger asChild={typeof trigger !== "string"}>{trigger}</AlertDialogTrigger>
+      }
+
+      <AlertDialogContent className={contentCls}>
+        <AlertDialogHeader className={headerCls}>
+          <AlertDialogTitle className={titleCls}>{title}</AlertDialogTitle>
+          {description && (
+            <AlertDialogDescription className={descriptionCls}>
+              {description}
+            </AlertDialogDescription>
+          )}
+        </AlertDialogHeader>
+
+        {children}
+
+        {
+          (!!cancelText || !!actionText) &&
+          <AlertDialogFooterWrapper
+            cancelText={cancelText}
+            actionText={actionText}
+            footerCls={footerCls}
+            actionCls={actionCls}
+            cancelCls={cancelCls}
+            onConfirm={onConfirm}
+            onCancel={onCancel}
+          />
+        }
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+```
+
+Add `AlertDialogWrapper` and `AlertDialogFooterWrapper` at the export block.
+
+```tsx
+export {
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+/* [!code ++:2] [!code focus:2] */
+  AlertDialogWrapper,
+  AlertDialogFooterWrapper,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-alert-dialog
+```
+
+Copy and paste the following code into your project.
+
+### alert-dialog.tsx
+<include cwd meta='title="ui/alert-dialog.tsx"'>
+  ./components/ui/alert-dialog.tsx
+</include>
+
+### Done
+You can now use `AlertDialogWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { AlertDialogWrapper } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+
+export function Basic() {
+  return (
+    <>
+      <AlertDialogWrapper
+        trigger={<Button>Delete</Button>}
+      />
+    </>
+  )
+}
+```
+
+### Controlled
+```tsx
+import { useState } from "react"
+import { AlertDialogWrapper } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+
+export function Controlled() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <AlertDialogWrapper
+        open={open}
+        onOpenChange={setOpen}
+        trigger={<Button>Controlled</Button>}
+        onConfirm={() => setOpen(false)}
+      />
+    </>
+  )
+}
+
+// Programaticaly open model without trigger
+export function Controlled2() {
+  const [open, setOpen] = useState(false)
+ 
+  const updateOpen = () => setOpen(p => !p)
+
+  return (
+    <>
+      <Button onClick={updateOpen}>Controlled 2</Button>
+
+      <AlertDialogWrapper
+        open={open}
+        onOpenChange={updateOpen}
+        onConfirm={updateOpen}
+      />
+    </>
+  )
+}
+```
+
+### Custom
+```tsx
+export function Custom() {
+  return (
+    <AlertDialogWrapper
+      trigger={<Button>Delete</Button>}
+      title="Some Custom Modal"
+      description=""
+
+      // to remove footer make cancelText and actionText empty
+      cancelText=""
+      actionText=""
+    >
+      <div>...</div>
+    </AlertDialogWrapper>
+  )
+}
+```
+
+## Reference
+
+#### AlertDialogFooterWrapper
+<AutoTypeTable 
+name="AlertDialogFooterWrapper" 
+type={`export interface AlertDialogFooterWrapper {
+    /**
+   * Text or element for the cancel button
+   * Set to \`""\` or \`null\` or \`false\` to hide the cancel button
+   * 
+   * @default "Cancel"
+   * 
+   * \`\`\`tsx
+   * cancelText="No, keep it"
+   * // or custom element
+   * cancelText={<><XIcon />Nevermind</>}
+   * // or hide it
+   * cancelText={null}
+   * \`\`\`
+   */
+  cancelText?: React.ReactNode;
+
+  /**
+   * Text or element for the confirm/action button
+   * Set to \`""\` or \`null\` or \`false\` to hide the action button
+   * 
+   * @default "Confirm"
+   * 
+   * \`\`\`tsx
+   * actionText="Yes, delete"
+   * // or custom element
+   * actionText={<><TrashIcon />Delete Forever</>}
+   * \`\`\`
+   */
+  actionText?: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the footer container
+   */
+  footerCls?: string;
+
+  /**
+   * Additional CSS classes for the action/confirm button
+   * 
+   * \`\`\`tsx
+   * actionCls="bg-red-600 hover:bg-red-700"
+   * \`\`\`
+   */
+  actionCls?: string;
+
+  /**
+   * Additional CSS classes for the cancel button
+   */
+  cancelCls?: string;
+
+  /**
+   * Callback fired when the action/confirm button is clicked
+   * Dialog remains open after this callback - close it via state if needed
+   * 
+   * \`\`\`tsx
+   * onConfirm={() => {
+   *   deleteAccount()
+   *   setOpen(false)
+   * }}
+   * \`\`\`
+   */
+  onConfirm?: () => void;
+
+  /**
+   * Callback fired when the cancel button is clicked
+   * Dialog automatically closes after this callback
+   * 
+   * \`\`\`tsx
+   * onCancel={() => {
+   *   console.log("User cancelled")
+   * }}
+   * \`\`\`
+   */
+  onCancel?: () => void;
+}`} 
+/>
+
+#### AlertDialogWrapper
+<AutoTypeTable 
+name="AlertDialogWrapper" 
+type={`export interface AlertDialogWrapper {
+  /**
+   * Optional trigger element that opens the dialog when clicked
+   * If not provided, control the dialog via the \`open\` prop
+   * 
+   * Automatically uses \`asChild\` when React element is provided
+   * 
+   * \`\`\`tsx
+   * trigger={<Button variant="destructive">Delete Account</Button>}
+   * // or
+   * trigger="Click to open"
+   * \`\`\`
+   */
+  trigger?: React.ReactNode;
+
+  /**
+   * Dialog title displayed in the header
+   * 
+   * @default "Are you absolutely sure?"
+   * 
+   * \`\`\`tsx
+   * title="Delete User Account"
+   * // or
+   * title={<span className="text-red-600">Warning!</span>}
+   * \`\`\`
+   */
+  title?: React.ReactNode;
+
+  /**
+   * Description text explaining the action's consequences
+   * Set to \`"null"\` or \`undefined\` to hide the description
+   * 
+   * @default "This action cannot be undone. This will permanently remove your data from our servers."
+   * 
+   * \`\`\`tsx
+   * description="All files and data will be permanently deleted."
+   * // or hide it
+   * description={null}
+   * \`\`\`
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Additional content rendered between description and footer
+   * Use for custom forms, warnings, or additional information
+   * 
+   * \`\`\`tsx
+   * <AlertDialogWrapper>
+   *   <div className="my-4">
+   *     <input placeholder="Type 'DELETE' to confirm" />
+   *   </div>
+   * </AlertDialogWrapper>
+   * \`\`\`
+   */
+  children?: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the dialog content container
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes for the header section
+   */
+  headerCls?: string;
+
+  /**
+   * Additional CSS classes for the title
+   */
+  titleCls?: string;
+
+  /**
+   * Additional CSS classes for the description
+   */
+  descriptionCls?: string;
+
+ /**
+   * ...otherProps: All properties from Radix UI Alert Dialog Root can be passed directly.
+   */
+  otherProps: AlertDialogPrimitive.Root
+}`} 
+/>
+
+Properties of `AlertDialogFooterWrapper` can be passed directly.
+
+## Related Components
+
+- [Shadcn Alert Dialog](https://ui.shadcn.com/docs/components/alert-dialog)
+- [Radix UI Alert Dialog](https://www.radix-ui.com/primitives/docs/components/alert-dialog)
