@@ -4,7 +4,7 @@ import * as React from "react"
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
 import { type VariantProps } from "class-variance-authority"
 
-import { cn } from "@/lib/utils"
+import { cn, getLabel, getValue, isOption } from "@/lib/utils"
 import { toggleVariants } from "@/components/ui/toggle"
 
 const ToggleGroupContext = React.createContext<
@@ -80,4 +80,62 @@ function ToggleGroupItem({
   )
 }
 
-export { ToggleGroup, ToggleGroupItem }
+type toggleItemT = allowedPrimitiveT | (optionT & {
+  "aria-label"?: string
+})
+
+type toggleItemsT = toggleItemT[]
+
+type itemProps = {
+  option: toggleItemT
+  className?: string
+}
+
+function Item({ option, className }: itemProps) {
+  const value = getValue(option)
+  const label = getLabel(option)
+  const isObj = isOption(option)
+
+  return (
+    <ToggleGroupItem
+      value={`${value}`}
+      className={cn("border", className, isObj && option.className)}
+      aria-label={isObj ? option["aria-label"] : undefined}
+    >
+      {isObj ? label : `${label}`}
+    </ToggleGroupItem>
+  )
+}
+
+type props = {
+  options: toggleItemT[]
+  itemCls?: string
+  type?: "single" | "multiple"
+} & Omit<React.ComponentProps<typeof ToggleGroupPrimitive.Root>, "type">
+
+function ToggleGroupWrapper({
+  options,
+  itemCls,
+  type = "single",
+  ...props
+}: props) {
+  return (
+    <ToggleGroup type={type} {...(props as any)}>
+      {options.map((option, i) => (
+        <Item
+          key={i}
+          option={option}
+          className={itemCls}
+        />
+      ))}
+    </ToggleGroup>
+  )
+}
+
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+  ToggleGroupWrapper,
+  type toggleItemT,
+  type toggleItemsT,
+}

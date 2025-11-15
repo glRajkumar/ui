@@ -82,10 +82,7 @@ type accordionWrapperProps = {
   contentCls?: string
   type?: "single" | "multiple"
   collapsible?: boolean
-} & Omit<
-  AccordionPrimitive.AccordionSingleProps | AccordionPrimitive.AccordionMultipleProps,
-  "type" | "collapsible"
->
+} & Omit<React.ComponentProps<typeof AccordionPrimitive.Root>, "type" | "collapsible">
 
 function AccordionWrapper({
   items,
@@ -93,16 +90,10 @@ function AccordionWrapper({
   triggerCls,
   contentCls,
   type = "single",
-  collapsible = true,
   ...props
 }: accordionWrapperProps) {
-  const rootProps =
-    type === "single"
-      ? ({ type: "single", collapsible, ...props } as AccordionPrimitive.AccordionSingleProps)
-      : ({ type: "multiple", ...props } as AccordionPrimitive.AccordionMultipleProps)
-
   return (
-    <Accordion {...rootProps}>
+    <Accordion type={type} {...(props as any)}>
       {items.map((item) => (
         <AccordionItem
           key={item.value}

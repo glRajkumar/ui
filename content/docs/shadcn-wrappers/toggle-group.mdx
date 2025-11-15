@@ -1,0 +1,204 @@
+---
+title: Toggle Group
+description: A simplified wrapper for Shadcn Toggle Group with flexible option handling and automatic type conversion
+---
+
+import { ToggleGroupEx } from "@/components/examples";
+
+<ToggleGroupEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/toggle-group
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `toggle-group` component.
+
+```tsx
+import { cn, getLabel, getValue, isOption } from "@/lib/utils"
+```
+
+```tsx title="ui/toggle-group.tsx"
+type toggleItemT = allowedPrimitiveT | (optionT & {
+  "aria-label"?: string
+})
+
+type toggleItemsT = toggleItemT[]
+
+type itemProps = {
+  option: toggleItemT
+  className?: string
+}
+
+function Item({ option, className }: itemProps) {
+  const value = getValue(option)
+  const label = getLabel(option)
+  const isObj = isOption(option)
+
+  return (
+    <ToggleGroupItem
+      value={`${value}`}
+      className={cn(className, isObj && option.className)}
+      aria-label={isObj ? option["aria-label"] : undefined}
+    >
+      {isObj ? label : `${label}`}
+    </ToggleGroupItem>
+  )
+}
+
+type props = {
+  options: toggleItemT[]
+  itemCls?: string
+  type?: "single" | "multiple"
+} & Omit<React.ComponentProps<typeof ToggleGroupPrimitive.Root>, "type">
+
+function ToggleGroupWrapper({
+  options,
+  itemCls,
+  type = "single",
+  ...props
+}: props) {
+  return (
+    <ToggleGroup type={type} {...(props as any)}>
+      {options.map((option, i) => (
+        <Item
+          key={i}
+          option={option}
+          className={itemCls}
+        />
+      ))}
+    </ToggleGroup>
+  )
+}
+```
+
+Updated `ToggleGroupWrapper` in the export block.
+
+```tsx
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+// [!code focus:3] [!code ++:3]
+  ToggleGroupWrapper,
+  type toggleItemT,
+  type toggleItemsT,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-toggle @radix-ui/react-toggle-group
+```
+
+### toggle-group.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/toggle.tsx"'>
+  ./components/ui/toggle.tsx
+</include>
+
+<include cwd meta='title="ui/toggle-group.tsx"'>
+  ./components/ui/toggle-group.tsx
+</include>
+
+### Done
+You can now use `ToggleGroupWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { ToggleGroupWrapper } from "@/components/ui/toggle-group";
+
+export function Basic() {
+  return (
+     <ToggleGroupWrapper
+      options={["Toogle 1", "Toggle 2"]}
+    />
+  )
+}
+```
+
+## Reference
+
+#### ToggleGroupWrapper
+<AutoTypeTable 
+name="ToggleGroupWrapper" 
+type={`export interface ToggleGroupWrapper {
+  /**
+   * Array of toggle options to render
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string, "aria-label"?: string }\`
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Bold",
+   *   "Italic",
+   *   "Underline",
+   *   // or with objects
+   *   { label: <BoldIcon />, value: "bold", "aria-label": "Toggle bold" },
+   *   { label: <ItalicIcon />, value: "italic", className: "text-blue-500" }
+   * ]
+   * \`\`\`
+   */
+  options: toggleItemsT;
+
+  /**
+   * Additional CSS classes applied to all toggle items
+   * Individual options can override this with their own \`className\`
+   * 
+   * \`\`\`tsx
+   * itemCls="px-4 py-2"
+   * \`\`\`
+   */
+  itemCls?: string;
+
+  /**
+   * Controls toggle behavior
+   * 
+   * - \`"single"\`: Only one item can be selected at a time
+   * - \`"multiple"\`: Multiple items can be selected simultaneously
+   * 
+   * @default "single"
+   * 
+   * \`\`\`tsx
+   * type="multiple" // Allow multiple selections
+   * \`\`\`
+   */
+  type?: "single" | "multiple";
+
+  /**
+   * ...otherProps: All properties from Radix UI ToggleGroup Root can be passed directly.
+   */
+  otherProps: ToggleGroupPrimitive.Root
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Toggle Group](https://ui.shadcn.com/docs/components/toggle-group)
+- [Radix UI Toggle Group](https://www.radix-ui.com/primitives/docs/components/toggle-group)

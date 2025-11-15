@@ -1,3 +1,4 @@
+import { ToggleGroupExample } from "./toggle-group";
 import { AlertDialogExample } from "./alert-dialog";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
@@ -95,6 +96,14 @@ export function TabsEx() {
   return (
     <Wrapper path="/components/examples/tabs.tsx">
       <TabsExample />
+    </Wrapper>
+  )
+}
+
+export function ToggleGroupEx() {
+  return (
+    <Wrapper path="/components/examples/toggle-group.tsx">
+      <ToggleGroupExample />
     </Wrapper>
   )
 }
