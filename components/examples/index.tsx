@@ -5,6 +5,7 @@ import { ComboboxExample } from "./combobox";
 import { SelectExample } from "./select";
 import { DialogExample } from "./dialog";
 import { DrawerExample } from "./drawer";
+import { SheetExample } from "./sheet";
 import { CardExample } from "./card";
 import Wrapper from "../wrapper";
 
@@ -68,6 +69,14 @@ export function DrawerEx() {
   return (
     <Wrapper path="/components/examples/drawer.tsx">
       <DrawerExample />
+    </Wrapper>
+  )
+}
+
+export function SheetEx() {
+  return (
+    <Wrapper path="/components/examples/sheet.tsx">
+      <SheetExample />
     </Wrapper>
   )
 }

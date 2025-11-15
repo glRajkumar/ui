@@ -1,0 +1,451 @@
+---
+title: Sheet
+description: A simplified wrapper for Shadcn Sheet with flexible option handling and automatic type conversion
+---
+
+import { SheetEx } from "@/components/examples";
+
+<SheetEx />
+
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/sheet
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `sheet` component.
+
+```tsx title="ui/sheet.tsx"
+type SheetFooterWrapperProps = {
+  cancel?: React.ReactNode
+  action?: React.ReactNode
+  footerCls?: string
+  actionCls?: string
+  cancelCls?: string
+  onAction?: () => void
+  onCancel?: () => void
+}
+
+function SheetFooterWrapper({
+  cancel,
+  action,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onAction = () => { },
+  onCancel = () => { },
+}: SheetFooterWrapperProps) {
+  return (
+    <SheetFooter className={footerCls}>
+      {
+        cancel &&
+        <SheetClose asChild>
+          <Button
+            variant="secondary"
+            onClick={onCancel}
+            className={cn("border", cancelCls)}
+            asChild={typeof cancel !== "string"}
+          >
+            {cancel}
+          </Button>
+        </SheetClose>
+      }
+
+      {
+        action &&
+        <Button
+          onClick={onAction}
+          className={actionCls}
+          asChild={typeof action !== "string"}
+        >
+          {action}
+        </Button>
+      }
+    </SheetFooter>
+  )
+}
+
+type SheetWrapperProps = {
+  title?: React.ReactNode
+  trigger?: React.ReactNode
+  children?: React.ReactNode
+  description?: React.ReactNode
+  descriptionCls?: string
+  contentCls?: string
+  headerCls?: string
+  titleCls?: string
+  side?: "top" | "bottom" | "right" | "left"
+} & SheetFooterWrapperProps
+
+function SheetWrapper({
+  trigger,
+  title,
+  description,
+  children,
+  contentCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+
+  cancel = "Cancel",
+  action,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onAction,
+  onCancel,
+
+  side = "right",
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Root> & SheetWrapperProps) {
+  return (
+    <Sheet {...props}>
+      {trigger &&
+        <SheetTrigger asChild={typeof trigger !== "string"}>{trigger}</SheetTrigger>
+      }
+
+      <SheetContent side={side} className={contentCls}>
+        <SheetHeader className={headerCls}>
+          <SheetTitle className={titleCls}>{title}</SheetTitle>
+          {description && (
+            <SheetDescription className={descriptionCls}>
+              {description}
+            </SheetDescription>
+          )}
+        </SheetHeader>
+
+        {children}
+
+        {
+          (!!cancel || !!action) &&
+          <SheetFooterWrapper
+            cancel={cancel}
+            action={action}
+            footerCls={footerCls}
+            actionCls={actionCls}
+            cancelCls={cancelCls}
+            onAction={onAction}
+            onCancel={onCancel}
+          />
+        }
+      </SheetContent>
+    </Sheet>
+  )
+}
+```
+
+Add `SheetWrapper` and `SheetFooterWrapper` at the export block.
+
+```tsx
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+  SheetAction,
+  SheetClose,
+/* [!code ++:2] [!code focus:2] */
+  SheetWrapper,
+  SheetFooterWrapper,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-dialog
+```
+
+### sheet.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/sheet.tsx"'>
+  ./components/ui/sheet.tsx
+</include>
+
+### Done
+You can now use `SheetWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { SheetWrapper } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+
+export function Basic() {
+  return (
+    <>
+      <SheetWrapper
+        trigger={<Button>Delete</Button>}
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+      />
+    </>
+  )
+}
+```
+
+### Controlled
+```tsx
+import { useState } from "react"
+import { SheetWrapper } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+
+export function Controlled() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <SheetWrapper
+        open={open}
+        onOpenChange={setOpen}
+        trigger={<Button>Controlled</Button>}
+        onAction={() => setOpen(false)}
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+      />
+    </>
+  )
+}
+
+// Programaticaly open model without trigger
+export function Controlled2() {
+  const [open, setOpen] = useState(false)
+ 
+  const updateOpen = () => setOpen(p => !p)
+
+  return (
+    <>
+      <Button onClick={updateOpen}>Controlled 2</Button>
+
+      <SheetWrapper
+        open={open}
+        onOpenChange={updateOpen}
+        onAction={updateOpen}
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+      />
+    </>
+  )
+}
+```
+
+### Custom
+```tsx
+export function Custom() {
+  return (
+    <SheetWrapper
+      trigger={<Button>Delete</Button>}
+      title="Some Custom Modal"
+
+      // to remove footer make cancel empty
+      cancel=""
+    >
+      <div>...</div>
+    </SheetWrapper>
+  )
+}
+```
+
+## Reference
+
+#### SheetFooterWrapper
+<AutoTypeTable 
+name="SheetFooterWrapper" 
+type={`export interface SheetFooterWrapper {
+    /**
+   * Text or element for the cancel button
+   * Set to \`""\` or \`null\` or \`false\` to hide the cancel button
+   * 
+   * @default "Cancel"
+   * 
+   * \`\`\`tsx
+   * cancel="No, keep it"
+   * // or custom element
+   * cancel={<button><XIcon />Nevermind</button>}
+   * // or hide it
+   * cancel={null}
+   * \`\`\`
+   */
+  cancel?: React.ReactNode;
+
+  /**
+   * Text or element for the confirm/action button
+   * Set to \`""\` or \`null\` or \`false\` to hide the action button
+   * 
+   * \`\`\`tsx
+   * action="Yes, delete"
+   * // or custom element
+   * action={<button><TrashIcon />Delete Forever</button>}
+   * \`\`\`
+   */
+  action?: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the footer container
+   */
+  footerCls?: string;
+
+  /**
+   * Additional CSS classes for the action/confirm button
+   * 
+   * \`\`\`tsx
+   * actionCls="bg-red-600 hover:bg-red-700"
+   * \`\`\`
+   */
+  actionCls?: string;
+
+  /**
+   * Additional CSS classes for the cancel button
+   */
+  cancelCls?: string;
+
+  /**
+   * Callback fired when the action/confirm button is clicked
+   * Sheet remains open after this callback - close it via state if needed
+   * 
+   * \`\`\`tsx
+   * onAction={() => {
+   *   deleteAccount()
+   *   setOpen(false)
+   * }}
+   * \`\`\`
+   */
+  onAction?: () => void;
+
+  /**
+   * Callback fired when the cancel button is clicked
+   * Sheet automatically closes after this callback
+   * 
+   * \`\`\`tsx
+   * onCancel={() => {
+   *   console.log("User cancelled")
+   * }}
+   * \`\`\`
+   */
+  onCancel?: () => void;
+}`} 
+/>
+
+#### SheetWrapper
+<AutoTypeTable 
+name="SheetWrapper" 
+type={`export interface SheetWrapper {
+  /**
+   * Optional trigger element that opens the sheet when clicked
+   * If not provided, control the sheet via the \`open\` prop
+   * 
+   * Automatically uses \`asChild\` when React element is provided
+   * 
+   * \`\`\`tsx
+   * trigger={<Button variant="destructive">Delete Account</Button>}
+   * // or
+   * trigger="Click to open"
+   * \`\`\`
+   */
+  trigger?: React.ReactNode;
+
+  /**
+   * Sheet title displayed in the header
+   * 
+   * \`\`\`tsx
+   * title="Delete User Account"
+   * // or
+   * title={<span className="text-red-600">Warning!</span>}
+   * \`\`\`
+   */
+  title?: React.ReactNode;
+
+  /**
+   * Description text explaining the action's consequences
+   * Set to \`"null"\` or \`undefined\` to hide the description
+   * 
+   * \`\`\`tsx
+   * description="All files and data will be permanently deleted."
+   * // or hide it
+   * description={null}
+   * \`\`\`
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Additional content rendered between description and footer
+   * Use for custom forms, warnings, or additional information
+   * 
+   * \`\`\`tsx
+   * <SheetWrapper>
+   *   <div className="my-4">
+   *     <input placeholder="Type 'DELETE' to confirm" />
+   *   </div>
+   * </SheetWrapper>
+   * \`\`\`
+   */
+  children?: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the sheet content container
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes for the header section
+   */
+  headerCls?: string;
+
+  /**
+   * Additional CSS classes for the title
+   */
+  titleCls?: string;
+
+  /**
+   * Additional CSS classes for the description
+   */
+  descriptionCls?: string;
+
+  /**
+   * Position of the sheet
+   * 
+   * @default "right"
+   */
+  side?: "top" | "bottom" | "right" | "left"
+
+ /**
+   * ...otherProps: All properties from Radix UI Sheet Root can be passed directly.
+   */
+  otherProps: SheetPrimitive.Root
+}`} 
+/>
+
+Properties of `SheetFooterWrapper` can be passed directly.
+
+## Related Components
+
+- [Shadcn Sheet](https://ui.shadcn.com/docs/components/sheet)
+- [Radix UI Dialog](https://www.radix-ui.com/primitives/docs/components/dialog)

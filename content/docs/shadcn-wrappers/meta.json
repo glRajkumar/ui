@@ -12,6 +12,7 @@
     "dialog",
     "drawer",
     "dropdown",
-    "select"
+    "select",
+    "sheet"
   ]
 }
