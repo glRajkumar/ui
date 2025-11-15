@@ -2,19 +2,21 @@
 
 import { useState } from "react";
 
-import { AlertDialogWrapper } from "@/components/ui/alert-dialog";
+import { DialogWrapper } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-export function AlertDialogExample() {
+export function DialogExample() {
   const [open, setOpen] = useState(false)
 
   return (
     <>
-      <AlertDialogWrapper
+      <DialogWrapper
         trigger={<Button variant="outline" size="sm">Delete</Button>}
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
       />
 
-      <AlertDialogWrapper
+      <DialogWrapper
         open={open}
         onOpenChange={setOpen}
         trigger={<Button variant="outline" size="sm">Controlled</Button>}
@@ -24,9 +26,10 @@ export function AlertDialogExample() {
         onAction={() => setOpen(p => !p)}
       />
 
-      <AlertDialogWrapper
+      <DialogWrapper
         trigger={<Button variant="outline" size="sm">No Action</Button>}
-        action=""
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
       />
     </>
   )

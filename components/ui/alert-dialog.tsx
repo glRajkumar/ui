@@ -143,45 +143,45 @@ function AlertDialogCancel({
 }
 
 type AlertDialogFooterWrapperProps = {
-  cancelText?: React.ReactNode
-  actionText?: React.ReactNode
+  cancel?: React.ReactNode
+  action?: React.ReactNode
   footerCls?: string
   actionCls?: string
   cancelCls?: string
-  onConfirm?: () => void
+  onAction?: () => void
   onCancel?: () => void
 }
 
 function AlertDialogFooterWrapper({
-  cancelText,
-  actionText,
+  cancel,
+  action,
   footerCls,
   actionCls,
   cancelCls,
-  onConfirm = () => { },
+  onAction = () => { },
   onCancel = () => { },
 }: AlertDialogFooterWrapperProps) {
   return (
     <AlertDialogFooter className={footerCls}>
       {
-        cancelText &&
+        cancel &&
         <AlertDialogCancel
           onClick={onCancel}
           className={cancelCls}
-          asChild={typeof cancelText !== "string"}
+          asChild={typeof cancel !== "string"}
         >
-          {cancelText}
+          {cancel}
         </AlertDialogCancel>
       }
 
       {
-        actionText &&
+        action &&
         <AlertDialogAction
-          onClick={onConfirm}
+          onClick={onAction}
           className={actionCls}
-          asChild={typeof actionText !== "string"}
+          asChild={typeof action !== "string"}
         >
-          {actionText}
+          {action}
         </AlertDialogAction>
       }
     </AlertDialogFooter>
@@ -197,7 +197,6 @@ type AlertDialogWrapperProps = {
   contentCls?: string
   headerCls?: string
   titleCls?: string
-  hasFooter?: boolean
 } & AlertDialogFooterWrapperProps
 
 function AlertDialogWrapper({
@@ -210,12 +209,12 @@ function AlertDialogWrapper({
   titleCls,
   descriptionCls,
 
-  cancelText = "Cancel",
-  actionText = "Confirm",
+  cancel = "Cancel",
+  action = "Confirm",
   footerCls,
   actionCls,
   cancelCls,
-  onConfirm,
+  onAction,
   onCancel,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
@@ -238,14 +237,14 @@ function AlertDialogWrapper({
         {children}
 
         {
-          (!!cancelText || !!actionText) &&
+          (!!cancel || !!action) &&
           <AlertDialogFooterWrapper
-            cancelText={cancelText}
-            actionText={actionText}
+            cancel={cancel}
+            action={action}
             footerCls={footerCls}
             actionCls={actionCls}
             cancelCls={cancelCls}
-            onConfirm={onConfirm}
+            onAction={onAction}
             onCancel={onCancel}
           />
         }

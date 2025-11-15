@@ -3,6 +3,7 @@ import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
 import { SelectExample } from "./select";
+import { DialogExample } from "./dialog";
 import { CardExample } from "./card";
 import Wrapper from "../wrapper";
 
@@ -50,6 +51,14 @@ export function CardEx() {
   return (
     <Wrapper path="/components/examples/card.tsx">
       <CardExample />
+    </Wrapper>
+  )
+}
+
+export function DialogEx() {
+  return (
+    <Wrapper path="/components/examples/dialog.tsx">
+      <DialogExample />
     </Wrapper>
   )
 }
