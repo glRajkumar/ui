@@ -21,6 +21,8 @@ npx shadcn@latest add @glrk-ui/accordion
 
 <Tab value="Manual">
 
+Copy and paste the following code into shadcn `accordion` component.
+
 ```tsx title="ui/accordion.tsx"
 type accordionItemT = {
   value: string
@@ -96,17 +98,17 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180", // [!code --]
-          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>.arrow]:rotate-180", // [!code ++]
+          "... [&[data-state=open]>svg]:rotate-180", // [!code --]
+          "... [&[data-state=open]>.arrow]:rotate-180", // [!code ++]
           className
         )}
         {...props}
       >
         {children}
         // [!code --]
-        <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
-         // [!code ++] [!code word:arrow]
-        <ChevronDownIcon className="arrow text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+        <ChevronDownIcon className="..." />
+         // [!code ++] [!code word:arrow ]
+        <ChevronDownIcon className="arrow ..." />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   )
@@ -121,7 +123,7 @@ export {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-/* [!code ++:3] */
+// [!code focus:3] [!code ++:3]
   AccordionWrapper,
   type accordionItemT,
   type accordionItemsT,
@@ -177,7 +179,7 @@ export function Basic() {
 
 ## Reference
 
-#### `accordionItemT`
+#### accordionItemT
 <AutoTypeTable 
 name="accordionItemT" 
 type={`export type accordionItemT = {
@@ -223,11 +225,13 @@ type={`export type accordionItemT = {
 `} 
 />
 
-#### `AccordionWrapper`
+#### AccordionWrapper
 <AutoTypeTable 
 name="AccordionWrapper" 
 type={`export interface AccordionWrapper {
   /**
+   * \`accordionItemsT\` = \`accordionItemT[]\`
+   * 
    * Array of accordion items to render
    * Each item contains the value, trigger, content, and optional styling
    * 
@@ -308,9 +312,9 @@ type={`export interface AccordionWrapper {
   collapsible?: boolean;
 
   /**
-   * ...AccordionPrimitiveProps: All properties from Radix UI Accordion Root can be passed directly.
+   * ...otherProps: All properties from Radix UI Accordion Root can be passed directly.
    */
-  AccordionPrimitiveProps: AccordionPrimitive.Root
+  otherProps: AccordionPrimitive.Root
 }
 `} 
 />

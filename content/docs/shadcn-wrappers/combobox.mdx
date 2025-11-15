@@ -29,7 +29,7 @@ See installation instructions for the components from shadcn.
   ./components/ui/combobox.tsx
 </include>
 
-Update `<Command />` component.
+Copy and paste the following code shadcn `command` component.
 
 ```tsx
 function CommandLoading({
@@ -62,7 +62,7 @@ export {
   CommandItem,
   CommandShortcut,
   CommandSeparator,
-/* [!code ++:1] */
+// [!code focus] [!code ++:1]
   CommandLoading,
 }
 ```
@@ -207,9 +207,10 @@ export function Styled() {
 
 ## Reference
 
+#### Common Properties
 <AutoTypeTable 
-name="Shared" 
-type={`export interface Shared {
+name="Common" 
+type={`export interface Common {
   /**
    * Optional ID for the combobox trigger element
    */
@@ -331,6 +332,7 @@ type={`export interface Shared {
 }`}
 />
 
+#### Combobox
 <AutoTypeTable 
 name="Combobox" 
 type={`export interface Combobox {
@@ -362,6 +364,7 @@ type={`export interface Combobox {
 }`}
 />
 
+#### MultiSelectCombobox
 <AutoTypeTable 
 name="MultiSelectCombobox" 
 type={`export interface MultiSelectCombobox {

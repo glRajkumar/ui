@@ -21,6 +21,8 @@ npx shadcn@latest add @glrk-ui/dropdown
 
 <Tab value="Manual">
 
+Create new file name `ui/dropdown.tsx`.
+
 <include cwd meta='title="ui/dropdown.tsx"'>
   ./components/ui/dropdown.tsx
 </include>
@@ -197,7 +199,7 @@ export function Complex() {
 
 ## Reference
 
-#### `DropdownWrapper`
+#### DropdownWrapper
 <AutoTypeTable 
 name="DropdownWrapper" 
 type={`export interface DropdownWrapper {
@@ -279,13 +281,13 @@ type={`export interface DropdownWrapper {
   onSelect?: (value: string | number | boolean) => void;
 
   /**
-   * All other props from DropdownMenu component
+   * ...otherProps: All properties from Radix UI DropdownMenu Root can be passed directly.
    */
-  ...DropdownMenuProps?: React.ComponentProps<typeof DropdownMenu>
+  otherProps: DropdownMenuPrimitive.Root
 }`}
 />
 
-#### `DropdownCheckboxWrapper`
+#### DropdownCheckboxWrapper
 <AutoTypeTable 
 name="DropdownCheckboxWrapper" 
 type={`export interface DropdownCheckboxWrapper {
@@ -376,13 +378,13 @@ type={`export interface DropdownCheckboxWrapper {
   onCheckedChange?: (value: string | number | boolean, checked: boolean) => void;
 
   /**
-   * All other props from DropdownMenu component
+   * ...otherProps: All properties from Radix UI DropdownMenu Root can be passed directly.
    */
-  ...DropdownMenuProps?: React.ComponentProps<typeof DropdownMenu>
+  otherProps: DropdownMenuPrimitive.Root
 }`}
 />
 
-#### `DropdownRadioWrapper`
+#### DropdownRadioWrapper
 <AutoTypeTable 
 name="DropdownRadioWrapper" 
 type={`export interface DropdownRadioWrapper {
@@ -466,9 +468,9 @@ type={`export interface DropdownRadioWrapper {
   onValueChange?: (value: string | number | boolean) => void;
 
   /**
-   * All other props from DropdownMenu component
+   * ...otherProps: All properties from Radix UI DropdownMenu Root can be passed directly.
    */
-  ...DropdownMenuProps?: React.ComponentProps<typeof DropdownMenu>
+  otherProps: DropdownMenuPrimitive.Root
 }`}
 />
 
