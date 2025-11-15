@@ -1,0 +1,272 @@
+---
+title: Card
+description: A simplified wrapper for Shadcn Card with flexible option handling and automatic type conversion
+---
+
+import { CardEx } from "@/components/examples";
+
+<CardEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/card
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `card` component.
+
+```tsx title="ui/card.tsx"
+type CardWrapperProps = {
+  title?: React.ReactNode
+  description?: React.ReactNode
+  children?: React.ReactNode
+  footer?: React.ReactNode
+  actions?: React.ReactNode
+  wrapperCls?: string
+  headerCls?: string
+  titleCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  footerCls?: string
+}
+
+function CardWrapper({
+  title,
+  description,
+  children,
+  footer,
+  actions,
+  wrapperCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+  contentCls,
+  footerCls,
+}: CardWrapperProps) {
+  return (
+    <Card className={cn(wrapperCls)}>
+      <CardHeader className={cn(headerCls)}>
+        {title && <CardTitle className={titleCls}>{title}</CardTitle>}
+        {description && <CardDescription className={descriptionCls}>{description}</CardDescription>}
+
+        {actions}
+      </CardHeader>
+
+      <CardContent className={cn(contentCls)}>
+        {children}
+      </CardContent>
+
+      {footer
+        ? typeof footer === "string"
+          ? <CardFooter className={footerCls}>{footer}</CardFooter>
+          : footer
+        : null
+      }
+    </Card>
+  )
+}
+```
+
+```tsx
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+// [!code focus] [!code ++:1]
+  CardWrapper,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### card.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/card.tsx"'>
+  ./components/ui/card.tsx
+</include>
+
+### Done
+You can now use `CardWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { CardWrapper } from "@/components/ui/card";
+
+export function Basic() {
+  return (
+    <CardWrapper
+      title="Card Title"
+      description="Card Description"
+      footer="Card Footer"
+    >
+      <p>Card Content</p>
+    </CardWrapper>
+  )
+}
+```
+
+## Reference
+
+#### accordionItemT
+<AutoTypeTable 
+name="CardWrapper" 
+type={`export interface CardWrapper {
+  /**
+   * Card title displayed in the header
+   * Can be a string or any React element
+   * 
+   * \`\`\`tsx
+   * title="User Profile"
+   * // or
+   * title={<div className="flex items-center gap-2"><Icon />Profile</div>}
+   * \`\`\`
+   */
+  title?: React.ReactNode;
+
+  /**
+   * Description text displayed below the title in the header
+   * Can be a string or any React element
+   * 
+   * \`\`\`tsx
+   * description="Manage your account settings and preferences"
+   * // or
+   * description={<span className="text-muted">Last updated: {date}</span>}
+   * \`\`\`
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Main content of the card
+   * Rendered inside CardContent component
+   * 
+   * \`\`\`tsx
+   * <CardWrapper title="Profile">
+   *   <form>
+   *     <input name="name" />
+   *     <input name="email" />
+   *   </form>
+   * </CardWrapper>
+   * \`\`\`
+   */
+  children?: React.ReactNode;
+
+  /**
+   * Footer content displayed at the bottom of the card
+   * 
+   * - String values are wrapped in CardFooter component
+   * - React elements are rendered directly (you control the wrapper)
+   * - Set to \`null\` or \`undefined\` to hide footer
+   * 
+   * \`\`\`tsx
+   * footer="Last updated 2 hours ago"
+   * // or with custom wrapper
+   * footer={<CardFooter className="bg-gray-50">Custom footer</CardFooter>}
+   * // or hide it
+   * footer={null}
+   * \`\`\`
+   */
+  footer?: React.ReactNode;
+
+  /**
+   * Action elements displayed in the header section
+   * Typically used for buttons, menus, or other controls
+   * Renders after title and description
+   * 
+   * \`\`\`tsx
+   * actions={
+   *   <div className="ml-auto flex gap-2">
+   *     <Button variant="outline">Edit</Button>
+   *     <Button>Save</Button>
+   *   </div>
+   * }
+   * \`\`\`
+   */
+  actions?: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the card wrapper (root element)
+   * 
+   * \`\`\`tsx
+   * wrapperCls="max-w-md shadow-lg"
+   * \`\`\`
+   */
+  wrapperCls?: string;
+
+  /**
+   * Additional CSS classes for the header container
+   * Contains title, description, and actions
+   * 
+   * \`\`\`tsx
+   * headerCls="bg-gray-50 border-b"
+   * \`\`\`
+   */
+  headerCls?: string;
+
+  /**
+   * Additional CSS classes for the title element
+   * 
+   * \`\`\`tsx
+   * titleCls="text-2xl font-bold text-blue-600"
+   * \`\`\`
+   */
+  titleCls?: string;
+
+  /**
+   * Additional CSS classes for the description element
+   * 
+   * \`\`\`tsx
+   * descriptionCls="text-gray-600 text-sm"
+   * \`\`\`
+   */
+  descriptionCls?: string;
+
+  /**
+   * Additional CSS classes for the content container
+   * 
+   * \`\`\`tsx
+   * contentCls="p-6 space-y-4"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes for the footer container
+   * Only applied when footer is a string value
+   * 
+   * \`\`\`tsx
+   * footerCls="bg-gray-50 text-sm text-gray-600"
+   * \`\`\`
+   */
+  footerCls?: string;
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Card](https://ui.shadcn.com/docs/components/card)
+- [Radix UI Card](https://www.radix-ui.com/primitives/docs/components/card)

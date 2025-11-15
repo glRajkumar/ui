@@ -3,6 +3,7 @@ import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
 import { SelectExample } from "./select";
+import { CardExample } from "./card";
 import Wrapper from "../wrapper";
 
 export function SelectEx() {
@@ -41,6 +42,14 @@ export function AlertDialogEx() {
   return (
     <Wrapper path="/components/examples/alert-dialog.tsx">
       <AlertDialogExample />
+    </Wrapper>
+  )
+}
+
+export function CardEx() {
+  return (
+    <Wrapper path="/components/examples/card.tsx">
+      <CardExample />
     </Wrapper>
   )
 }
