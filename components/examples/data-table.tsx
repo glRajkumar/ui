@@ -165,7 +165,7 @@ export function DataTableExample() {
         <div className="overflow-x-auto">
           <DataTable
             table={table}
-            noTxt="No employees found."
+            emptyMessage="No employees found."
           />
         </div>
       </div>

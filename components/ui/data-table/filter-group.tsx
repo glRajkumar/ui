@@ -13,9 +13,10 @@ interface FilterGroupProps<TData> {
     lable: string
     options: string[]
   }[]
+  indicatorAt?: indicatorAt
 }
 
-export function FilterGroup<TData>({ table, options }: FilterGroupProps<TData>) {
+export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupProps<TData>) {
   const [selected, setSelected] = useState<allowedPrimitiveT[]>([])
 
   return (
@@ -29,7 +30,6 @@ export function FilterGroup<TData>({ table, options }: FilterGroupProps<TData>) 
               column={table.getColumn(opt.key)}
               title={opt.lable}
               options={opt.options}
-              remove={() => setSelected(p => p.filter(v => v !== opt.key))}
             />
           ))
       }
@@ -38,6 +38,7 @@ export function FilterGroup<TData>({ table, options }: FilterGroupProps<TData>) 
         checked={selected}
         onCheckedChange={(val, checked) => setSelected(prev => !checked ? prev.filter(p => !p) : [...prev, val])}
         options={options.map(m => ({ label: m.lable, value: m.key }))}
+        indicatorAt={indicatorAt}
       >
         <Button variant="outline">
           <CirclePlus className="size-4" />

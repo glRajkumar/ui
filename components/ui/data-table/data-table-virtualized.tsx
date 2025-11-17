@@ -17,7 +17,7 @@ import {
 
 interface DataTableProps<TData> {
   table: TanstackTable<TData>;
-  noTxt?: string;
+  emptyMessage?: string;
   overscan?: number
   className?: string;
   hasNextPage?: boolean
@@ -28,7 +28,7 @@ interface DataTableProps<TData> {
 
 export function DataTableVirtualized<TData>({
   table,
-  noTxt = "No matching results.",
+  emptyMessage = "No matching results.",
   className = "",
   hasNextPage = false,
   isFetchingNextPage = false,
@@ -145,7 +145,7 @@ export function DataTableVirtualized<TData>({
             ) : (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={columnCount} className="border-b">
-                  <div className="dc h-32 my-4 text-sm text-center">{noTxt}</div>
+                  <div className="dc h-32 my-4 text-sm text-center">{emptyMessage}</div>
                 </TableCell>
               </TableRow>
             )}

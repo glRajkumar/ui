@@ -301,6 +301,7 @@ function ButtonLabel({
 type multiSelectComboboxProps = base & {
   value?: allowedPrimitiveT[]
   maxVisibleCount?: number
+  label?: React.ReactNode
   onValueChange?: (v: allowedPrimitiveT[]) => void
 }
 
@@ -317,6 +318,7 @@ function MultiSelectCombobox({
   contentCls,
   groupCls,
   itemCls,
+  label,
 
   value: o_value,
   onValueChange: o_onValueChange,
@@ -360,6 +362,8 @@ function MultiSelectCombobox({
             "text-muted-foreground": value.length === 0,
           })}
         >
+          {label}
+
           <ButtonLabel
             value={value}
             options={options}
