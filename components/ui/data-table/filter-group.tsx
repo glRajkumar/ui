@@ -1,14 +1,8 @@
 import { useState } from "react";
-import { CirclePlus, RotateCw } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
+import { DropdownCheckboxWrapper } from "../dropdown";
 import { ColumnFilter } from "./column-filter";
 import { Button } from "../button";
 
@@ -22,9 +16,7 @@ interface FilterGroupProps<TData> {
 }
 
 export function FilterGroup<TData>({ table, options }: FilterGroupProps<TData>) {
-  const [selected, setSelected] = useState<string[]>([])
-
-  const isFiltered = table.getState().columnFilters.length > 0
+  const [selected, setSelected] = useState<allowedPrimitiveT[]>([])
 
   return (
     <>
@@ -42,41 +34,16 @@ export function FilterGroup<TData>({ table, options }: FilterGroupProps<TData>) 
           ))
       }
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">
-            <CirclePlus className="size-4" />
-            <span>Filter</span>
-          </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent align="start" className="px-0">
-          {
-            options
-              .filter(f => !selected.includes(f.key))
-              .map(opt => (
-                <DropdownMenuItem
-                  key={opt.key}
-                  onClick={() => setSelected(p => [...p, opt.key])}
-                  className="px-4 text-xs font-medium text-theme-text focus:bg-theme-grey-text/5 focus:text-theme-text"
-                >
-                  {opt.lable}
-                </DropdownMenuItem>
-              ))
-          }
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {
-        isFiltered &&
-        <Button
-          size="icon"
-          variant="outline"
-          onClick={() => table.resetColumnFilters()}
-        >
-          <RotateCw className=" size-4" />
+      <DropdownCheckboxWrapper
+        checked={selected}
+        onCheckedChange={(val, checked) => setSelected(prev => !checked ? prev.filter(p => !p) : [...prev, val])}
+        options={options.map(m => ({ label: m.lable, value: m.key }))}
+      >
+        <Button variant="outline">
+          <CirclePlus className="size-4" />
+          <span>Filter</span>
         </Button>
-      }
+      </DropdownCheckboxWrapper>
     </>
   )
 }

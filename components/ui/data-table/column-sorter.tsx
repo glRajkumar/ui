@@ -1,4 +1,4 @@
-// import { TiArrowUnsorted, TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
+import { ChevronsDown, ChevronsUp, ChevronsUpDown } from "lucide-react";
 import { Column } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
@@ -20,21 +20,30 @@ export function ColumnSorter<TData, TValue>({
 
   const sorted = column.getIsSorted()
 
+  function onSort() {
+    if (sorted === "asc") {
+      column.toggleSorting(true)
+    } else if (sorted === "desc") {
+      column.clearSorting()
+    } else {
+      column.toggleSorting(false)
+    }
+  }
+
   return (
     <Button
-      size="sm"
       variant="ghost"
-      className={cn("-ml-3 h-7 text-xs data-[state=open]:bg-transparent", className)}
-      onClick={() => column.toggleSorting(sorted === "asc")}
+      className={cn("-ml-2", className)}
+      onClick={onSort}
     >
-      <span>{title}</span>
-      {/* {sorted === "desc" ? (
-        <TiArrowSortedDown className="ml-4 opacity-80" />
+      {title}
+      {sorted === "desc" ? (
+        <ChevronsDown className="ml-4 opacity-80" />
       ) : sorted === "asc" ? (
-        <TiArrowSortedUp className="ml-4 opacity-80" />
+        <ChevronsUp className="ml-4 opacity-80" />
       ) : (
-        <TiArrowUnsorted className="ml-4 opacity-80" />
-      )} */}
+        <ChevronsUpDown className="ml-4 opacity-80" />
+      )}
     </Button>
   )
 }

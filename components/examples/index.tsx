@@ -1,5 +1,6 @@
 import { ToggleGroupExample } from "./toggle-group";
 import { AlertDialogExample } from "./alert-dialog";
+import { DataTableExample } from "./data-table";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
@@ -104,6 +105,14 @@ export function ToggleGroupEx() {
   return (
     <Wrapper path="/components/examples/toggle-group.tsx">
       <ToggleGroupExample />
+    </Wrapper>
+  )
+}
+
+export function DataTableEx() {
+  return (
+    <Wrapper path="/components/examples/data-table.tsx">
+      <DataTableExample />
     </Wrapper>
   )
 }

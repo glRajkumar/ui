@@ -24,7 +24,7 @@ interface ColumndFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
   title?: string
   options: string[]
-  remove: () => void
+  remove?: () => void
   popoverContentCls?: string
 }
 
@@ -86,7 +86,7 @@ export function ColumnFilter<TData, TValue>({
                       }
                       const filterValues = Array.from(updatedValues);
                       column?.setFilterValue(
-                        filterValues?.length ? filterValues : []
+                        filterValues?.length ? filterValues : undefined
                       );
                     }}
                     className="flex items-center w-full px-4 py-1.5 text-xs aria-selected:bg-transparent aria-selected:text-primary cursor-pointer"
@@ -108,11 +108,16 @@ export function ColumnFilter<TData, TValue>({
               })}
             </CommandGroup>
 
-            <CommandSeparator />
+            {
+              remove &&
+              <>
+                <CommandSeparator />
 
-            <CommandItem onSelect={remove} className="justify-center py-2">
-              Remove Filter
-            </CommandItem>
+                <CommandItem onSelect={remove} className="justify-center py-2">
+                  Remove Filter
+                </CommandItem>
+              </>
+            }
           </CommandList>
         </Command>
       </PopoverContent>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Check, PlusCircle } from "lucide-react";
+import { Check } from "lucide-react";
 import { Column } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
@@ -44,8 +44,8 @@ export function ColumnFacetedFilter<TData, TValue>({
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline">
-          <PlusCircle className="size-4" />
           {title}
+
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />

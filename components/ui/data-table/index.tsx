@@ -1,5 +1,6 @@
 export * from "./data-table-virtualized";
 export * from "./column-faceted-filter";
+export * from "./column-header";
 export * from "./column-filter";
 export * from "./column-sorter";
 export * from "./column-toggle";

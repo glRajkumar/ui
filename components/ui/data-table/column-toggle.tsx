@@ -1,7 +1,7 @@
 "use client";
 
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-// import { RxMixerHorizontal } from "react-icons/rx";
+import { Settings2 } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export function ColumnToggle<TData>({ table }: ColumnToggleProps<TData>) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          {/* <RxMixerHorizontal className="h-4 w-4" /> */}
+          <Settings2 />
           View
         </Button>
       </DropdownMenuTrigger>

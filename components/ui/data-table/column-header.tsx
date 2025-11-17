@@ -23,15 +23,16 @@ export function ColumnHeader<TData, TValue>({
   title,
   className,
 }: ColumnHeaderProps<TData, TValue>) {
-  if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>
-  }
+  if (!column.getCanSort()) return <div className={cn(className)}>{title}</div>
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className={cn("data-[state=open]:bg-accent", className)}>
-          <span>{title}</span>
+        <Button
+          variant="ghost"
+          className={cn("-ml-2", className)}
+        >
+          {title}
           {column.getIsSorted() === "desc" ? (
             <ArrowDown />
           ) : column.getIsSorted() === "asc" ? (
@@ -43,18 +44,25 @@ export function ColumnHeader<TData, TValue>({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start">
-        <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+        <DropdownMenuItem
+          onClick={() => column.getIsSorted() !== "asc" ? column.toggleSorting(false) : column.clearSorting()}
+        >
           <ArrowUp className="h-3.5 w-3.5 text-muted-foreground/70" />
           Asc
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+
+        <DropdownMenuItem
+          onClick={() => column.getIsSorted() !== "desc" ? column.toggleSorting(true) : column.clearSorting()}
+        >
           <ArrowDown className="h-3.5 w-3.5 text-muted-foreground/70" />
           Desc
         </DropdownMenuItem>
+
         <DropdownMenuSeparator />
+
         <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
           <EyeOff className="h-3.5 w-3.5 text-muted-foreground/70" />
-          Hide
+          Hide Column
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
