@@ -31,7 +31,7 @@ import { cn, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/ut
 type itemProps = {
   option: allowedPrimitiveT | optionT
   className?: string
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 }
 
 function Item({ option, className, indicatorAt }: itemProps) {
@@ -56,7 +56,7 @@ type props = {
   id?: string
   options: optionsT
   placeholder?: string
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
   triggerCls?: string
   contentCls?: string
   groupCls?: string

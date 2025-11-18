@@ -9,11 +9,11 @@ import { Button } from "../button";
 interface FilterGroupProps<TData> {
   table: Table<TData>
   options: {
-    key: string
-    lable: string
-    options: string[]
+    value: string
+    lable: React.ReactNode
+    options: optionsT
   }[]
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 }
 
 export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupProps<TData>) {
@@ -23,12 +23,12 @@ export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupP
     <>
       {
         options
-          .filter(f => selected.includes(f.key))
+          .filter(f => selected.includes(f.value))
           .map(opt => (
             <ColumnFilter
-              key={opt.key}
-              column={table.getColumn(opt.key)}
+              key={opt.value}
               title={opt.lable}
+              column={table.getColumn(opt.value)}
               options={opt.options}
             />
           ))
@@ -37,7 +37,7 @@ export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupP
       <DropdownCheckboxWrapper
         checked={selected}
         onCheckedChange={(val, checked) => setSelected(prev => !checked ? prev.filter(p => !p) : [...prev, val])}
-        options={options.map(m => ({ label: m.lable, value: m.key }))}
+        options={options.map(m => ({ label: m.lable, value: m.value }))}
         indicatorAt={indicatorAt}
       >
         <Button variant="outline">

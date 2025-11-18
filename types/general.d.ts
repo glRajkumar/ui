@@ -18,4 +18,4 @@ type groupT = {
 
 type optionsT = (allowedPrimitiveT | optionT | groupT)[]
 
-type indicatorAt = "right" | "left"
+type indicatorAtT = "right" | "left"

@@ -112,17 +112,17 @@ const statusOptions = [
 
 const filterOptions = [
   {
-    key: 'department',
+    value: 'department',
     lable: 'Department',
     options: ['Engineering', 'Marketing', 'Sales', 'HR', 'Finance']
   },
   {
-    key: 'role',
+    value: 'role',
     lable: 'Role',
     options: ['Manager', 'Senior', 'Junior', 'Lead', 'Intern']
   },
   {
-    key: 'location',
+    value: 'location',
     lable: 'Location',
     options: ['New York', 'San Francisco', 'London', 'Tokyo', 'Berlin']
   }

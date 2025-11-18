@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react"
+import * as PopoverPrimitive from "@radix-ui/react-popover"
 
 import { cn, extractText, filteredOptions, findOptionByValue, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
-import { useElementWidth } from "@/hooks/use-element"
 
 import {
   Command,
@@ -24,7 +24,7 @@ type ItemProps = {
   option: allowedPrimitiveT | optionT
   selected: boolean
   className?: string
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
   onSelect: (value: allowedPrimitiveT) => void
 }
 
@@ -61,16 +61,19 @@ type base = {
   placeholder?: string
   emptyMessage?: string
 
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
   triggerCls?: string
   contentCls?: string
   groupCls?: string
   itemCls?: string
+  matchTriggerWidth?: boolean
 
   open?: boolean
   onOpenChange?: (v: boolean) => void
   query?: string
   onQueryChange?: (v: string) => void
+
+  popoverContentProps?: Omit<React.ComponentProps<typeof PopoverPrimitive.Content>, "className">
 }
 
 type comboboxProps = base & {
@@ -82,11 +85,12 @@ type comboboxProps = base & {
 function Combobox({
   id,
   options = [],
-  isLoading = false,
-  placeholder = "",
-  emptyMessage = "",
-  canCreateNew = false,
+  isLoading,
+  placeholder,
+  emptyMessage,
+  canCreateNew,
 
+  matchTriggerWidth = true,
   indicatorAt,
   triggerCls,
   contentCls,
@@ -101,9 +105,9 @@ function Combobox({
 
   open: o_open,
   onOpenChange: o_onOpenChange,
-}: comboboxProps) {
-  const { ref, width } = useElementWidth<HTMLButtonElement>()
 
+  popoverContentProps,
+}: comboboxProps) {
   const [i_value, setIValue] = useState("")
   const [i_query, setIQuery] = useState("")
   const [i_open, setIOpen] = useState(false)
@@ -139,7 +143,6 @@ function Combobox({
       <PopoverTrigger asChild>
         <Button
           id={id}
-          ref={ref}
           role="combobox"
           variant="outline"
           className={cn("font-normal", triggerCls, {
@@ -165,7 +168,10 @@ function Combobox({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className={cn("p-0", contentCls)} style={{ width: width ? `${width}px` : "auto" }}>
+      <PopoverContent
+        {...popoverContentProps}
+        className={cn("p-0", matchTriggerWidth && "w-[var(--radix-popover-trigger-width)]", contentCls)}
+      >
         <Command shouldFilter={false}>
           {
             !isLoading &&
@@ -308,10 +314,11 @@ type multiSelectComboboxProps = base & {
 function MultiSelectCombobox({
   id,
   options = [],
-  isLoading = false,
-  placeholder = "",
-  emptyMessage = "",
+  isLoading,
+  placeholder,
+  emptyMessage,
 
+  matchTriggerWidth = true,
   maxVisibleCount,
   indicatorAt,
   triggerCls,
@@ -328,9 +335,8 @@ function MultiSelectCombobox({
 
   open: o_open,
   onOpenChange: o_onOpenChange,
+  popoverContentProps,
 }: multiSelectComboboxProps) {
-  const { ref, width } = useElementWidth<HTMLButtonElement>()
-
   const [i_value, setIValue] = useState<allowedPrimitiveT[]>([])
   const [i_query, setIQuery] = useState("")
   const [i_open, setIOpen] = useState(false)
@@ -354,7 +360,6 @@ function MultiSelectCombobox({
       <PopoverTrigger asChild>
         <Button
           id={id}
-          ref={ref}
           role="combobox"
           variant="outline"
           aria-expanded={open}
@@ -376,7 +381,10 @@ function MultiSelectCombobox({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className={cn("p-0", contentCls)} style={{ width: width ? `${width}px` : "auto" }}>
+      <PopoverContent
+        {...popoverContentProps}
+        className={cn("p-0", matchTriggerWidth && "w-[var(--radix-popover-trigger-width)]", contentCls)}
+      >
         <Command shouldFilter={false}>
           {
             !isLoading &&
@@ -456,4 +464,6 @@ function MultiSelectCombobox({
 export {
   Combobox,
   MultiSelectCombobox,
+  type comboboxProps,
+  type multiSelectComboboxProps,
 }

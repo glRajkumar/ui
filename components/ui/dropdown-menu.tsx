@@ -80,7 +80,7 @@ function DropdownMenuCheckboxItem({
   checked,
   indicatorAt = "right",
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem> & { indicatorAt?: indicatorAt }) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem> & { indicatorAt?: indicatorAtT }) {
   return (
     <DropdownMenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
@@ -116,7 +116,7 @@ function DropdownMenuRadioItem({
   children,
   indicatorAt = "right",
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem> & { indicatorAt?: indicatorAt }) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem> & { indicatorAt?: indicatorAtT }) {
   return (
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"

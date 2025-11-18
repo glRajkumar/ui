@@ -105,7 +105,7 @@ function SelectItem({
   children,
   indicatorAt = "right",
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Item> & { indicatorAt?: indicatorAt }) {
+}: React.ComponentProps<typeof SelectPrimitive.Item> & { indicatorAt?: indicatorAtT }) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -178,7 +178,7 @@ function SelectScrollDownButton({
 type itemProps = {
   option: allowedPrimitiveT | optionT
   className?: string
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 }
 
 function Item({ option, className, indicatorAt }: itemProps) {
@@ -203,7 +203,7 @@ type props = {
   id?: string
   options: optionsT
   placeholder?: string
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
   triggerCls?: string
   contentCls?: string
   groupCls?: string

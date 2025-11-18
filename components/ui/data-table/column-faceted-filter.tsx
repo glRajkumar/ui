@@ -1,15 +1,13 @@
 import { Column } from "@tanstack/react-table";
 
-import { MultiSelectCombobox } from "../combobox";
+import { MultiSelectCombobox, type multiSelectComboboxProps } from "../combobox";
+import { getValue } from "@/lib/utils";
 
-interface ColumnFacetedFilterProps<TData, TValue> {
+interface ColumnFacetedFilterProps<TData, TValue>
+  extends Omit<multiSelectComboboxProps, 'options' | 'value' | 'onValueChange' | 'label'> {
   column?: Column<TData, TValue>
   title?: string
-  options: {
-    label: string
-    value: string
-    icon?: React.ComponentType<{ className?: string }>
-  }[]
+  options: optionsT
 }
 
 export function ColumnFacetedFilter<TData, TValue>({
@@ -19,14 +17,21 @@ export function ColumnFacetedFilter<TData, TValue>({
 }: ColumnFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues()
 
-  const newOptions = options.map(v => ({
-    label: <>{v.label} {facets?.get(v.value) && (
-      <span className="ml-auto flex h-4 w-4 items-center justify-center text-xs">
-        {facets.get(v.value)}
-      </span>
-    )}</>,
-    value: v.value
-  }))
+  const newOptions = options.map(option => {
+    const value = getValue(option)
+    const label = getValue(option)
+
+    return {
+      label: <>
+        {label}
+        {facets?.get(value) && (
+          <span className="ml-auto flex h-4 w-4 items-center justify-center text-xs">
+            {facets.get(value)}
+          </span>
+        )}</>,
+      value,
+    }
+  })
 
   function onSelect(selected: allowedPrimitiveT[]) {
     column?.setFilterValue(selected?.length ? selected : undefined)
@@ -39,6 +44,8 @@ export function ColumnFacetedFilter<TData, TValue>({
       onValueChange={onSelect}
       label={<span className="font-semibold">{title}</span>}
       indicatorAt="left"
+      contentCls="w-fit"
+      matchTriggerWidth={false}
     />
   )
 }

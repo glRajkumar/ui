@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { cn, getLabel, getValue, isSeparator, parseAllowedPrimitive } from "@/lib/utils"
+import { cn, getLabel, getValue, isSeparator, optionTypeChecker, parseAllowedPrimitive } from "@/lib/utils"
 
 import {
   DropdownMenu,
@@ -60,21 +60,10 @@ type inputSubMenuT = {
 
 type inputOptionsT = (inputOptionT | inputGroupT | inputSubMenuT)[]
 
-function isDropdownGroup(option: any): option is dropdownGroupT {
-  return option && typeof option === "object" && "group" in option
-}
-
-function isSubMenu(option: any): option is dropdownSubMenuT {
-  return option && typeof option === "object" && "submenu" in option
-}
-
-function isInputGroup(option: any): option is inputGroupT {
-  return option && typeof option === "object" && "group" in option
-}
-
-function isInputSubMenu(option: any): option is inputSubMenuT {
-  return option && typeof option === "object" && "submenu" in option
-}
+const isDropdownGroup = optionTypeChecker<dropdownGroupT>("group")
+const isSubMenu = optionTypeChecker<dropdownSubMenuT>("submenu")
+const isInputGroup = optionTypeChecker<inputGroupT>("group")
+const isInputSubMenu = optionTypeChecker<inputSubMenuT>("submenu")
 
 type ItemProps = {
   option: dropdownOptionT
@@ -236,7 +225,7 @@ type CheckboxItemProps = {
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
 
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 }
 
 function CheckboxItem({ option, className, checked = false, indicatorAt, onCheckedChange = () => { } }: CheckboxItemProps) {
@@ -267,7 +256,7 @@ type CheckboxSubMenuProps = {
   checked?: allowedPrimitiveT[]
   onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void
 
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 }
 
 function CheckboxSubMenu({ submenu, itemCls, groupCls, checked = [], indicatorAt, onCheckedChange = () => { } }: CheckboxSubMenuProps) {
@@ -343,7 +332,7 @@ type DropdownCheckboxWrapperProps = {
   checked?: allowedPrimitiveT[]
   onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void
 
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 } & React.ComponentProps<typeof DropdownMenu>
 
 function DropdownCheckboxWrapper({
@@ -439,7 +428,7 @@ function DropdownCheckboxWrapper({
 type RadioItemProps = {
   option: inputOptionT
   className?: string
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 }
 
 function RadioItem({ option, className, indicatorAt }: RadioItemProps) {
@@ -469,7 +458,7 @@ type RadioSubMenuProps = {
   value?: allowedPrimitiveT
   onValueChange?: (value: allowedPrimitiveT) => void
 
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 }
 
 function RadioSubMenu({ submenu, itemCls, groupCls, value = "", indicatorAt, onValueChange = () => { } }: RadioSubMenuProps) {
@@ -539,7 +528,7 @@ type DropdownRadioWrapperProps = {
   value?: allowedPrimitiveT
   onValueChange?: (value: allowedPrimitiveT) => void
 
-  indicatorAt?: indicatorAt
+  indicatorAt?: indicatorAtT
 } & React.ComponentProps<typeof DropdownMenu>
 
 function DropdownRadioWrapper({
