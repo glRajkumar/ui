@@ -5,7 +5,7 @@ import { MultiSelectCombobox, type multiSelectComboboxProps } from "../combobox"
 interface ColumndFilterProps<TData, TValue>
   extends Omit<multiSelectComboboxProps, 'options' | 'value' | 'onValueChange' | 'label'> {
   column?: Column<TData, TValue>
-  title?: React.ReactNode
+  title: React.ReactNode
   options: optionsT
 }
 

@@ -12,10 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface ColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface ColumnHeaderProps<TData, TValue> {
+  className?: string
   column: Column<TData, TValue>
-  title: string
+  title: React.ReactNode
 }
 
 export function ColumnHeader<TData, TValue>({

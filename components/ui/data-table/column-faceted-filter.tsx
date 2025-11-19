@@ -6,7 +6,7 @@ import { getValue } from "@/lib/utils";
 interface ColumnFacetedFilterProps<TData, TValue>
   extends Omit<multiSelectComboboxProps, 'options' | 'value' | 'onValueChange' | 'label'> {
   column?: Column<TData, TValue>
-  title?: string
+  title: React.ReactNode
   options: optionsT
 }
 
@@ -14,6 +14,7 @@ export function ColumnFacetedFilter<TData, TValue>({
   column,
   title,
   options,
+  ...props
 }: ColumnFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues()
 
@@ -42,10 +43,11 @@ export function ColumnFacetedFilter<TData, TValue>({
       options={newOptions}
       value={column?.getFilterValue() as string[]}
       onValueChange={onSelect}
-      label={<span className="font-semibold">{title}</span>}
+      label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}
       indicatorAt="left"
       contentCls="w-fit"
       matchTriggerWidth={false}
+      {...props}
     />
   )
 }

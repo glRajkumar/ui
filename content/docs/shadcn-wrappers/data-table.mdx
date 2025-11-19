@@ -6,3 +6,455 @@ description: A simplified wrapper for Shadcn Data Table with flexible option han
 import { DataTableEx } from "@/components/examples";
 
 <DataTableEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/data-table
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+```npm
+npm install @tanstack/react-table
+```
+
+Add following shadcn components: `button`, `table`, `command`, `popover`, `dropdown-menu`, `select`, `badge`.
+
+Update same components from our site.
+
+<include cwd meta='title="ui/data-table/column-faceted-filter.tsx"'>
+  ./components/ui/data-table/column-faceted-filter.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/column-filter.tsx"'>
+  ./components/ui/data-table/column-filter.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/column-header.tsx"'>
+  ./components/ui/data-table/column-header.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/column-sorter.tsx"'>
+  ./components/ui/data-table/column-sorter.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/column-toggle.tsx"'>
+  ./components/ui/data-table/column-toggle.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/data-table.tsx"'>
+  ./components/ui/data-table/data-table.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/filter-group.tsx"'>
+  ./components/ui/data-table/filter-group.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/pagination.tsx"'>
+  ./components/ui/data-table/pagination.tsx
+</include>
+
+<include cwd meta='title="ui/data-table/use-table.ts"'>
+  ./components/ui/data-table/use-table.ts
+</include>
+
+<include cwd meta='title="ui/data-table/index.tsx"'>
+  ./components/ui/data-table/index-no-virt.tsx
+</include>
+
+--- 
+
+If you wish to add `DataTableVirtualized`
+
+```npm
+npm install @tanstack/react-virtual
+```
+<include cwd meta='title="ui/data-table/data-table-virtualized.tsx"'>
+  ./components/ui/data-table/data-table-virtualized.tsx
+</include>
+
+add import statement in the `ui/data-table/index.tsx`
+
+```tsx
+/* [!code ++:1] [!code focus:1] */
+export * from "./data-table-virtualized";
+export * from "./column-faceted-filter";
+export * from "./column-header";
+export * from "./column-filter";
+export * from "./column-sorter";
+export * from "./column-toggle";
+export * from "./filter-group";
+export * from "./pagination";
+export * from "./data-table";
+export * from "./use-table";
+```
+
+</Tab>
+
+</Tabs>
+
+--- 
+
+## Usage
+
+### DataTable
+```tsx
+import {
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+
+import { DataTable } from '@/components/ui/data-table';
+
+function MyTable() {
+  const table = useReactTable({ 
+    data, 
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
+  
+  return <DataTable table={table} />
+}
+```
+
+### DataTableVirtualized
+```tsx
+import {
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+
+import { DataTableVirtualized } from '@/components/ui/data-table-virtualized';
+
+function MyTable() {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery()
+  
+  const table = useReactTable({ 
+    data: data.pages.flat(), 
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
+  
+  return (
+    <DataTableVirtualized
+      table={table}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      fetchNextPage={fetchNextPage}
+      className="h-[600px]" // Fixed height required
+    />
+  )
+}
+```
+
+### useTable Hook
+Custom hook for managing table state and configuration. Pre-configured with `columnVisibility`, `columnFilters` (Faceted), `sorting`, `rowSelection`,  `globalFilter`, `pagination`. 
+So you can use most of the functionality of `tanstack-table` just using this hook.
+
+```tsx
+import { useTable } from '@/components/ui/use-table';
+import { DataTable } from '@/components/ui/data-table';
+
+function MyTable() {
+  const table = useTable({ data, columns })
+  
+  return (
+    <>
+      //... Other components
+
+      <DataTable table={table} />
+    </>
+  )
+}
+```
+
+### ColumnSorter
+Simple column header with sorting functionality.
+
+```tsx
+const columns: ColumnDef<User>[] = [
+  {
+    accessorKey: 'name',
+    header: ({ column }) => (
+      <ColumnSorter column={column} title="Name" />
+    ),
+  },
+]
+```
+
+### ColumnHeader
+Advanced column header with dropdown menu for sorting and visibility.
+
+```tsx
+const columns: ColumnDef<User>[] = [
+  {
+    accessorKey: 'name',
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Name" />
+    ),
+  },
+]
+```
+
+### ColumnFilter
+Multi-select dropdown filter for column values.
+
+```tsx
+<ColumnFilter
+  title="Role"
+  column={table.getColumn('role')}
+  options={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
+/>
+```
+
+### ColumnFacetedFilter
+Multi-select dropdown filter with faceted value counts.
+
+```tsx
+<ColumnFacetedFilter
+  title="Role"
+  column={table.getColumn('role')}
+  options={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
+/>
+```
+
+### FilterGroup
+Dynamic filter management component that allows adding/removing filters (`ColumnFilter`).
+
+```tsx
+<FilterGroup
+  table={table}
+  options={[
+    {
+      key: 'department',
+      lable: 'Department',
+      options: ['Engineering', 'Marketing', 'Sales']
+    },
+    {
+      key: 'location',
+      lable: 'Location',
+      options: ['New York', 'London', 'Tokyo']
+    }
+  ]}
+/>
+```
+
+### ColumnToggle
+Dropdown menu for showing/hiding table columns.
+
+```tsx
+<ColumnToggle table={table} />
+```
+
+### Pagination
+Comprehensive pagination controls with page size selection.
+
+```tsx
+<Pagination table={table} />
+```
+
+Note: `options` array is of `optionsT` type, so you can pass allowed data. DataTable fully customizable with `column` array itself.
+
+
+## Reference
+
+#### ColumndFilter and ColumnFacetedFilter
+<AutoTypeTable 
+name="props" 
+type={`export interface props {
+  /**
+   * Ref to column that the filter applies to
+   * example: \`table.getColumn('role')\`
+   */
+  column: Column
+
+  /**
+   * Display label for the filter
+   */
+  title: React.ReactNode
+
+  /**
+   * Array of options - can be primitives, objects, or groups
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
+   * - Groups: \`{ group: string, options: Array, className?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Simple string",
+      *   42,
+   *   true,
+   *   "---",
+   *   { label: "Custom", value: "custom" },
+   *   { label: <><Icon />Banana</>, value: "banana" },
+   *   { 
+   *      group: "Fruits", 
+   *      options: ["Apple", "Banana"] 
+   *   },
+   * ]
+   * \`\`\`
+   */
+  options: optionsT
+
+  /**
+  * ...otherProps: All properties from MultiSelectCombobox can be passed directly.
+  */
+  otherProps: MultiSelectCombobox
+}`} 
+/>
+
+#### ColumnHeader
+<AutoTypeTable 
+name="ColumnHeader" 
+type={`export interface ColumnHeader {
+  /**
+   * Ref to column that the filter applies to
+   */
+  column: Column
+
+  /**
+   * Display label for the filter
+   */
+  title: React.ReactNode
+
+  /**
+   * Additional CSS classes for the trigger button
+   */
+  className?: string
+}`} 
+/>
+
+#### ColumnSorter
+<AutoTypeTable 
+name="ColumnSorter" 
+type={`export interface ColumnSorter {
+  /**
+   * Ref to column that the filter applies to
+   */
+  column: Column
+
+  /**
+   * Display label for the filter
+   */
+  title: React.ReactNode
+
+  /**
+   * Additional CSS classes for the trigger button
+   */
+  className?: string
+}`} 
+/>
+
+#### ColumnToggle and Pagination
+<AutoTypeTable 
+name="props" 
+type={`export type props = {
+  /**
+   * Ref to table from the tanstack table
+   */
+  table: Table
+} `} 
+/>
+
+#### useTable
+<AutoTypeTable 
+name="useTable" 
+type={`export type useTable = {
+  /**
+   * data for the table
+   */
+  data: Record<string, any>[]
+
+  /**
+   * Ref to column that the filter applies to
+   */
+  column: Column
+}`} 
+/>
+
+#### DataTable
+<AutoTypeTable 
+name="DataTable" 
+type={`export interface DataTable {
+  /**
+   * Ref to table from the tanstack table
+   */
+  table: Table
+
+  /**
+   * Message displayed when search returns no results or shown when no rows
+   * @default No matching results.
+   */
+  emptyMessage?: string
+
+  /**
+   * Additional CSS classes for the table component
+   */
+  className?: string
+}`} 
+/>
+
+#### DataTableVirtualized
+<AutoTypeTable 
+name="DataTableVirtualized" 
+type={`export interface DataTableVirtualized {
+  /**
+   * Ref to table from the tanstack table
+   */
+  table: Table
+
+  /**
+   * Message displayed when search returns no results or shown when no rows
+   * @default No matching results.
+   */
+  emptyMessage?: string
+
+  /**
+   * Additional CSS classes for the table wrapper div component
+   */
+  className?: string
+
+  /**
+   * Enables infinite loading if more pages are available
+   */
+  hasNextPage?: boolean
+
+  /**
+   * Whether the next page is being fetched
+   */
+  isFetchingNextPage?: boolean
+
+  /**
+   * Callback to load the next page (triggered automatically)
+   */
+  fetchNextPage?: () => void
+
+  /**
+   * Virtualizer config overrides: 
+   * Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, "count" | "getScrollElement">>
+   */
+  virtualizerOptions: VirtualizerOptions
+}`} 
+/>
+
+
+## Related Components
+
+- [Shadcn Data Table](https://ui.shadcn.com/docs/components/data-table)
+- [Tanstack table](https://tanstack.com/table/latest/docs/introduction)
+- [Tanstack Virtual](https://tanstack.com/virtual/latest/docs/introduction)

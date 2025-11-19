@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 
-interface ColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface ColumnHeaderProps<TData, TValue> {
+  className?: string
   column: Column<TData, TValue>
-  title: string
+  title: React.ReactNode
 }
 
 export function ColumnSorter<TData, TValue>({

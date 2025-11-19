@@ -16,14 +16,13 @@ import {
 } from "@/components/ui/table";
 
 interface DataTableProps<TData> {
-  table: TanstackTable<TData>;
-  emptyMessage?: string;
-  overscan?: number
-  className?: string;
+  table: TanstackTable<TData>
+  emptyMessage?: string
+  className?: string
   hasNextPage?: boolean
   isFetchingNextPage?: boolean
   fetchNextPage?: () => void
-  virtualizerOpts?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>>
+  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>>
 }
 
 export function DataTableVirtualized<TData>({
@@ -33,7 +32,7 @@ export function DataTableVirtualized<TData>({
   hasNextPage = false,
   isFetchingNextPage = false,
   fetchNextPage = () => { },
-  virtualizerOpts,
+  virtualizerOptions,
 }: DataTableProps<TData>) {
   const rows = table.getRowModel().rows
   const columnCount = table.getAllColumns().length
@@ -46,7 +45,7 @@ export function DataTableVirtualized<TData>({
     getScrollElement: () => parentRef.current,
     estimateSize: () => 81,
     overscan: 10,
-    ...(virtualizerOpts ?? {}),
+    ...(virtualizerOptions ?? {}),
   })
 
   const virtualItems = virtualizer.getVirtualItems()
