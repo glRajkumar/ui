@@ -4,9 +4,261 @@
   "homepage": "https://ui.glrk.dev",
   "items": [
     {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Accordion componet with wrapper",
+      "registryDependencies": [
+        "accordion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/accordion.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert Dialog",
+      "description": "Alert Dialog componet with wrapper",
+      "registryDependencies": [
+        "alert-dialog"
+      ],
+      "files": [
+        {
+          "path": "components/ui/alert-dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "cardt componet with wrapper",
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "components/ui/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Combobox componet with wrapper",
+      "registryDependencies": [
+        "command",
+        "popover",
+        "button",
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data Table Wrapper",
+      "description": "Data Table componet with wrapper",
+      "dependencies": [
+        "@tanstack/react-table"
+      ],
+      "registryDependencies": [
+        "dropdown-menu",
+        "select",
+        "command",
+        "popover",
+        "button",
+        "badge",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/column-faceted-filter.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/column-filter.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/column-header.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/column-sorter.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/column-toggle.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/data-table.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/filter-group.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/pagination.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/use-table.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/index-no-virt.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/data-table/index.tsx"
+        }
+      ]
+    },
+    {
+      "name": "data-table-virtual",
+      "type": "registry:ui",
+      "title": "Data Table Virtualized",
+      "description": "Data Table Virtualized componet with wrapper",
+      "dependencies": [
+        "@tanstack/react-virtual"
+      ],
+      "files": [
+        {
+          "path": "components/ui/data-table/data-table-virtualized.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/data-table/index.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Dialog componet with wrapper",
+      "registryDependencies": [
+        "dialog",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "drawer componet with wrapper",
+      "registryDependencies": [
+        "drawer",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:ui",
+      "title": "Dropdown",
+      "description": "Dropdown componet with wrapper",
+      "registryDependencies": [
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/dropdown.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "form-wrapper",
+      "type": "registry:ui",
+      "title": "Form",
+      "description": "Form componet with wrapper",
+      "registryDependencies": [
+        "form",
+        "combobox",
+        "select",
+        "popover",
+        "radio-group",
+        "calendar",
+        "textarea",
+        "button",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/select.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/form.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/form-wrapper.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/form-wrapper.tsx"
+        }
+      ]
+    },
+    {
       "name": "select",
       "type": "registry:ui",
-      "title": "SelectWrapper",
+      "title": "Select",
       "description": "Select componet with wrapper",
       "registryDependencies": [
         "select"
@@ -19,6 +271,66 @@
         },
         {
           "path": "components/ui/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "Sheet componet with wrapper",
+      "registryDependencies": [
+        "sheet"
+      ],
+      "files": [
+        {
+          "path": "components/ui/sheet.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Tabs componet with wrapper",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "components/ui/tabs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle Group",
+      "description": "Toggle Group componet with wrapper",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "components/ui/toggle-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Tooltip componet with wrapper",
+      "registryDependencies": [
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "components/ui/tooltip.tsx",
           "type": "registry:ui"
         }
       ]
