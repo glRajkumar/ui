@@ -198,13 +198,11 @@ import { Button } from "@/components/ui/button";
 
 export function Basic() {
   return (
-    <>
-      <DrawerWrapper
-        trigger={<Button>Delete</Button>}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-      />
-    </>
+    <DrawerWrapper
+      trigger={<Button>Delete</Button>}
+      title="Are you absolutely sure?"
+      description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+    />
   )
 }
 ```
@@ -219,16 +217,14 @@ export function Controlled() {
   const [open, setOpen] = useState(false)
 
   return (
-    <>
-      <DrawerWrapper
-        open={open}
-        onOpenChange={setOpen}
-        trigger={<Button>Controlled</Button>}
-        onAction={() => setOpen(false)}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-      />
-    </>
+    <DrawerWrapper
+      open={open}
+      onOpenChange={setOpen}
+      trigger={<Button>Controlled</Button>}
+      onAction={() => setOpen(false)}
+      title="Are you absolutely sure?"
+      description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+    />
   )
 }
 

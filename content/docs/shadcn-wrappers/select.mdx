@@ -28,6 +28,7 @@ import { cn, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/ut
 ```
 
 ```tsx title="ui/select.tsx"
+
 type itemProps = {
   option: allowedPrimitiveT | optionT
   className?: string
@@ -52,7 +53,7 @@ function Item({ option, className, indicatorAt }: itemProps) {
   )
 }
 
-type props = {
+type selectProps = {
   id?: string
   options: optionsT
   placeholder?: string
@@ -61,12 +62,12 @@ type props = {
   contentCls?: string
   groupCls?: string
   itemCls?: string
-}
+} & React.ComponentProps<typeof SelectPrimitive.Root>
 function SelectWrapper({
   id, options, placeholder, indicatorAt,
   triggerCls, contentCls, groupCls, itemCls,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root> & props) {
+}: selectProps) {
   return (
     <Select {...props}>
       <SelectTrigger id={id} className={triggerCls}>
@@ -123,8 +124,9 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-/* [!code ++:1] [!code focus] */
+/* [!code ++:2] [!code focus:2] */
   SelectWrapper,
+  type selectProps,
 }
 ```
 

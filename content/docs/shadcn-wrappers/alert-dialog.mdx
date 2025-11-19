@@ -195,11 +195,9 @@ import { Button } from "@/components/ui/button";
 
 export function Basic() {
   return (
-    <>
-      <AlertDialogWrapper
-        trigger={<Button>Delete</Button>}
-      />
-    </>
+    <AlertDialogWrapper
+      trigger={<Button>Delete</Button>}
+    />
   )
 }
 ```
@@ -214,14 +212,12 @@ export function Controlled() {
   const [open, setOpen] = useState(false)
 
   return (
-    <>
-      <AlertDialogWrapper
-        open={open}
-        onOpenChange={setOpen}
-        trigger={<Button>Controlled</Button>}
-        onAction={() => setOpen(false)}
-      />
-    </>
+    <AlertDialogWrapper
+      open={open}
+      onOpenChange={setOpen}
+      trigger={<Button>Controlled</Button>}
+      onAction={() => setOpen(false)}
+    />
   )
 }
 
