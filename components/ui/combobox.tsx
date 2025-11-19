@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
 
-import { cn, extractText, filteredOptions, findOptionByValue, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
+import { cn, getLabel, getValue, isAllowedPrimitive, isGroup, isOption, isSeparator } from "@/lib/utils"
 
 import {
   Command,
@@ -19,6 +19,55 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+
+const extractText = (node: any): string => {
+  if (node === null || node === undefined) return ""
+  if (isAllowedPrimitive(node)) return String(node)
+  if (Array.isArray(node)) return node.map(extractText).join(" ")
+  if (node.props?.children) return extractText(node.props.children)
+  return ""
+}
+
+const findOptionByValue = (options: optionsT, value: allowedPrimitiveT) => {
+  for (const item of options) {
+    if (isGroup(item)) {
+      const found = item.options.find((opt) => getValue(opt) === value)
+      if (found) return found
+    } else if (!isSeparator(item) && getValue(item) === value) {
+      return item
+    }
+  }
+  return ""
+}
+
+const filteredOptions = (options: optionsT, query: string): optionsT => {
+  const q = query.toLowerCase()
+  const result: optionsT = []
+
+  for (const item of options) {
+    if (isGroup(item)) {
+      const filtered = item.options.filter(opt =>
+        extractText(getLabel(opt)).toLowerCase().includes(q)
+      )
+      if (filtered.length) {
+        result.push({ ...item, options: filtered })
+      }
+      continue
+    }
+
+    if (isSeparator(item)) {
+      result.push(item)
+      continue
+    }
+
+    if (extractText(getLabel(item)).toLowerCase().includes(q)) {
+      result.push(item)
+    }
+  }
+
+  return result
+}
+
 
 type ItemProps = {
   option: allowedPrimitiveT | optionT

@@ -1,9 +1,203 @@
 ---
 title: Form Wrapper
-description: A simplified wrapper for Shadcn Form Wrapper with flexible option handling and automatic type conversion
+description: Reusable form field wrappers built on top of shadcn/ui and react-hook-form
 ---
 
 import { FormEx } from "@/components/examples";
 
 <FormEx />
 
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/form-wrapper
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Add following shadcn components: `select`, `command`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`.
+
+Update same components from our site.
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/form-wrapper.tsx"'>
+  ./components/ui/form-wrapper.tsx
+</include>
+
+</Tab>
+
+</Tabs>
+
+These wrappers automatically handle:
+
+- Label
+- Form control wiring  
+- Error messages  
+- Placeholder generation  
+- Value parsing (e.g., converting `"1"` → number)  
+- Shadcn UI integration  
+
+## Usage
+
+```tsx
+import { FormProvider, useForm } from "react-hook-form"
+
+export function Basic() {
+  const form = useForm({
+    defaultValues: {/* ... */},
+  })
+
+  return (
+    <FormProvider {...form}>
+      <form
+        onSubmit={form.handleSubmit((d) => console.log(d))}
+      >
+      // Wrapper component
+      </form>
+    </FormProvider>
+  )
+}
+```
+
+## Reference
+
+```ts
+import { Control, FieldValues, Path } from "react-hook-form";
+
+type BaseWrapperProps<T extends FieldValues> = {
+  name: Path<T>
+  label?: string
+  control: Control<T>
+  className?: string
+}
+```
+
+#### InputWrapper
+
+```ts
+type InputWrapperProps<T extends FieldValues> =
+  BaseWrapperProps<T> &
+  React.InputHTMLAttributes<HTMLInputElement>
+```
+
+```tsx
+<InputWrapper
+  name="username"
+  label="Username"
+  control={form.control}
+/>
+```
+
+#### TextareaWrapper
+
+```ts
+type TextareaWrapperProps<T extends FieldValues> =
+  BaseWrapperProps<T> &
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+```
+
+```tsx
+<TextareaWrapper
+  name="bio"
+  label="Bio"
+  control={form.control}
+/>
+```
+
+#### RadioWrapper
+
+```ts
+type RadioWrapperProps<T extends FieldValues> = BaseWrapperProps<T> & {
+  options: (allowedPrimitiveT | optionT)[]
+}
+```
+
+```tsx
+<RadioWrapper
+  name="gender"
+  label="Gender"
+  control={form.control}
+  options={["male", "female", "other"]}
+/>
+```
+
+#### SelectWrapper
+
+```ts
+type SelectWrapperProps<T extends FieldValues> =
+  BaseWrapperProps<T> &
+  Omit<selectProps, "value" | "onValueChange">
+```
+
+```tsx
+<SelectWrapper
+  name="country"
+  label="Country"
+  control={form.control}
+  options={[
+    { value: "in", label: "India" },
+    { value: "us", label: "USA" }
+  ]}
+/>
+```
+
+#### ComboboxWrapper
+
+```ts
+type ComboboxWrapperProps<T extends FieldValues> =
+  BaseWrapperProps<T> &
+  Omit<comboboxProps, "value" | "onValueChange">
+```
+
+```tsx
+<ComboboxWrapper
+  name="fruit"
+  label="Favorite Fruit"
+  control={form.control}
+  options={["Apple", "Banana", "Mango"]}
+/>
+```
+
+#### MultiSelectComboboxWrapper
+
+```ts
+type MultiSelectComboboxWrapperProps<T extends FieldValues> =
+  BaseWrapperProps<T> &
+  Omit<multiSelectComboboxProps, "value" | "onValueChange">
+```
+
+```tsx
+<MultiSelectComboboxWrapper
+  name="hobbies"
+  label="Hobbies"
+  control={form.control}
+  options={["Music", "Sports", "Travel"]}
+/>
+```
+
+#### DatePickerWrapper
+
+```ts
+type DatePickerWrapperProps<T extends FieldValues> =
+  BaseWrapperProps<T> &
+  Omit<React.ComponentProps<typeof Calendar>, "selected" | "onSelect">
+```
+
+```tsx
+<DatePickerWrapper
+  name="dob"
+  label="Date of Birth"
+  control={form.control}
+/>
+```
+
+## Related Components
+
+- [Shadcn Form](https://ui.shadcn.com/docs/components/form)

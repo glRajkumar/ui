@@ -31,36 +31,3 @@ export const isGroup = optionTypeChecker<groupT>("group")
 
 export const getValue = (item: any) => typeof item === "object" ? item.value : item
 export const getLabel = (item: any) => typeof item === "object" ? item.label : item
-
-export const extractText = (node: any): string => {
-  if (node === null || node === undefined) return ""
-  if (isAllowedPrimitive(node)) return String(node)
-  if (Array.isArray(node)) return node.map(extractText).join(" ")
-  if (node.props?.children) return extractText(node.props.children)
-  return ""
-}
-
-export const findOptionByValue = (options: optionsT, value: allowedPrimitiveT) => {
-  for (const item of options) {
-    if (isGroup(item)) {
-      const found = item.options.find((opt) => getValue(opt) === value)
-      if (found) return found
-    } else if (!isSeparator(item) && getValue(item) === value) {
-      return item
-    }
-  }
-  return ""
-}
-
-export const filteredOptions = (options: optionsT, query: string): optionsT => {
-  return options
-    .map((item) => {
-      if (isGroup(item)) {
-        const filtered = item.options.filter((opt) => extractText(getLabel(opt)).toLowerCase().includes(query.toLowerCase()))
-        return filtered.length ? { ...item, options: filtered } : null
-      }
-      if (isSeparator(item)) return item
-      return extractText(getLabel(item)).toLowerCase().includes(query.toLowerCase()) ? item : null
-    })
-    .filter(v => v !== null)
-}
