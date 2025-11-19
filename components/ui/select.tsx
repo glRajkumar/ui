@@ -199,7 +199,7 @@ function Item({ option, className, indicatorAt }: itemProps) {
   )
 }
 
-type props = {
+type selectProps = {
   id?: string
   options: optionsT
   placeholder?: string
@@ -208,12 +208,12 @@ type props = {
   contentCls?: string
   groupCls?: string
   itemCls?: string
-}
+} & React.ComponentProps<typeof SelectPrimitive.Root>
 function SelectWrapper({
   id, options, placeholder, indicatorAt,
   triggerCls, contentCls, groupCls, itemCls,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root> & props) {
+}: selectProps) {
   return (
     <Select {...props}>
       <SelectTrigger id={id} className={triggerCls}>
@@ -267,4 +267,5 @@ export {
   SelectTrigger,
   SelectValue,
   SelectWrapper,
+  type selectProps,
 }
