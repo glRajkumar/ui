@@ -34,6 +34,21 @@
       ]
     },
     {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Breadcrumb componet with wrapper",
+      "registryDependencies": [
+        "breadcrumb"
+      ],
+      "files": [
+        {
+          "path": "components/ui/breadcrumb.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
@@ -233,7 +248,9 @@
         "calendar",
         "textarea",
         "button",
-        "input"
+        "input",
+        "checkbox",
+        "switch"
       ],
       "files": [
         {
