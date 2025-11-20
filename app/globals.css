@@ -167,3 +167,7 @@
     @apply px-0;
   }
 }
+
+.home > section {
+  @apply max-w-7xl mx-auto px-6 py-8;
+}

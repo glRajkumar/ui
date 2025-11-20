@@ -117,9 +117,12 @@ function CardWrapper({
         {actions}
       </CardHeader>
 
-      <CardContent className={cn(contentCls)}>
-        {children}
-      </CardContent>
+      {
+        children &&
+        <CardContent className={cn(contentCls)}>
+          {children}
+        </CardContent>
+      }
 
       {footer
         ? typeof footer === "string"
