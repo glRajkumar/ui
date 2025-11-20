@@ -291,8 +291,8 @@ type={`export interface DropdownWrapper {
    * - Primitives: \`string | number | boolean\`
    * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
    * - Objects with extras: \`{ label, value, variant?: "default" | "destructive", shortcut?: string, disabled?: boolean }\`
-   * - Groups: \`{ group: string, options: Array, className?: string }\`
-   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
    * - Separators: Use \`"---"\` as a value
    * 
    * \`\`\`tsx
@@ -325,6 +325,11 @@ type={`export interface DropdownWrapper {
    * Additional CSS classes applied to option groups
    */
   groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
 
   /**
    * ...contentProps: All properties from Radix UI DropdownMenu Content can be passed directly.
@@ -373,8 +378,8 @@ type={`export interface DropdownCheckboxWrapper {
    * Supports:
    * - Primitives: \`string | number | boolean\`
    * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
-   * - Groups: \`{ group: string, options: Array, className?: string }\`
-   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
    * - Separators: Use \`"---"\` as a value
    * 
    * \`\`\`tsx
@@ -411,6 +416,11 @@ type={`export interface DropdownCheckboxWrapper {
    * Additional CSS classes applied to option groups
    */
   groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
 
   /**
    * ...contentProps: All properties from Radix UI DropdownMenu Content can be passed directly.
@@ -470,8 +480,8 @@ type={`export interface DropdownRadioWrapper {
    * Supports:
    * - Primitives: \`string | number | boolean\`
    * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
-   * - Groups: \`{ group: string, options: Array, className?: string }\`
-   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
    * - Separators: Use \`"---"\` as a value
    * 
    * \`\`\`tsx
@@ -506,6 +516,11 @@ type={`export interface DropdownRadioWrapper {
    * Additional CSS classes applied to option groups
    */
   groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
 
   /**
    * ...contentProps: All properties from Radix UI DropdownMenu Content can be passed directly.

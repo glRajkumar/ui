@@ -42,15 +42,43 @@ These wrappers automatically handle:
 - Error messages  
 - Placeholder generation  
 - Value parsing (e.g., converting `"1"` → number)  
-- Shadcn UI integration  
 
 ## Usage
 
+### Basic
 ```tsx
 import { FormProvider, useForm } from "react-hook-form"
 
 export function Basic() {
   const form = useForm({
+    defaultValues: {/* ... */},
+  })
+
+  return (
+    <FormProvider {...form}>
+      <form
+        onSubmit={form.handleSubmit((d) => console.log(d))}
+      >
+      // Wrapper component
+      </form>
+    </FormProvider>
+  )
+}
+```
+
+### Controlled
+```tsx
+import { FormProvider, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+
+const formSchema = z.object({
+  // your schema
+})
+
+export function Controlled() {
+  const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {/* ... */},
   })
 
@@ -73,7 +101,7 @@ import { Control, FieldValues, Path } from "react-hook-form";
 
 type BaseWrapperProps<T extends FieldValues> = {
   name: Path<T>
-  label?: string
+  label?: React.ReactNode
   control: Control<T>
   className?: string
 }
@@ -127,6 +155,36 @@ type RadioWrapperProps<T extends FieldValues> = BaseWrapperProps<T> & {
   options={["male", "female", "other"]}
 />
 ```
+
+
+#### CheckboxWrapper
+
+```ts
+type CheckboxWrapperProps<T extends FieldValues> = BaseWrapperProps<T> & {
+  options: (allowedPrimitiveT | optionT)[]
+}
+```
+
+```tsx
+<CheckboxWrapper
+  name="interest"
+  label="Interest"
+  control={form.control}
+  options={["Book reading", "Music", "TV", "Movie"]}
+/>
+```
+
+#### SwitchWrapper
+
+```tsx
+<SwitchWrapper
+  name="isCompleted"
+  label="Is completed"
+  control={form.control}
+/>
+```
+
+Note: Value need to be boolean.
 
 #### SelectWrapper
 

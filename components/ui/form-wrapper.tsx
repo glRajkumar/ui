@@ -16,11 +16,12 @@ import { Calendar } from "./calendar";
 import { Textarea } from "./textarea";
 import { Checkbox } from './checkbox';
 import { Button } from "./button";
+import { Switch } from './switch';
 import { Input } from "./input";
 
 type BaseWrapperProps<T extends FieldValues> = {
   name: Path<T>
-  label?: string
+  label?: React.ReactNode
   control: Control<T>
   className?: string
 }
@@ -168,6 +169,32 @@ export function CheckboxWrapper<T extends FieldValues>({
           </FormItem>
         )
       }}
+    />
+  )
+}
+
+export function SwitchWrapper<T extends FieldValues>({ name, label, control, className }: BaseWrapperProps<T>) {
+  return (
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={className}>
+          <div className='flex items-center justify-between gap-4'>
+            {label && <FormLabel className="font-normal">{label}</FormLabel>}
+
+            <FormControl>
+              <Switch
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                aria-label={typeof label === "string" ? label : name}
+              />
+            </FormControl>
+          </div>
+
+          <FormMessage />
+        </FormItem>
+      )}
     />
   )
 }

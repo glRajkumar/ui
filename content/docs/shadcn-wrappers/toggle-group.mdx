@@ -24,7 +24,7 @@ npx shadcn@latest add @glrk-ui/toggle-group
 Copy and paste the following code into shadcn `toggle-group` component.
 
 ```tsx
-import { cn, getLabel, getValue, isOption } from "@/lib/utils"
+import { cn, getKey, getLabel, getValue, isOption } from "@/lib/utils"
 ```
 
 ```tsx title="ui/toggle-group.tsx"
@@ -71,7 +71,7 @@ function ToggleGroupWrapper({
     <ToggleGroup type={type} {...(props as any)}>
       {options.map((option, i) => (
         <Item
-          key={i}
+          key={getKey(option, i)}
           option={option}
           className={itemCls}
         />

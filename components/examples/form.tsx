@@ -6,6 +6,7 @@ import {
   InputWrapper,
   RadioWrapper,
   SelectWrapper,
+  SwitchWrapper,
   TextareaWrapper,
   ComboboxWrapper,
   CheckboxWrapper,
@@ -25,6 +26,7 @@ export function FormExample() {
       fruit: "",
       hobbies: [],
       dob: undefined,
+      isCompleted: false,
     },
   })
 
@@ -84,6 +86,12 @@ export function FormExample() {
           label="Interest"
           control={form.control}
           options={interestOptions}
+        />
+
+        <SwitchWrapper
+          name="isCompleted"
+          label="Is completed"
+          control={form.control}
         />
 
         <SelectWrapper
