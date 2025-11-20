@@ -5,7 +5,7 @@ import { Control, FieldValues, Path } from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
-import { cn, getLabel, getValue, parseAllowedPrimitive } from "@/lib/utils";
+import { cn, getKey, getLabel, getValue, parseAllowedPrimitive } from "@/lib/utils";
 
 import { type comboboxProps, type multiSelectComboboxProps, Combobox, MultiSelectCombobox } from "./combobox";
 import { type selectProps, SelectWrapper as SelectPrimitiveWrapper } from "./select";
@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { RadioGroup, RadioGroupItem } from "./radio-group";
 import { Calendar } from "./calendar";
 import { Textarea } from "./textarea";
+import { Checkbox } from './checkbox';
 import { Button } from "./button";
 import { Input } from "./input";
 
@@ -80,17 +81,17 @@ export function RadioWrapper<T extends FieldValues>({ name, label, control, clas
 
           <FormControl>
             <RadioGroup
-              value={`${field.value}`}
+              value={field.value}
               onValueChange={value => field.onChange(parseAllowedPrimitive(value))}
-              className="flex items-center gap-12"
+              className="flex items-center flex-wrap gap-4"
             >
-              {options.map((option) => (
+              {options.map((option, i) => (
                 <FormItem
-                  key={getValue(option)}
-                  className="flex items-center flex-row space-x-1"
+                  key={getKey(option, i)}
+                  className="flex items-center"
                 >
                   <FormControl>
-                    <RadioGroupItem value={getValue(option)} />
+                    <RadioGroupItem value={`${getValue(option)}`} />
                   </FormControl>
                   <FormLabel className="font-normal">
                     {getLabel(option)}
@@ -103,6 +104,70 @@ export function RadioWrapper<T extends FieldValues>({ name, label, control, clas
           <FormMessage />
         </FormItem>
       )}
+    />
+  )
+}
+
+type CheckboxWrapperProps<T extends FieldValues> = BaseWrapperProps<T> & {
+  options: (allowedPrimitiveT | optionT)[]
+}
+export function CheckboxWrapper<T extends FieldValues>({
+  name,
+  label,
+  control,
+  className,
+  options
+}: CheckboxWrapperProps<T>) {
+  return (
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => {
+        const valueArr: allowedPrimitiveT[] = Array.isArray(field.value)
+          ? field.value
+          : []
+
+        const toggleValue = (v: allowedPrimitiveT) => {
+          if (valueArr.includes(v)) {
+            field.onChange(valueArr.filter(x => x !== v))
+          } else {
+            field.onChange([...valueArr, v])
+          }
+        }
+
+        return (
+          <FormItem className={cn("relative", className)}>
+            {label && <FormLabel>{label}</FormLabel>}
+
+            <div className="flex items-center flex-wrap gap-4">
+              {options.map((option, i) => {
+                const val = getValue(option)
+                const isChecked = valueArr.includes(parseAllowedPrimitive(val))
+
+                return (
+                  <FormItem
+                    key={getKey(option, i)}
+                    className="flex items-center gap-2 space-y-0"
+                  >
+                    <FormControl>
+                      <Checkbox
+                        checked={isChecked}
+                        onCheckedChange={() => toggleValue(parseAllowedPrimitive(val))}
+                      />
+                    </FormControl>
+
+                    <FormLabel className="font-normal">
+                      {getLabel(option)}
+                    </FormLabel>
+                  </FormItem>
+                )
+              })}
+            </div>
+
+            <FormMessage />
+          </FormItem>
+        )
+      }}
     />
   )
 }

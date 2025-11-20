@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Check, ChevronsUpDown, Loader2, Plus } from "lucide-react"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
 
-import { cn, getLabel, getValue, isAllowedPrimitive, isGroup, isOption, isSeparator } from "@/lib/utils"
+import { cn, getKey, getLabel, getValue, isAllowedPrimitive, isGroup, isOption, isSeparator } from "@/lib/utils"
 
 import {
   Command,
@@ -90,7 +90,7 @@ function Item({ option, selected, indicatorAt = "right", onSelect, className }: 
       className={cn(indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8", className, optCls)}
       onSelect={() => onSelect(value)}
     >
-      {typeof label === "object" ? label : `${label}`}
+      {label}
 
       <Check
         className={cn(
@@ -207,7 +207,7 @@ function Combobox({
             <span className="flex items-center gap-2 truncate">
               {
                 (selectedOption || selectedOption === false)
-                  ? typeof label === "object" ? label : `${label}`
+                  ? label
                   : placeholder
               }
             </span>
@@ -256,7 +256,7 @@ function Combobox({
                   >
                     {item.options.map((opt, j) => (
                       <Item
-                        key={`g-${i}-${j}`}
+                        key={getKey(opt, j)}
                         option={opt}
                         selected={getValue(opt) === value}
                         onSelect={onSelect}
@@ -270,7 +270,7 @@ function Combobox({
 
               return (
                 <Item
-                  key={`i-${i}`}
+                  key={getKey(item, i)}
                   option={item}
                   selected={getValue(item) === value}
                   onSelect={onSelect}
@@ -319,7 +319,7 @@ function ButtonLabel({
     const found = findOptionByValue(options, val)
     if (!found) return `${val}`
     const label = getLabel(found)
-    return typeof label === "object" ? label : `${label}`
+    return label
   }
 
   if (isLoading)
@@ -469,7 +469,7 @@ function MultiSelectCombobox({
                   >
                     {item.options.map((opt, j) => (
                       <Item
-                        key={`g-${i}-${j}`}
+                        key={getKey(opt, j)}
                         option={opt}
                         selected={value.includes(getValue(opt))}
                         onSelect={onSelect}
@@ -483,7 +483,7 @@ function MultiSelectCombobox({
 
               return (
                 <Item
-                  key={`i-${i}`}
+                  key={getKey(item, i)}
                   option={item}
                   selected={value.includes(getValue(item))}
                   onSelect={onSelect}

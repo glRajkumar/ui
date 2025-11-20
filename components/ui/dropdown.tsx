@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { cn, getLabel, getValue, isSeparator, optionTypeChecker, parseAllowedPrimitive } from "@/lib/utils"
+import { cn, getKey, getLabel, getValue, isSeparator, optionTypeChecker, parseAllowedPrimitive } from "@/lib/utils"
 
 import {
   DropdownMenu,
@@ -30,6 +30,7 @@ type dropdownGroupT = {
   group: string
   options: dropdownOptionT[]
   className?: string
+  groupLabelCls?: string
 }
 
 type dropdownSubMenuT = {
@@ -49,6 +50,7 @@ type inputGroupT = {
   group: string
   options: inputOptionT[]
   className?: string
+  groupLabelCls?: string
 }
 
 type inputSubMenuT = {
@@ -86,7 +88,7 @@ function Item({ option, className, onSelect }: ItemProps) {
       onSelect={onSelect}
       className={cn(className, opt?.className)}
     >
-      {typeof label === "object" ? label : `${label}`}
+      {label}
       {shortcut && <DropdownMenuShortcut>{shortcut}</DropdownMenuShortcut>}
     </DropdownMenuItem>
   )
@@ -96,25 +98,29 @@ type SubMenuProps = {
   submenu: dropdownSubMenuT
   itemCls?: string
   groupCls?: string
+  groupLabelCls?: string
   onSelect?: (value: allowedPrimitiveT) => void
 }
 
-function SubMenu({ submenu, itemCls, groupCls, onSelect }: SubMenuProps) {
+function SubMenu({ submenu, itemCls, groupCls, groupLabelCls, onSelect }: SubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
+      <DropdownMenuSubTrigger className={submenu.triggerCls}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
+      <DropdownMenuSubContent className={submenu.contentCls}>
         {submenu.options.map((option, i) => {
           if (isDropdownGroup(option)) {
             return (
               <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                  {option.group}
+                </DropdownMenuLabel>
+
                 {option.options.map((grOpt, j) => (
                   <Item
-                    key={`${option.group}-item-${j}`}
+                    key={getKey(grOpt, j)}
                     option={grOpt}
                     className={itemCls}
                     onSelect={() => onSelect?.(getValue(grOpt))}
@@ -127,7 +133,7 @@ function SubMenu({ submenu, itemCls, groupCls, onSelect }: SubMenuProps) {
           if (isSubMenu(option)) {
             return (
               <SubMenu
-                key={`submenu-${i}`}
+                key={getKey(option, i)}
                 submenu={option}
                 itemCls={itemCls}
                 groupCls={groupCls}
@@ -138,7 +144,7 @@ function SubMenu({ submenu, itemCls, groupCls, onSelect }: SubMenuProps) {
 
           return (
             <Item
-              key={`item-${i}`}
+              key={getKey(option, i)}
               option={option}
               className={itemCls}
               onSelect={() => onSelect?.(getValue(option))}
@@ -155,6 +161,7 @@ type DropdownWrapperProps = {
   options: dropdownOptionsT
   itemCls?: string
   groupCls?: string
+  groupLabelCls?: string
   contentProps?: React.ComponentProps<typeof DropdownMenuContent>
   onSelect?: (value: allowedPrimitiveT) => void
 } & React.ComponentProps<typeof DropdownMenu>
@@ -164,6 +171,7 @@ function DropdownWrapper({
   options,
   itemCls,
   groupCls,
+  groupLabelCls,
   contentProps,
   onSelect,
   ...props
@@ -179,10 +187,13 @@ function DropdownWrapper({
           if (isDropdownGroup(option)) {
             return (
               <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                  {option.group}
+                </DropdownMenuLabel>
+
                 {option.options.map((grOpt, j) => (
                   <Item
-                    key={`${option.group}-item-${j}`}
+                    key={getKey(grOpt, j)}
                     option={grOpt}
                     className={itemCls}
                     onSelect={() => onSelect?.(getValue(grOpt))}
@@ -195,10 +206,11 @@ function DropdownWrapper({
           if (isSubMenu(option)) {
             return (
               <SubMenu
-                key={`submenu-${i}`}
+                key={option.submenu}
                 submenu={option}
                 itemCls={itemCls}
                 groupCls={groupCls}
+                groupLabelCls={groupLabelCls}
                 onSelect={onSelect}
               />
             )
@@ -206,7 +218,7 @@ function DropdownWrapper({
 
           return (
             <Item
-              key={`item-${i}`}
+              key={getKey(option, i)}
               option={option}
               className={itemCls}
               onSelect={() => onSelect?.(getValue(option))}
@@ -243,7 +255,7 @@ function CheckboxItem({ option, className, checked = false, indicatorAt, onCheck
       indicatorAt={indicatorAt}
       onCheckedChange={onCheckedChange}
     >
-      {typeof label === "object" ? label : `${label}`}
+      {label}
     </DropdownMenuCheckboxItem>
   )
 }
@@ -252,6 +264,7 @@ type CheckboxSubMenuProps = {
   submenu: inputSubMenuT
   itemCls?: string
   groupCls?: string
+  groupLabelCls?: string
 
   checked?: allowedPrimitiveT[]
   onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void
@@ -259,27 +272,30 @@ type CheckboxSubMenuProps = {
   indicatorAt?: indicatorAtT
 }
 
-function CheckboxSubMenu({ submenu, itemCls, groupCls, checked = [], indicatorAt, onCheckedChange = () => { } }: CheckboxSubMenuProps) {
+function CheckboxSubMenu({ submenu, itemCls, groupCls, groupLabelCls, checked = [], indicatorAt, onCheckedChange = () => { } }: CheckboxSubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
+      <DropdownMenuSubTrigger className={submenu.triggerCls}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
+      <DropdownMenuSubContent className={submenu.contentCls}>
         {submenu.options.map((option, i) => {
           if (isInputGroup(option)) {
             return (
               <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                  {option.group}
+                </DropdownMenuLabel>
+
                 {option.options.map((grOpt, j) => {
                   const v = getValue(grOpt)
                   return (
                     <CheckboxItem
-                      key={`${v}-${j}`}
+                      key={getKey(grOpt, j)}
                       option={grOpt}
-                      className={itemCls}
                       checked={checked.includes(v)}
+                      className={itemCls}
                       indicatorAt={indicatorAt}
                       onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
                     />
@@ -292,12 +308,13 @@ function CheckboxSubMenu({ submenu, itemCls, groupCls, checked = [], indicatorAt
           if (isInputSubMenu(option)) {
             return (
               <CheckboxSubMenu
-                key={`submenu-${i}`}
+                key={option.submenu}
                 submenu={option}
+                checked={checked}
                 itemCls={itemCls}
                 groupCls={groupCls}
-                checked={checked}
                 indicatorAt={indicatorAt}
+                groupLabelCls={groupLabelCls}
                 onCheckedChange={onCheckedChange}
               />
             )
@@ -306,10 +323,10 @@ function CheckboxSubMenu({ submenu, itemCls, groupCls, checked = [], indicatorAt
           const v = getValue(option)
           return (
             <CheckboxItem
-              key={`${v}-${i}`}
+              key={getKey(option, i)}
               option={option}
-              className={itemCls}
               checked={checked.includes(v)}
+              className={itemCls}
               indicatorAt={indicatorAt}
               onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
             />
@@ -327,6 +344,7 @@ type DropdownCheckboxWrapperProps = {
   label?: string
   itemCls?: string
   groupCls?: string
+  groupLabelCls?: string
   contentProps?: React.ComponentProps<typeof DropdownMenuContent>
 
   checked?: allowedPrimitiveT[]
@@ -343,6 +361,7 @@ function DropdownCheckboxWrapper({
   contentProps,
   itemCls,
   groupCls,
+  groupLabelCls,
 
   checked: o_checked,
   onCheckedChange: o_onCheckedChange,
@@ -376,15 +395,18 @@ function DropdownCheckboxWrapper({
           if (isInputGroup(option)) {
             return (
               <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                  {option.group}
+                </DropdownMenuLabel>
+
                 {option.options.map((grOpt, j) => {
                   const v = getValue(grOpt)
                   return (
                     <CheckboxItem
-                      key={`${v}-${j}`}
+                      key={getKey(grOpt, j)}
                       option={grOpt}
-                      className={itemCls}
                       checked={checked.includes(v)}
+                      className={itemCls}
                       indicatorAt={indicatorAt}
                       onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
                     />
@@ -397,12 +419,13 @@ function DropdownCheckboxWrapper({
           if (isInputSubMenu(option)) {
             return (
               <CheckboxSubMenu
-                key={`submenu-${i}`}
+                key={option.submenu}
                 submenu={option}
+                checked={checked}
                 itemCls={itemCls}
                 groupCls={groupCls}
-                checked={checked}
                 indicatorAt={indicatorAt}
+                groupLabelCls={groupLabelCls}
                 onCheckedChange={onCheckedChange}
               />
             )
@@ -411,10 +434,10 @@ function DropdownCheckboxWrapper({
           const v = getValue(option)
           return (
             <CheckboxItem
-              key={`${v}-${i}`}
+              key={getKey(option, i)}
               option={option}
-              className={itemCls}
               checked={checked.includes(v)}
+              className={itemCls}
               indicatorAt={indicatorAt}
               onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
             />
@@ -445,7 +468,7 @@ function RadioItem({ option, className, indicatorAt }: RadioItemProps) {
       className={className}
       indicatorAt={indicatorAt}
     >
-      {typeof label === "object" ? label : `${label}`}
+      {label}
     </DropdownMenuRadioItem>
   )
 }
@@ -454,6 +477,7 @@ type RadioSubMenuProps = {
   submenu: inputSubMenuT
   itemCls?: string
   groupCls?: string
+  groupLabelCls?: string
 
   value?: allowedPrimitiveT
   onValueChange?: (value: allowedPrimitiveT) => void
@@ -461,23 +485,26 @@ type RadioSubMenuProps = {
   indicatorAt?: indicatorAtT
 }
 
-function RadioSubMenu({ submenu, itemCls, groupCls, value = "", indicatorAt, onValueChange = () => { } }: RadioSubMenuProps) {
+function RadioSubMenu({ submenu, itemCls, groupCls, groupLabelCls, value = "", indicatorAt, onValueChange = () => { } }: RadioSubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
+      <DropdownMenuSubTrigger className={submenu.triggerCls}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
+      <DropdownMenuSubContent className={submenu.contentCls}>
         <DropdownMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
           {submenu.options.map((option, i) => {
             if (isInputGroup(option)) {
               return (
                 <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                  <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                    {option.group}
+                  </DropdownMenuLabel>
+
                   {option.options.map((grOpt, j) => (
                     <RadioItem
-                      key={`${getValue(grOpt)}-${j}`}
+                      key={getKey(grOpt, j)}
                       option={grOpt}
                       className={itemCls}
                       indicatorAt={indicatorAt}
@@ -490,20 +517,21 @@ function RadioSubMenu({ submenu, itemCls, groupCls, value = "", indicatorAt, onV
             if (isInputSubMenu(option)) {
               return (
                 <RadioSubMenu
-                  key={`submenu-${i}`}
+                  key={option.submenu}
+                  value={value}
                   submenu={option}
                   itemCls={itemCls}
                   groupCls={groupCls}
-                  value={value}
-                  onValueChange={onValueChange}
                   indicatorAt={indicatorAt}
+                  groupLabelCls={groupLabelCls}
+                  onValueChange={onValueChange}
                 />
               )
             }
 
             return (
               <RadioItem
-                key={`${getValue(option)}-${i}`}
+                key={getKey(option, i)}
                 option={option}
                 className={itemCls}
                 indicatorAt={indicatorAt}
@@ -523,6 +551,7 @@ type DropdownRadioWrapperProps = {
   label?: string
   itemCls?: string
   groupCls?: string
+  groupLabelCls?: string
   contentProps?: React.ComponentProps<typeof DropdownMenuContent>
 
   value?: allowedPrimitiveT
@@ -538,6 +567,7 @@ function DropdownRadioWrapper({
   label,
   itemCls,
   groupCls,
+  groupLabelCls,
   contentProps,
 
   value: o_value,
@@ -569,10 +599,13 @@ function DropdownRadioWrapper({
             if (isInputGroup(option)) {
               return (
                 <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <DropdownMenuLabel>{option.group}</DropdownMenuLabel>
+                  <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                    {option.group}
+                  </DropdownMenuLabel>
+
                   {option.options.map((grOpt, j) => (
                     <RadioItem
-                      key={`${getValue(grOpt)}-${j}`}
+                      key={getKey(grOpt, j)}
                       option={grOpt}
                       className={itemCls}
                       indicatorAt={indicatorAt}
@@ -585,12 +618,13 @@ function DropdownRadioWrapper({
             if (isInputSubMenu(option)) {
               return (
                 <RadioSubMenu
-                  key={`submenu-${i}`}
+                  key={option.submenu}
+                  value={value}
                   submenu={option}
                   itemCls={itemCls}
                   groupCls={groupCls}
-                  value={value}
                   indicatorAt={indicatorAt}
+                  groupLabelCls={groupLabelCls}
                   onValueChange={v => onValueChange(parseAllowedPrimitive(v))}
                 />
               )
@@ -598,10 +632,10 @@ function DropdownRadioWrapper({
 
             return (
               <RadioItem
-                key={`${getValue(option)}-${i}`}
+                key={getKey(option, i)}
                 option={option}
-                indicatorAt={indicatorAt}
                 className={itemCls}
+                indicatorAt={indicatorAt}
               />
             )
           })}

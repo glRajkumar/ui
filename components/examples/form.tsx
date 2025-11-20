@@ -8,6 +8,7 @@ import {
   SelectWrapper,
   TextareaWrapper,
   ComboboxWrapper,
+  CheckboxWrapper,
   DatePickerWrapper,
   MultiSelectComboboxWrapper,
 } from "@/components/ui/form-wrapper";
@@ -19,6 +20,7 @@ export function FormExample() {
       name: "",
       description: "",
       gender: "",
+      interest: [],
       country: "",
       fruit: "",
       hobbies: [],
@@ -27,6 +29,7 @@ export function FormExample() {
   })
 
   const genderOptions = ["male", "female", "other"]
+  const interestOptions = ["Book reading", "Music", "TV", "Movie"]
 
   const countryOptions = [
     { value: "in", label: "India" },
@@ -55,7 +58,7 @@ export function FormExample() {
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit((d) => console.log(d))}
-        className="space-y-6 my-8"
+        className="space-y-6 my-8 w-96"
       >
         <InputWrapper
           name="name"
@@ -74,6 +77,13 @@ export function FormExample() {
           label="Gender"
           control={form.control}
           options={genderOptions}
+        />
+
+        <CheckboxWrapper
+          name="interest"
+          label="Interest"
+          control={form.control}
+          options={interestOptions}
         />
 
         <SelectWrapper

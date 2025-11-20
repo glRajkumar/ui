@@ -4,7 +4,7 @@ import * as React from "react"
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
 import { type VariantProps } from "class-variance-authority"
 
-import { cn, getLabel, getValue, isOption } from "@/lib/utils"
+import { cn, getKey, getLabel, getValue, isOption } from "@/lib/utils"
 import { toggleVariants } from "@/components/ui/toggle"
 
 const ToggleGroupContext = React.createContext<
@@ -123,7 +123,7 @@ function ToggleGroupWrapper({
     <ToggleGroup type={type} {...(props as any)}>
       {options.map((option, i) => (
         <Item
-          key={i}
+          key={getKey(option, i)}
           option={option}
           className={itemCls}
         />

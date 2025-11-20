@@ -4,7 +4,7 @@ import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
-import { cn, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
+import { cn, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
 
 function Select({
   ...props
@@ -194,7 +194,7 @@ function Item({ option, className, indicatorAt }: itemProps) {
       className={cn(className, optCls)}
       indicatorAt={indicatorAt}
     >
-      {typeof label === "object" ? label : `${label}`}
+      {label}
     </SelectItem>
   )
 }
@@ -207,16 +207,17 @@ type selectProps = {
   triggerCls?: string
   contentCls?: string
   groupCls?: string
+  groupLabelCls?: string
   itemCls?: string
 } & React.ComponentProps<typeof SelectPrimitive.Root>
 function SelectWrapper({
   id, options, placeholder, indicatorAt,
   triggerCls, contentCls, groupCls, itemCls,
-  ...props
+  groupLabelCls, ...props
 }: selectProps) {
   return (
     <Select {...props}>
-      <SelectTrigger id={id} className={triggerCls}>
+      <SelectTrigger id={id} className={cn("w-full", triggerCls)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
@@ -226,11 +227,11 @@ function SelectWrapper({
             if (isGroup(option)) {
               return (
                 <SelectGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <SelectLabel className="pb-0.5">{option.group}</SelectLabel>
+                  <SelectLabel className={cn("pb-0.5", groupLabelCls)}>{option.group}</SelectLabel>
 
                   {option.options.map((grOpts, j) => (
                     <Item
-                      key={`${option.group}-item-${j}`}
+                      key={getKey(grOpts, j)}
                       option={grOpts}
                       className={cn("pl-4", itemCls)}
                       indicatorAt={indicatorAt}
@@ -242,7 +243,7 @@ function SelectWrapper({
 
             return (
               <Item
-                key={`i-${i}`}
+                key={getKey(option, i)}
                 option={option}
                 className={itemCls}
                 indicatorAt={indicatorAt}

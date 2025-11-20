@@ -90,7 +90,7 @@ function TabsWrapper({
   return (
     <Tabs {...props}>
       <TabsList className={listCls}>
-        {tabs.map((tab) => (
+        {tabs.map(tab => (
           <TabsTrigger
             key={tab.value}
             value={tab.value}
@@ -102,7 +102,7 @@ function TabsWrapper({
         ))}
       </TabsList>
 
-      {tabs.map((tab) => (
+      {tabs.map(tab => (
         <TabsContent
           key={tab.value}
           value={tab.value}
