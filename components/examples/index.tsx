@@ -1,5 +1,6 @@
 import { ToggleGroupExample } from "./toggle-group";
 import { AlertDialogExample } from "./alert-dialog";
+import { BreadcrumbExample } from "./breadcrumb";
 import { DataTableExample } from "./data-table";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
@@ -122,6 +123,14 @@ export function FormEx() {
   return (
     <Wrapper path="/components/examples/form.tsx">
       <FormExample />
+    </Wrapper>
+  )
+}
+
+export function BreadcrumbEx() {
+  return (
+    <Wrapper path="/components/examples/breadcrumb.tsx">
+      <BreadcrumbExample />
     </Wrapper>
   )
 }
