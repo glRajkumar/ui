@@ -7,3 +7,492 @@ import { BreadcrumbEx } from "@/components/examples";
 
 <BreadcrumbEx />
 
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/breadcrumb
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `breadcrumb` component.
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
+```
+
+```tsx title="ui/breadcrumb.tsx"
+type breadcrumbItemT = string | {
+  label: React.ReactNode
+  href?: string
+  onClick?: () => void
+  className?: string
+}
+
+type breadcrumbItemsT = breadcrumbItemT[]
+
+type base = {
+  itemCls?: string
+  linkCls?: string
+  pageCls?: string
+}
+
+type listBase = base & {
+  separator?: React.ReactNode
+  separatorCls?: string
+}
+
+type itemProps = base & {
+  item: breadcrumbItemT
+  isLast: boolean
+}
+function Item({
+  item: itemObj,
+  isLast,
+  itemCls,
+  linkCls,
+  pageCls,
+}: itemProps) {
+  const item = typeof itemObj === "string" ? { label: itemObj } : itemObj
+
+  return (
+    <BreadcrumbItem className={cn(itemCls, item?.className)}>
+      {isLast
+        ? <BreadcrumbPage className={pageCls}>{item?.label}</BreadcrumbPage>
+        : Object?.keys(item)?.length > 2
+          ? <BreadcrumbLink
+            {...item}
+            className={cn("cursor-pointer", linkCls)}
+          >
+            {item?.label}
+          </BreadcrumbLink>
+          : <span className={linkCls}>{item?.label}</span>
+      }
+    </BreadcrumbItem>
+  )
+}
+
+type fullItemsProps = listBase & {
+  items: breadcrumbItemsT
+}
+function BreadcrumbFullItems({
+  items,
+  separator,
+  separatorCls,
+  ...rest
+}: fullItemsProps) {
+  return items.map((item, index) => {
+    const isLast = index === items.length - 1
+
+    return (
+      <React.Fragment key={index}>
+        <Item
+          item={item}
+          isLast={isLast}
+          {...rest}
+        />
+        {!isLast && (
+          <BreadcrumbSeparator className={separatorCls}>
+            {separator}
+          </BreadcrumbSeparator>
+        )}
+      </React.Fragment>
+    )
+  })
+}
+
+type dropdownProps = listBase & {
+  hiddenItems: breadcrumbItemsT
+  dropdownCls?: string
+}
+function BreadcrumbDropdown({
+  hiddenItems,
+  dropdownCls,
+}: dropdownProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <BreadcrumbEllipsis />
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className={dropdownCls}>
+        {hiddenItems.map((itemObj, index) => {
+          const item = typeof itemObj === "string" ? { label: itemObj } : itemObj
+          return (
+            <DropdownMenuItem asChild key={`hidden-${index}`}>
+              {item?.href ? (
+                <a href={item?.href} className="w-full">{item?.label}</a>
+              ) : item?.onClick ? (
+                <button onClick={item?.onClick} className="w-full text-left">
+                  {item?.label}
+                </button>
+              ) : (
+                <span>{item?.label}</span>
+              )}
+            </DropdownMenuItem>
+          )
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+type wrapperProps = listBase & {
+  items: breadcrumbItemsT
+  maxItems?: number
+  itemsBeforeCollapse?: number
+  itemsAfterCollapse?: number
+  collapseType?: "ellipsis" | "dropdown"
+  containerCls?: string
+  dropdownCls?: string
+  listCls?: string
+}
+function BreadcrumbWrapper({
+  items,
+  maxItems = 4,
+  itemsBeforeCollapse = 1,
+  itemsAfterCollapse = 1,
+  collapseType = "ellipsis",
+  containerCls,
+  listCls,
+  dropdownCls,
+  separator,
+  separatorCls,
+  ...rest
+}: wrapperProps) {
+  const shouldCollapse = maxItems && items.length > maxItems
+
+  if (!shouldCollapse) {
+    return (
+      <Breadcrumb className={containerCls}>
+        <BreadcrumbList className={listCls}>
+          <BreadcrumbFullItems
+            items={items}
+            separator={separator}
+            separatorCls={separatorCls}
+            {...rest}
+          />
+        </BreadcrumbList>
+      </Breadcrumb>
+    )
+  }
+
+  const startItems = items.slice(0, itemsBeforeCollapse)
+  const endItems = items.slice(-itemsAfterCollapse)
+  const hiddenItems = items.slice(itemsBeforeCollapse, -itemsAfterCollapse)
+
+  return (
+    <Breadcrumb className={containerCls}>
+      <BreadcrumbList className={listCls}>
+        {startItems.map((item, index) => (
+          <React.Fragment key={`start-${index}`}>
+            <Item
+              item={item}
+              isLast={false}
+              {...rest}
+            />
+            <BreadcrumbSeparator className={separatorCls}>
+              {separator}
+            </BreadcrumbSeparator>
+          </React.Fragment>
+        ))}
+
+        <BreadcrumbItem>
+          {
+            collapseType === "ellipsis"
+              ? <BreadcrumbEllipsis />
+              : <BreadcrumbDropdown
+                hiddenItems={hiddenItems}
+                dropdownCls={dropdownCls}
+              />
+          }
+        </BreadcrumbItem>
+
+        {endItems.map((item, index) => {
+          const isLast = index === endItems.length - 1
+
+          return (
+            <React.Fragment key={`end-${index}`}>
+              <BreadcrumbSeparator className={separatorCls}>
+                {separator}
+              </BreadcrumbSeparator>
+              <Item
+                item={item}
+                isLast={isLast}
+                {...rest}
+              />
+            </React.Fragment>
+          )
+        })}
+      </BreadcrumbList>
+    </Breadcrumb>
+  )
+}
+```
+
+Add export statements.
+
+```tsx
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+// [!code focus:3] [!code ++:3]
+  BreadcrumbWrapper,
+  type breadcrumbItemT,
+  type breadcrumbItemsT,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+Add `dropdown-menu` from shadcn. 
+
+Or use
+
+```npm
+npx shadcn@latest add dropdown-menu
+```
+
+### breadcrumb.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/breadcrumb.tsx"'>
+  ./components/ui/breadcrumb.tsx
+</include>
+
+### Done
+You can now use `BreadcrumbWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { BreadcrumbWrapper } from "@/components/ui/accordion";
+
+export function Basic() {
+  return (
+    <BreadcrumbWrapper
+      items={["Store", "Products", "Electronics", "Computers"]}
+    />
+  )
+}
+```
+
+### Advanced
+```tsx
+import { BreadcrumbWrapper } from "@/components/ui/accordion";
+
+export function Basic() {
+  return (
+    <BreadcrumbWrapper
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: "Category", href: "/products/category" },
+        { label: "Electronics", href: "/products/category/electronics" },
+        { label: "Laptops", href: "/products/category/electronics/laptops" },
+        { label: "MacBook Air M3" }
+      ]}
+      collapseType="dropdown"
+      itemsAfterCollapse={2}
+    />
+  )
+}
+```
+
+## Reference
+
+#### breadcrumbItemT
+<AutoTypeTable 
+name="breadcrumbItemT" 
+type={`export interface breadcrumbItemT {
+  /**
+   * Breadcrumb item - can be a simple string or an object with advanced options
+   * 
+   * Simple usage:
+   * \`\`\`tsx
+   * const items = ["Home", "Products", "Details"];
+   * \`\`\`
+   * 
+   * Advanced usage with objects:
+   * \`\`\`tsx
+   * const items = [
+   *   { label: "Home", href: "/" },
+   *   { label: "Products", onClick: () => navigate('/products') },
+   *   { label: <><Icon />Custom</>, href: "/custom", className: "font-bold" },
+   *   "Current Page" // Last item is usually plain text
+   * ];
+   * \`\`\`
+   */
+  items: (string | {
+    label: React.ReactNode;
+    href?: string;
+    onClick?: () => void;
+    className?: string;
+  })[];
+}`} 
+/>
+
+#### BreadcrumbWrapper
+<AutoTypeTable 
+name="Breadcrumb" 
+type={`export interface Breadcrumb {
+  /**
+   * Array of breadcrumb items
+   * 
+   * \`\`\`tsx
+   * items={["Home", "Products", "Category", "Item"]}
+   * 
+   * // Or with links
+   * items={[
+   *   { label: "Home", href: "/" },
+   *   { label: "Products", href: "/products" },
+   *   "Current Page"
+   * ]}
+   * \`\`\`
+   */
+  items: breadcrumbItems
+
+  /**
+   * Additional CSS classes applied to all breadcrumb items
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to breadcrumb links
+   * Only affects items with \`href\` or \`onClick\`
+   */
+  linkCls?: string;
+
+  /**
+   * Additional CSS classes applied to the current page (last item)
+   */
+  pageCls?: string;
+
+  /**
+   * Custom separator element between breadcrumb items
+   * 
+   * \`\`\`tsx
+   * separator={<ChevronRight />}
+   * separator=">"
+   * separator={<span className="mx-2">/</span>}
+   * \`\`\`
+   * 
+   * @default ">"
+   */
+  separator?: React.ReactNode;
+
+  /**
+   * Additional CSS classes applied to separators
+   */
+  separatorCls?: string;
+
+  /**
+   * Maximum number of items to display before collapsing
+   * 
+   * When total items exceed this number, middle items are collapsed
+   * 
+   * \`\`\`tsx
+   * // With 6 items and maxItems={4}
+   * // Shows: Home / ... / Category / Current
+   * maxItems={4}
+   * \`\`\`
+   *
+   * @default 4
+   */
+  maxItems?: number;
+
+  /**
+   * Number of items to keep visible at the start when collapsed
+   * 
+   * Works with \`maxItems\` to control collapse behavior
+   * 
+   * \`\`\`tsx
+   * // Keep first 2 items visible
+   * maxItems={5}
+   * itemsBeforeCollapse={2}
+   * // Shows: First / Second / ... / Last
+   * \`\`\`
+   * 
+   * @default 1
+   */
+  itemsBeforeCollapse?: number;
+
+  /**
+   * Number of items to keep visible at the end when collapsed
+   * 
+   * Works with \`maxItems\` to control collapse behavior
+   * 
+   * \`\`\`tsx
+   * // Keep last 2 items visible
+   * maxItems={5}
+   * itemsAfterCollapse={2}
+   * // Shows: First / ... / Second Last / Last
+   * \`\`\`
+   * 
+   * @default 1
+   */
+  itemsAfterCollapse?: number;
+
+  /**
+   * Style of collapse indicator for hidden items
+   * 
+   * - \`"ellipsis"\`: Shows "..." as a non-interactive placeholder
+   * - \`"dropdown"\`: Shows "..." as a clickable dropdown menu with hidden items
+   * 
+   * \`\`\`tsx
+   * collapseType="ellipsis" // Simple ...
+   * collapseType="dropdown" // Clickable ... with menu
+   * \`\`\`
+   * 
+   * @default "ellipsis"
+   */
+  collapseType?: "ellipsis" | "dropdown";
+
+  /**
+   * Additional CSS classes for the breadcrumb container
+   */
+  containerCls?: string;
+
+  /**
+   * Additional CSS classes for the collapse dropdown menu
+   * Only applies when \`collapseType="dropdown"\`
+   */
+  dropdownCls?: string;
+
+  /**
+   * Additional CSS classes for the breadcrumb list wrapper
+   */
+  listCls?: string;
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Breadcrumb](https://ui.shadcn.com/docs/components/breadcrumb)
