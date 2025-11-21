@@ -1,13 +1,30 @@
 import { Column } from "@tanstack/react-table";
 
+import { getLabel, getValue, isGroup } from "@/lib/utils";
+
 import { MultiSelectCombobox, type multiSelectComboboxProps } from "../combobox";
-import { getLabel, getValue } from "@/lib/utils";
 
 interface ColumnFacetedFilterProps<TData, TValue>
   extends Omit<multiSelectComboboxProps, 'options' | 'value' | 'onValueChange' | 'label'> {
   column?: Column<TData, TValue>
   title: React.ReactNode
   options: optionsT
+}
+
+function change(option: allowedPrimitiveT | optionT, facets?: Map<any, number>) {
+  const value = getValue(option)
+  const label = getLabel(option)
+
+  return {
+    label: <>
+      {label}
+      {facets?.get(value) && (
+        <span className="ml-auto flex h-4 w-4 items-center justify-center text-xs">
+          {facets.get(value)}
+        </span>
+      )}</>,
+    value,
+  }
 }
 
 export function ColumnFacetedFilter<TData, TValue>({
@@ -19,19 +36,14 @@ export function ColumnFacetedFilter<TData, TValue>({
   const facets = column?.getFacetedUniqueValues()
 
   const newOptions = options.map(option => {
-    const value = getValue(option)
-    const label = getLabel(option)
-
-    return {
-      label: <>
-        {label}
-        {facets?.get(value) && (
-          <span className="ml-auto flex h-4 w-4 items-center justify-center text-xs">
-            {facets.get(value)}
-          </span>
-        )}</>,
-      value,
+    if (isGroup(option)) {
+      return {
+        ...option,
+        options: option.options.map(o => change(o, facets))
+      }
     }
+
+    return change(option, facets)
   })
 
   function onSelect(selected: allowedPrimitiveT[]) {
