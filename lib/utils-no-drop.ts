@@ -38,8 +38,3 @@ export function getKey(item: allowedPrimitiveT | optionT, i: number): string {
   if (val === "---") return `${i}`
   return `${val}`
 }
-
-export const isDropdownGroup = optionTypeChecker<dropdownGroupT>("group")
-export const isDropdownSubMenu = optionTypeChecker<dropdownSubMenuT>("submenu")
-export const isDropdownInputGroup = optionTypeChecker<dropdownInputGroupT>("group")
-export const isDropdownInputSubMenu = optionTypeChecker<dropdownInputSubMenuT>("submenu")
