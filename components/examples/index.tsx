@@ -6,6 +6,7 @@ import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
 import { TooltipExample } from "./tooltip";
+import { MenubarExample } from "./menubar";
 import { SelectExample } from "./select";
 import { DialogExample } from "./dialog";
 import { DrawerExample } from "./drawer";
@@ -131,6 +132,14 @@ export function BreadcrumbEx() {
   return (
     <Wrapper path="/components/examples/breadcrumb.tsx">
       <BreadcrumbExample />
+    </Wrapper>
+  )
+}
+
+export function MenubarEx() {
+  return (
+    <Wrapper path="/components/examples/menubar.tsx">
+      <MenubarExample />
     </Wrapper>
   )
 }

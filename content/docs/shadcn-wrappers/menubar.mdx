@@ -1,0 +1,565 @@
+---
+title: Menubar
+description: A simplified wrapper for Shadcn Menubar with flexible option handling and automatic type conversion
+---
+
+import { MenubarEx } from "@/components/examples";
+
+<MenubarEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/menubar
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Update following code in `ui/menubar.tsx`
+
+```tsx
+/* [!code focus] */
+function MenubarCheckboxItem({
+  className,
+  children,
+  checked,
+/* [!code ++:1] [!code focus] */
+  indicatorAt = "right",
+  ...props
+/* [!code ++:1] [!code focus] */
+}: React.ComponentProps<typeof MenubarPrimitive.CheckboxItem> & { indicatorAt?: indicatorAtT }) {
+  return (
+    <MenubarPrimitive.CheckboxItem
+      data-slot="menubar-checkbox-item"
+      className={cn(
+/* [!code ++:1] [!code focus] */
+        "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+/* [!code ++:1] [!code focus] */
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
+      )}
+      checked={checked}
+      {...props}
+    >
+      /* [!code ++:1] [!code focus] */
+      <span className={cn("pointer-events-none absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
+        <MenubarPrimitive.ItemIndicator>
+          <CheckIcon className="size-4" />
+        </MenubarPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </MenubarPrimitive.CheckboxItem>
+  )
+}
+
+/* [!code focus] */
+function MenubarRadioItem({
+  className,
+  children,
+/* [!code ++:1] [!code focus] */
+  indicatorAt = "right",
+  ...props
+/* [!code ++:1] [!code focus] */
+}: React.ComponentProps<typeof MenubarPrimitive.RadioItem> & { indicatorAt?: indicatorAtT }) {
+  return (
+    <MenubarPrimitive.RadioItem
+      data-slot="menubar-radio-item"
+      className={cn(
+/* [!code ++:1] [!code focus] */
+        "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+/* [!code ++:1] [!code focus] */
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
+      )}
+      {...props}
+    >
+/* [!code ++:1] [!code focus] */
+      <span className={cn("pointer-events-none absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
+        <MenubarPrimitive.ItemIndicator>
+          <CircleIcon className="size-2 fill-current" />
+        </MenubarPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </MenubarPrimitive.RadioItem>
+  )
+}
+```
+
+Create new file name `ui/menubar-wrapper.tsx`.
+
+<include cwd meta='title="ui/menubar-wrapper.tsx"'>
+  ./components/ui/menubar-wrapper.tsx
+</include>
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-menubar
+```
+
+Copy and paste the following code into your project.
+
+### general.d.ts
+<include cwd meta='title="types/general.d.ts"'>
+  ./types/general.d.ts
+</include>
+
+### utils.ts
+<include cwd meta='title="lib/utils.ts"'>
+  ./lib/utils.ts
+</include>
+
+### menubar.tsx
+<include cwd meta='title="ui/menubar.tsx"'>
+  ./components/ui/menubar.tsx
+</include>
+
+### menubar-wrapper.tsx
+<include cwd meta='title="ui/menubar-wrapper.tsx"'>
+  ./components/ui/menubar-wrapper.tsx
+</include>
+
+### Done
+You can now use `DropdownCheckboxWrapper`, `DropdownRadioWrapper`, and `DropdownWrapper`.
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown"
+import { Button } from "@/components/ui/button"
+
+export function Basic() {
+  return (
+    <>
+      <DropdownWrapper
+        options={["Option 1", "Option 2", "Option 3"]}
+        contentProps={{ align: "end" }}
+      >
+        <Button variant="outline">
+          Options
+        </Button>
+      </DropdownWrapper>
+
+      <DropdownCheckboxWrapper options={dropdownOptions}>
+        <Button variant="outline">
+          Checkbox
+        </Button>
+      </DropdownCheckboxWrapper>
+
+      <DropdownRadioWrapper options={dropdownOptions}>
+        <Button variant="outline">
+          Radio
+        </Button>
+      </DropdownRadioWrapper>
+    </>
+  )
+}
+```
+
+### Controlled
+```tsx
+import { useState } from "react"
+import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown"
+import { Button } from "@/components/ui/button"
+
+export function Controlled() {
+  const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
+  const [val, setVal] = useState<allowedPrimitiveT>(true)
+
+  return (
+    <>
+      <DropdownWrapper
+        options={dropdownOptions}
+        onSelect={v => console.log(v)}
+      >
+        <Button variant="outline">
+          Options
+        </Button>
+      </DropdownWrapper>
+
+      <DropdownCheckboxWrapper
+        checked={checked}
+        options={dropdownOptions}
+        onCheckedChange={(value, isChecked) => {
+          setChecked((prev) =>
+            isChecked
+              ? [...prev, value]
+              : prev.filter((x) => x !== value)
+          )
+        }}
+      >
+        <Button variant="outline">
+          Checkbox
+        </Button>
+      </DropdownCheckboxWrapper>
+
+      <DropdownRadioWrapper
+        value={val}
+        options={dropdownOptions}
+        onValueChange={setVal}
+      >
+        <Button variant="outline">
+          Radio
+        </Button>
+      </DropdownRadioWrapper>
+    </>
+  )
+}
+```
+
+### Nested Complex Data
+```tsx
+const dropdownOptions = [
+  { label: "New File", value: "new", shortcut: "Ctrl+N" },
+  "Save",
+  12,
+  { label: <><Banana /> Banana</>, value: "banana" },
+  "---",
+  {
+    group: "Settings",
+    options: [
+      { label: "Appearance", value: "appearance" },
+      22,
+      true
+    ],
+  },
+
+  {
+    submenu: "More",
+    options: [
+      { label: <><Apple /> Apple</>, value: "apple" },
+      {
+        group: "Tools",
+        options: [
+          { label: "Formatter", value: "formatter" },
+          false,
+        ],
+      },
+    ],
+  },
+]
+
+export function Complex() {
+  return (
+    <DropdownWrapper
+      options={dropdownOptions}
+    />
+  )
+}
+```
+
+## Reference
+
+#### DropdownWrapper
+<AutoTypeTable 
+name="DropdownWrapper" 
+type={`export interface DropdownWrapper {
+  /**
+   * Trigger element for the menubar-wrapper. Wrapped with asChild, so pass a single React element
+   * 
+   * \`\`\`tsx
+   * <DropdownWrapper options={options}>
+   *   <Button>Open Menu</Button>
+   * </DropdownWrapper>
+   * \`\`\`
+   */
+  children: React.ReactNode;
+
+  /**
+   * Array of dropdown options - supports primitives, objects, groups, and submenus
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
+   * - Objects with extras: \`{ label, value, variant?: "default" | "destructive", shortcut?: string, disabled?: boolean }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Simple item",
+   *   { label: "Edit", value: "edit", shortcut: "⌘E" },
+   *   { label: "Delete", value: "delete", variant: "destructive" },
+   *   "---",
+   *   { 
+   *     group: "Actions", 
+   *     options: ["Save", "Export"] 
+   *   },
+   *   {
+   *     submenu: "Share",
+   *     options: ["Email", "Link", "Social"]
+   *   }
+   * ]
+   * \`\`\`
+   */
+  options: dropdownOptionsT;
+
+  /**
+   * Additional CSS classes for individual dropdown items
+   * 
+   * Note: Individual options can override this with their own \`className\`
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
+
+  /**
+   * ...contentProps: All properties from Radix UI Menubar Content can be passed directly.
+   * 
+   * \`\`\`tsx
+   * contentProps={{ 
+   *   align: "end", 
+   *   className: "w-56" 
+   * }}
+   * \`\`\`
+   */
+  contentProps: MenubarPrimitive.Content;
+
+  /**
+   * Callback fired when an option is selected
+   * Receives the value of the selected option
+   * 
+   * \`\`\`tsx
+   * onSelect={(value) => {
+   *   console.log("Selected:", value);
+   * }}
+   * \`\`\`
+   */
+  onSelect?: (value: string | number | boolean) => void;
+
+  /**
+   * ...otherProps: All properties from Radix UI Menubar Root can be passed directly.
+   */
+  otherProps: MenubarPrimitive.Root
+}`}
+/>
+
+#### DropdownCheckboxWrapper
+<AutoTypeTable 
+name="DropdownCheckboxWrapper" 
+type={`export interface DropdownCheckboxWrapper {
+  /**
+   * Trigger element for the dropdown (must accept ref)
+   * Wrapped with asChild, so pass a single React element
+   */
+  children: React.ReactNode;
+
+  /**
+   * Array of checkbox options - supports primitives, objects, groups, and submenus
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Email",
+   *   "SMS",
+   *   { label: "Push", value: "push", disabled: true },
+   *   "---",
+   *   { 
+   *     group: "Marketing", 
+   *     options: ["Newsletter", "Updates"] 
+   *   }
+   * ]
+   * \`\`\`
+   */
+  options: inputOptionsT;
+
+  /**
+   * Optional label displayed at the top of the dropdown
+   * Automatically adds a separator after the label
+   * 
+   * \`\`\`tsx
+   * label="Select Notifications"
+   * \`\`\`
+   */
+  label?: string;
+
+  /**
+   * Additional CSS classes for individual checkbox items
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
+
+  /**
+   * ...contentProps: All properties from Radix UI Menubar Content can be passed directly.
+   */
+  contentProps: MenubarPrimitive.Content;
+
+  /**
+   * Controlled state: array of checked values
+   * 
+   * If provided, component operates in controlled mode
+   * If not provided, manages its own internal state
+   * 
+   * \`\`\`tsx
+   * checked={["email", "sms"]}
+   * \`\`\`
+   */
+  checked?: (string | number | boolean)[];
+
+  /**
+   * Callback fired when a checkbox state changes
+   * 
+   * @param value - The value of the toggled option
+   * @param checked - New checked state (true/false)
+   * 
+   * \`\`\`tsx
+   * onCheckedChange={(value, checked) => {
+   *   if (checked) {
+   *     setSelected([...selected, value])
+   *   } else {
+   *     setSelected(selected.filter(v => v !== value))
+   *   }
+   * }}
+   * \`\`\`
+   */
+  onCheckedChange?: (value: string | number | boolean, checked: boolean) => void;
+
+  /**
+   * ...otherProps: All properties from Radix UI Menubar Root can be passed directly.
+   */
+  otherProps: MenubarPrimitive.Root
+}`}
+/>
+
+#### DropdownRadioWrapper
+<AutoTypeTable 
+name="DropdownRadioWrapper" 
+type={`export interface DropdownRadioWrapper {
+  /**
+   * Trigger element for the dropdown (must accept ref)
+   * Wrapped with asChild, so pass a single React element
+   */
+  children: React.ReactNode;
+
+  /**
+   * Array of radio options - supports primitives, objects, groups, and submenus
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Light",
+   *   "Dark",
+   *   "System",
+   *   "---",
+   *   { 
+   *     group: "Experimental", 
+   *     options: [
+   *       { label: "Auto", value: "auto", disabled: true }
+   *     ] 
+   *   }
+   * ]
+   * \`\`\`
+   */
+  options: inputOptionsT;
+
+  /**
+   * Optional label displayed at the top of the dropdown
+   * Automatically adds a separator after the label
+   */
+  label?: string;
+
+  /**
+   * Additional CSS classes for individual radio items
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
+
+  /**
+   * ...contentProps: All properties from Radix UI Menubar Content can be passed directly.
+   */
+  contentProps: MenubarPrimitive.Content;
+
+  /**
+   * Controlled state: the currently selected value
+   * 
+   * If provided, component operates in controlled mode
+   * If not provided, manages its own internal state (defaults to "")
+   * 
+   * \`\`\`tsx
+   * value="dark"
+   * \`\`\`
+   */
+  value?: string | number | boolean;
+
+  /**
+   * Callback fired when the selected value changes
+   * 
+   * @param value - The newly selected value
+   * 
+   * \`\`\`tsx
+   * onValueChange={(value) => {
+   *   setTheme(value)
+   * }}
+   * \`\`\`
+   */
+  onValueChange?: (value: string | number | boolean) => void;
+
+  /**
+   * ...otherProps: All properties from Radix UI Menubar Root can be passed directly.
+   */
+  otherProps: MenubarPrimitive.Root
+}`}
+/>
+
+## Related Components
+
+- [Shadcn Dropdown Menu](https://ui.shadcn.com/docs/components/menubar)
+- [Radix UI Dropdown Menu](https://www.radix-ui.com/primitives/docs/components/menubar)
