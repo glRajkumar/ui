@@ -81,8 +81,9 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils.ts",
-          "type": "registry:lib"
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -114,8 +115,9 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils.ts",
-          "type": "registry:lib"
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -225,8 +227,22 @@
       ],
       "files": [
         {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+         "path": "types/dropdown.d.ts",
+          "type": "registry:file",
+          "target": "types/dropdown.d.ts"
+        },
+        {
           "path": "components/ui/dropdown-menu.tsx",
           "type": "registry:ui"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/dropdown.tsx",
@@ -273,6 +289,39 @@
       ]
     },
     {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menubar",
+      "description": "Menubar componet with wrapper",
+      "registryDependencies": [
+        "menubar"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+         "path": "types/dropdown.d.ts",
+          "type": "registry:file",
+          "target": "types/dropdown.d.ts"
+        },
+        {
+          "path": "components/ui/menubar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/menubar-wrapper.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "select",
       "type": "registry:ui",
       "title": "Select",
@@ -285,6 +334,11 @@
           "path": "types/general.d.ts",
           "type": "registry:file",
           "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
         },
         {
           "path": "components/ui/select.tsx",
@@ -331,6 +385,16 @@
         "toggle-group"
       ],
       "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        },
         {
           "path": "components/ui/toggle-group.tsx",
           "type": "registry:ui"

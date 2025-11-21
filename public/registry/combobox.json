@@ -18,9 +18,10 @@
       "target": "types/general.d.ts"
     },
     {
-      "path": "lib/utils.ts",
+      "path": "lib/utils-no-drop.ts",
       "content": "import { clsx, type ClassValue } from \"clsx\"\r\nimport { twMerge } from \"tailwind-merge\"\r\n\r\nexport function cn(...inputs: ClassValue[]) {\r\n  return twMerge(clsx(inputs))\r\n}\r\n\r\nexport function isAllowedPrimitive(value: unknown): value is allowedPrimitiveT {\r\n  return [\"string\", \"number\", \"boolean\"].includes(typeof value)\r\n}\r\n\r\nexport function parseAllowedPrimitive(value: allowedPrimitiveT): allowedPrimitiveT {\r\n  if (typeof value !== \"string\") return value\r\n\r\n  const trimmed = value.trim()\r\n\r\n  if (trimmed === \"true\") return true\r\n  if (trimmed === \"false\") return false\r\n  if (/^-?\\d+(\\.\\d+)?$/.test(trimmed)) return Number(trimmed)\r\n\r\n  return trimmed\r\n}\r\n\r\nexport function optionTypeChecker<T>(key: keyof T) {\r\n  return (option: any): option is T => !!option && typeof option === \"object\" && key in option\r\n}\r\n\r\nexport const isSeparator = (item: any) => item === \"---\"\r\nexport const isOption = optionTypeChecker<optionT>(\"value\")\r\nexport const isGroup = optionTypeChecker<groupT>(\"group\")\r\n\r\nexport const getValue = (item: allowedPrimitiveT | optionT) => typeof item === \"object\" ? item.value : item\r\nexport const getLabel = (item: allowedPrimitiveT | optionT) => typeof item === \"object\" ? item.label : `${item}`\r\n\r\nexport function getKey(item: allowedPrimitiveT | optionT, i: number): string {\r\n  const val = getValue(item)\r\n  if (typeof val === \"boolean\") return `key-${val}`\r\n  if (val === \"---\") return `${i}`\r\n  return `${val}`\r\n}",
-      "type": "registry:lib"
+      "type": "registry:lib",
+      "target": "lib/utils.ts"
     },
     {
       "path": "components/ui/combobox.tsx",
