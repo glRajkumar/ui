@@ -52,54 +52,29 @@ type commonInner = commomClsT & {
   contentProps?: React.ComponentProps<typeof MenubarContent>
 }
 
-
-
-
-
-type menuBaseT = commomClsT & {
+type menubarBaseT = commomClsT & {
+  value: string
+  trigger: React.ReactNode
   contentProps?: React.ComponentProps<typeof MenubarContent>
-  onSelect?: (value: allowedPrimitiveT) => void
 }
 
-type menubarProps = menuBaseT & {
-  trigger: React.ReactNode
+type menubarOptionsT = (menubarBaseT & {
   options: dropdownOptionsT
-}
+  onSelect?: (value: allowedPrimitiveT) => void
+})[]
 
-type menubarOptionT = menubarProps & {
-  value: string
-}
-
-type menubarOptionsT = menubarOptionT[]
-
-type wrapperProps = menuBaseT & React.ComponentProps<typeof Menubar> & {
-  options: menubarOptionsT
-}
-
-type commonInputProps = commomClsT & {
-  contentProps?: React.ComponentProps<typeof MenubarContent>
-}
-
-type inputMenubarOptionT = commonInputProps & {
-  value: string
-  label?: string
-  trigger: React.ReactNode
+type menubarInputOptionT = menubarBaseT & {
   options: dropdownInputOptionsT
 }
 
-type menubarCheckboxOptionInputT = inputMenubarOptionT & commonCheckboxProps
-type menubarCheckboxOptionInputsT = menubarCheckboxOptionInputT[]
+type menubarCheckboxOptionsT = (menubarInputOptionT & commonCheckboxProps)[]
+type menubarRadioOptionsT = (menubarInputOptionT & commonRadioProps)[]
 
-type checkboxWrapperProps = commonInputProps & commonCheckboxProps & React.ComponentProps<typeof Menubar> & {
-  options: menubarCheckboxOptionInputsT
+type commonWrapT = commomClsT & Omit<React.ComponentProps<typeof Menubar>, "children" | "asChild"> & {
+  contentProps?: React.ComponentProps<typeof MenubarContent>
 }
 
-type menubarRadioOptionInputT = inputMenubarOptionT & commonRadioProps
-type menubarRadioOptionInputsT = menubarRadioOptionInputT[]
-
-type radioWrapperProps = commonInputProps & commonRadioProps & React.ComponentProps<typeof Menubar> & {
-  options: menubarRadioOptionInputsT
-}
+// -------
 
 type itemProps = {
   option: dropdownOptionT
@@ -657,6 +632,10 @@ function MenubarRadioWrapperInner({
   )
 }
 
+type wrap = commonWrapT & {
+  options: menubarOptionsT
+  onSelect?: (value: allowedPrimitiveT) => void
+}
 function MenubarWrapper({
   options,
   itemCls,
@@ -665,14 +644,15 @@ function MenubarWrapper({
   contentProps,
   onSelect,
   ...props
-}: wrapperProps) {
+}: wrap) {
   return (
     <Menubar {...props}>
       {
         options.map(op => (
           <MenubarWrapperInner
-            {...op}
             key={op.value}
+            trigger={op.trigger}
+            options={op.options}
             itemCls={cn(itemCls, op.itemCls)}
             groupCls={cn(groupCls, op.groupCls)}
             groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
@@ -685,6 +665,9 @@ function MenubarWrapper({
   )
 }
 
+type wrapCheckboxT = commonWrapT & commonCheckboxProps & {
+  options: menubarCheckboxOptionsT
+}
 function MenubarCheckboxWrapper({
   options,
 
@@ -698,13 +681,14 @@ function MenubarCheckboxWrapper({
 
   indicatorAt,
   ...props
-}: checkboxWrapperProps) {
+}: wrapCheckboxT) {
   return (
     <Menubar {...props}>
       {options.map(op => (
         <MenubarCheckboxWrapperInner
-          {...op}
           key={op.value}
+          trigger={op.trigger}
+          options={op.options}
           itemCls={cn(itemCls, op.itemCls)}
           groupCls={cn(groupCls, op.groupCls)}
           groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
@@ -718,6 +702,9 @@ function MenubarCheckboxWrapper({
   )
 }
 
+type wrapRadioT = commonWrapT & commonRadioProps & {
+  options: menubarRadioOptionsT
+}
 function MenubarRadioWrapper({
   options,
 
@@ -731,13 +718,14 @@ function MenubarRadioWrapper({
 
   indicatorAt,
   ...props
-}: radioWrapperProps) {
+}: wrapRadioT) {
   return (
     <Menubar {...props}>
       {options.map(op => (
         <MenubarRadioWrapperInner
-          {...op}
           key={op.value}
+          trigger={op.trigger}
+          options={op.options}
           itemCls={cn(itemCls, op.itemCls)}
           groupCls={cn(groupCls, op.groupCls)}
           groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
@@ -755,4 +743,7 @@ export {
   MenubarWrapper,
   MenubarCheckboxWrapper,
   MenubarRadioWrapper,
+  type menubarOptionsT,
+  type menubarCheckboxOptionsT,
+  type menubarRadioOptionsT,
 }

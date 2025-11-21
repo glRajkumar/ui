@@ -4,14 +4,13 @@ import { useState } from "react";
 
 import { dropdownOptions } from "./data";
 
-import { MenubarCheckboxWrapper, MenubarRadioWrapper, MenubarWrapper } from "@/components/ui/menubar-wrapper";
-import { Button } from "@/components/ui/button";
+import { MenubarCheckboxWrapper, menubarOptionsT, MenubarRadioWrapper, MenubarWrapper } from "@/components/ui/menubar-wrapper";
 
 export function MenubarExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   const [val, setVal] = useState<allowedPrimitiveT>(true)
 
-  const opts = [
+  const opts: menubarOptionsT = [
     {
       value: "1",
       trigger: "Option 1",
@@ -20,7 +19,7 @@ export function MenubarExample() {
     {
       value: "2",
       trigger: "Option 2",
-      options: dropdownOptions
+      options: dropdownOptions,
     }
   ]
 
@@ -29,11 +28,7 @@ export function MenubarExample() {
       <MenubarWrapper
         options={opts}
         contentProps={{ align: "end" }}
-      >
-        <Button variant="outline">
-          Options
-        </Button>
-      </MenubarWrapper>
+      />
 
       <MenubarCheckboxWrapper
         options={opts}
@@ -45,21 +40,13 @@ export function MenubarExample() {
               : prev.filter((x) => x !== value)
           )
         }}
-      >
-        <Button variant="outline">
-          Checkbox
-        </Button>
-      </MenubarCheckboxWrapper>
+      />
 
       <MenubarRadioWrapper
         value={`${val}`}
         options={opts}
         onValueChange={setVal}
-      >
-        <Button variant="outline">
-          Radio
-        </Button>
-      </MenubarRadioWrapper>
+      />
     </>
   )
 }
