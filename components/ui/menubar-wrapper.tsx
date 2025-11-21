@@ -53,7 +53,7 @@ type commonInner = commomClsT & {
 }
 
 type menubarBaseT = commomClsT & {
-  value: string
+  key: string
   trigger: React.ReactNode
   contentProps?: React.ComponentProps<typeof MenubarContent>
 }
@@ -70,7 +70,7 @@ type menubarInputOptionT = menubarBaseT & {
 type menubarCheckboxOptionsT = (menubarInputOptionT & commonCheckboxProps)[]
 type menubarRadioOptionsT = (menubarInputOptionT & commonRadioProps)[]
 
-type commonWrapT = commomClsT & Omit<React.ComponentProps<typeof Menubar>, "children" | "asChild"> & {
+type commonWrapT = commomClsT & Omit<React.ComponentProps<typeof Menubar>, "children" | "asChild" | "value"> & {
   contentProps?: React.ComponentProps<typeof MenubarContent>
 }
 
@@ -650,7 +650,7 @@ function MenubarWrapper({
       {
         options.map(op => (
           <MenubarWrapperInner
-            key={op.value}
+            key={op.key}
             trigger={op.trigger}
             options={op.options}
             itemCls={cn(itemCls, op.itemCls)}
@@ -686,7 +686,7 @@ function MenubarCheckboxWrapper({
     <Menubar {...props}>
       {options.map(op => (
         <MenubarCheckboxWrapperInner
-          key={op.value}
+          key={op.key}
           trigger={op.trigger}
           options={op.options}
           itemCls={cn(itemCls, op.itemCls)}
@@ -723,7 +723,7 @@ function MenubarRadioWrapper({
     <Menubar {...props}>
       {options.map(op => (
         <MenubarRadioWrapperInner
-          key={op.value}
+          key={op.key}
           trigger={op.trigger}
           options={op.options}
           itemCls={cn(itemCls, op.itemCls)}

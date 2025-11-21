@@ -12,12 +12,12 @@ export function MenubarExample() {
 
   const opts: menubarOptionsT = [
     {
-      value: "1",
+      key: "1",
       trigger: "Option 1",
       options: dropdownOptions
     },
     {
-      value: "2",
+      key: "2",
       trigger: "Option 2",
       options: dropdownOptions,
     }
@@ -43,7 +43,7 @@ export function MenubarExample() {
       />
 
       <MenubarRadioWrapper
-        value={`${val}`}
+        value={val}
         options={opts}
         onValueChange={setVal}
       />

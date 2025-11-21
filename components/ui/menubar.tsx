@@ -147,7 +147,7 @@ function MenubarRadioItem({
       )}
       {...props}
     >
-      <span className={cn("pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
+      <span className={cn("pointer-events-none absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
         <MenubarPrimitive.ItemIndicator>
           <CircleIcon className="size-2 fill-current" />
         </MenubarPrimitive.ItemIndicator>
