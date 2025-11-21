@@ -91,6 +91,21 @@ function DropdownMenuRadioItem({
 }
 ```
 
+Create new file name `types/dropdown.d.ts`.
+
+<include cwd meta='title="types/dropdown.d.ts"'>
+  ./types/dropdown.d.ts
+</include>
+
+Add following lines to `lib/utils.ts`
+
+```tsx
+export const isDropdownGroup = optionTypeChecker<dropdownGroupT>("group")
+export const isDropdownSubMenu = optionTypeChecker<dropdownSubMenuT>("submenu")
+export const isDropdownInputGroup = optionTypeChecker<dropdownInputGroupT>("group")
+export const isDropdownInputSubMenu = optionTypeChecker<dropdownInputSubMenuT>("submenu")
+```
+
 Create new file name `ui/dropdown.tsx`.
 
 <include cwd meta='title="ui/dropdown.tsx"'>
@@ -114,6 +129,11 @@ Copy and paste the following code into your project.
 ### general.d.ts
 <include cwd meta='title="types/general.d.ts"'>
   ./types/general.d.ts
+</include>
+
+### dropdown.d.ts
+<include cwd meta='title="types/dropdown.d.ts"'>
+  ./types/dropdown.d.ts
 </include>
 
 ### utils.ts
@@ -148,10 +168,12 @@ import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "
 import { Button } from "@/components/ui/button"
 
 export function Basic() {
+  const dropdownOptions = ["Option 1", "Option 2", "Option 3"]
+
   return (
     <>
       <DropdownWrapper
-        options={["Option 1", "Option 2", "Option 3"]}
+        options={dropdownOptions}
         contentProps={{ align: "end" }}
       >
         <Button variant="outline">
@@ -184,6 +206,8 @@ import { Button } from "@/components/ui/button"
 export function Controlled() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   const [val, setVal] = useState<allowedPrimitiveT>(true)
+
+  const dropdownOptions = ["Option 1", "Option 2", "Option 3"]
 
   return (
     <>
@@ -268,6 +292,238 @@ export function Complex() {
 ```
 
 ## Reference
+
+#### DropdownOptions
+<AutoTypeTable 
+name="DropdownOptions" 
+type={`export interface DropdownOptions {
+  /**
+   * Array of dropdown menu options with support for regular items, groups, and nested submenus
+   * 
+   * ## Supported Types:
+   * 
+   * ### Basic Options
+   * - **Primitives**: \`string | number | boolean\`
+   * - **Objects**: \`{ label: React.ReactNode, value: allowedPrimitiveT }\`
+   * - **Separators**: Use \`"---"\` as a value
+   * 
+   * ### Extended Options (with additional properties)
+   * \`\`\`tsx
+   * {
+   *   label: "Delete",
+   *   value: "delete",
+   *   variant: "destructive",  // "default" | "destructive"
+   *   shortcut: "⌘⌫",
+   *   disabled: true
+   * }
+   * \`\`\`
+   * 
+   * ### Groups
+   * \`\`\`tsx
+   * {
+   *   group: "Category Name",
+   *   options: ["Option 1", "Option 2"],
+   *   className?: "custom-group-class",
+   *   groupLabelCls?: "custom-label-class"
+   * }
+   * \`\`\`
+   * 
+   * ### Submenus (Nested Menus)
+   * \`\`\`tsx
+   * {
+   *   submenu: "More Options",
+   *   options: [
+   *     "Nested Option 1",
+   *     { group: "Nested Group", options: ["A", "B"] }
+   *   ],
+   *   triggerCls?: "custom-trigger-class",
+   *   contentCls?: "custom-content-class"
+   * }
+   * \`\`\`
+   * 
+   * ## Complete Example:
+   * \`\`\`tsx
+   * const options: dropdownOptionsT = [
+   *   "New File",
+   *   { label: "Open", value: "open", shortcut: "⌘O" },
+   *   "---",
+   *   {
+   *     group: "Recent Files",
+   *     options: ["Document.pdf", "Image.png"]
+   *   },
+   *   {
+   *     submenu: "Export",
+   *     options: [
+   *       "PDF",
+   *       "HTML",
+   *       {
+   *         group: "Advanced",
+   *         options: ["LaTeX", "DocX"]
+   *       }
+   *     ]
+   *   },
+   *   "---",
+   *   {
+   *     label: "Delete",
+   *     value: "delete",
+   *     variant: "destructive",
+   *     shortcut: "⌘⌫"
+   *   }
+   * ];
+   * \`\`\`
+   */
+  options: (
+    | string
+    | number
+    | boolean
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+      }
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+        variant?: "default" | "destructive";
+        shortcut?: string;
+        disabled?: boolean;
+      }
+    | {
+        group: string;
+        options: Array<any>;
+        className?: string;
+        groupLabelCls?: string;
+      }
+    | {
+        submenu: string;
+        options: Array<any>;
+        triggerCls?: string;
+        contentCls?: string;
+      }
+  )[];
+}`}
+/>
+
+
+#### DropdownInputOptions
+<AutoTypeTable 
+name="DropdownInputOptions" 
+type={`export interface DropdownInputOptions {
+  /**
+   * Array of dropdown menu options for input controls (checkbox/radio)
+   * Simplified version without variants and shortcuts
+   * 
+   * ## Supported Types:
+   * 
+   * ### Basic Options
+   * - **Primitives**: \`string | number | boolean\`
+   * - **Objects**: \`{ label: React.ReactNode, value: allowedPrimitiveT }\`
+   * - **Separators**: Use \`"---"\` as a value
+   * 
+   * ### Extended Options (with disabled state)
+   * \`\`\`tsx
+   * {
+   *   label: "Option Label",
+   *   value: "option-value",
+   *   disabled: true
+   * }
+   * \`\`\`
+   * 
+   * ### Groups
+   * \`\`\`tsx
+   * {
+   *   group: "Category Name",
+   *   options: ["Option 1", "Option 2"],
+   *   className?: "custom-group-class",
+   *   groupLabelCls?: "custom-label-class"
+   * }
+   * \`\`\`
+   * 
+   * ### Submenus (Nested Menus)
+   * \`\`\`tsx
+   * {
+   *   submenu: "More Options",
+   *   options: [
+   *     "Nested Option 1",
+   *     { label: "Nested Option 2", value: "nested2", disabled: true },
+   *     { group: "Nested Group", options: ["A", "B"] }
+   *   ],
+   *   triggerCls?: "custom-trigger-class",
+   *   contentCls?: "custom-content-class"
+   * }
+   * \`\`\`
+   * 
+   * ## Usage with Checkbox:
+   * \`\`\`tsx
+   * const checkboxOptions: dropdowndropdownInputOptionsT = [
+   *   "Feature A",
+   *   "Feature B",
+   *   { label: "Feature C (Beta)", value: "feature-c", disabled: true },
+   *   "---",
+   *   {
+   *     group: "Advanced Features",
+   *     options: ["Dark Mode", "Auto-save", "Notifications"]
+   *   },
+   *   {
+   *     submenu: "Experimental",
+   *     options: ["AI Assistant", "Voice Control"]
+   *   }
+   * ];
+   * 
+   * const [checked, setChecked] = useState(["Feature A", "Dark Mode"]);
+   * \`\`\`
+   * 
+   * ## Usage with Radio:
+   * \`\`\`tsx
+   * const radioOptions: dropdowndropdownInputOptionsT = [
+   *   "Light",
+   *   "Dark",
+   *   { label: "System Default", value: "system" },
+   *   "---",
+   *   {
+   *     group: "Custom Themes",
+   *     options: [
+   *       "Blue",
+   *       { label: "Green (Premium)", value: "green", disabled: true }
+   *     ]
+   *   }
+   * ];
+   * 
+   * const [theme, setTheme] = useState("Light");
+   * \`\`\`
+   * 
+   * ## Key Differences from dropdownOptionsT:
+   * - **No \`variant\`**: Input controls don't support destructive styling
+   * - **No \`shortcut\`**: Keyboard shortcuts not applicable for checkboxes/radios
+   * - **Only \`disabled\`**: Simplified to just enabled/disabled state
+   */
+  options: (
+    | string
+    | number
+    | boolean
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+      }
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+        disabled?: boolean;
+      }
+    | {
+        group: string;
+        options: Array<any>;
+        className?: string;
+        groupLabelCls?: string;
+      }
+    | {
+        submenu: string;
+        options: Array<any>;
+        triggerCls?: string;
+        contentCls?: string;
+      }
+  )[];
+}`}
+/>
 
 #### DropdownWrapper
 <AutoTypeTable 
@@ -395,7 +651,7 @@ type={`export interface DropdownCheckboxWrapper {
    * ]
    * \`\`\`
    */
-  options: inputOptionsT;
+  options: dropdownInputOptionsT;
 
   /**
    * Optional label displayed at the top of the dropdown
@@ -499,7 +755,7 @@ type={`export interface DropdownRadioWrapper {
    * ]
    * \`\`\`
    */
-  options: inputOptionsT;
+  options: dropdownInputOptionsT;
 
   /**
    * Optional label displayed at the top of the dropdown
