@@ -29,8 +29,8 @@ export const isSeparator = (item: any) => item === "---"
 export const isOption = optionTypeChecker<optionT>("value")
 export const isGroup = optionTypeChecker<groupT>("group")
 
-export const getValue = (item: allowedPrimitiveT | optionT) => typeof item === "object" ? item.value : item
-export const getLabel = (item: allowedPrimitiveT | optionT) => typeof item === "object" ? item.label : `${item}`
+export const getValue = (item: any) => typeof item === "object" ? item.value : item
+export const getLabel = (item: any) => typeof item === "object" ? item.label : `${item}`
 
 export function getKey(item: allowedPrimitiveT | optionT, i: number): string {
   const val = getValue(item)

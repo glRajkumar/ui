@@ -1,7 +1,7 @@
 import { Column } from "@tanstack/react-table";
 
 import { MultiSelectCombobox, type multiSelectComboboxProps } from "../combobox";
-import { getValue } from "@/lib/utils";
+import { getLabel, getValue } from "@/lib/utils";
 
 interface ColumnFacetedFilterProps<TData, TValue>
   extends Omit<multiSelectComboboxProps, 'options' | 'value' | 'onValueChange' | 'label'> {
@@ -20,7 +20,7 @@ export function ColumnFacetedFilter<TData, TValue>({
 
   const newOptions = options.map(option => {
     const value = getValue(option)
-    const label = getValue(option)
+    const label = getLabel(option)
 
     return {
       label: <>
