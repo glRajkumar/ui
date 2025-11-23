@@ -104,9 +104,9 @@ function NavigationMenuWrapper({
 }
 
 export {
-  NavigationMenuWrapper,
   NavList,
   NavLinkItem,
+  NavigationMenuWrapper,
   type navMenuItemT,
   type navMenuItemsT,
   type navLinkItemT,
