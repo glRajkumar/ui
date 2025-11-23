@@ -49,7 +49,7 @@ export async function asyncOptions({ n, delayBy = 5000 }: { n?: number, delayBy?
   return generateOptions(n)
 }
 
-export const dropdownOptions: dropdownOptionsT = [
+export const dropdownOptions: menuOptionsT = [
   { label: "New File", value: "new", shortcut: "Ctrl+N" },
   "Save",
   12,

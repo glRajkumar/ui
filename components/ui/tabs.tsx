@@ -65,7 +65,7 @@ function TabsContent({
 
 type tabItemT = {
   value: string
-  label: React.ReactNode
+  trigger: React.ReactNode
   content: React.ReactNode
   disabled?: boolean
   triggerCls?: string
@@ -97,7 +97,7 @@ function TabsWrapper({
             disabled={tab.disabled}
             className={cn(triggerCls, tab.triggerCls)}
           >
-            {tab.label}
+            {tab.trigger}
           </TabsTrigger>
         ))}
       </TabsList>

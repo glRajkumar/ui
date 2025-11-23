@@ -91,25 +91,25 @@ function DropdownMenuRadioItem({
 }
 ```
 
-Create new file name `types/dropdown.d.ts`.
+Create new file name `types/menu.d.ts`.
 
-<include cwd meta='title="types/dropdown.d.ts"'>
-  ./types/dropdown.d.ts
+<include cwd meta='title="types/menu.d.ts"'>
+  ./types/menu.d.ts
 </include>
 
 Add following lines to `lib/utils.ts`
 
 ```tsx
-export const isDropdownGroup = optionTypeChecker<dropdownGroupT>("group")
-export const isDropdownSubMenu = optionTypeChecker<dropdownSubMenuT>("submenu")
-export const isDropdownInputGroup = optionTypeChecker<dropdownInputGroupT>("group")
-export const isDropdownInputSubMenu = optionTypeChecker<dropdownInputSubMenuT>("submenu")
+export const isGroupMenu = optionTypeChecker<menuGroupT>("group")
+export const isSubMenu = optionTypeChecker<subMenuT>("submenu")
+export const isInputGroupMenu = optionTypeChecker<menuInputGroupT>("group")
+export const isInputSubMenu = optionTypeChecker<inputSubMenuT>("submenu")
 ```
 
-Create new file name `ui/dropdown.tsx`.
+Create new file name `ui/dropdown-menu-wrapper.tsx`.
 
-<include cwd meta='title="ui/dropdown.tsx"'>
-  ./components/ui/dropdown.tsx
+<include cwd meta='title="ui/dropdown-menu-wrapper.tsx"'>
+  ./components/ui/dropdown-menu-wrapper.tsx
 </include>
 
 </Tab>
@@ -131,9 +131,9 @@ Copy and paste the following code into your project.
   ./types/general.d.ts
 </include>
 
-### dropdown.d.ts
-<include cwd meta='title="types/dropdown.d.ts"'>
-  ./types/dropdown.d.ts
+### menu.d.ts
+<include cwd meta='title="types/menu.d.ts"'>
+  ./types/menu.d.ts
 </include>
 
 ### utils.ts
@@ -146,9 +146,9 @@ Copy and paste the following code into your project.
   ./components/ui/dropdown-menu.tsx
 </include>
 
-### dropdown.tsx
-<include cwd meta='title="ui/dropdown.tsx"'>
-  ./components/ui/dropdown.tsx
+### dropdown-menu-wrapper.tsx
+<include cwd meta='title="ui/dropdown-menu-wrapper.tsx"'>
+  ./components/ui/dropdown-menu-wrapper.tsx
 </include>
 
 ### Done
@@ -164,7 +164,7 @@ You can now use `DropdownCheckboxWrapper`, `DropdownRadioWrapper`, and `Dropdown
 
 ### Basic
 ```tsx
-import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown"
+import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown-menu-wrapper"
 import { Button } from "@/components/ui/button"
 
 export function Basic() {
@@ -200,7 +200,7 @@ export function Basic() {
 ### Controlled
 ```tsx
 import { useState } from "react"
-import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown"
+import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown-menu-wrapper"
 import { Button } from "@/components/ui/button"
 
 export function Controlled() {
@@ -343,7 +343,7 @@ type={`export interface DropdownOptions {
    * 
    * ## Complete Example:
    * \`\`\`tsx
-   * const options: dropdownOptionsT = [
+   * const options: menuOptionsT = [
    *   "New File",
    *   { label: "Open", value: "open", shortcut: "⌘O" },
    *   "---",
@@ -491,7 +491,7 @@ type={`export interface DropdownInputOptions {
    * const [theme, setTheme] = useState("Light");
    * \`\`\`
    * 
-   * ## Key Differences from dropdownOptionsT:
+   * ## Key Differences from menuOptionsT:
    * - **No \`variant\`**: Input controls don't support destructive styling
    * - **No \`shortcut\`**: Keyboard shortcuts not applicable for checkboxes/radios
    * - **Only \`disabled\`**: Simplified to just enabled/disabled state
@@ -568,7 +568,7 @@ type={`export interface DropdownWrapper {
    * ]
    * \`\`\`
    */
-  options: dropdownOptionsT;
+  options: menuOptionsT;
 
   /**
    * Additional CSS classes for individual dropdown items
@@ -651,7 +651,7 @@ type={`export interface DropdownCheckboxWrapper {
    * ]
    * \`\`\`
    */
-  options: dropdownInputOptionsT;
+  options: menuInputOptionsT;
 
   /**
    * Optional label displayed at the top of the dropdown
@@ -755,7 +755,7 @@ type={`export interface DropdownRadioWrapper {
    * ]
    * \`\`\`
    */
-  options: dropdownInputOptionsT;
+  options: menuInputOptionsT;
 
   /**
    * Optional label displayed at the top of the dropdown

@@ -10,7 +10,7 @@ export function TabsExample() {
       tabs={[
         {
           value: "overview",
-          label: "Overview",
+          trigger: "Overview",
           content: (
             <div>
               <h3 className="text-lg font-semibold mb-2">Welcome</h3>
@@ -20,7 +20,7 @@ export function TabsExample() {
         },
         {
           value: "details",
-          label: <><User /> Details</>,
+          trigger: <><User /> Details</>,
           content: (
             <div>
               <h3 className="text-lg font-semibold mb-2">Details</h3>

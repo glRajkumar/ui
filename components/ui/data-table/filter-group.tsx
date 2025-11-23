@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
-import { DropdownCheckboxWrapper } from "../dropdown";
+import { DropdownCheckboxWrapper } from "../dropdown-menu-wrapper";
 import { ColumnFilter } from "./column-filter";
 import { Button } from "../button";
 

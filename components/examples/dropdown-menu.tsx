@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { dropdownOptions } from "./data";
 
-import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown";
+import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown-menu-wrapper";
 import { Button } from "@/components/ui/button";
 
 export function DropdownExample() {

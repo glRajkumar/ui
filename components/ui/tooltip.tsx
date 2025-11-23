@@ -60,17 +60,17 @@ function TooltipContent({
 
 type TooltipWrapperProps = {
   trigger: React.ReactNode
+  content: React.ReactNode
   triggerCls?: string
-  description: React.ReactNode
-  descriptionCls?: string
+  contentCls?: string
   contentProps?: Omit<React.ComponentProps<typeof TooltipPrimitive.Content>, "className">
 } & Omit<React.ComponentProps<typeof TooltipPrimitive.Provider>, "children">
 
 function TooltipWrapper({
   trigger,
+  content,
   triggerCls,
-  description,
-  descriptionCls,
+  contentCls,
   contentProps,
 }: TooltipWrapperProps) {
   return (
@@ -82,8 +82,8 @@ function TooltipWrapper({
         {trigger}
       </TooltipTrigger>
 
-      <TooltipContent {...contentProps} className={cn(descriptionCls)}>
-        {description}
+      <TooltipContent {...contentProps} className={cn(contentCls)}>
+        {content}
       </TooltipContent>
     </Tooltip>
   )

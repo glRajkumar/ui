@@ -39,7 +39,7 @@ export function getKey(item: allowedPrimitiveT | optionT, i: number): string {
   return `${val}`
 }
 
-export const isDropdownGroup = optionTypeChecker<dropdownGroupT>("group")
-export const isDropdownSubMenu = optionTypeChecker<dropdownSubMenuT>("submenu")
-export const isDropdownInputGroup = optionTypeChecker<dropdownInputGroupT>("group")
-export const isDropdownInputSubMenu = optionTypeChecker<dropdownInputSubMenuT>("submenu")
+export const isSubMenu = optionTypeChecker<subMenuT>("submenu")
+export const isGroupMenu = optionTypeChecker<menuGroupT>("group")
+export const isInputSubMenu = optionTypeChecker<inputSubMenuT>("submenu")
+export const isInputGroupMenu = optionTypeChecker<menuInputGroupT>("group")

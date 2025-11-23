@@ -26,7 +26,7 @@ Copy and paste the following code into shadcn `tabs` component.
 ```tsx title="ui/tabs.tsx"
 type tabItemT = {
   value: string
-  label: React.ReactNode
+  trigger: React.ReactNode
   content: React.ReactNode
   disabled?: boolean
   triggerCls?: string
@@ -58,7 +58,7 @@ function TabsWrapper({
             disabled={tab.disabled}
             className={cn(triggerCls, tab.triggerCls)}
           >
-            {tab.label}
+            {tab.trigger}
           </TabsTrigger>
         ))}
       </TabsList>
@@ -132,12 +132,12 @@ export function Basic() {
       tabs={[
         {
           value: "overview",
-          label: "Overview",
+          trigger: "Overview",
           content: "Over content",
         },
         {
           value: "details",
-          label: <><User /> Details</>,
+          trigger: <><User /> Details</>,
           content: (
             <div>
               <h3 className="text-lg font-semibold mb-2">Details</h3>
@@ -162,17 +162,17 @@ function ControlledTabs() {
   const tabs = [
     {
       value: "profile",
-      label: "Profile",
+      trigger: "Profile",
       content: <ProfileForm />,
     },
     {
       value: "account",
-      label: "Account",
+      trigger: "Account",
       content: <AccountSettings />,
     },
     {
       value: "security",
-      label: "Security",
+      trigger: "Security",
       content: <SecuritySettings />,
     },
   ]
@@ -201,7 +201,7 @@ function StyledTabs() {
   const tabs = [
     {
       value: "code",
-      label: "Code",
+      trigger: "Code",
       content: (
         <pre className="bg-gray-900 text-gray-100 p-4 rounded-md">
           <code>function hello() {`{\n  console.log("Hello")\n}`}</code>
@@ -211,7 +211,7 @@ function StyledTabs() {
     },
     {
       value: "preview",
-      label: "Preview",
+      trigger: "Preview",
       content: (
         <div className="border rounded-md p-4">
           <button className="bg-blue-500 text-white px-4 py-2 rounded">
@@ -248,10 +248,10 @@ type={`export type tabItemT = {
   value: string;
 
   /**
-   * Label displayed in the tab trigger button
+   * trigger displayed in the tab trigger button
    * Can be a string or any React element
    */
-  label: React.ReactNode;
+  trigger: React.ReactNode;
 
   /**
    * Content displayed when this tab is active
@@ -283,18 +283,18 @@ name="TabsWrapper"
 type={`export interface TabsWrapper {
   /**
    * Array of tab items to render
-   * Each item contains the value, label, content, and optional styling
+   * Each item contains the value, trigger, content, and optional styling
    * 
    * \`\`\`tsx
    * const tabs = [
    *   {
    *     value: "overview",
-   *     label: "Overview",
+   *     trigger: "Overview",
    *     content: <div>Overview content</div>,
    *   },
    *   {
    *     value: "settings",
-   *     label: <><SettingsIcon />Settings</>,
+   *     trigger: <><SettingsIcon />Settings</>,
    *     content: <SettingsPanel />,
    *     disabled: true,
    *   }

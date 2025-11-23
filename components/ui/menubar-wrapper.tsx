@@ -4,10 +4,10 @@ import { useState } from "react"
 import {
   cn, getKey, getLabel, getValue,
   isSeparator,
-  isDropdownGroup,
-  isDropdownSubMenu,
-  isDropdownInputGroup,
-  isDropdownInputSubMenu,
+  isSubMenu,
+  isGroupMenu,
+  isInputSubMenu,
+  isInputGroupMenu,
   parseAllowedPrimitive,
 } from "@/lib/utils"
 
@@ -59,12 +59,12 @@ type menubarBaseT = commomClsT & {
 }
 
 type menubarOptionsT = (menubarBaseT & {
-  options: dropdownOptionsT
+  options: menuOptionsT
   onSelect?: (value: allowedPrimitiveT) => void
 })[]
 
 type menubarInputOptionT = menubarBaseT & {
-  options: dropdownInputOptionsT
+  options: menuInputOptionsT
 }
 
 type menubarCheckboxOptionsT = (menubarInputOptionT & commonCheckboxProps)[]
@@ -77,7 +77,7 @@ type commonWrapT = commomClsT & Omit<React.ComponentProps<typeof Menubar>, "chil
 // -------
 
 type itemProps = {
-  option: dropdownOptionT
+  option: menuOptionT
   className?: string
   onSelect?: () => void
 }
@@ -107,7 +107,7 @@ function Item({
 }
 
 type checkboxItemProps = {
-  option: dropdownInputOptionT
+  option: menuInputOptionT
   className?: string
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
@@ -141,7 +141,7 @@ function CheckboxItem({
 }
 
 type radioItemProps = {
-  option: dropdownInputOptionT
+  option: menuInputOptionT
   className?: string
   indicatorAt?: indicatorAtT
 }
@@ -170,7 +170,7 @@ function RadioItem({
 }
 
 type SubMenuProps = commomClsT & {
-  submenu: dropdownSubMenuT
+  submenu: subMenuT
   onSelect?: (value: allowedPrimitiveT) => void
 }
 function SubMenu({
@@ -188,7 +188,7 @@ function SubMenu({
 
       <MenubarSubContent className={submenu.contentCls}>
         {submenu.options.map((option, i) => {
-          if (isDropdownGroup(option)) {
+          if (isGroupMenu(option)) {
             return (
               <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
                 <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
@@ -207,7 +207,7 @@ function SubMenu({
             )
           }
 
-          if (isDropdownSubMenu(option)) {
+          if (isSubMenu(option)) {
             return (
               <SubMenu
                 key={getKey(option, i)}
@@ -234,7 +234,7 @@ function SubMenu({
 }
 
 type CheckboxSubMenuProps = commomClsT & commonCheckboxProps & {
-  submenu: dropdownInputSubMenuT
+  submenu: inputSubMenuT
 }
 function CheckboxSubMenu({
   submenu,
@@ -253,7 +253,7 @@ function CheckboxSubMenu({
 
       <MenubarSubContent className={submenu.contentCls}>
         {submenu.options.map((option, i) => {
-          if (isDropdownInputGroup(option)) {
+          if (isInputGroupMenu(option)) {
             return (
               <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
                 <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
@@ -277,7 +277,7 @@ function CheckboxSubMenu({
             )
           }
 
-          if (isDropdownInputSubMenu(option)) {
+          if (isInputSubMenu(option)) {
             return (
               <CheckboxSubMenu
                 key={option.submenu}
@@ -310,7 +310,7 @@ function CheckboxSubMenu({
 }
 
 type RadioSubMenuProps = commomClsT & commonRadioProps & {
-  submenu: dropdownInputSubMenuT
+  submenu: inputSubMenuT
 }
 function RadioSubMenu({
   submenu,
@@ -330,7 +330,7 @@ function RadioSubMenu({
       <MenubarSubContent className={submenu.contentCls}>
         <MenubarRadioGroup value={`${value}`} onValueChange={onValueChange}>
           {submenu.options.map((option, i) => {
-            if (isDropdownInputGroup(option)) {
+            if (isInputGroupMenu(option)) {
               return (
                 <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
                   <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
@@ -349,7 +349,7 @@ function RadioSubMenu({
               )
             }
 
-            if (isDropdownInputSubMenu(option)) {
+            if (isInputSubMenu(option)) {
               return (
                 <RadioSubMenu
                   key={option.submenu}
@@ -380,7 +380,7 @@ function RadioSubMenu({
 }
 
 type wrapperInner = commonInner & {
-  options: dropdownOptionsT
+  options: menuOptionsT
   onSelect?: (value: allowedPrimitiveT) => void
 }
 function MenubarWrapperInner({
@@ -400,7 +400,7 @@ function MenubarWrapperInner({
 
       <MenubarContent {...contentProps}>
         {options.map((option, i) => {
-          if (isDropdownGroup(option)) {
+          if (isGroupMenu(option)) {
             return (
               <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
                 <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
@@ -419,7 +419,7 @@ function MenubarWrapperInner({
             )
           }
 
-          if (isDropdownSubMenu(option)) {
+          if (isSubMenu(option)) {
             return (
               <SubMenu
                 key={option.submenu}
@@ -447,7 +447,7 @@ function MenubarWrapperInner({
 }
 
 type checkboxWrapperInner = commonInner & commonCheckboxProps & {
-  options: dropdownInputOptionsT
+  options: menuInputOptionsT
   label?: string
 }
 function MenubarCheckboxWrapperInner({
@@ -488,7 +488,7 @@ function MenubarCheckboxWrapperInner({
           </>
         )}
         {options.map((option, i) => {
-          if (isDropdownInputGroup(option)) {
+          if (isInputGroupMenu(option)) {
             return (
               <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
                 <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
@@ -512,7 +512,7 @@ function MenubarCheckboxWrapperInner({
             )
           }
 
-          if (isDropdownInputSubMenu(option)) {
+          if (isInputSubMenu(option)) {
             return (
               <CheckboxSubMenu
                 key={option.submenu}
@@ -545,7 +545,7 @@ function MenubarCheckboxWrapperInner({
 }
 
 type radioWrapperInner = commonInner & commonRadioProps & {
-  options: dropdownInputOptionsT
+  options: menuInputOptionsT
   label?: string
 }
 function MenubarRadioWrapperInner({
@@ -583,7 +583,7 @@ function MenubarRadioWrapperInner({
         )}
         <MenubarRadioGroup value={`${value}`} onValueChange={v => onValueChange(parseAllowedPrimitive(v))}>
           {options.map((option, i) => {
-            if (isDropdownInputGroup(option)) {
+            if (isInputGroupMenu(option)) {
               return (
                 <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
                   <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
@@ -602,7 +602,7 @@ function MenubarRadioWrapperInner({
               )
             }
 
-            if (isDropdownInputSubMenu(option)) {
+            if (isInputSubMenu(option)) {
               return (
                 <RadioSubMenu
                   key={option.submenu}

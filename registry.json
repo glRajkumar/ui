@@ -106,9 +106,9 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "types/dropdown.d.ts",
+          "path": "types/menu.d.ts",
           "type": "registry:file",
-          "target": "types/dropdown.d.ts"
+          "target": "types/menu.d.ts"
         },
         {
           "path": "lib/utils.ts",
@@ -265,9 +265,9 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "types/dropdown.d.ts",
+          "path": "types/menu.d.ts",
           "type": "registry:file",
-          "target": "types/dropdown.d.ts"
+          "target": "types/menu.d.ts"
         },
         {
           "path": "components/ui/dropdown-menu.tsx",
@@ -278,7 +278,7 @@
           "type": "registry:lib"
         },
         {
-          "path": "components/ui/dropdown.tsx",
+          "path": "components/ui/dropdown-menu-wrapper.tsx",
           "type": "registry:ui"
         }
       ]
@@ -336,9 +336,9 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "types/dropdown.d.ts",
+          "path": "types/menu.d.ts",
           "type": "registry:file",
-          "target": "types/dropdown.d.ts"
+          "target": "types/menu.d.ts"
         },
         {
           "path": "components/ui/menubar.tsx",

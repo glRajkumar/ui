@@ -91,19 +91,19 @@ function ContextMenuRadioItem({
 }
 ```
 
-Create new file name `types/dropdown.d.ts`.
+Create new file name `types/menu.d.ts`.
 
-<include cwd meta='title="types/dropdown.d.ts"'>
-  ./types/dropdown.d.ts
+<include cwd meta='title="types/menu.d.ts"'>
+  ./types/menu.d.ts
 </include>
 
 Add following lines to `lib/utils.ts`
 
 ```tsx
-export const isDropdownGroup = optionTypeChecker<dropdownGroupT>("group")
-export const isDropdownSubMenu = optionTypeChecker<dropdownSubMenuT>("submenu")
-export const isDropdownInputGroup = optionTypeChecker<dropdownInputGroupT>("group")
-export const isDropdownInputSubMenu = optionTypeChecker<dropdownInputSubMenuT>("submenu")
+export const isGroupMenu = optionTypeChecker<menuGroupT>("group")
+export const isSubMenu = optionTypeChecker<subMenuT>("submenu")
+export const isInputGroupMenu = optionTypeChecker<menuInputGroupT>("group")
+export const isInputSubMenu = optionTypeChecker<inputSubMenuT>("submenu")
 ```
 
 Create new file name `ui/context-menu-wrapper.tsx`.
@@ -131,9 +131,9 @@ Copy and paste the following code into your project.
   ./types/general.d.ts
 </include>
 
-### dropdown.d.ts
-<include cwd meta='title="types/dropdown.d.ts"'>
-  ./types/dropdown.d.ts
+### menu.d.ts
+<include cwd meta='title="types/menu.d.ts"'>
+  ./types/menu.d.ts
 </include>
 
 ### utils.ts
@@ -164,7 +164,7 @@ You can now use `ContextCheckboxWrapper`, `ContextRadioWrapper`, and `ContextWra
 
 ### Basic
 ```tsx
-import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/dropdown"
+import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/context-menu-wrapper"
 import { Button } from "@/components/ui/button"
 
 export function Basic() {
@@ -199,7 +199,7 @@ export function Basic() {
 ### Controlled
 ```tsx
 import { useState } from "react"
-import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/dropdown"
+import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/context-menu-wrapper"
 import { Button } from "@/components/ui/button"
 
 export function Controlled() {
@@ -342,7 +342,7 @@ type={`export interface DropdownOptions {
    * 
    * ## Complete Example:
    * \`\`\`tsx
-   * const options: dropdownOptionsT = [
+   * const options: menuOptionsT = [
    *   "New File",
    *   { label: "Open", value: "open", shortcut: "⌘O" },
    *   "---",
@@ -490,7 +490,7 @@ type={`export interface DropdownInputOptions {
    * const [theme, setTheme] = useState("Light");
    * \`\`\`
    * 
-   * ## Key Differences from dropdownOptionsT:
+   * ## Key Differences from menuOptionsT:
    * - **No \`variant\`**: Input controls don't support destructive styling
    * - **No \`shortcut\`**: Keyboard shortcuts not applicable for checkboxes/radios
    * - **Only \`disabled\`**: Simplified to just enabled/disabled state
@@ -567,7 +567,7 @@ type={`export interface ContextWrapper {
    * ]
    * \`\`\`
    */
-  options: dropdownOptionsT;
+  options: menuOptionsT;
 
   /**
    * Additional CSS classes for individual dropdown items
@@ -649,7 +649,7 @@ type={`export interface ContextCheckboxWrapper {
    * ]
    * \`\`\`
    */
-  options: dropdownInputOptionsT;
+  options: menuInputOptionsT;
 
   /**
    * Optional label displayed at the top of the dropdown
@@ -753,7 +753,7 @@ type={`export interface ContextRadioWrapper {
    * ]
    * \`\`\`
    */
-  options: dropdownInputOptionsT;
+  options: menuInputOptionsT;
 
   /**
    * Optional label displayed at the top of the dropdown

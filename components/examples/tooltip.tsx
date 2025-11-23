@@ -4,7 +4,7 @@ export function TooltipExample() {
   return (
     <TooltipWrapper
       trigger="Hover"
-      description="Some tooltip description"
+      content="Some tooltip description"
     />
   )
 }

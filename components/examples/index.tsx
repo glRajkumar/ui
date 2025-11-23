@@ -4,7 +4,7 @@ import { AlertDialogExample } from "./alert-dialog";
 import { BreadcrumbExample } from "./breadcrumb";
 import { DataTableExample } from "./data-table";
 import { AccordionExample } from "./accordion";
-import { DropdownExample } from "./dropdown";
+import { DropdownExample } from "./dropdown-menu";
 import { ComboboxExample } from "./combobox";
 import { ContextExample } from "./context-menu";
 import { TooltipExample } from "./tooltip";
@@ -36,7 +36,7 @@ export function ComboboxEx() {
 
 export function DropdownEx() {
   return (
-    <Wrapper path="/components/examples/dropdown.tsx">
+    <Wrapper path="/components/examples/dropdown-menu.tsx">
       <DropdownExample />
     </Wrapper>
   )

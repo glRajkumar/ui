@@ -26,17 +26,17 @@ Copy and paste the following code into shadcn `tooltip` component.
 ```tsx title="ui/tooltip.tsx"
 type TooltipWrapperProps = {
   trigger: React.ReactNode
+  content: React.ReactNode
   triggerCls?: string
-  description: React.ReactNode
-  descriptionCls?: string
+  contentCls?: string
   contentProps?: Omit<React.ComponentProps<typeof TooltipPrimitive.Content>, "className">
 } & Omit<React.ComponentProps<typeof TooltipPrimitive.Provider>, "children">
 
 function TooltipWrapper({
   trigger,
+  content,
   triggerCls,
-  description,
-  descriptionCls,
+  contentCls,
   contentProps,
 }: TooltipWrapperProps) {
   return (
@@ -48,8 +48,8 @@ function TooltipWrapper({
         {trigger}
       </TooltipTrigger>
 
-      <TooltipContent {...contentProps} className={cn(descriptionCls)}>
-        {description}
+      <TooltipContent {...contentProps} className={cn(contentCls)}>
+        {content}
       </TooltipContent>
     </Tooltip>
   )
@@ -107,7 +107,7 @@ export function Basic() {
   return (
      <TooltipWrapper
       trigger="Hover"
-      description="Some tooltip description"
+      content="Some tooltip content"
     />
   )
 }
@@ -131,14 +131,14 @@ type={`export interface TooltipWrapper {
   triggerCls?: string;
 
   /**
-   * Description of the tooltip. 
+   * content of the tooltip. 
    */
-  description: React.ReactNode;
+  content: React.ReactNode;
 
   /**
-   * Additional CSS classes for the description
+   * Additional CSS classes for the content
    */
-  descriptionCls?: string;
+  contentCls?: string;
 
   /**
    * ...contentProps: All properties from Radix UI Tooltip Content can be passed directly.
