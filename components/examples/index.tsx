@@ -1,3 +1,4 @@
+import { NavigationMenuExample } from "./navigation-menu";
 import { ToggleGroupExample } from "./toggle-group";
 import { AlertDialogExample } from "./alert-dialog";
 import { BreadcrumbExample } from "./breadcrumb";
@@ -152,3 +153,12 @@ export function ContextMenuEx() {
     </Wrapper>
   )
 }
+
+export function NavigationMenuEx() {
+  return (
+    <Wrapper path="/components/examples/navigation-menu.tsx">
+      <NavigationMenuExample />
+    </Wrapper>
+  )
+}
+
