@@ -5,8 +5,8 @@
   "root": true,
   "pages": [
     "index",
-    "alert-dialog",
     "accordion",
+    "alert-dialog",
     "breadcrumb",
     "card",
     "combobox",

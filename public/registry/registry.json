@@ -92,6 +92,39 @@
       ]
     },
     {
+      "name": "context-menu",
+      "type": "registry:ui",
+      "title": "Context Menu",
+      "description": "Context Menu componet with wrapper",
+      "registryDependencies": [
+        "context-menu"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "types/dropdown.d.ts",
+          "type": "registry:file",
+          "target": "types/dropdown.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/context-menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/context-menu-wrapper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "data-table",
       "type": "registry:ui",
       "title": "Data Table Wrapper",
@@ -232,7 +265,7 @@
           "target": "types/general.d.ts"
         },
         {
-         "path": "types/dropdown.d.ts",
+          "path": "types/dropdown.d.ts",
           "type": "registry:file",
           "target": "types/dropdown.d.ts"
         },
@@ -303,7 +336,7 @@
           "target": "types/general.d.ts"
         },
         {
-         "path": "types/dropdown.d.ts",
+          "path": "types/dropdown.d.ts",
           "type": "registry:file",
           "target": "types/dropdown.d.ts"
         },
@@ -318,6 +351,25 @@
         {
           "path": "lib/utils.ts",
           "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation Menu",
+      "description": "Navigation Menu componet with wrapper",
+      "registryDependencies": [
+        "navigation-menu"
+      ],
+      "files": [
+        {
+          "path": "components/ui/navigation-menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/navigation-menu-wrapper.tsx",
+          "type": "registry:ui"
         }
       ]
     },
