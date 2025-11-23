@@ -8,7 +8,6 @@ export function NavigationMenuExample() {
       items={[
         {
           key: "home",
-          type: "trigger",
           trigger: "Home",
           content: (
             <div className="p-2 w-[250px]">
@@ -22,15 +21,11 @@ export function NavigationMenuExample() {
           ),
         }, {
           key: "pricing",
-          type: "link",
-          item: {
-            href: "/pricing",
-            children: "Pricing",
-          },
+          href: "/pricing",
+          children: "Pricing",
         },
         {
           key: "features",
-          type: "trigger",
           trigger: "Features",
           content: (
             <div className="p-2 w-[300px]">

@@ -75,7 +75,6 @@ export function Complex() {
       items={[
         {
           key: "home",
-          type: "trigger",
           trigger: "Home",
           content: (
             <div className="p-2 w-[250px]">
@@ -89,15 +88,11 @@ export function Complex() {
           ),
         }, {
           key: "pricing",
-          type: "link",
-          item: {
-            href: "/pricing",
-            children: "Pricing",
-          },
+          href: "/pricing",
+          children: "Pricing",
         },
         {
           key: "features",
-          type: "trigger",
           trigger: "Features",
           content: (
             <div className="p-2 w-[300px]">
@@ -236,6 +231,7 @@ type={`export interface NavList {
 />
 
 #### NavigationMenuItem
+##### Common
 <AutoTypeTable 
 name="NavigationMenuItem" 
 type={`export interface NavigationMenuItem {
@@ -266,11 +262,8 @@ type={`export interface NavigationMenuItem {
    * \`\`\`tsx
    * {
    *   key: "home",
-   *   type: "link",
-   *   item: {
-   *     href: "/",
-   *     children: "Home"
-   *   }
+   *   href: "/",
+   *   children: "Home"
    * }
    * \`\`\`
    * 
@@ -280,7 +273,6 @@ type={`export interface NavigationMenuItem {
    * \`\`\`tsx
    * {
    *   key: "products",
-   *   type: "trigger",
    *   trigger: "Products",
    *   content: <div>Product list here</div>,
    *   contentProps: {
@@ -289,10 +281,22 @@ type={`export interface NavigationMenuItem {
    * }
    * \`\`\`
    */
-  type: "link" | "trigger";
+   item?: {
+      trigger: React.ReactNode
+      content: React.ReactNode
+      triggerCls?: string
+      contentCls?: string
+      contentProps?: React.ComponentProps<typeof NavigationMenuContent>
+    } | navLinkItemT
+}`}
+/>
 
-  // When type is "link"
+##### Link type
+<AutoTypeTable 
+name="NavigationMenuItem" 
+type={`export interface NavigationMenuItem {
   /**
+   * // When type is "link"
    * Navigation link configuration
    * Only applicable when \`type="link"\`
    * 
@@ -305,15 +309,22 @@ type={`export interface NavigationMenuItem {
    * }
    * \`\`\`
    */
-  item?: {
-    href: string;
-    children: React.ReactNode;
-    className?: string;
-    [key: string]: any;
-  };
+  href: string;
 
-  // When type is "trigger"
   /**
+   * ...otherProps: All properties of Link from Next.js can be passed directly.
+   */
+  otherProps: Link
+
+}`}
+/>
+
+##### Trigger-Content
+<AutoTypeTable 
+name="NavigationMenuItem" 
+type={`export interface NavigationMenuItem {
+  /**
+   * // When type is "trigger"
    * Trigger element for dropdown menu
    * Only applicable when \`type="trigger"\`
    * 
@@ -342,6 +353,16 @@ type={`export interface NavigationMenuItem {
    * \`\`\`
    */
   content?: React.ReactNode;
+
+  /**
+   * Optional CSS classes for this specific accordion trigger
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes for the content
+   */
+  contentCls?: string;
 
   /**
    * Props passed to the NavigationMenuContent component
@@ -415,6 +436,16 @@ type={`export interface NavigationMenuWrapper {
    * \`\`\`
    */
   className?: string;
+
+  /**
+   * Optional CSS classes for this specific accordion trigger
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes for the content
+   */
+  contentCls?: string;
 
   /**
    * ...otherProps: All properties from Radix UI NavigationMenuPrimitive Root can be passed directly.

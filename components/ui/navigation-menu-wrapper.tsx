@@ -1,3 +1,5 @@
+"use client"
+
 import Link, { type LinkProps } from "next/link"
 
 import { cn } from "@/lib/utils"
@@ -23,16 +25,15 @@ type navMenuItemT = {
   itemProps?: React.ComponentProps<typeof NavigationMenuItem>
 } & (
     | {
-      type: "trigger"
       trigger: React.ReactNode
       content: React.ReactNode
+      triggerCls?: string
+      contentCls?: string
       contentProps?: React.ComponentProps<typeof NavigationMenuContent>
     }
-    | {
-      type: "link"
-      item: navLinkItemT
-    }
+    | navLinkItemT
   )
+
 type navMenuItemsT = navMenuItemT[]
 
 function NavLinkItem({ children, className, ...props }: navLinkItemT) {
@@ -65,36 +66,50 @@ function NavList({ items, wrapperCls }: listWrapperProps) {
   )
 }
 
-type NavigationMenuWrapperProps = React.ComponentProps<typeof NavigationMenu> & {
+type wrapperProps = React.ComponentProps<typeof NavigationMenu> & {
   items: navMenuItemsT
+  triggerCls?: string
+  contentCls?: string
 }
 
 function NavigationMenuWrapper({
   items,
   className,
+  triggerCls,
+  contentCls,
   ...props
-}: NavigationMenuWrapperProps) {
+}: wrapperProps) {
   return (
     <NavigationMenu className={className} {...props}>
       <NavigationMenuList>
-        {items.map((item) => {
-          if (item.type === "link") {
+        {items.map(itemWrap => {
+          const { key, ...item } = itemWrap
+          if ("trigger" in item) {
             return (
-              <NavigationMenuItem key={item.key} {...item.itemProps}>
-                <NavLinkItem {...item.item} className={cn(navigationMenuTriggerStyle(), item?.item?.className)} />
+              <NavigationMenuItem key={key} {...item.itemProps}>
+                <NavigationMenuTrigger
+                  asChild={typeof item.trigger !== "string"}
+                  className={cn(triggerCls, item.triggerCls)}
+                >
+                  {item.trigger}
+                </NavigationMenuTrigger>
+
+                <NavigationMenuContent
+                  {...item.contentProps}
+                  className={cn(contentCls, item.contentCls)}
+                >
+                  {item.content}
+                </NavigationMenuContent>
               </NavigationMenuItem>
             )
           }
 
           return (
-            <NavigationMenuItem key={item.key} {...item.itemProps}>
-              <NavigationMenuTrigger asChild={typeof item.trigger !== "string"}>
-                {item.trigger}
-              </NavigationMenuTrigger>
-
-              <NavigationMenuContent {...item.contentProps}>
-                {item.content}
-              </NavigationMenuContent>
+            <NavigationMenuItem key={key} {...item.itemProps}>
+              <NavLinkItem
+                {...item}
+                className={cn(navigationMenuTriggerStyle(), item?.className)}
+              />
             </NavigationMenuItem>
           )
         })}
