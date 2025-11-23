@@ -1,0 +1,819 @@
+---
+title: Context Menu
+description: A simplified wrapper for Shadcn Context Menu with flexible option handling and automatic type conversion
+---
+
+import { ContextMenuEx } from "@/components/examples";
+
+<ContextMenuEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/context-menu
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Update following code in `ui/context-menu.tsx`
+
+```tsx
+/* [!code focus] */
+function ContextMenuCheckboxItem({
+  className,
+  children,
+  checked,
+/* [!code ++:1] [!code focus] */
+  indicatorAt = "right",
+  ...props
+/* [!code ++:1] [!code focus] */
+}: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem> & { indicatorAt?: indicatorAtT }) {
+  return (
+    <ContextMenuPrimitive.CheckboxItem
+      data-slot="context-menu-checkbox-item"
+      className={cn(
+/* [!code ++:1] [!code focus] */
+        "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+/* [!code ++:1] [!code focus] */
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
+      )}
+      checked={checked}
+      {...props}
+    >
+      /* [!code ++:1] [!code focus] */
+      <span className={cn("pointer-events-none absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
+        <ContextMenuPrimitive.ItemIndicator>
+          <CheckIcon className="size-4" />
+        </ContextMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </ContextMenuPrimitive.CheckboxItem>
+  )
+}
+
+/* [!code focus] */
+function ContextMenuRadioItem({
+  className,
+  children,
+/* [!code ++:1] [!code focus] */
+  indicatorAt = "right",
+  ...props
+/* [!code ++:1] [!code focus] */
+}: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem> & { indicatorAt?: indicatorAtT }) {
+  return (
+    <ContextMenuPrimitive.RadioItem
+      data-slot="context-menu-radio-item"
+      className={cn(
+/* [!code ++:1] [!code focus] */
+        "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+/* [!code ++:1] [!code focus] */
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
+      )}
+      {...props}
+    >
+/* [!code ++:1] [!code focus] */
+      <span className={cn("pointer-events-none absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
+        <ContextMenuPrimitive.ItemIndicator>
+          <CircleIcon className="size-2 fill-current" />
+        </ContextMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </ContextMenuPrimitive.RadioItem>
+  )
+}
+```
+
+Create new file name `types/dropdown.d.ts`.
+
+<include cwd meta='title="types/dropdown.d.ts"'>
+  ./types/dropdown.d.ts
+</include>
+
+Add following lines to `lib/utils.ts`
+
+```tsx
+export const isDropdownGroup = optionTypeChecker<dropdownGroupT>("group")
+export const isDropdownSubMenu = optionTypeChecker<dropdownSubMenuT>("submenu")
+export const isDropdownInputGroup = optionTypeChecker<dropdownInputGroupT>("group")
+export const isDropdownInputSubMenu = optionTypeChecker<dropdownInputSubMenuT>("submenu")
+```
+
+Create new file name `ui/context-menu-wrapper.tsx`.
+
+<include cwd meta='title="ui/context-menu-wrapper.tsx"'>
+  ./components/ui/context-menu-wrapper.tsx
+</include>
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-context-menu
+```
+
+Copy and paste the following code into your project.
+
+### general.d.ts
+<include cwd meta='title="types/general.d.ts"'>
+  ./types/general.d.ts
+</include>
+
+### dropdown.d.ts
+<include cwd meta='title="types/dropdown.d.ts"'>
+  ./types/dropdown.d.ts
+</include>
+
+### utils.ts
+<include cwd meta='title="lib/utils.ts"'>
+  ./lib/utils.ts
+</include>
+
+### context-menu.tsx
+<include cwd meta='title="ui/context-menu.tsx"'>
+  ./components/ui/context-menu.tsx
+</include>
+
+### context-menu-wrapper.tsx
+<include cwd meta='title="ui/context-menu-wrapper.tsx"'>
+  ./components/ui/context-menu-wrapper.tsx
+</include>
+
+### Done
+You can now use `ContextCheckboxWrapper`, `ContextRadioWrapper`, and `ContextWrapper`.
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/dropdown"
+import { Button } from "@/components/ui/button"
+
+export function Basic() {
+  const dropdownOptions = ["Option 1", "Option 2", "Option 3"]
+
+  return (
+    <>
+      <ContextWrapper
+        options={dropdownOptions}
+      >
+        <Button variant="outline">
+          Options
+        </Button>
+      </ContextWrapper>
+
+      <ContextCheckboxWrapper options={dropdownOptions}>
+        <Button variant="outline">
+          Checkbox
+        </Button>
+      </ContextCheckboxWrapper>
+
+      <ContextRadioWrapper options={dropdownOptions}>
+        <Button variant="outline">
+          Radio
+        </Button>
+      </ContextRadioWrapper>
+    </>
+  )
+}
+```
+
+### Controlled
+```tsx
+import { useState } from "react"
+import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/dropdown"
+import { Button } from "@/components/ui/button"
+
+export function Controlled() {
+  const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
+  const [val, setVal] = useState<allowedPrimitiveT>(true)
+
+  const dropdownOptions = ["Option 1", "Option 2", "Option 3"]
+
+  return (
+    <>
+      <ContextWrapper
+        options={dropdownOptions}
+        onSelect={v => console.log(v)}
+      >
+        <Button variant="outline">
+          Options
+        </Button>
+      </ContextWrapper>
+
+      <ContextCheckboxWrapper
+        checked={checked}
+        options={dropdownOptions}
+        onCheckedChange={(value, isChecked) => {
+          setChecked((prev) =>
+            isChecked
+              ? [...prev, value]
+              : prev.filter((x) => x !== value)
+          )
+        }}
+      >
+        <Button variant="outline">
+          Checkbox
+        </Button>
+      </ContextCheckboxWrapper>
+
+      <ContextRadioWrapper
+        value={val}
+        options={dropdownOptions}
+        onValueChange={setVal}
+      >
+        <Button variant="outline">
+          Radio
+        </Button>
+      </ContextRadioWrapper>
+    </>
+  )
+}
+```
+
+### Nested Complex Data
+```tsx
+const dropdownOptions = [
+  { label: "New File", value: "new", shortcut: "Ctrl+N" },
+  "Save",
+  12,
+  { label: <><Banana /> Banana</>, value: "banana" },
+  "---",
+  {
+    group: "Settings",
+    options: [
+      { label: "Appearance", value: "appearance" },
+      22,
+      true
+    ],
+  },
+
+  {
+    submenu: "More",
+    options: [
+      { label: <><Apple /> Apple</>, value: "apple" },
+      {
+        group: "Tools",
+        options: [
+          { label: "Formatter", value: "formatter" },
+          false,
+        ],
+      },
+    ],
+  },
+]
+
+export function Complex() {
+  return (
+    <ContextWrapper
+      options={dropdownOptions}
+    />
+  )
+}
+```
+
+## Reference
+
+#### DropdownOptions
+<AutoTypeTable 
+name="DropdownOptions" 
+type={`export interface DropdownOptions {
+  /**
+   * Array of dropdown menu options with support for regular items, groups, and nested submenus
+   * 
+   * ## Supported Types:
+   * 
+   * ### Basic Options
+   * - **Primitives**: \`string | number | boolean\`
+   * - **Objects**: \`{ label: React.ReactNode, value: allowedPrimitiveT }\`
+   * - **Separators**: Use \`"---"\` as a value
+   * 
+   * ### Extended Options (with additional properties)
+   * \`\`\`tsx
+   * {
+   *   label: "Delete",
+   *   value: "delete",
+   *   variant: "destructive",  // "default" | "destructive"
+   *   shortcut: "⌘⌫",
+   *   disabled: true
+   * }
+   * \`\`\`
+   * 
+   * ### Groups
+   * \`\`\`tsx
+   * {
+   *   group: "Category Name",
+   *   options: ["Option 1", "Option 2"],
+   *   className?: "custom-group-class",
+   *   groupLabelCls?: "custom-label-class"
+   * }
+   * \`\`\`
+   * 
+   * ### Submenus (Nested Menus)
+   * \`\`\`tsx
+   * {
+   *   submenu: "More Options",
+   *   options: [
+   *     "Nested Option 1",
+   *     { group: "Nested Group", options: ["A", "B"] }
+   *   ],
+   *   triggerCls?: "custom-trigger-class",
+   *   contentCls?: "custom-content-class"
+   * }
+   * \`\`\`
+   * 
+   * ## Complete Example:
+   * \`\`\`tsx
+   * const options: dropdownOptionsT = [
+   *   "New File",
+   *   { label: "Open", value: "open", shortcut: "⌘O" },
+   *   "---",
+   *   {
+   *     group: "Recent Files",
+   *     options: ["Document.pdf", "Image.png"]
+   *   },
+   *   {
+   *     submenu: "Export",
+   *     options: [
+   *       "PDF",
+   *       "HTML",
+   *       {
+   *         group: "Advanced",
+   *         options: ["LaTeX", "DocX"]
+   *       }
+   *     ]
+   *   },
+   *   "---",
+   *   {
+   *     label: "Delete",
+   *     value: "delete",
+   *     variant: "destructive",
+   *     shortcut: "⌘⌫"
+   *   }
+   * ];
+   * \`\`\`
+   */
+  options: (
+    | string
+    | number
+    | boolean
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+      }
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+        variant?: "default" | "destructive";
+        shortcut?: string;
+        disabled?: boolean;
+      }
+    | {
+        group: string;
+        options: Array<any>;
+        className?: string;
+        groupLabelCls?: string;
+      }
+    | {
+        submenu: string;
+        options: Array<any>;
+        triggerCls?: string;
+        contentCls?: string;
+      }
+  )[];
+}`}
+/>
+
+
+#### DropdownInputOptions
+<AutoTypeTable 
+name="DropdownInputOptions" 
+type={`export interface DropdownInputOptions {
+  /**
+   * Array of dropdown menu options for input controls (checkbox/radio)
+   * Simplified version without variants and shortcuts
+   * 
+   * ## Supported Types:
+   * 
+   * ### Basic Options
+   * - **Primitives**: \`string | number | boolean\`
+   * - **Objects**: \`{ label: React.ReactNode, value: allowedPrimitiveT }\`
+   * - **Separators**: Use \`"---"\` as a value
+   * 
+   * ### Extended Options (with disabled state)
+   * \`\`\`tsx
+   * {
+   *   label: "Option Label",
+   *   value: "option-value",
+   *   disabled: true
+   * }
+   * \`\`\`
+   * 
+   * ### Groups
+   * \`\`\`tsx
+   * {
+   *   group: "Category Name",
+   *   options: ["Option 1", "Option 2"],
+   *   className?: "custom-group-class",
+   *   groupLabelCls?: "custom-label-class"
+   * }
+   * \`\`\`
+   * 
+   * ### Submenus (Nested Menus)
+   * \`\`\`tsx
+   * {
+   *   submenu: "More Options",
+   *   options: [
+   *     "Nested Option 1",
+   *     { label: "Nested Option 2", value: "nested2", disabled: true },
+   *     { group: "Nested Group", options: ["A", "B"] }
+   *   ],
+   *   triggerCls?: "custom-trigger-class",
+   *   contentCls?: "custom-content-class"
+   * }
+   * \`\`\`
+   * 
+   * ## Usage with Checkbox:
+   * \`\`\`tsx
+   * const checkboxOptions: dropdowndropdownInputOptionsT = [
+   *   "Feature A",
+   *   "Feature B",
+   *   { label: "Feature C (Beta)", value: "feature-c", disabled: true },
+   *   "---",
+   *   {
+   *     group: "Advanced Features",
+   *     options: ["Dark Mode", "Auto-save", "Notifications"]
+   *   },
+   *   {
+   *     submenu: "Experimental",
+   *     options: ["AI Assistant", "Voice Control"]
+   *   }
+   * ];
+   * 
+   * const [checked, setChecked] = useState(["Feature A", "Dark Mode"]);
+   * \`\`\`
+   * 
+   * ## Usage with Radio:
+   * \`\`\`tsx
+   * const radioOptions: dropdowndropdownInputOptionsT = [
+   *   "Light",
+   *   "Dark",
+   *   { label: "System Default", value: "system" },
+   *   "---",
+   *   {
+   *     group: "Custom Themes",
+   *     options: [
+   *       "Blue",
+   *       { label: "Green (Premium)", value: "green", disabled: true }
+   *     ]
+   *   }
+   * ];
+   * 
+   * const [theme, setTheme] = useState("Light");
+   * \`\`\`
+   * 
+   * ## Key Differences from dropdownOptionsT:
+   * - **No \`variant\`**: Input controls don't support destructive styling
+   * - **No \`shortcut\`**: Keyboard shortcuts not applicable for checkboxes/radios
+   * - **Only \`disabled\`**: Simplified to just enabled/disabled state
+   */
+  options: (
+    | string
+    | number
+    | boolean
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+      }
+    | {
+        label: React.ReactNode;
+        value: string | number | boolean;
+        disabled?: boolean;
+      }
+    | {
+        group: string;
+        options: Array<any>;
+        className?: string;
+        groupLabelCls?: string;
+      }
+    | {
+        submenu: string;
+        options: Array<any>;
+        triggerCls?: string;
+        contentCls?: string;
+      }
+  )[];
+}`}
+/>
+
+#### ContextWrapper
+<AutoTypeTable 
+name="ContextWrapper" 
+type={`export interface ContextWrapper {
+  /**
+   * Trigger element for the dropdown. Wrapped with asChild, so pass a single React element
+   * 
+   * \`\`\`tsx
+   * <ContextWrapper options={options}>
+   *   <Button>Open Menu</Button>
+   * </ContextWrapper>
+   * \`\`\`
+   */
+  children: React.ReactNode;
+
+  /**
+   * Array of dropdown options - supports primitives, objects, groups, and submenus
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
+   * - Objects with extras: \`{ label, value, variant?: "default" | "destructive", shortcut?: string, disabled?: boolean }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Simple item",
+   *   { label: "Edit", value: "edit", shortcut: "⌘E" },
+   *   { label: "Delete", value: "delete", variant: "destructive" },
+   *   "---",
+   *   { 
+   *     group: "Actions", 
+   *     options: ["Save", "Export"] 
+   *   },
+   *   {
+   *     submenu: "Share",
+   *     options: ["Email", "Link", "Social"]
+   *   }
+   * ]
+   * \`\`\`
+   */
+  options: dropdownOptionsT;
+
+  /**
+   * Additional CSS classes for individual dropdown items
+   * 
+   * Note: Individual options can override this with their own \`className\`
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
+
+  /**
+   * ...contentProps: All properties from Radix UI ContextMenu Content can be passed directly.
+   * 
+   * \`\`\`tsx
+   * contentProps={{ 
+   *   className: "w-56" 
+   * }}
+   * \`\`\`
+   */
+  contentProps: ContextMenuPrimitive.Content;
+
+  /**
+   * Callback fired when an option is selected
+   * Receives the value of the selected option
+   * 
+   * \`\`\`tsx
+   * onSelect={(value) => {
+   *   console.log("Selected:", value);
+   * }}
+   * \`\`\`
+   */
+  onSelect?: (value: string | number | boolean) => void;
+
+  /**
+   * ...otherProps: All properties from Radix UI ContextMenu Root can be passed directly.
+   */
+  otherProps: ContextMenuPrimitive.Root
+}`}
+/>
+
+#### ContextCheckboxWrapper
+<AutoTypeTable 
+name="ContextCheckboxWrapper" 
+type={`export interface ContextCheckboxWrapper {
+  /**
+   * Trigger element for the dropdown (must accept ref)
+   * Wrapped with asChild, so pass a single React element
+   */
+  children: React.ReactNode;
+
+  /**
+   * Array of checkbox options - supports primitives, objects, groups, and submenus
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Email",
+   *   "SMS",
+   *   { label: "Push", value: "push", disabled: true },
+   *   "---",
+   *   { 
+   *     group: "Marketing", 
+   *     options: ["Newsletter", "Updates"] 
+   *   }
+   * ]
+   * \`\`\`
+   */
+  options: dropdownInputOptionsT;
+
+  /**
+   * Optional label displayed at the top of the dropdown
+   * Automatically adds a separator after the label
+   * 
+   * \`\`\`tsx
+   * label="Select Notifications"
+   * \`\`\`
+   */
+  label?: string;
+
+  /**
+   * Additional CSS classes for individual checkbox items
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
+
+  /**
+   * ...contentProps: All properties from Radix UI ContextMenu Content can be passed directly.
+   */
+  contentProps: ContextMenuPrimitive.Content;
+
+  /**
+   * Controlled state: array of checked values
+   * 
+   * If provided, component operates in controlled mode
+   * If not provided, manages its own internal state
+   * 
+   * \`\`\`tsx
+   * checked={["email", "sms"]}
+   * \`\`\`
+   */
+  checked?: (string | number | boolean)[];
+
+  /**
+   * Callback fired when a checkbox state changes
+   * 
+   * @param value - The value of the toggled option
+   * @param checked - New checked state (true/false)
+   * 
+   * \`\`\`tsx
+   * onCheckedChange={(value, checked) => {
+   *   if (checked) {
+   *     setSelected([...selected, value])
+   *   } else {
+   *     setSelected(selected.filter(v => v !== value))
+   *   }
+   * }}
+   * \`\`\`
+   */
+  onCheckedChange?: (value: string | number | boolean, checked: boolean) => void;
+
+  /**
+   * ...otherProps: All properties from Radix UI ContextMenu Root can be passed directly.
+   */
+  otherProps: ContextMenuPrimitive.Root
+}`}
+/>
+
+#### ContextRadioWrapper
+<AutoTypeTable 
+name="ContextRadioWrapper" 
+type={`export interface ContextRadioWrapper {
+  /**
+   * Trigger element for the dropdown (must accept ref)
+   * Wrapped with asChild, so pass a single React element
+   */
+  children: React.ReactNode;
+
+  /**
+   * Array of radio options - supports primitives, objects, groups, and submenus
+   * 
+   * Supports:
+   * - Primitives: \`string | number | boolean\`
+   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
+   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
+   * - Submenus: \`{ submenu: string, options: Array, triggerCls?: string, contentCls?: string, groupLabelCls?: string }\`
+   * - Separators: Use \`"---"\` as a value
+   * 
+   * \`\`\`tsx
+   * const options = [
+   *   "Light",
+   *   "Dark",
+   *   "System",
+   *   "---",
+   *   { 
+   *     group: "Experimental", 
+   *     options: [
+   *       { label: "Auto", value: "auto", disabled: true }
+   *     ] 
+   *   }
+   * ]
+   * \`\`\`
+   */
+  options: dropdownInputOptionsT;
+
+  /**
+   * Optional label displayed at the top of the dropdown
+   * Automatically adds a separator after the label
+   */
+  label?: string;
+
+  /**
+   * Additional CSS classes for individual radio items
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes applied to option groups
+   */
+  groupCls?: string;
+
+  /**
+   * Additional CSS classes applied to option group's label
+   */
+  groupLabelCls?: string
+
+  /**
+   * ...contentProps: All properties from Radix UI ContextMenu Content can be passed directly.
+   */
+  contentProps: ContextMenuPrimitive.Content;
+
+  /**
+   * Controlled state: the currently selected value
+   * 
+   * If provided, component operates in controlled mode
+   * If not provided, manages its own internal state (defaults to "")
+   * 
+   * \`\`\`tsx
+   * value="dark"
+   * \`\`\`
+   */
+  value?: string | number | boolean;
+
+  /**
+   * Callback fired when the selected value changes
+   * 
+   * @param value - The newly selected value
+   * 
+   * \`\`\`tsx
+   * onValueChange={(value) => {
+   *   setTheme(value)
+   * }}
+   * \`\`\`
+   */
+  onValueChange?: (value: string | number | boolean) => void;
+
+  /**
+   * ...otherProps: All properties from Radix UI ContextMenu Root can be passed directly.
+   */
+  otherProps: ContextMenuPrimitive.Root
+}`}
+/>
+
+## Related Components
+
+- [Shadcn context Menu](https://ui.shadcn.com/docs/components/context-menu)
+- [Radix UI context Menu](https://www.radix-ui.com/primitives/docs/components/context-menu)

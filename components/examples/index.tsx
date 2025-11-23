@@ -5,6 +5,7 @@ import { DataTableExample } from "./data-table";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown";
 import { ComboboxExample } from "./combobox";
+import { ContextExample } from "./context-menu";
 import { TooltipExample } from "./tooltip";
 import { MenubarExample } from "./menubar";
 import { SelectExample } from "./select";
@@ -140,6 +141,14 @@ export function MenubarEx() {
   return (
     <Wrapper path="/components/examples/menubar.tsx">
       <MenubarExample />
+    </Wrapper>
+  )
+}
+
+export function ContextMenuEx() {
+  return (
+    <Wrapper path="/components/examples/context-menu.tsx">
+      <ContextExample />
     </Wrapper>
   )
 }
