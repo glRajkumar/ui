@@ -39,9 +39,14 @@
       "title": "Breadcrumb",
       "description": "Breadcrumb componet with wrapper",
       "registryDependencies": [
-        "breadcrumb"
+        "breadcrumb",
+        "dropdown-menu"
       ],
       "files": [
+        {
+          "path": "components/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "components/ui/breadcrumb.tsx",
           "type": "registry:ui"
@@ -120,6 +125,21 @@
         },
         {
           "path": "components/ui/context-menu-wrapper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "Empty componet with wrapper",
+      "registryDependencies": [
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "components/ui/empty.tsx",
           "type": "registry:ui"
         }
       ]
@@ -303,6 +323,16 @@
       ],
       "files": [
         {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        },
+        {
           "path": "components/ui/combobox.tsx",
           "type": "registry:ui"
         },
@@ -318,6 +348,21 @@
           "path": "components/ui/form-wrapper.tsx",
           "type": "registry:ui",
           "target": "components/ui/form-wrapper.tsx"
+        }
+      ]
+    },
+    {
+      "name": "item",
+      "type": "registry:ui",
+      "title": "Item",
+      "description": "Item componet with wrapper",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "components/ui/item.tsx",
+          "type": "registry:ui"
         }
       ]
     },
@@ -369,6 +414,46 @@
         },
         {
           "path": "components/ui/navigation-menu-wrapper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Pagination componet with wrapper",
+      "registryDependencies": [
+        "pagination"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        },
+        {
+          "path": "components/ui/pagination.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Popover componet with wrapper",
+      "registryDependencies": [
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "components/ui/popover.tsx",
           "type": "registry:ui"
         }
       ]
