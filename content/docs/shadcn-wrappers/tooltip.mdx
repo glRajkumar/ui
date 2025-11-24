@@ -38,17 +38,18 @@ function TooltipWrapper({
   triggerCls,
   contentCls,
   contentProps,
+  ...props
 }: TooltipWrapperProps) {
   return (
-    <Tooltip>
+    <Tooltip {...props}>
       <TooltipTrigger
-        className={cn(triggerCls)}
+        className={triggerCls}
         asChild={typeof trigger !== "string"}
       >
         {trigger}
       </TooltipTrigger>
 
-      <TooltipContent {...contentProps} className={cn(contentCls)}>
+      <TooltipContent {...contentProps} className={contentCls}>
         {content}
       </TooltipContent>
     </Tooltip>

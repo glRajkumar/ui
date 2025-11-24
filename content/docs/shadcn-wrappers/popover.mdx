@@ -1,0 +1,159 @@
+---
+title: Popover
+description: A simplified wrapper for Shadcn Popover with flexible option handling and automatic type conversion
+---
+
+import { PopoverEx } from "@/components/examples";
+
+<PopoverEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/popover
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `popover` component.
+
+```tsx title="ui/popover.tsx"
+type PopoverWrapperProps = {
+  trigger: React.ReactNode
+  content: React.ReactNode
+  triggerCls?: string
+  contentCls?: string
+  contentProps?: Omit<React.ComponentProps<typeof PopoverPrimitive.Content>, "className">
+} & Omit<React.ComponentProps<typeof PopoverPrimitive.Root>, "children">
+
+function PopoverWrapper({
+  trigger,
+  content,
+  triggerCls,
+  contentCls,
+  contentProps,
+  ...props
+}: PopoverWrapperProps) {
+  return (
+    <Popover {...props}>
+      <PopoverTrigger
+        className={triggerCls}
+        asChild={typeof trigger !== "string"}
+      >
+        {trigger}
+      </PopoverTrigger>
+
+      <PopoverContent {...contentProps} className={contentCls}>
+        {content}
+      </PopoverContent>
+    </Popover>
+  )
+}
+```
+
+Updated `PopoverWrapper` in the export block.
+
+```tsx
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverProvider,
+// [!code focus] [!code ++:1]
+  PopoverWrapper,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### Installation
+
+```npm
+npm install @radix-ui/react-popover
+```
+
+### popover.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/popover.tsx"'>
+  ./components/ui/popover.tsx
+</include>
+
+### Done
+You can now use `PopoverWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { PopoverWrapper } from "@/components/ui/popover";
+
+export function Basic() {
+  return (
+     <PopoverWrapper
+      trigger="Hover"
+      content="Some popover content"
+    />
+  )
+}
+```
+
+## Reference
+
+#### PopoverWrapper
+<AutoTypeTable 
+name="PopoverWrapper" 
+type={`export interface PopoverWrapper {
+    /**
+   * Content displayed in the clickable trigger button
+   * Can be a string or any React element
+   */
+  trigger: React.ReactNode;
+
+  /**
+   * content of the popover. 
+   */
+  content: React.ReactNode;
+
+  /**
+   * Optional CSS classes for this specific accordion trigger
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes for the content
+   */
+  contentCls?: string;
+
+  /**
+   * ...contentProps: All properties from Radix UI Popover Content can be passed directly.
+   */
+  contentProps: PopoverPrimitive.Content;
+
+  /**
+   * ...otherProps: All properties from Radix UI Popover Root can be passed directly.
+   */
+  otherProps: PopoverPrimitive.Root
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Popover](https://ui.shadcn.com/docs/components/popover)
+- [Radix UI Popover](https://www.radix-ui.com/primitives/docs/components/popover)

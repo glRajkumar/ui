@@ -9,6 +9,7 @@ import { ComboboxExample } from "./combobox";
 import { ContextExample } from "./context-menu";
 import { TooltipExample } from "./tooltip";
 import { MenubarExample } from "./menubar";
+import { PopoverExample } from "./popover";
 import { SelectExample } from "./select";
 import { DialogExample } from "./dialog";
 import { DrawerExample } from "./drawer";
@@ -162,3 +163,10 @@ export function NavigationMenuEx() {
   )
 }
 
+export function PopoverEx() {
+  return (
+    <Wrapper path="/components/examples/popover.tsx">
+      <PopoverExample />
+    </Wrapper>
+  )
+}
