@@ -6,3 +6,629 @@ description: A simplified wrapper for Shadcn Item with flexible option handling 
 import { ItemEx } from "@/components/examples";
 
 <ItemEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/item
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Change the props as follows 
+
+```tsx
+type itemDivProps = React.ComponentProps<"div"> &
+  VariantProps<typeof itemVariants> & { asChild?: boolean }
+function Item({
+  className,
+  variant = "default",
+  size = "default",
+  asChild = false,
+  ...props
+}: itemDivProps) {
+}
+```
+
+```tsx
+type itemMediaProps = React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>
+function ItemMedia({
+  className,
+  variant = "default",
+  ...props
+}: itemMediaProps) {
+}
+```
+
+Copy and paste the following code into shadcn `item` component.
+
+```tsx title="ui/item.tsx"
+type commonCls = {
+  itemWrapperCls?: string
+  headerCls?: string
+  titleCls?: string
+  mediaCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  actionsCls?: string
+  footerCls?: string
+  itemProps?: Omit<itemDivProps, "className">
+  itemMediaProps?: Omit<itemMediaProps, "className">
+}
+
+type itemT = commonCls & {
+  header?: React.ReactNode
+  title?: React.ReactNode
+  media?: React.ReactNode
+  description?: React.ReactNode
+  actions?: React.ReactNode
+  content?: React.ReactNode
+  footer?: React.ReactNode
+}
+
+type itemsT = itemT[]
+
+function ItemWrapper({
+  title, description, actions, content, footer, media, header,
+  itemWrapperCls, headerCls, titleCls, descriptionCls,
+  contentCls, mediaCls, actionsCls, footerCls,
+  itemProps, itemMediaProps,
+}: itemT) {
+  return (
+    <Item {...itemProps} className={itemWrapperCls}>
+      {media && <ItemMedia {...itemMediaProps} className={mediaCls}>{media}</ItemMedia>}
+
+      {header && <ItemHeader className={headerCls}>{header}</ItemHeader>}
+
+      {
+        (title || description || content) &&
+        <ItemContent className={contentCls}>
+          {title && <ItemTitle className={titleCls}>{title}</ItemTitle>}
+          {description && <ItemDescription className={descriptionCls}>{description}</ItemDescription>}
+          {content}
+        </ItemContent>
+      }
+
+      {actions && <ItemActions className={actionsCls}>{actions}</ItemActions>}
+
+      {footer && <ItemFooter className={footerCls}>{footer}</ItemFooter>}
+    </Item>
+  )
+}
+
+type itemGroupProps = commonCls & {
+  wrapperCls?: string
+  items: itemsT
+}
+
+function ItemGroupWrapper({
+  wrapperCls,
+  items,
+  itemWrapperCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+  contentCls,
+  mediaCls,
+  actionsCls,
+  footerCls,
+  itemProps,
+  itemMediaProps,
+}: itemGroupProps) {
+  return (
+    <ItemGroup className={wrapperCls}>
+      {items.map((item, i) => (
+        <ItemWrapper
+          key={i}
+          {...item}
+          itemWrapperCls={cn(itemWrapperCls, item.itemWrapperCls)}
+          headerCls={cn(headerCls, item.headerCls)}
+          titleCls={cn(titleCls, item.titleCls)}
+          descriptionCls={cn(descriptionCls, item.descriptionCls)}
+          contentCls={cn(contentCls, item.contentCls)}
+          mediaCls={cn(mediaCls, item.mediaCls)}
+          actionsCls={cn(actionsCls, item.actionsCls)}
+          footerCls={cn(footerCls, item.footerCls)}
+          itemProps={{ ...itemProps, ...item.itemProps }}
+          itemMediaProps={{ ...itemMediaProps, ...item.itemMediaProps }}
+        />
+      ))}
+    </ItemGroup>
+  )
+}
+```
+
+```tsx
+export {
+    Item,
+  ItemMedia,
+  ItemContent,
+  ItemActions,
+  ItemGroup,
+  ItemSeparator,
+  ItemTitle,
+  ItemDescription,
+  ItemHeader,
+  ItemFooter,
+// [!code focus:4] [!code ++:4]
+  ItemWrapper,
+  ItemGroupWrapper,
+  type itemT,
+  type itemsT,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### item.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/item.tsx"'>
+  ./components/ui/item.tsx
+</include>
+
+### Done
+You can now use `ItemWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { ItemWrapper } from "@/components/ui/item"
+import { Button } from "@/components/ui/button"
+
+export function Basic() {
+  return (
+    <ItemWrapper
+      header="Product"
+      title="Wireless Headphones"
+      description="Noise-cancelling over-ear headphones with long battery life."
+      content="Perfect for work, travel, and everyday listening. Supports fast charging."
+      actions={<Button size="sm">Buy Now</Button>}
+      footer="Updated 2 days ago"
+    />
+  )
+}
+```
+
+### Item Group
+```tsx
+import { type itemsT, ItemGroupWrapper } from "@/components/ui/item"
+import { Button } from "@/components/ui/button"
+
+export function Group() {
+   const items: itemsT = [
+    {
+      header: "Product",
+      title: "Wireless Headphones",
+      description: "Noise-cancelling over-ear headphones with long battery life.",
+      content: "Perfect for work, travel, and everyday listening. Supports fast charging.",
+      actions: <Button size="sm">Buy Now</Button>,
+      footer: "Updated 2 days ago",
+      itemProps: { variant: "outline" }
+    },
+    {
+      title: "Smart Watch",
+      description: "Track your fitness, heart rate and notifications.",
+      actions: <Button variant="outline" size="sm">View Details</Button>,
+      footer: "In Stock",
+      itemProps: { variant: "muted" }
+    },
+  ]
+
+  return (
+    <ItemGroupWrapper
+      items={items}
+    />
+  )
+}
+```
+
+## Reference
+
+#### ItemWrapper
+<AutoTypeTable 
+name="ItemWrapper" 
+type={`export interface ItemWrapper {
+  /**
+   * Custom header content
+   * 
+   * Displayed at the top of the item, before title
+   * Useful for badges, timestamps, or metadata
+   * 
+   * \`\`\`tsx
+   * header={<Badge variant="secondary">Draft</Badge>}
+   * header={
+   *   <div className="flex justify-between">
+   *     <Badge>New</Badge>
+   *     <span className="text-xs">5 min ago</span>
+   *   </div>
+   * }
+   * \`\`\`
+   */
+  header?: React.ReactNode;
+
+  /**
+   * Main title text
+   * 
+   * Primary heading for the item
+   * 
+   * \`\`\`tsx
+   * title="Task Name"
+   * title={<h3 className="font-bold">Custom Title</h3>}
+   * \`\`\`
+   */
+  title?: React.ReactNode;
+
+  /**
+   * Media element (avatar, icon, image, thumbnail)
+   * 
+   * Typically displayed on the left side or at the top
+   * 
+   * \`\`\`tsx
+   * media={<Avatar src="/avatar.jpg" />}
+   * media={<FileIcon className="w-8 h-8" />}
+   * media={<img src="/thumbnail.jpg" alt="" className="w-16 h-16 rounded" />}
+   * \`\`\`
+   */
+  media?: React.ReactNode;
+
+  /**
+   * Description or subtitle text
+   * 
+   * Secondary text providing additional context
+   * 
+   * \`\`\`tsx
+   * description="This is a brief description"
+   * description={
+   *   <span className="text-sm text-muted-foreground">
+   *     Last updated today
+   *   </span>
+   * }
+   * \`\`\`
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Action buttons or interactive elements
+   * 
+   * Typically displayed on the right side or at the bottom
+   * 
+   * \`\`\`tsx
+   * actions={<Button size="sm">View Details</Button>}
+   * actions={
+   *   <div className="flex gap-2">
+   *     <Button size="icon" variant="ghost"><EditIcon /></Button>
+   *     <Button size="icon" variant="ghost"><TrashIcon /></Button>
+   *   </div>
+   * }
+   * \`\`\`
+   */
+  actions?: React.ReactNode;
+
+  /**
+   * Additional custom content
+   * 
+   * Flexible area for any extra content between description and actions
+   * 
+   * \`\`\`tsx
+   * content={
+   *   <div className="mt-3 flex gap-2">
+   *     <Tag>React</Tag>
+   *     <Tag>TypeScript</Tag>
+   *   </div>
+   * }
+   * \`\`\`
+   */
+  content?: React.ReactNode;
+
+  /**
+   * Footer content
+   * 
+   * Displayed at the bottom of the item
+   * Useful for timestamps, metadata, or additional actions
+   * 
+   * \`\`\`tsx
+   * footer={<span className="text-xs text-muted-foreground">Created 2 days ago</span>}
+   * footer={
+   *   <div className="flex justify-between items-center">
+   *     <span>3 comments</span>
+   *     <Button variant="link" size="sm">Reply</Button>
+   *   </div>
+   * }
+   * \`\`\`
+   */
+  footer?: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the root Item container
+   * 
+   * \`\`\`tsx
+   * itemWrapperCls="hover:bg-muted/50 transition-colors"
+   * \`\`\`
+   */
+  itemWrapperCls?: string;
+
+  /**
+   * Additional CSS classes for the ItemHeader section
+   * 
+   * \`\`\`tsx
+   * headerCls="mb-2"
+   * \`\`\`
+   */
+  headerCls?: string;
+
+  /**
+   * Additional CSS classes for the ItemTitle element
+   * 
+   * \`\`\`tsx
+   * titleCls="text-lg font-semibold"
+   * \`\`\`
+   */
+  titleCls?: string;
+
+  /**
+   * Additional CSS classes for the ItemMedia container
+   * 
+   * \`\`\`tsx
+   * mediaCls="rounded-full overflow-hidden"
+   * \`\`\`
+   */
+  mediaCls?: string;
+
+  /**
+   * Additional CSS classes for the ItemDescription element
+   * 
+   * \`\`\`tsx
+   * descriptionCls="text-sm text-muted-foreground line-clamp-2"
+   * \`\`\`
+   */
+  descriptionCls?: string;
+
+  /**
+   * Additional CSS classes for the ItemContent section
+   * 
+   * Contains title, description, and custom content
+   * 
+   * \`\`\`tsx
+   * contentCls="flex-1"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes for the ItemActions section
+   * 
+   * \`\`\`tsx
+   * actionsCls="ml-auto"
+   * \`\`\`
+   */
+  actionsCls?: string;
+
+  /**
+   * Additional CSS classes for the ItemFooter section
+   * 
+   * \`\`\`tsx
+   * footerCls="pt-3 border-t"
+   * \`\`\`
+   */
+  footerCls?: string;
+
+  /**
+   * Additional props passed to the root Item component
+   * 
+   * Excludes className (use itemWrapperCls instead)
+   * 
+   * \`\`\`tsx
+   * itemProps={{
+   *   onClick: () => console.log('clicked'),
+   *   role: "button",
+   *   tabIndex: 0
+   * }}
+   * \`\`\`
+   */
+  itemProps?: Omit<React.HTMLAttributes<HTMLDivElement>, "className">;
+
+  /**
+   * Additional props passed to the ItemMedia component
+   * 
+   * Excludes className (use mediaCls instead)
+   * 
+   * \`\`\`tsx
+   * itemMediaProps={{
+   *   variant: "circular",
+   *   size: "lg"
+   * }}
+   * \`\`\`
+   */
+  itemMediaProps?: Omit<React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>, "className">;
+}`} 
+/>
+
+#### ItemGroupWrapper
+<AutoTypeTable 
+name="ItemGroupWrapper" 
+type={`export interface ItemGroupWrapper {
+  /**
+   * Additional CSS classes for the ItemGroup container
+   * 
+   * \`\`\`tsx
+   * wrapperCls="space-y-2 p-4"
+   * wrapperCls="divide-y"
+   * wrapperCls="grid grid-cols-2 gap-4"
+   * \`\`\`
+   */
+  wrapperCls?: string;
+
+  /**
+   * Array of item configurations
+   * 
+   * Each item can have all properties from ItemWrapper
+   * 
+   * Array<{
+   *  header?: React.ReactNode;
+   *  title?: React.ReactNode;
+   *  media?: React.ReactNode;
+   *  description?: React.ReactNode;
+   *  actions?: React.ReactNode;
+   *  content?: React.ReactNode;
+   *  footer?: React.ReactNode;
+   *  itemWrapperCls?: string;
+   *  headerCls?: string;
+   *  titleCls?: string;
+   *  mediaCls?: string;
+   *  descriptionCls?: string;
+   *  contentCls?: string;
+   *  actionsCls?: string;
+   *  footerCls?: string;
+   *  itemProps?: Omit<React.HTMLAttributes<HTMLDivElement>, "className">;
+   *  itemMediaProps?: Omit<any, "className">;
+   * }>
+   *
+   * \`\`\`tsx
+   * items={[
+   *   {
+   *     media: <Avatar src="/user1.jpg" />,
+   *     title: "John Doe",
+   *     description: "Software Engineer",
+   *     actions: <Button size="sm">Follow</Button>
+   *   },
+   *   {
+   *     media: <Avatar src="/user2.jpg" />,
+   *     title: "Jane Smith",
+   *     description: "Product Manager",
+   *     actions: <Button size="sm">Follow</Button>
+   *   }
+   * ]}
+   * \`\`\`
+   */
+  items: itemsT;
+
+  /**
+   * Shared CSS classes for all item containers
+   * Can be overridden per item via item.itemWrapperCls
+   * 
+   * \`\`\`tsx
+   * itemWrapperCls="p-4 border rounded-lg hover:shadow-md transition"
+   * \`\`\`
+   */
+  itemWrapperCls?: string;
+
+  /**
+   * Shared CSS classes for all item headers
+   * Can be overridden per item via item.headerCls
+   * 
+   * \`\`\`tsx
+   * headerCls="mb-2"
+   * \`\`\`
+   */
+  headerCls?: string;
+
+  /**
+   * Shared CSS classes for all item titles
+   * Can be overridden per item via item.titleCls
+   * 
+   * \`\`\`tsx
+   * titleCls="text-lg font-semibold text-foreground"
+   * \`\`\`
+   */
+  titleCls?: string;
+
+  /**
+   * Shared CSS classes for all item descriptions
+   * Can be overridden per item via item.descriptionCls
+   * 
+   * \`\`\`tsx
+   * descriptionCls="text-sm text-muted-foreground line-clamp-2"
+   * \`\`\`
+   */
+  descriptionCls?: string;
+
+  /**
+   * Shared CSS classes for all item content sections
+   * Can be overridden per item via item.contentCls
+   * 
+   * \`\`\`tsx
+   * contentCls="flex-1 space-y-1"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+  /**
+   * Shared CSS classes for all item media elements
+   * Can be overridden per item via item.mediaCls
+   * 
+   * \`\`\`tsx
+   * mediaCls="w-12 h-12 rounded-full overflow-hidden"
+   * \`\`\`
+   */
+  mediaCls?: string;
+
+  /**
+   * Shared CSS classes for all item actions
+   * Can be overridden per item via item.actionsCls
+   * 
+   * \`\`\`tsx
+   * actionsCls="ml-auto flex gap-2"
+   * \`\`\`
+   */
+  actionsCls?: string;
+
+  /**
+   * Shared CSS classes for all item footers
+   * Can be overridden per item via item.footerCls
+   * 
+   * \`\`\`tsx
+   * footerCls="pt-2 mt-2 border-t text-xs text-muted-foreground"
+   * \`\`\`
+   */
+  footerCls?: string;
+
+  /**
+   * Shared props for all Item components
+   * Can be overridden per item via item.itemProps
+   * 
+   * \`\`\`tsx
+   * itemProps={{
+   *   role: "button",
+   *   tabIndex: 0,
+   *   onKeyDown: handleKeyDown
+   * }}
+   * \`\`\`
+   */
+  itemProps?: Omit<React.HTMLAttributes<HTMLDivElement>, "className">;
+
+  /**
+   * Shared props for all ItemMedia components
+   * Can be overridden per item via item.itemMediaProps
+   * 
+   * \`\`\`tsx
+   * itemMediaProps={{
+   *   variant: "circular",
+   *   size: "md"
+   * }}
+   * \`\`\`
+   */
+  itemMediaProps?: Omit<React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>, "className">;
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Item](https://ui.shadcn.com/docs/components/item)

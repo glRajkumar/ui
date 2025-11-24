@@ -6,3 +6,400 @@ description: A simplified wrapper for Shadcn Pagination with flexible option han
 import { PaginationEx } from "@/components/examples";
 
 <PaginationEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/pagination
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Upade the following changes in `pagination.tsx`
+
+```tsx
+"use client"
+import Link from "next/link"
+
+import { cn, getKey, isSeparator } from "@/lib/utils"
+```
+
+```tsx
+type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<typeof Link> & { isActive?: boolean }
+
+function PaginationLink({
+  className,
+  isActive,
+  size = "icon",
+  ...props
+}: PaginationLinkProps) {
+  return (
+    <Link
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        buttonVariants({
+          variant: isActive ? "outline" : "ghost",
+          size,
+        }),
+        className
+      )}
+      {...props}
+    />
+  )
+}
+```
+
+Copy and paste the following code into shadcn `pagination` component.
+
+```tsx title="ui/pagination.tsx"
+type PaginationWrapperProps = {
+  total: number
+  page?: number
+  wrapperCls?: string
+  contentCls?: string
+  itemCls?: string
+  linkCls?: string
+  siblingCount?: number
+  onPageChange?: (page: number) => void
+};
+
+function PaginationWrapper({
+  total,
+  page: o_page,
+  onPageChange: o_onPageChange,
+  siblingCount = 1,
+  wrapperCls,
+  contentCls,
+  itemCls,
+  linkCls,
+}: PaginationWrapperProps) {
+  const [i_page, setIPage] = React.useState(1)
+
+  const page = o_page ?? i_page
+  const onPageChange = o_onPageChange ?? setIPage
+
+  const paginationRange = React.useMemo(() => {
+    if (total <= 1) return [1]
+
+    const pages: (number | "---")[] = []
+    const start = Math.max(2, page - siblingCount)
+    const end = Math.min(total - 1, page + siblingCount)
+
+    pages.push(1)
+
+    if (start > 2) pages.push("---")
+
+    for (let i = start; i <= end; i++) pages.push(i)
+
+    if (end < total - 1) pages.push("---")
+
+    if (total > 1) pages.push(total)
+
+    return pages
+  }, [page, siblingCount, total])
+
+  return (
+    <Pagination className={wrapperCls}>
+      <PaginationContent className={contentCls}>
+        <PaginationItem className={itemCls}>
+          <PaginationPrevious
+            href=""
+            onClick={() => page > 1 && onPageChange(page - 1)}
+            className={cn(linkCls, page === 1 && "pointer-events-none opacity-50")}
+          />
+        </PaginationItem>
+
+        {paginationRange.map((p, i) => {
+          const key = getKey(p, i)
+
+          if (isSeparator(p)) {
+            return (
+              <PaginationItem key={key} className={itemCls}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )
+          }
+
+          return (
+            <PaginationItem key={key} className={itemCls}>
+              <PaginationLink
+                href=""
+                onClick={() => onPageChange(p as number)}
+                isActive={p === page}
+                className={linkCls}
+              >
+                {p}
+              </PaginationLink>
+            </PaginationItem>
+          )
+        })}
+
+        <PaginationItem className={itemCls}>
+          <PaginationNext
+            href=""
+            onClick={() => page < total && onPageChange(page + 1)}
+            className={cn(linkCls, page === total && "pointer-events-none opacity-50")}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  )
+}
+```
+
+```tsx
+export {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+// [!code focus] [!code ++:1]
+  PaginationWrapper,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### pagination.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/pagination.tsx"'>
+  ./components/ui/pagination.tsx
+</include>
+
+### Done
+You can now use `PaginationWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { PaginationWrapper } from "../ui/pagination";
+
+export function Basic() {
+  return (
+    <PaginationWrapper
+      total={20}
+    />
+  )
+}
+```
+
+### Controlled
+```tsx
+import { useState } from "react"
+import { PaginationWrapper } from "../ui/pagination";
+
+export function Controlled() {
+  const [value, setValue] = useState(5)
+
+  return (
+    <PaginationWrapper
+      total={20}
+      page={value}
+      onPageChange={setValue}
+    />
+  )
+}
+```
+
+## Reference
+
+#### PaginationWrapper
+<AutoTypeTable 
+name="PaginationWrapper" 
+type={`export interface PaginationWrapper {
+  /**
+   * Pagination component with automatic page range calculation
+   * 
+   * Provides navigation between pages with ellipsis for large page counts
+   * Supports both controlled and uncontrolled modes
+   * 
+   * ## Basic Usage (Uncontrolled):
+   * \`\`\`tsx
+   * <PaginationWrapper
+   *   total={10}
+   *   onPageChange={(page) => console.log('Page:', page)}
+   * />
+   * \`\`\`
+   * 
+   * ## Controlled Mode:
+   * \`\`\`tsx
+   * const [currentPage, setCurrentPage] = useState(1);
+   * 
+   * <PaginationWrapper
+   *   total={20}
+   *   page={currentPage}
+   *   onPageChange={setCurrentPage}
+   * />
+   * \`\`\`
+   * 
+   * ## With Custom Sibling Count:
+   * \`\`\`tsx
+   * // Shows more pages around current page
+   * <PaginationWrapper
+   *   total={50}
+   *   siblingCount={2}
+   *   onPageChange={handlePageChange}
+   * />
+   * 
+   * // Compact version with fewer visible pages
+   * <PaginationWrapper
+   *   total={50}
+   *   siblingCount={0}
+   *   onPageChange={handlePageChange}
+   * />
+   * \`\`\`
+   */
+
+  /**
+   * Total number of pages
+   * 
+   * Must be a positive integer
+   * 
+   * \`\`\`tsx
+   * total={1}  // Single page (no navigation needed)
+   * total={10} // 10 pages
+   * total={100} // 100 pages with ellipsis
+   * \`\`\`
+   */
+  total: number;
+
+  /**
+   * Current active page (controlled mode)
+   * 
+   * When provided, component operates in controlled mode
+   * Must be used with \`onPageChange\` to update the value
+   * 
+   * \`\`\`tsx
+   * const [page, setPage] = useState(1);
+   * 
+   * <PaginationWrapper
+   *   total={20}
+   *   page={page}
+   *   onPageChange={setPage}
+   * />
+   * \`\`\`
+   * 
+   * @default 1 (uncontrolled)
+   */
+  page?: number;
+
+  /**
+   * Number of sibling pages to show on each side of current page
+   * 
+   * Controls how many page numbers appear before and after the current page
+   * Higher values show more pages but take up more space
+   * 
+   * ## Examples:
+   * 
+   * **siblingCount={0}** (current page only):
+   * \`1 ... 5 ... 10\`
+   * 
+   * **siblingCount={1}** (default):
+   * \`1 ... 4 5 6 ... 10\`
+   * 
+   * **siblingCount={2}**:
+   * \`1 ... 3 4 5 6 7 ... 10\`
+   * 
+   * \`\`\`tsx
+   * siblingCount={0} // Minimal: only current page
+   * siblingCount={1} // Default: balanced view
+   * siblingCount={2} // More context
+   * siblingCount={3} // Maximum context
+   * \`\`\`
+   * 
+   * @default 1
+   */
+  siblingCount?: number;
+
+  /**
+   * Callback fired when page changes
+   * 
+   * Called when user clicks on:
+   * - Previous button
+   * - Next button
+   * - Any page number
+   * 
+   * \`\`\`tsx
+   * onPageChange={(newPage) => {
+   *   console.log('Navigating to page:', newPage);
+   *   fetchData(newPage);
+   * }}
+   * \`\`\`
+   * 
+   * @param page - The new page number (1-indexed)
+   */
+  onPageChange?: (page: number) => void;
+
+  /**
+   * Additional CSS classes for the root Pagination container
+   * 
+   * \`\`\`tsx
+   * wrapperCls="justify-end"
+   * wrapperCls="mt-8"
+   * \`\`\`
+   */
+  wrapperCls?: string;
+
+  /**
+   * Additional CSS classes for the PaginationContent wrapper
+   * 
+   * Contains all pagination items
+   * 
+   * \`\`\`tsx
+   * contentCls="gap-2"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes for each PaginationItem container
+   * 
+   * Applied to all items (prev, next, pages, ellipsis)
+   * 
+   * \`\`\`tsx
+   * itemCls="mx-1"
+   * \`\`\`
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes for PaginationLink and navigation buttons
+   * 
+   * Applied to Previous, Next, and page number links
+   * 
+   * \`\`\`tsx
+   * linkCls="rounded-md"
+   * linkCls="min-w-[40px]"
+   * \`\`\`
+   */
+  linkCls?: string;
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Pagination](https://ui.shadcn.com/docs/components/pagination)

@@ -6,3 +6,323 @@ description: A simplified wrapper for Shadcn Empty with flexible option handling
 import { EmptyEx } from "@/components/examples";
 
 <EmptyEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/empty
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into shadcn `empty` component.
+
+```tsx title="ui/empty.tsx"
+type EmptyWrapperProps = {
+  title?: React.ReactNode
+  description?: React.ReactNode
+  media?: React.ReactNode
+  content?: React.ReactNode
+  wrapperCls?: string
+  headerCls?: string
+  titleCls?: string
+  mediaCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  mediaVariant?: VariantProps<typeof emptyMediaVariants>["variant"]
+}
+
+function EmptyWrapper({
+  title,
+  description,
+  media,
+  content,
+  wrapperCls,
+  headerCls,
+  titleCls,
+  mediaCls,
+  descriptionCls,
+  contentCls,
+  mediaVariant = "default",
+}: EmptyWrapperProps) {
+  return (
+    <Empty className={wrapperCls}>
+      <EmptyHeader className={headerCls}>
+        {media && <EmptyMedia className={mediaCls} variant={mediaVariant}>{media}</EmptyMedia>}
+        {title && <EmptyTitle className={titleCls}>{title}</EmptyTitle>}
+        {description && <EmptyDescription className={descriptionCls}>{description}</EmptyDescription>}
+      </EmptyHeader>
+
+      {
+        content &&
+        <EmptyContent className={contentCls}>
+          {content}
+        </EmptyContent>
+      }
+    </Empty>
+  )
+}
+```
+
+```tsx
+export {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent,
+  EmptyMedia,
+// [!code focus] [!code ++:1]
+  EmptyWrapper,
+}
+```
+
+</Tab>
+
+<Tab value="Full Guide">
+<section id="setup-section">
+<div className="fd-steps [&_h3]:fd-step">
+
+### empty.tsx
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/empty.tsx"'>
+  ./components/ui/empty.tsx
+</include>
+
+### Done
+You can now use `EmptyWrapper`
+
+</div>
+</section>
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { Inbox } from "lucide-react"
+import { EmptyWrapper } from "@/components/ui/empty"
+import { Button } from "@/components/ui/button"
+
+export function Basic() {
+  return (
+    <EmptyWrapper
+      title="No Messages"
+      description="You haven't received any messages yet. When someone contacts you, they'll show up here."
+      media={<Inbox className="size-10 text-muted-foreground" />}
+      content={<Button>Compose Message</Button>}
+    />
+  )
+}
+```
+
+### Custom Styling
+```tsx
+import { EmptyWrapper } from "@/components/ui/empty";
+import { AlertCircle } from "lucide-react";
+
+export function CustomStyling() {
+  return (
+    <EmptyWrapper
+      media={<AlertCircle />}
+      mediaVariant="icon"
+      title="No results found"
+      description="Try adjusting your search or filter to find what you're looking for"
+      wrapperCls="border-2 bg-muted/50"
+      titleCls="text-destructive"
+      mediaCls="bg-destructive/10"
+    />
+  )
+}
+```
+
+## Reference
+
+#### EmptyWrapper
+<AutoTypeTable 
+name="EmptyWrapper" 
+type={`export interface EmptyWrapper {
+  /**
+   * Empty state component for displaying placeholder content
+   * 
+   * Perfect for empty lists, no search results, missing data, or onboarding states
+   * 
+   * ## Basic Usage:
+   * \`\`\`tsx
+   * <EmptyWrapper
+   *   title="No results found"
+   *   description="Try adjusting your search or filters"
+   * />
+   * \`\`\`
+   * 
+   * ## With Icon/Image:
+   * \`\`\`tsx
+   * <EmptyWrapper
+   *   media={<SearchIcon className="w-12 h-12" />}
+   *   title="No products found"
+   *   description="We couldn't find any products matching your search"
+   * />
+   * \`\`\`
+   * 
+   * ## With Actions:
+   * \`\`\`tsx
+   * <EmptyWrapper
+   *   media={<InboxIcon />}
+   *   title="Your inbox is empty"
+   *   description="Start a conversation to see messages here"
+   * >
+   *   <Button>New Message</Button>
+   * </EmptyWrapper>
+   * \`\`\`
+   */
+
+  /**
+   * Main title text for the empty state
+   * 
+   * Can be a string or custom React element
+   * 
+   * \`\`\`tsx
+   * title="No items found"
+   * title={<h2 className="font-bold">Welcome!</h2>}
+   * \`\`\`
+   */
+  title?: React.ReactNode;
+
+  /**
+   * Descriptive text explaining the empty state
+   * 
+   * Provides context or guidance to the user
+   * 
+   * \`\`\`tsx
+   * description="Try adjusting your filters or search terms"
+   * description={
+   *   <>
+   *     <p>Your cart is empty.</p>
+   *     <p>Browse products to get started.</p>
+   *   </>
+   * }
+   * \`\`\`
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Visual media element (icon, illustration, or image)
+   * 
+   * Displayed above the title to enhance the empty state
+   * 
+   * \`\`\`tsx
+   * media={<SearchIcon className="w-16 h-16" />}
+   * media={<img src="/empty-state.svg" alt="" />}
+   * media={<EmptyBoxIllustration />}
+   * \`\`\`
+   */
+  media?: React.ReactNode;
+
+  /**
+   * Action buttons or additional content
+   * 
+   * Typically contains CTAs to help users take action
+   * 
+   * \`\`\`tsx
+   * <EmptyWrapper 
+   *   title="No projects"
+   *   content={
+   *     <div className="flex gap-2">
+   *       <Button>Create Project</Button>
+   *       <Button variant="outline">Import</Button>
+   *     </div>
+   *   }
+   * />
+   * \`\`\`
+   */
+  content?: React.ReactNode;
+
+  /**
+   * Additional CSS classes for the root Empty container
+   * 
+   * \`\`\`tsx
+   * wrapperCls="min-h-[400px] bg-muted/20"
+   * \`\`\`
+   */
+  wrapperCls?: string;
+
+  /**
+   * Additional CSS classes for the EmptyHeader section
+   * 
+   * Contains media, title, and description
+   * 
+   * \`\`\`tsx
+   * headerCls="gap-4"
+   * \`\`\`
+   */
+  headerCls?: string;
+
+  /**
+   * Additional CSS classes for the EmptyTitle element
+   * 
+   * \`\`\`tsx
+   * titleCls="text-2xl font-bold text-primary"
+   * \`\`\`
+   */
+  titleCls?: string;
+
+  /**
+   * Additional CSS classes for the EmptyMedia container
+   * 
+   * \`\`\`tsx
+   * mediaCls="bg-muted/50 rounded-full p-4"
+   * \`\`\`
+   */
+  mediaCls?: string;
+
+  /**
+   * Additional CSS classes for the EmptyDescription element
+   * 
+   * \`\`\`tsx
+   * descriptionCls="text-sm text-muted-foreground max-w-md"
+   * \`\`\`
+   */
+  descriptionCls?: string;
+
+  /**
+   * Additional CSS classes for the EmptyContent section
+   * 
+   * Contains the content (action buttons, etc.)
+   * 
+   * \`\`\`tsx
+   * contentCls="flex gap-3 mt-6"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+  /**
+   * Visual style variant for the media element
+   * 
+   * Controls the appearance/styling of the media container
+   * 
+   * Available variants depend on your \`emptyMediaVariants\` configuration
+   * 
+   * \`\`\`tsx
+   * mediaVariant="default"
+   * mediaVariant="muted"
+   * mediaVariant="outline"
+   * \`\`\`
+   * 
+   * @default "default"
+   */
+  mediaVariant?: "default" | "muted" | "outline"
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Empty](https://ui.shadcn.com/docs/components/empty)

@@ -7,10 +7,9 @@ export function EmptyExample() {
   return (
     <EmptyWrapper
       title="No Messages"
-      description="You haven’t received any messages yet. When someone contacts you, they’ll show up here."
+      description="You haven't received any messages yet. When someone contacts you, they'll show up here."
       media={<Inbox className="size-10 text-muted-foreground" />}
-    >
-      <Button>Compose Message</Button>
-    </EmptyWrapper>
+      content={<Button>Compose Message</Button>}
+    />
   )
 }

@@ -98,7 +98,7 @@ type EmptyWrapperProps = {
   title?: React.ReactNode
   description?: React.ReactNode
   media?: React.ReactNode
-  children?: React.ReactNode
+  content?: React.ReactNode
   wrapperCls?: string
   headerCls?: string
   titleCls?: string
@@ -112,7 +112,7 @@ function EmptyWrapper({
   title,
   description,
   media,
-  children,
+  content,
   wrapperCls,
   headerCls,
   titleCls,
@@ -130,9 +130,9 @@ function EmptyWrapper({
       </EmptyHeader>
 
       {
-        children &&
+        content &&
         <EmptyContent className={contentCls}>
-          {children}
+          {content}
         </EmptyContent>
       }
     </Empty>
