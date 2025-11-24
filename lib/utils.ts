@@ -35,7 +35,7 @@ export const getLabel = (item: allowedPrimitiveT | optionT) => typeof item === "
 export function getKey(item: allowedPrimitiveT | optionT, i: number): string {
   const val = getValue(item)
   if (typeof val === "boolean") return `key-${val}`
-  if (val === "---") return `${i}`
+  if (val === "---") return `---${i}`
   return `${val}`
 }
 

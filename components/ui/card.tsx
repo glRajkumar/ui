@@ -109,8 +109,8 @@ function CardWrapper({
   footerCls,
 }: CardWrapperProps) {
   return (
-    <Card className={cn(wrapperCls)}>
-      <CardHeader className={cn(headerCls)}>
+    <Card className={wrapperCls}>
+      <CardHeader className={headerCls}>
         {title && <CardTitle className={titleCls}>{title}</CardTitle>}
         {description && <CardDescription className={descriptionCls}>{description}</CardDescription>}
 
@@ -119,7 +119,7 @@ function CardWrapper({
 
       {
         children &&
-        <CardContent className={cn(contentCls)}>
+        <CardContent className={contentCls}>
           {children}
         </CardContent>
       }

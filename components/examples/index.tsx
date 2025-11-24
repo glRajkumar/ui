@@ -2,6 +2,7 @@ import { NavigationMenuExample } from "./navigation-menu";
 import { ToggleGroupExample } from "./toggle-group";
 import { AlertDialogExample } from "./alert-dialog";
 import { BreadcrumbExample } from "./breadcrumb";
+import { PaginationExample } from "./pagination";
 import { DataTableExample } from "./data-table";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown-menu";
@@ -14,9 +15,11 @@ import { SelectExample } from "./select";
 import { DialogExample } from "./dialog";
 import { DrawerExample } from "./drawer";
 import { SheetExample } from "./sheet";
+import { EmptyExample } from "./empty";
 import { CardExample } from "./card";
 import { TabsExample } from "./tabs";
 import { FormExample } from "./form";
+import { ItemExample } from "./item";
 import Wrapper from "../wrapper";
 
 export function SelectEx() {
@@ -167,6 +170,30 @@ export function PopoverEx() {
   return (
     <Wrapper path="/components/examples/popover.tsx">
       <PopoverExample />
+    </Wrapper>
+  )
+}
+
+export function ItemEx() {
+  return (
+    <Wrapper path="/components/examples/item.tsx">
+      <ItemExample />
+    </Wrapper>
+  )
+}
+
+export function EmptyEx() {
+  return (
+    <Wrapper path="/components/examples/empty.tsx">
+      <EmptyExample />
+    </Wrapper>
+  )
+}
+
+export function PaginationEx() {
+  return (
+    <Wrapper path="/components/examples/pagination.tsx">
+      <PaginationExample />
     </Wrapper>
   )
 }
