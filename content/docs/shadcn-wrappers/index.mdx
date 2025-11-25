@@ -18,6 +18,20 @@ Shadcn UI provides an excellent foundation for building design systems, but dire
 
 ---
 
+## Prerequest
+- Shadcn base setup
+- add following to your `components.json` at `registries` block
+
+```json
+{
+  "registries": {
+    "@glrk-ui": "https://ui.glrk.dev/registry/{name}.json"
+  }
+}
+```
+
+---
+
 ## Type Definitions
 
 ### Core Types
@@ -115,7 +129,7 @@ const options: optionsT = [
 
 ### Understanding String Conversion
 
-Shadcn's controlled components use string values internally. The wrapper system handles conversion between strings and primitive types transparently.
+Shadcn's controlled components use string values internally. The wrapper system handles conversion between strings and primitive types transparently. Some components directly supports type conversion. If the component not supported this feature, you can use following guide.
 
 ### Implementation Patterns
 
