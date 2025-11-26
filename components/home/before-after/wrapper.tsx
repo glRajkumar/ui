@@ -12,8 +12,8 @@ type props = {
 }
 function Wrapper({ before, after, form, settings, children }: props) {
   return (
-    <section className="flex flex-col-reverse gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 lg:h-[70vh]">
-      <div className="flex flex-col h-80 lg:h-[inherit]">
+    <section className="flex flex-col-reverse gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-col h-80 lg:h-[70vh]">
         <div className="mb-0.5 pl-1.5 text-xs font-medium">Before</div>
         <DynamicCodeBlock
           code={before}
@@ -21,7 +21,7 @@ function Wrapper({ before, after, form, settings, children }: props) {
         />
       </div>
 
-      <div className="flex flex-col h-80 lg:h-[inherit]">
+      <div className="flex flex-col h-80 lg:h-[70vh]">
         <div className="mb-0.5 pl-1.5 text-xs font-medium">After</div>
         <DynamicCodeBlock
           code={after}

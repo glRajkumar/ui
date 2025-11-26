@@ -171,3 +171,17 @@
 .home > section {
   @apply max-w-7xl mx-auto px-6 py-8;
 }
+
+.words {
+  animation: roll var(--steps-duration) steps(var(--steps)) 0s infinite forwards;
+}
+
+@keyframes roll {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-100%);
+  }
+}
