@@ -40,37 +40,33 @@ const settings: settingObjT = {
 }
 
 function trans(options: optionsT, level = 2): string {
-  const lines: string[] = []
+  let str = ""
 
   options.forEach((o) => {
     if (isGroup(o)) {
-      lines.push(
-        `${indent(level)}<SelectGroup${o.className ? ` className="${o.className}"` : ""}>`,
-        `${indent(level + 1)}<SelectLabel>${o.group}</SelectLabel>`,
-        trans(o.options, level + 1),
-        `${indent(level)}</SelectGroup>`
-      )
+      str +=
+        `${indent(level)}<SelectGroup${o.className ? ` className="${o.className}"` : ""}>\n` +
+        `${indent(level + 1)}<SelectLabel>${o.group}</SelectLabel>\n` +
+        trans(o.options, level + 1) + "\n" +
+        `${indent(level)}</SelectGroup>\n`
       return
     }
 
     if (isOption(o)) {
-      lines.push(
-        `${indent(level)}<SelectItem value="${o.value}"${o.className ? ` className="${o.className}"` : ""}>${o.label}</SelectItem>`
-      )
+      str +=
+        `${indent(level)}<SelectItem value="${o.value}"${o.className ? ` className="${o.className}"` : ""}>${o.label}</SelectItem>\n`
       return
     }
 
     if (isSeparator(o)) {
-      lines.push(`${indent(level)}<SelectSeparator />`)
+      str += `${indent(level)}<SelectSeparator />\n`
       return
     }
 
-    lines.push(
-      `${indent(level)}<SelectItem value="${o}">${o}</SelectItem>`
-    )
+    str += `${indent(level)}<SelectItem value="${o}">${o}</SelectItem>\n`
   })
 
-  return lines.join("\n")
+  return str.trimEnd()
 }
 
 const before = ({ options, placeholder }: Pick<afterParams, "options" | "placeholder">) => {
