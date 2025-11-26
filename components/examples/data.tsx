@@ -29,16 +29,20 @@ export const options: optionsT = [
       "grp 1",
       21,
       true,
-      { value: "banana", label: <><Banana /> Banana</> }
+      {
+        value: "banana",
+        label: <><Banana /> Banana</>,
+        className: "bg-amber-50"
+      }
     ],
   },
+  "---",
   {
     group: "Group 2",
     options: [
       "grp 2",
       22
     ],
-    className: "bg-amber-50",
   },
 ]
 
