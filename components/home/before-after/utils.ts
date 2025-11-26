@@ -4,7 +4,7 @@ const INDENT_SIZE = 2
 
 export const indent = (level: number) => " ".repeat(level * INDENT_SIZE)
 
-export function filterOpt(options: optionsT, components: string[]) {
+export function filterOpt(options: optionsT, components: string[], hasGroupCls: boolean = false) {
   const hasLabelValIcon = components.includes("icon / diff value than label")
   const hasTargetStyle = components.includes("target style")
   const hasSeperator = components.includes("seperator")
@@ -18,7 +18,7 @@ export function filterOpt(options: optionsT, components: string[]) {
       return {
         ...rest,
         options: filterOpt(o.options, components),
-        ...(hasTargetStyle && { className }),
+        ...(hasGroupCls && { className }),
       }
     }
 

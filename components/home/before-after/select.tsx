@@ -5,7 +5,7 @@ import { SelectWrapper } from "@/components/ui/select"
 
 import { isGroup, isOption, isSeparator } from "@/lib/utils"
 import { options as optionsStr } from "./data"
-import { filterOpt, indent } from "@/components/home/before-after/before-after"
+import { filterOpt, indent } from "./utils"
 import { options } from "../../examples/data"
 
 import Wrapper from "./wrapper";
@@ -26,10 +26,10 @@ const settings: settingObjT = {
     type: "checkbox",
     default: [],
     options: [
-      "seperator",
       "icon / diff value than label",
       "group",
       "target style",
+      "seperator",
     ]
   },
   groupCls: {
@@ -61,7 +61,7 @@ function trans(options: optionsT, level = 2): string {
     }
 
     if (isSeparator(o)) {
-      lines.push("", `${indent(level)}<SelectSeparator />`, "")
+      lines.push(`${indent(level)}<SelectSeparator />`)
       return
     }
 
@@ -73,10 +73,7 @@ function trans(options: optionsT, level = 2): string {
   return lines.join("\n")
 }
 
-const newBase = ({
-  options,
-  placeholder,
-}: Pick<afterParams, "options" | "placeholder">) => {
+const before = ({ options, placeholder }: Pick<afterParams, "options" | "placeholder">) => {
   return `<Select>
   <SelectTrigger>
     <SelectValue placeholder="${placeholder}" />
@@ -125,13 +122,13 @@ export function SelectDemo() {
 
   const val = form.watch()
 
-  const base = filterOpt(optionsStr, val.components)
+  const base = filterOpt(optionsStr, val.components, val.groupCls)
 
   return (
     <Wrapper
       form={form}
       settings={settings}
-      before={newBase({
+      before={before({
         options: base,
         placeholder: val.placeholder
       })}

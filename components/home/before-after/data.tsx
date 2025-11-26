@@ -20,6 +20,7 @@ export const options: optionsT = [
   "---",
   {
     group: "Group 1",
+    className: "bg-pink-100",
     options: [
       "grp 1",
       21,
@@ -34,6 +35,7 @@ export const options: optionsT = [
   "---",
   {
     group: "Group 2",
+    className: "bg-pink-100",
     options: [
       "grp 2",
       22
