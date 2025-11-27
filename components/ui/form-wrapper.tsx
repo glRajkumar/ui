@@ -79,7 +79,7 @@ export function RadioWrapper<T extends FieldValues>({ name, label, control, clas
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("relative", className)}>
+        <FormItem className={className}>
           {label && <FormLabel>{label}</FormLabel>}
 
           <FormControl>
@@ -139,7 +139,7 @@ export function CheckboxWrapper<T extends FieldValues>({
         }
 
         return (
-          <FormItem className={cn("relative", className)}>
+          <FormItem className={className}>
             {label && <FormLabel>{label}</FormLabel>}
 
             <div className="flex items-center flex-wrap gap-4">
@@ -208,7 +208,7 @@ export function SelectWrapper<T extends FieldValues>({ name, label, control, cla
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("relative", className)}>
+        <FormItem className={className}>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
             <SelectPrimitiveWrapper
@@ -282,7 +282,7 @@ export function ComboboxWrapper<T extends FieldValues>({ name, label, control, c
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("relative", className)}>
+        <FormItem className={className}>
           {label && <FormLabel>{label}</FormLabel>}
 
           <FormControl>
@@ -308,7 +308,7 @@ export function MultiSelectComboboxWrapper<T extends FieldValues>({ name, label,
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("relative", className)}>
+        <FormItem className={className}>
           {label && <FormLabel>{label}</FormLabel>}
 
           <FormControl>

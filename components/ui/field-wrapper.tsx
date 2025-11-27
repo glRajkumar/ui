@@ -74,8 +74,8 @@ export function RadioWrapper({ name, label, error, invalid, className, options, 
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={cn("relative", className)} data-invalid={isInvalid}>
-      {label && <FieldLabel>{label}</FieldLabel>}
+    <Field className={className} data-invalid={isInvalid}>
+      {label && <FieldLabel htmlFor={`${name}-0`}>{label}</FieldLabel>}
       <RadioGroup
         value={value ? String(value) : undefined}
         onValueChange={(val) => onValueChange?.(parseAllowedPrimitive(val))}
@@ -113,8 +113,8 @@ export function CheckboxWrapper({ name, label, error, invalid, className, option
   }
 
   return (
-    <Field className={cn("relative", className)} data-invalid={isInvalid}>
-      {label && <FieldLabel>{label}</FieldLabel>}
+    <Field className={className} data-invalid={isInvalid}>
+      {label && <FieldLabel htmlFor={`${name}-0`}>{label}</FieldLabel>}
       <div className="flex items-center flex-wrap gap-4" aria-invalid={isInvalid}>
         {options.map((option, i) => {
           const val = getValue(option)
@@ -172,10 +172,11 @@ export function SelectWrapper({ name, label, error, invalid, className, options,
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={cn("relative", className)} data-invalid={isInvalid}>
+    <Field className={className} data-invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <SelectPrimitiveWrapper
         {...props}
+        id={name}
         options={options}
         value={value ? String(value) : undefined}
         placeholder={placeholder ?? `Select ${label}`}
@@ -235,10 +236,11 @@ export function ComboboxWrapper({ name, label, error, invalid, className, placeh
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={cn("relative", className)} data-invalid={isInvalid}>
+    <Field className={className} data-invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <Combobox
         {...rest}
+        id={name}
         value={value}
         placeholder={placeholder || `Select ${label}`}
         onValueChange={onValueChange}
@@ -254,10 +256,11 @@ export function MultiSelectComboboxWrapper({ name, label, error, invalid, classN
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={cn("relative", className)} data-invalid={isInvalid}>
+    <Field className={className} data-invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <MultiSelectCombobox
         {...rest}
+        id={name}
         value={value}
         placeholder={placeholder || `Select ${label}`}
         onValueChange={onValueChange}
