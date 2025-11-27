@@ -1,18 +1,21 @@
-"use client";
+'use client'
 
-import { Controller, Control, FieldValues, Path } from "react-hook-form";
+import { Controller, Control, FieldValues, Path } from 'react-hook-form'
+
+import { type multiSelectComboboxProps, type comboboxProps } from './combobox'
+import { type selectProps } from './select'
 
 import {
-  InputWrapper,
-  TextareaWrapper,
-  RadioWrapper,
-  CheckboxWrapper,
-  SwitchWrapper,
-  SelectWrapper,
-  DatePickerWrapper,
-  ComboboxWrapper,
-  MultiSelectComboboxWrapper
-} from "./field-wrapper";
+  InputWrapper as Input,
+  TextareaWrapper as Textarea,
+  RadioWrapper as Radio,
+  CheckboxWrapper as Checkbox,
+  SwitchWrapper as Switch,
+  SelectWrapper as Select,
+  DatePickerWrapper as DatePicker,
+  ComboboxWrapper as Combobox,
+  MultiSelectComboboxWrapper as MultiSelectCombobox,
+} from './field-wrapper'
 
 type BaseProps<T extends FieldValues> = {
   name: Path<T>
@@ -22,25 +25,16 @@ type BaseProps<T extends FieldValues> = {
 }
 
 type InputProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name' | 'defaultValue'>
-
-export function InputController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  ...props
-}: InputProps<T>) {
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name' | 'value' | 'onChange' | 'onBlur'>
+export function InputWrapper<T extends FieldValues>({ name, control, ...props }: InputProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <InputWrapper
+        <Input
           {...props}
           name={name}
-          label={label}
-          className={className}
           value={field.value ?? ''}
           onChange={field.onChange}
           onBlur={field.onBlur}
@@ -52,26 +46,17 @@ export function InputController<T extends FieldValues>({
   )
 }
 
-type TextareaControllerProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'name' | 'defaultValue'>
-
-export function TextareaController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  ...props
-}: TextareaControllerProps<T>) {
+type TextareaProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'name' | 'value' | 'onChange' | 'onBlur'>
+export function TextareaWrapper<T extends FieldValues>({ name, control, ...props }: TextareaProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <TextareaWrapper
+        <Textarea
           {...props}
           name={name}
-          label={label}
-          className={className}
           value={field.value ?? ''}
           onChange={field.onChange}
           onBlur={field.onBlur}
@@ -83,27 +68,18 @@ export function TextareaController<T extends FieldValues>({
   )
 }
 
-type RadioControllerProps<T extends FieldValues> = BaseProps<T> & {
+type RadioProps<T extends FieldValues> = BaseProps<T> & {
   options: (allowedPrimitiveT | optionT)[]
 }
-
-export function RadioController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  options
-}: RadioControllerProps<T>) {
+export function RadioWrapper<T extends FieldValues>({ name, control, ...props }: RadioProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <RadioWrapper
+        <Radio
+          {...props}
           name={name}
-          label={label}
-          className={className}
-          options={options}
           value={field.value}
           onValueChange={field.onChange}
           error={fieldState.error}
@@ -114,27 +90,18 @@ export function RadioController<T extends FieldValues>({
   )
 }
 
-type CheckboxControllerProps<T extends FieldValues> = BaseProps<T> & {
+type CheckboxProps<T extends FieldValues> = BaseProps<T> & {
   options: (allowedPrimitiveT | optionT)[]
 }
-
-export function CheckboxController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  options
-}: CheckboxControllerProps<T>) {
+export function CheckboxWrapper<T extends FieldValues>({ name, control, ...props }: CheckboxProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <CheckboxWrapper
+        <Checkbox
+          {...props}
           name={name}
-          label={label}
-          className={className}
-          options={options}
           value={field.value ?? []}
           onValueChange={field.onChange}
           error={fieldState.error}
@@ -145,23 +112,16 @@ export function CheckboxController<T extends FieldValues>({
   )
 }
 
-type SwitchControllerProps<T extends FieldValues> = BaseProps<T>
-
-export function SwitchController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label
-}: SwitchControllerProps<T>) {
+type SwitchProps<T extends FieldValues> = BaseProps<T>
+export function SwitchWrapper<T extends FieldValues>({ name, control, ...props }: SwitchProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <SwitchWrapper
+        <Switch
+          {...props}
           name={name}
-          label={label}
-          className={className}
           checked={field.value ?? false}
           onCheckedChange={field.onChange}
           error={fieldState.error}
@@ -172,30 +132,16 @@ export function SwitchController<T extends FieldValues>({
   )
 }
 
-type SelectControllerProps<T extends FieldValues> = BaseProps<T> & {
-  options: (allowedPrimitiveT | optionT)[]
-  placeholder?: string
-}
-
-export function SelectController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  options,
-  placeholder
-}: SelectControllerProps<T>) {
+type SelectProps<T extends FieldValues> = BaseProps<T> & Omit<selectProps, 'value' | 'onValueChange'>
+export function SelectWrapper<T extends FieldValues>({ name, control, ...props }: SelectProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <SelectWrapper
+        <Select
+          {...props}
           name={name}
-          label={label}
-          className={className}
-          options={options}
-          placeholder={placeholder}
           value={field.value}
           onValueChange={field.onChange}
           error={fieldState.error}
@@ -206,26 +152,17 @@ export function SelectController<T extends FieldValues>({
   )
 }
 
-type DatePickerControllerProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof DatePickerWrapper>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'>
-
-export function DatePickerController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  ...calendarProps
-}: DatePickerControllerProps<T>) {
+type DatePickerProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof DatePicker>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'>
+export function DatePickerWrapper<T extends FieldValues>({ name, control, ...props }: DatePickerProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <DatePickerWrapper
-          {...calendarProps}
+        <DatePicker
+          {...props}
           name={name}
-          label={label}
-          className={className}
           value={field.value}
           onSelect={field.onChange}
           error={fieldState.error}
@@ -236,30 +173,16 @@ export function DatePickerController<T extends FieldValues>({
   )
 }
 
-type ComboboxControllerProps<T extends FieldValues> = BaseProps<T> & {
-  options: (allowedPrimitiveT | optionT)[]
-  placeholder?: string
-}
-
-export function ComboboxController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  options,
-  placeholder,
-}: ComboboxControllerProps<T>) {
+type ComboboxProps<T extends FieldValues> = BaseProps<T> & Omit<comboboxProps, 'value' | 'onValueChange'>
+export function ComboboxWrapper<T extends FieldValues>({ name, control, ...props }: ComboboxProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <ComboboxWrapper
+        <Combobox
+          {...props}
           name={name}
-          label={label}
-          className={className}
-          options={options}
-          placeholder={placeholder}
           value={field.value}
           onValueChange={field.onChange}
           error={fieldState.error}
@@ -270,30 +193,16 @@ export function ComboboxController<T extends FieldValues>({
   )
 }
 
-type MultiSelectComboboxControllerProps<T extends FieldValues> = BaseProps<T> & {
-  options: (allowedPrimitiveT | optionT)[]
-  placeholder?: string
-}
-
-export function MultiSelectComboboxController<T extends FieldValues>({
-  name,
-  control,
-  className,
-  label,
-  options,
-  placeholder,
-}: MultiSelectComboboxControllerProps<T>) {
+type MultiSelectComboboxProps<T extends FieldValues> = BaseProps<T> & Omit<multiSelectComboboxProps, 'value' | 'onValueChange'>
+export function MultiSelectComboboxWrapper<T extends FieldValues>({ name, control, ...props }: MultiSelectComboboxProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <MultiSelectComboboxWrapper
+        <MultiSelectCombobox
+          {...props}
           name={name}
-          label={label}
-          className={className}
-          options={options}
-          placeholder={placeholder}
           value={field.value ?? []}
           onValueChange={field.onChange}
           error={fieldState.error}

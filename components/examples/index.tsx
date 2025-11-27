@@ -3,6 +3,7 @@ import { ToggleGroupExample } from "./toggle-group";
 import { AlertDialogExample } from "./alert-dialog";
 import { BreadcrumbExample } from "./breadcrumb";
 import { PaginationExample } from "./pagination";
+import { Field_RHF_Example } from "./field-rhf";
 import { DataTableExample } from "./data-table";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown-menu";
@@ -16,6 +17,7 @@ import { DialogExample } from "./dialog";
 import { DrawerExample } from "./drawer";
 import { SheetExample } from "./sheet";
 import { EmptyExample } from "./empty";
+import { FieldExample } from "./field";
 import { CardExample } from "./card";
 import { TabsExample } from "./tabs";
 import { FormExample } from "./form";
@@ -194,6 +196,22 @@ export function PaginationEx() {
   return (
     <Wrapper path="/components/examples/pagination.tsx">
       <PaginationExample />
+    </Wrapper>
+  )
+}
+
+export function FieldEx() {
+  return (
+    <Wrapper path="/components/examples/field.tsx">
+      <FieldExample />
+    </Wrapper>
+  )
+}
+
+export function Field_RHF_Ex() {
+  return (
+    <Wrapper path="/components/examples/field-rhf.tsx">
+      <Field_RHF_Example />
     </Wrapper>
   )
 }

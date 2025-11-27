@@ -18,7 +18,7 @@ import { Button } from "./button";
 import { Switch } from './switch';
 import { Input } from "./input";
 
-type BaseWrapperProps = {
+type BaseProps = {
   name: string
   label?: React.ReactNode
   error?: { message?: string }
@@ -26,12 +26,8 @@ type BaseWrapperProps = {
   className?: string
 }
 
-type InputWrapperProps = BaseWrapperProps & React.InputHTMLAttributes<HTMLInputElement> & {
-  value?: string | number
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
-
-export function InputWrapper({ name, label, error, invalid, className, type = "text", placeholder, value, onChange, ...props }: InputWrapperProps) {
+type InputProps = BaseProps & React.InputHTMLAttributes<HTMLInputElement>
+export function InputWrapper({ name, label, error, invalid, className, type = "text", placeholder, ...props }: InputProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -42,8 +38,6 @@ export function InputWrapper({ name, label, error, invalid, className, type = "t
         name={name}
         type={type}
         placeholder={placeholder || `Enter ${label}`}
-        value={value}
-        onChange={onChange}
         aria-invalid={isInvalid}
         {...props}
       />
@@ -52,12 +46,8 @@ export function InputWrapper({ name, label, error, invalid, className, type = "t
   )
 }
 
-type TextareaWrapperProps = BaseWrapperProps & React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  value?: string
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-}
-
-export function TextareaWrapper({ name, label, error, invalid, className, placeholder, value, onChange, ...rest }: TextareaWrapperProps) {
+type TextareaProps = BaseProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>
+export function TextareaWrapper({ name, label, error, invalid, className, placeholder, ...rest }: TextareaProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -67,8 +57,6 @@ export function TextareaWrapper({ name, label, error, invalid, className, placeh
         id={name}
         name={name}
         placeholder={placeholder || `Enter ${label}`}
-        value={value}
-        onChange={onChange}
         aria-invalid={isInvalid}
         {...rest}
       />
@@ -77,13 +65,12 @@ export function TextareaWrapper({ name, label, error, invalid, className, placeh
   )
 }
 
-type RadioWrapperProps = BaseWrapperProps & {
+type RadioProps = BaseProps & {
   options: (allowedPrimitiveT | optionT)[]
   value?: allowedPrimitiveT
   onValueChange?: (value: allowedPrimitiveT) => void
 }
-
-export function RadioWrapper({ name, label, error, invalid, className, options, value, onValueChange }: RadioWrapperProps) {
+export function RadioWrapper({ name, label, error, invalid, className, options, value, onValueChange }: RadioProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -109,13 +96,12 @@ export function RadioWrapper({ name, label, error, invalid, className, options, 
   )
 }
 
-type CheckboxWrapperProps = BaseWrapperProps & {
+type CheckboxProps = BaseProps & {
   options: (allowedPrimitiveT | optionT)[]
   value?: allowedPrimitiveT[]
   onValueChange?: (value: allowedPrimitiveT[]) => void
 }
-
-export function CheckboxWrapper({ name, label, error, invalid, className, options, value = [], onValueChange }: CheckboxWrapperProps) {
+export function CheckboxWrapper({ name, label, error, invalid, className, options, value = [], onValueChange }: CheckboxProps) {
   const isInvalid = invalid || !!error
 
   const toggleValue = (v: allowedPrimitiveT) => {
@@ -154,12 +140,11 @@ export function CheckboxWrapper({ name, label, error, invalid, className, option
   )
 }
 
-type SwitchWrapperProps = BaseWrapperProps & {
+type SwitchProps = BaseProps & {
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
 }
-
-export function SwitchWrapper({ name, label, error, invalid, className, checked, onCheckedChange }: SwitchWrapperProps) {
+export function SwitchWrapper({ name, label, error, invalid, className, checked, onCheckedChange }: SwitchProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -179,12 +164,11 @@ export function SwitchWrapper({ name, label, error, invalid, className, checked,
   )
 }
 
-type SelectWrapperProps = BaseWrapperProps & Omit<selectProps, "value" | "onValueChange"> & {
-  value?: string | number | boolean
+type SelectProps = BaseProps & Omit<selectProps, "value" | "onValueChange"> & {
+  value?: allowedPrimitiveT
   onValueChange?: (value: allowedPrimitiveT) => void
 }
-
-export function SelectWrapper({ name, label, error, invalid, className, options, placeholder, value, onValueChange, ...props }: SelectWrapperProps) {
+export function SelectWrapper({ name, label, error, invalid, className, options, placeholder, value, onValueChange, ...props }: SelectProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -203,12 +187,11 @@ export function SelectWrapper({ name, label, error, invalid, className, options,
   )
 }
 
-type DatePickerWrapperProps = BaseWrapperProps & Omit<React.ComponentProps<typeof Calendar>, "selected" | "onSelect"> & {
+type DatePickerProps = BaseProps & Omit<React.ComponentProps<typeof Calendar>, "selected" | "onSelect"> & {
   value?: Date
   onSelect?: (date: Date | undefined) => void
 }
-
-export function DatePickerWrapper({ name, label, error, invalid, className, value, onSelect, ...calendarProps }: DatePickerWrapperProps) {
+export function DatePickerWrapper({ name, label, error, invalid, className, value, onSelect, ...calendarProps }: DatePickerProps) {
   const [open, setOpen] = useState(false)
   const isInvalid = invalid || !!error
 
@@ -247,12 +230,8 @@ export function DatePickerWrapper({ name, label, error, invalid, className, valu
   )
 }
 
-type ComboboxWrapperProps = BaseWrapperProps & Omit<comboboxProps, "value" | "onValueChange"> & {
-  value?: allowedPrimitiveT
-  onValueChange?: (value: allowedPrimitiveT) => void
-}
-
-export function ComboboxWrapper({ name, label, error, invalid, className, placeholder, value, onValueChange, ...rest }: ComboboxWrapperProps) {
+type ComboboxProps = BaseProps & comboboxProps
+export function ComboboxWrapper({ name, label, error, invalid, className, placeholder, value, onValueChange, ...rest }: ComboboxProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -270,12 +249,8 @@ export function ComboboxWrapper({ name, label, error, invalid, className, placeh
   )
 }
 
-type MultiSelectComboboxWrapperProps = BaseWrapperProps & Omit<multiSelectComboboxProps, "value" | "onValueChange"> & {
-  value?: allowedPrimitiveT[]
-  onValueChange?: (value: allowedPrimitiveT[]) => void
-}
-
-export function MultiSelectComboboxWrapper({ name, label, error, invalid, className, placeholder, value, onValueChange, ...rest }: MultiSelectComboboxWrapperProps) {
+type MultiSelectComboboxProps = BaseProps & multiSelectComboboxProps
+export function MultiSelectComboboxWrapper({ name, label, error, invalid, className, placeholder, value, onValueChange, ...rest }: MultiSelectComboboxProps) {
   const isInvalid = invalid || !!error
 
   return (

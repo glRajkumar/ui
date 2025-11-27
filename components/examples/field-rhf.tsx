@@ -12,10 +12,10 @@ import {
   CheckboxWrapper,
   DatePickerWrapper,
   MultiSelectComboboxWrapper,
-} from "@/components/ui/form-wrapper"
+} from "@/components/ui/field-wrapper-rhf"
 import { Button } from "@/components/ui/button"
 
-export function FormExample() {
+export function Field_RHF_Example() {
   const form = useForm({
     defaultValues: {
       name: "",

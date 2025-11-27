@@ -1,0 +1,298 @@
+---
+title: Field Wrapper
+description: Reusable Field field wrappers built on top of shadcn/ui
+---
+
+import { FieldEx } from "@/components/examples";
+
+<FieldEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/field-wrapper
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Add following shadcn components: `select`, `command`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
+
+Update same components from our site.
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/field-wrapper.tsx"'>
+  ./components/ui/field-wrapper.tsx
+</include>
+
+</Tab>
+
+</Tabs>
+
+These wrappers automatically handle:
+
+- Label
+- Form control wiring  
+- Error messages  
+- Placeholder generation  
+- Value parsing (e.g., converting `"1"` → number)  
+
+## Usage
+
+### Basic
+```tsx
+export function Basic() {
+  const [value, setValue] = useState({
+    /* ... */
+  })
+
+  function onChange(key: string, value: allowedPrimitiveT | allowedPrimitiveT[]) {
+    setValue(prev => ({
+      ...prev,
+      [key]: value
+    }))
+  }
+
+  function onSubit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    console.log(value)
+  }
+
+  return (
+    <form
+      onSubmit={onSubit}
+    >
+    // Wrapper component
+    <Comp 
+      value={value.field}
+      onValueChange={val => onChange("field", val)}
+    />
+    </form>
+  )
+}
+```
+
+### With Errors
+```tsx
+export function Controlled() {
+  const [value, setValue] = useState({
+    /* ... */
+  })
+  const [errors, setErrors] = useState({
+    /* ... */
+  })
+
+  function onChange(key: string, value: allowedPrimitiveT | allowedPrimitiveT[]) {
+    setValue(prev => ({
+      ...prev,
+      [key]: value
+    }))
+  }
+
+  function onSubit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    console.log(value)
+  }
+
+  return (
+    <form
+      onSubmit={onSubit}
+    >
+    // Wrapper component
+    <Comp 
+      value={value.field}
+      onValueChange={val => onChange("field", val)}
+      error={errors.field ? { message: errors.field }: undefined}
+      invalid={!!errors.field}
+    />
+    </form>
+  )
+}
+```
+
+## Reference
+
+```ts
+type BaseProps = {
+  name: string
+  label?: React.ReactNode
+  error?: { message?: string }
+  invalid?: boolean
+  className?: string
+}
+```
+
+#### InputWrapper
+
+```ts
+type InputProps = BaseProps & 
+  React.InputHTMLAttributes<HTMLInputElement>
+```
+
+```tsx
+<InputWrapper
+  name="username"
+  label="Username"
+  value={value}
+  onChange={e => onChange(e.target.value)}
+/>
+```
+
+#### TextareaWrapper
+
+```ts
+type TextareaProps = BaseProps & 
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+```
+
+```tsx
+<TextareaWrapper
+  name="bio"
+  label="Bio"
+  value={value}
+  onChange={e => onChange(e.target.value)}
+/>
+```
+
+#### RadioWrapper
+
+```ts
+type RadioProps = BaseProps & {
+  options: (allowedPrimitiveT | optionT)[]
+  value?: allowedPrimitiveT
+  onValueChange?: (value: allowedPrimitiveT) => void
+}
+```
+
+```tsx
+<RadioWrapper
+  name="gender"
+  label="Gender"
+  options={["male", "female", "other"]}
+  value={value}
+  onValueChange={val => onChange(val)}
+/>
+```
+
+
+#### CheckboxWrapper
+
+```ts
+type CheckboxProps = BaseProps & {
+  options: (allowedPrimitiveT | optionT)[]
+  value?: allowedPrimitiveT[]
+  onValueChange?: (value: allowedPrimitiveT[]) => void
+}
+```
+
+```tsx
+<CheckboxWrapper
+  name="interest"
+  label="Interest"
+  options={["Book reading", "Music", "TV", "Movie"]}
+  value={value}
+  onValueChange={val => onChange(val)}
+/>
+```
+
+#### SwitchWrapper
+
+```ts
+type SwitchProps = BaseProps & {
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
+}
+```
+
+```tsx
+<SwitchWrapper
+  name="isCompleted"
+  label="Is completed"
+  checked={value}
+  onCheckedChange={val => onChange(val)}
+/>
+```
+
+#### SelectWrapper
+
+```ts
+type SelectProps = BaseProps & Omit<selectProps, "value" | "onValueChange"> & {
+  value?: allowedPrimitiveT
+  onValueChange?: (value: allowedPrimitiveT) => void
+}
+```
+
+```tsx
+<SelectWrapper
+  name="country"
+  label="Country"
+  options={[
+    { value: "in", label: "India" },
+    { value: "us", label: "USA" }
+  ]}
+  value={value}
+  onValueChange={val => onChange(val)}
+/>
+```
+
+#### DatePickerWrapper
+
+```ts
+type DatePickerProps = BaseProps & Omit<React.ComponentProps<typeof Calendar>, "selected" | "onSelect"> & {
+  value?: Date
+  onSelect?: (date: Date | undefined) => void
+}
+```
+
+```tsx
+<DatePickerWrapper
+  name="dob"
+  label="Date of Birth"
+  value={value}
+  onSelect={val => onChange(val)}
+/>
+```
+
+#### ComboboxWrapper
+
+```ts
+type ComboboxProps = BaseProps & comboboxProps
+```
+
+```tsx
+<ComboboxWrapper
+  name="fruit"
+  label="Favorite Fruit"
+  options={["Apple", "Banana", "Mango"]}
+  value={value}
+  onValueChange={val => onChange(val)}
+/>
+```
+
+#### MultiSelectComboboxWrapper
+
+```ts
+type MultiSelectComboboxProps = BaseProps & multiSelectComboboxProps
+```
+
+```tsx
+<MultiSelectComboboxWrapper
+  name="hobbies"
+  label="Hobbies"
+  options={["Music", "Sports", "Travel"]}
+  value={value}
+  onValueChange={val => onChange(val)}
+/>
+```
+
+## Related Components
+
+- [Shadcn Field](https://ui.shadcn.com/docs/components/field)
