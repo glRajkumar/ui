@@ -6,3 +6,294 @@ description: Reusable Field field wrappers built on top of shadcn/ui with tansta
 import { Field_TF_Ex } from "@/components/examples";
 
 <Field_TF_Ex />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/field-wrapper-tf
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Add following shadcn components: `select`, `command`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
+
+Update same components from our site.
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/field-wrapper-tf.tsx"'>
+  ./components/ui/field-wrapper-tf.tsx
+</include>
+
+</Tab>
+
+</Tabs>
+
+## Usage
+
+### Basic
+You can use `field-wrappers` directly without relying on this component. 
+
+```tsx
+import { useForm } from '@tanstack/react-form'
+
+import { InputWrapper } from '@/components/ui/field-wrapper'
+
+export function Basic() {
+  type FormData = {/* ... */}
+  const defaultValues: FormData = {/* ... */}
+
+  const form = useForm({
+    defaultValues,
+    onSubmit: async ({ value }) => {
+      console.log('Form submitted:', value)
+    },
+  })
+
+  return (
+    <form
+      onSubmit={(e) => {
+      e.preventDefault()
+      form.handleSubmit()
+    }}
+    >
+    // for example used InputWrapper from field-wrappers
+      <form.Field
+        name="name"
+        children={({ state, handleChange }) => (
+          <InputWrapper
+            name="name"
+            value={state.value}
+            onChange={(e) => handleChange(e.target.value)}
+            {...otherProps}
+          />
+        )}
+      />
+    </form>
+  )
+}
+```
+
+Integration with `field-wrapper-tf`, these components will handle `value`, `onChange` and `error states`, etc.
+
+```tsx
+import { useAppForm } from '@/components/ui/field-wrapper-tf'
+
+export function Basic() {
+  type FormData = {/* ... */}
+  const defaultValues: FormData = {/* ... */}
+
+  const form = useAppForm({
+    defaultValues,
+    onSubmit: async ({ value }) => {
+      console.log('Form submitted:', value)
+    },
+  })
+
+  return (
+    <form
+      onSubmit={(e) => {
+      e.preventDefault()
+      form.handleSubmit()
+    }}
+    >
+    // Wrapper component
+      <form.AppField
+        name="name"
+      >
+        {(field) => (
+          <field.InputField // you will get suggestions for other components
+            label="First Name"
+            {...otherProps}
+          />
+        )}
+      </form.AppField>
+    </form>
+  )
+}
+```
+
+## Reference
+
+#### InputField
+
+```ts
+type inputFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField name="firstName">
+  {(field) => (
+    <field.InputField
+      label="First Name"
+      placeholder="Enter your first name"
+    />
+  )}
+</form.AppField>
+```
+
+#### TextareaField
+
+```ts
+type textareaFieldProps = Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange' | 'onBlur'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField name="bio">
+  {(field) => (
+    <field.TextareaField
+      label="Bio"
+      placeholder="Tell us about yourself"
+      rows={4}
+    />
+  )}
+</form.AppField>
+```
+
+#### RadioField
+
+```ts
+type radioFieldProps = {
+  label?: React.ReactNode
+  options: (allowedPrimitiveT | optionT)[]
+  className?: string
+}
+```
+
+```tsx
+<form.AppField name="role">
+  {(field) => (
+    <field.RadioField
+      label="Role"
+      options={['Developer', 'Designer', 'Manager', 'Other']}
+    />
+  )}
+</form.AppField>
+```
+
+#### CheckboxField
+Checkbox also shares same props as `radioFieldProps`
+
+```tsx
+<form.AppField name="hobbies">
+  {(field) => (
+    <field.CheckboxField
+      label="Hobbies"
+      options={['Reading', 'Gaming', 'Sports', 'Music', 'Travel']}
+    />
+  )}
+</form.AppField>
+```
+
+#### SwitchField
+
+```ts
+type switchFieldProps = {
+  label?: React.ReactNode
+  className?: string
+}
+```
+
+```tsx
+<form.AppField name="newsletter">
+  {(field) => (
+    <field.SwitchField label="Subscribe to newsletter" />
+  )}
+</form.AppField>
+```
+
+#### SelectField
+
+```ts
+type selectFieldProps = Omit<selectProps, 'value' | 'onValueChange'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField name="country">
+  {(field) => (
+    <field.SelectField
+      label="Country"
+      options={['USA', 'UK', 'Canada', 'Australia', 'India']}
+      placeholder="Select your country"
+    />
+  )}
+</form.AppField>
+```
+
+#### DatePickerField
+
+```ts
+type datePickerFieldProps = Omit<React.ComponentProps<typeof DatePicker>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField name="birthDate">
+  {(field) => (
+    <field.DatePickerField
+      label="Birth Date"
+    />
+  )}
+</form.AppField>
+```
+
+#### ComboboxField
+
+```ts
+type comboboxFieldProps = Omit<comboboxProps, 'value' | 'onValueChange' | 'name'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField name="country">
+  {(field) => (
+    <field.ComboboxField
+      label="Country"
+      options={['USA', 'UK', 'Canada', 'Australia', 'India']}
+      placeholder="Select your country"
+    />
+  )}
+</form.AppField>
+```
+
+#### MultiSelectComboboxField
+
+```ts
+type multiSelectComboboxFieldProps = Omit<multiSelectComboboxProps, 'value' | 'onValueChange' | 'name'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField name="country">
+  {(field) => (
+    <field.MultiSelectComboboxField
+      label="Country"
+      options={['USA', 'UK', 'Canada', 'Australia', 'India']}
+      placeholder="Select your country"
+    />
+  )}
+</form.AppField>
+```
+
+## Related Components
+
+- [Shadcn Field](https://ui.shadcn.com/docs/components/field)
+- [Tanstack Form](https://tanstack.com/form/latest/docs/overview)
+

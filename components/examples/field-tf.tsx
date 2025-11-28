@@ -145,8 +145,6 @@ export function Field_TF_Example() {
         {(field) => (
           <field.DatePickerField
             label="Birth Date"
-            fromYear={1950}
-            toYear={2024}
           />
         )}
       </form.AppField>
