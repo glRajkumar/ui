@@ -4,6 +4,7 @@ import { AlertDialogExample } from "./alert-dialog";
 import { BreadcrumbExample } from "./breadcrumb";
 import { PaginationExample } from "./pagination";
 import { Field_RHF_Example } from "./field-rhf";
+import { Field_TF_Example } from "./field-tf";
 import { DataTableExample } from "./data-table";
 import { AccordionExample } from "./accordion";
 import { DropdownExample } from "./dropdown-menu";
@@ -212,6 +213,14 @@ export function Field_RHF_Ex() {
   return (
     <Wrapper path="/components/examples/field-rhf.tsx">
       <Field_RHF_Example />
+    </Wrapper>
+  )
+}
+
+export function Field_TF_Ex() {
+  return (
+    <Wrapper path="/components/examples/field-tf.tsx">
+      <Field_TF_Example />
     </Wrapper>
   )
 }

@@ -1,287 +1,238 @@
-"use client";
+'use client'
 
-import { ReactNode } from 'react';
+import { createFormHookContexts, createFormHook } from '@tanstack/react-form'
+
+import { type multiSelectComboboxProps, type comboboxProps } from './combobox'
+import { type selectProps } from './select'
 
 import {
-  InputWrapper,
-  TextareaWrapper,
-  RadioWrapper,
-  CheckboxWrapper,
-  SwitchWrapper,
-  SelectWrapper,
-  DatePickerWrapper,
-  ComboboxWrapper,
-  MultiSelectComboboxWrapper
-} from "./field-wrapper";
+  InputWrapper as Input,
+  TextareaWrapper as Textarea,
+  RadioWrapper as Radio,
+  CheckboxWrapper as Checkbox,
+  SwitchWrapper as Switch,
+  SelectWrapper as Select,
+  DatePickerWrapper as DatePicker,
+  ComboboxWrapper as Combobox,
+  MultiSelectComboboxWrapper as MultiSelectCombobox,
+} from './field-wrapper'
 
-type BaseFieldProps<TFormData, TName extends keyof TFormData> = {
-  form: any
-  name: TName
-  label?: ReactNode
+export const { fieldContext, useFieldContext, formContext, useFormContext } =
+  createFormHookContexts()
+
+type inputFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur'> & {
+  label?: React.ReactNode
+}
+function InputField(props: inputFieldProps) {
+  const field = useFieldContext<string>()
+
+  return (
+    <Input
+      {...props}
+      name={field.name}
+      value={field.state.value ?? ''}
+      onChange={(e) => field.handleChange(e.target.value)}
+      onBlur={field.handleBlur}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
+  )
+}
+
+type textareaFieldProps = Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange' | 'onBlur'> & {
+  label?: React.ReactNode
+}
+function TextareaField(props: textareaFieldProps) {
+  const field = useFieldContext<string>()
+
+  return (
+    <Textarea
+      {...props}
+      name={field.name}
+      value={field.state.value ?? ''}
+      onChange={(e) => field.handleChange(e.target.value)}
+      onBlur={field.handleBlur}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
+  )
+}
+
+type radioFieldProps = {
+  label?: React.ReactNode
+  options: (allowedPrimitiveT | optionT)[]
   className?: string
 }
+function RadioField(props: radioFieldProps) {
+  const field = useFieldContext<allowedPrimitiveT>()
 
-type InputFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> &
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name' | 'form' | 'defaultValue'>
-
-export function InputField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  ...props
-}: InputFieldProps<TFormData, TName>) {
   return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <InputWrapper
-          {...props}
-          name={String(name)}
-          label={label}
-          className={className}
-          value={(field.state.value as any) ?? ''}
-          onChange={(e) => field.handleChange(e.target.value as any)}
-          onBlur={field.handleBlur}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
+    <Radio
+      {...props}
+      name={field.name}
+      value={field.state.value}
+      onValueChange={(value) => field.handleChange(value)}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
   )
 }
 
-type TextareaFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> &
-  Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'name' | 'form' | 'defaultValue'>
+function CheckboxField(props: radioFieldProps) {
+  const field = useFieldContext<allowedPrimitiveT[]>()
 
-export function TextareaField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  ...props
-}: TextareaFieldProps<TFormData, TName>) {
   return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <TextareaWrapper
-          {...props}
-          name={String(name)}
-          label={label}
-          className={className}
-          value={(field.state.value as any) ?? ''}
-          onChange={(e) => field.handleChange(e.target.value as any)}
-          onBlur={field.handleBlur}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
+    <Checkbox
+      {...props}
+      name={field.name}
+      value={field.state.value ?? []}
+      onValueChange={(value) => field.handleChange(value)}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
   )
 }
 
-type RadioFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> & {
-  options: (allowedPrimitiveT | optionT)[]
+type switchFieldProps = {
+  label?: React.ReactNode
+  className?: string
 }
+function SwitchField(props: switchFieldProps) {
+  const field = useFieldContext<boolean>()
 
-export function RadioField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  options
-}: RadioFieldProps<TFormData, TName>) {
   return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <RadioWrapper
-          name={String(name)}
-          label={label}
-          className={className}
-          options={options}
-          value={field.state.value as any}
-          onValueChange={(value) => field.handleChange(value as any)}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
+    <Switch
+      {...props}
+      name={field.name}
+      checked={field.state.value ?? false}
+      onCheckedChange={(checked) => field.handleChange(checked)}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
   )
 }
 
-type CheckboxFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> & {
-  options: (allowedPrimitiveT | optionT)[]
+type selectFieldProps = Omit<selectProps, 'value' | 'onValueChange'> & {
+  label?: React.ReactNode
 }
+function SelectField(props: selectFieldProps) {
+  const field = useFieldContext<allowedPrimitiveT>()
 
-export function CheckboxField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  options
-}: CheckboxFieldProps<TFormData, TName>) {
   return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <CheckboxWrapper
-          name={String(name)}
-          label={label}
-          className={className}
-          options={options}
-          value={(field.state.value as any) ?? []}
-          onValueChange={(value) => field.handleChange(value as any)}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
+    <Select
+      {...props}
+      name={field.name}
+      value={field.state.value}
+      onValueChange={(value) => field.handleChange(value)}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
   )
 }
 
-type SwitchFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName>
+type datePickerFieldProps = Omit<React.ComponentProps<typeof DatePicker>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'> & {
+  label?: React.ReactNode
+}
+function DatePickerField(props: datePickerFieldProps) {
+  const field = useFieldContext<Date>()
 
-export function SwitchField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-}: SwitchFieldProps<TFormData, TName>) {
   return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <SwitchWrapper
-          name={String(name)}
-          label={label}
-          className={className}
-          checked={(field.state.value as any) ?? false}
-          onCheckedChange={(checked) => field.handleChange(checked as any)}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
+    <DatePicker
+      {...props}
+      name={field.name}
+      value={field.state.value}
+      onSelect={(date) => field.handleChange(date as Date)}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
   )
 }
 
-type SelectFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> & {
-  options: (allowedPrimitiveT | optionT)[]
-  placeholder?: string
+type comboboxFieldProps = Omit<comboboxProps, 'value' | 'onValueChange' | 'name'> & {
+  label?: React.ReactNode
 }
+function ComboboxField(props: comboboxFieldProps) {
+  const field = useFieldContext<allowedPrimitiveT>()
 
-export function SelectField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  options,
-  placeholder
-}: SelectFieldProps<TFormData, TName>) {
   return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <SelectWrapper
-          name={String(name)}
-          label={label}
-          className={className}
-          options={options}
-          placeholder={placeholder}
-          value={field.state.value as any}
-          onValueChange={(value) => field.handleChange(value as any)}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
+    <Combobox
+      {...props}
+      name={field.name}
+      value={field.state.value}
+      onValueChange={(value) => field.handleChange(value)}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
   )
 }
 
-type DatePickerFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> &
-  Omit<React.ComponentProps<typeof DatePickerWrapper>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'>
+type multiSelectComboboxFieldProps = Omit<multiSelectComboboxProps, 'value' | 'onValueChange' | 'name'> & {
+  label?: React.ReactNode
+}
+function MultiSelectComboboxField(props: multiSelectComboboxFieldProps) {
+  const field = useFieldContext<allowedPrimitiveT[]>()
 
-export function DatePickerField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  ...calendarProps
-}: DatePickerFieldProps<TFormData, TName>) {
   return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <DatePickerWrapper
-          {...calendarProps}
-          name={String(name)}
-          label={label}
-          className={className}
-          value={field.state.value as any}
-          onSelect={(date) => field.handleChange(date as any)}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
+    <MultiSelectCombobox
+      {...props}
+      name={field.name}
+      value={field.state.value ?? []}
+      onValueChange={(value) => field.handleChange(value)}
+      error={
+        field.state.meta.errors.length > 0
+          ? { message: field.state.meta.errors[0] }
+          : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
   )
 }
 
-type ComboboxFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> & {
-  options: (allowedPrimitiveT | optionT)[]
-  placeholder?: string
-}
-
-export function ComboboxField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  options,
-  placeholder,
-}: ComboboxFieldProps<TFormData, TName>) {
-  return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <ComboboxWrapper
-          name={String(name)}
-          label={label}
-          className={className}
-          options={options}
-          placeholder={placeholder}
-          value={field.state.value as any}
-          onValueChange={(value) => field.handleChange(value as any)}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
-  )
-}
-
-type MultiSelectComboboxFieldProps<TFormData, TName extends keyof TFormData> = BaseFieldProps<TFormData, TName> & {
-  options: (allowedPrimitiveT | optionT)[]
-  placeholder?: string
-}
-
-export function MultiSelectComboboxField<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  label,
-  className,
-  options,
-  placeholder,
-}: MultiSelectComboboxFieldProps<TFormData, TName>) {
-  return (
-    <form.Field name={name}>
-      {(field: any) => (
-        <MultiSelectComboboxWrapper
-          name={String(name)}
-          label={label}
-          className={className}
-          options={options}
-          placeholder={placeholder}
-          value={(field.state.value as any) ?? []}
-          onValueChange={(value) => field.handleChange(value as any)}
-          error={field.state.meta.errors?.[0] ? { message: field.state.meta.errors[0] } : undefined}
-          invalid={field.state.meta.errors.length > 0}
-        />
-      )}
-    </form.Field>
-  )
-}
+export const { useAppForm, withForm, withFieldGroup } = createFormHook({
+  fieldContext,
+  formContext,
+  fieldComponents: {
+    InputField,
+    TextareaField,
+    RadioField,
+    CheckboxField,
+    SwitchField,
+    SelectField,
+    DatePickerField,
+    ComboboxField,
+    MultiSelectComboboxField,
+  },
+  formComponents: {},
+})
