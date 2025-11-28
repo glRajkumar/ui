@@ -355,6 +355,9 @@
       "type": "registry:ui",
       "title": "Field with RHF",
       "description": "Field componet with wrapper with RHF",
+      "dependencies": [
+        "react-hook-form"
+      ],
       "registryDependencies": [
         "field",
         "combobox",
@@ -397,6 +400,60 @@
         },
         {
           "path": "components/ui/field-wrapper-rhf.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field-wrapper-tf",
+      "type": "registry:ui",
+      "title": "Field with TF",
+      "description": "Field componet with wrapper with TF",
+      "dependencies": [
+        "@tanstack/react-form"
+      ],
+      "registryDependencies": [
+        "field",
+        "combobox",
+        "select",
+        "popover",
+        "radio-group",
+        "calendar",
+        "textarea",
+        "button",
+        "input",
+        "checkbox",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        },
+        {
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/select.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/field-wrapper.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/field-wrapper-tf.tsx",
           "type": "registry:ui"
         }
       ]
