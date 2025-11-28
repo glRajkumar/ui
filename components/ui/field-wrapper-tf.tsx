@@ -1,7 +1,7 @@
 'use client'
 
 import { type ComponentProps } from 'react'
-import { createFormHookContexts, createFormHook, type AppFieldExtendedReactFormApi } from '@tanstack/react-form'
+import { createFormHookContexts, createFormHook, type AppFieldExtendedReactFormApi, type DeepKeys } from '@tanstack/react-form'
 
 import { type multiSelectComboboxProps, type comboboxProps } from './combobox'
 import { type selectProps } from './select'
@@ -238,142 +238,163 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   formComponents: {},
 })
 
-type AnyFormApi = AppFieldExtendedReactFormApi<any, any, any, any, any, any, any, any, any, any, any, any, any, any>
+// type FieldComponentProps<T> = {
+//   label?: React.ReactNode
+//   className?: string
+// } & Partial<{
+//   error: { message?: string }
+//   invalid: boolean
+// }> & Omit<T, 'form'>
 
-type AppFieldPropsWithoutName = Omit<
-  ComponentProps<AnyFormApi['AppField']>,
-  'children' | 'name'
->
+// type FormApiWithSchema<TFormData> = AppFieldExtendedReactFormApi<
+//   TFormData,
+//   any, any, any, any, any,
+//   any, any, any, any,
+//   any, any, any, any
+// >
 
-type BaseProps<TFormData, TName extends keyof TFormData> = {
-  form: AnyFormApi
-  name: TName
-  appFieldProps?: AppFieldPropsWithoutName
+// type BaseProps<TFormData, TName extends DeepKeys<TFormData>> = {
+//   form: FormApiWithSchema<TFormData>
+//   name: TName
+//   appFieldProps?: Omit<ComponentProps<FormApiWithSchema<TFormData>["AppField"]>, 'name' | 'children'>
+// }
+
+// export function InputWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<React.InputHTMLAttributes<HTMLInputElement>>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.InputField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function TextareaWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.TextareaField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function RadioWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<{ options: (allowedPrimitiveT | optionT)[] }>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.RadioField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function CheckboxWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<{ options: (allowedPrimitiveT | optionT)[] }>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.CheckboxField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function SwitchWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<{}>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.SwitchField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function SelectWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<Omit<selectProps, 'value' | 'onValueChange'>>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.SelectField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function DatePickerWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<Omit<React.ComponentProps<typeof DatePicker>, 'value' | 'onSelect'>>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.DatePickerField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function ComboboxWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<Omit<comboboxProps, 'value' | 'onValueChange' | 'name'>>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.ComboboxField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+// export function MultiSelectComboboxWrapper<TFormData extends object, TName extends DeepKeys<TFormData>>(
+//   { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<Omit<multiSelectComboboxProps, 'value' | 'onValueChange' | 'name'>>
+// ) {
+//   return (
+//     <form.AppField name={name} {...appFieldProps}>
+//       {(field: any) => <field.MultiSelectComboboxField {...fieldProps} />}
+//     </form.AppField>
+//   )
+// }
+
+
+type FieldComponentProps<T> = {
+  label?: React.ReactNode;
+  className?: string;
+} & Partial<{
+  error: { message?: string };
+  invalid: boolean;
+}> & Omit<T, 'form'>;
+
+
+type FormApiWithSchema<TFormData> = AppFieldExtendedReactFormApi<
+  TFormData,
+  any, any, any, any, any,
+  any, any, any, any,
+  any, any, any, any
+>;
+
+
+type BaseProps<TFormData, TName extends DeepKeys<TFormData>> = {
+  form: FormApiWithSchema<TFormData>;
+  name: TName;
+  appFieldProps?: Omit<ComponentProps<FormApiWithSchema<TFormData>["AppField"]>, 'name' | 'children'>;
+};
+
+
+function createFieldWrapper<TProps, TFormData extends object>(FieldComponentName: keyof FormApiWithSchema<TFormData>['fieldComponents']) {
+  return function FieldWrapper<TName extends DeepKeys<TFormData>>(
+    { form, name, appFieldProps, ...fieldProps }: BaseProps<TFormData, TName> & FieldComponentProps<TProps>
+  ) {
+    return (
+      <form.AppField name={name} {...appFieldProps}>
+        {(field: any) => {
+          const Component = field[FieldComponentName] as React.ComponentType<any>;
+          return <Component {...fieldProps} />;
+        }}
+      </form.AppField>
+    );
+  };
 }
 
-type InputProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & inputFieldProps
-export function InputWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: InputProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.InputField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-type TextareaProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & textareaFieldProps
-export function TextareaWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: TextareaProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.TextareaField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-type RadioProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & radioFieldProps
-export function RadioWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: RadioProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.RadioField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-type CheckboxProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & radioFieldProps
-export function CheckboxWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: CheckboxProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.CheckboxField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-type SwitchProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & switchFieldProps
-export function SwitchWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: SwitchProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.SwitchField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-type SelectProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & selectFieldProps
-export function SelectWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: SelectProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.SelectField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-type DatePickerProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & datePickerFieldProps
-export function DatePickerWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: DatePickerProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.DatePickerField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-type ComboboxProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & comboboxFieldProps
-export function ComboboxWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: ComboboxProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.ComboboxField {...fieldProps} />}
-    </form.AppField>
-  )
-}
-
-
-type MultiSelectComboboxProps<TFormData, TName extends keyof TFormData> = BaseProps<TFormData, TName> & multiSelectComboboxFieldProps
-export function MultiSelectComboboxWrapper<TFormData, TName extends keyof TFormData>({
-  form,
-  name,
-  appFieldProps,
-  ...fieldProps
-}: MultiSelectComboboxProps<TFormData, TName>) {
-  return (
-    <form.AppField name={name} {...appFieldProps}>
-      {(field: any) => <field.MultiSelectComboboxField {...fieldProps} />}
-    </form.AppField>
-  )
-}
+export const InputWrapper = createFieldWrapper<inputFieldProps, any>('InputField');
+export const TextareaWrapper = createFieldWrapper<textareaFieldProps, any>('TextareaField');
+export const RadioWrapper = createFieldWrapper<radioFieldProps, any>('RadioField');
+export const CheckboxWrapper = createFieldWrapper<radioFieldProps, any>('CheckboxField');
+export const SwitchWrapper = createFieldWrapper<{}, any>('SwitchField');
+export const SelectWrapper = createFieldWrapper<selectFieldProps, any>('SelectField');
+export const DatePickerWrapper = createFieldWrapper<datePickerFieldProps, any>('DatePickerField');
+export const ComboboxWrapper = createFieldWrapper<comboboxFieldProps, any>('ComboboxField');
+export const MultiSelectComboboxWrapper = createFieldWrapper<multiSelectComboboxFieldProps, any>('MultiSelectComboboxField');
