@@ -310,6 +310,7 @@
       "description": "Field componet with wrapper",
       "registryDependencies": [
         "field",
+        "command",
         "select",
         "popover",
         "radio-group",
@@ -330,6 +331,10 @@
           "path": "lib/utils-no-drop.ts",
           "type": "registry:lib",
           "target": "lib/utils.ts"
+        },
+        {
+          "path": "components/ui/command.tsx",
+          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -359,6 +364,7 @@
       ],
       "registryDependencies": [
         "field",
+        "command",
         "select",
         "popover",
         "radio-group",
@@ -379,6 +385,10 @@
           "path": "lib/utils-no-drop.ts",
           "type": "registry:lib",
           "target": "lib/utils.ts"
+        },
+        {
+          "path": "components/ui/command.tsx",
+          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -412,6 +422,7 @@
       ],
       "registryDependencies": [
         "field",
+        "command",
         "select",
         "popover",
         "radio-group",
@@ -432,6 +443,10 @@
           "path": "lib/utils-no-drop.ts",
           "type": "registry:lib",
           "target": "lib/utils.ts"
+        },
+        {
+          "path": "components/ui/command.tsx",
+          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -462,6 +477,7 @@
       "description": "Form componet with wrapper",
       "registryDependencies": [
         "form",
+        "command",
         "select",
         "popover",
         "radio-group",
@@ -482,6 +498,10 @@
           "path": "lib/utils-no-drop.ts",
           "type": "registry:lib",
           "target": "lib/utils.ts"
+        },
+        {
+          "path": "components/ui/command.tsx",
+          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
