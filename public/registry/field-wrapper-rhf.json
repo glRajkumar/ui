@@ -9,7 +9,6 @@
   ],
   "registryDependencies": [
     "field",
-    "combobox",
     "select",
     "popover",
     "radio-group",

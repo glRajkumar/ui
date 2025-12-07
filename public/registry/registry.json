@@ -310,7 +310,6 @@
       "description": "Field componet with wrapper",
       "registryDependencies": [
         "field",
-        "combobox",
         "select",
         "popover",
         "radio-group",
@@ -360,7 +359,6 @@
       ],
       "registryDependencies": [
         "field",
-        "combobox",
         "select",
         "popover",
         "radio-group",
@@ -414,7 +412,6 @@
       ],
       "registryDependencies": [
         "field",
-        "combobox",
         "select",
         "popover",
         "radio-group",
@@ -465,7 +462,6 @@
       "description": "Form componet with wrapper",
       "registryDependencies": [
         "form",
-        "combobox",
         "select",
         "popover",
         "radio-group",

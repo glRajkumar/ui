@@ -6,7 +6,6 @@
   "description": "Form componet with wrapper",
   "registryDependencies": [
     "form",
-    "combobox",
     "select",
     "popover",
     "radio-group",
