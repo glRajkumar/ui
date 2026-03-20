@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { dropdownOptions } from "./data";
 
-import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui-old/dropdown-menu-wrapper";
-import { Button } from "@/components/ui-old/button";
+import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown-menu-wrapper";
+import { buttonVariants } from "@/components/ui/button";
 
 export function DropdownExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
@@ -16,15 +16,12 @@ export function DropdownExample() {
       <DropdownWrapper
         options={dropdownOptions}
         contentProps={{ align: "end" }}
-      >
-        <Button variant="outline">
-          Options
-        </Button>
-      </DropdownWrapper>
+        trigger="Options"
+        triggerCls={buttonVariants({ variant: "outline" })}
+      />
 
       <DropdownCheckboxWrapper
         options={dropdownOptions}
-        label="Select Something"
         checked={checked}
         onCheckedChange={(value, isChecked) => {
           setChecked((prev) =>
@@ -33,21 +30,17 @@ export function DropdownExample() {
               : prev.filter((x) => x !== value)
           )
         }}
-      >
-        <Button variant="outline">
-          Checkbox
-        </Button>
-      </DropdownCheckboxWrapper>
+        trigger="Checkbox"
+        triggerCls={buttonVariants({ variant: "outline" })}
+      />
 
       <DropdownRadioWrapper
         value={val}
         options={dropdownOptions}
         onValueChange={setVal}
-      >
-        <Button variant="outline">
-          Radio
-        </Button>
-      </DropdownRadioWrapper>
+        trigger="Radio"
+        triggerCls={buttonVariants({ variant: "outline" })}
+      />
     </>
   )
 }

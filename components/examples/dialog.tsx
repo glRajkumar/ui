@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { DialogWrapper } from "@/components/ui-old/dialog";
-import { Button } from "@/components/ui-old/button";
+import { DialogWrapper } from "@/components/ui/dialog";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 export function DialogExample() {
   const [open, setOpen] = useState(false)
@@ -11,7 +11,8 @@ export function DialogExample() {
   return (
     <>
       <DialogWrapper
-        trigger={<Button variant="outline" size="sm">Delete</Button>}
+        trigger="Delete"
+        triggerCls={buttonVariants({ variant: "destructive" })}
         title="Are you absolutely sure?"
         description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
       />
@@ -19,7 +20,8 @@ export function DialogExample() {
       <DialogWrapper
         open={open}
         onOpenChange={setOpen}
-        trigger={<Button variant="outline" size="sm">Controlled</Button>}
+        trigger="Controlled"
+        triggerCls={buttonVariants({ variant: "outline" })}
         title="Do you want to leave page"
         description=""
         action="Proceed"
@@ -27,7 +29,8 @@ export function DialogExample() {
       />
 
       <DialogWrapper
-        trigger={<Button variant="outline" size="sm">No Action</Button>}
+        trigger="No Action"
+        triggerCls={buttonVariants({ variant: "outline" })}
         title="Are you absolutely sure?"
         description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
       />

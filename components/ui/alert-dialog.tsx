@@ -177,9 +177,8 @@ function AlertDialogFooterWrapper({
         <AlertDialogCancel
           onClick={onCancel}
           className={cancelCls}
-          render={typeof cancel !== "string" ? (cancel as React.ReactElement) : undefined}
         >
-          {typeof cancel === "string" ? cancel : null}
+          {cancel}
         </AlertDialogCancel>
       }
 
@@ -188,9 +187,8 @@ function AlertDialogFooterWrapper({
         <AlertDialogAction
           onClick={onAction}
           className={actionCls}
-          render={typeof action !== "string" ? (action as React.ReactElement) : undefined}
         >
-          {typeof action === "string" ? action : null}
+          {action}
         </AlertDialogAction>
       }
     </AlertDialogFooter>
@@ -202,6 +200,7 @@ type AlertDialogWrapperProps = {
   trigger?: React.ReactNode
   children?: React.ReactNode
   description?: React.ReactNode
+  triggerCls?: string
   descriptionCls?: string
   contentCls?: string
   headerCls?: string
@@ -213,6 +212,7 @@ function AlertDialogWrapper({
   title = "Are you absolutely sure?",
   description = "This action cannot be undone. This will permanently remove your data from our servers.",
   children,
+  triggerCls,
   contentCls,
   headerCls,
   titleCls,
@@ -229,9 +229,10 @@ function AlertDialogWrapper({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
   return (
     <AlertDialog {...props}>
-      {trigger &&
-        <AlertDialogTrigger render={typeof trigger !== "string" ? (trigger as React.ReactElement) : undefined}>
-          {typeof trigger === "string" ? trigger : null}
+      {
+        trigger &&
+        <AlertDialogTrigger className={triggerCls}>
+          {trigger}
         </AlertDialogTrigger>
       }
 
