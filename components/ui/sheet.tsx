@@ -127,6 +127,126 @@ function SheetDescription({
   )
 }
 
+type SheetFooterWrapperProps = {
+  cancel?: React.ReactNode
+  action?: React.ReactNode
+  footerCls?: string
+  actionCls?: string
+  cancelCls?: string
+  onAction?: () => void
+  onCancel?: () => void
+}
+
+function SheetFooterWrapper({
+  cancel,
+  action,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onAction = () => { },
+  onCancel = () => { },
+}: SheetFooterWrapperProps) {
+  return (
+    <SheetFooter className={footerCls}>
+      {
+        cancel &&
+        <SheetClose
+          render={
+            <Button
+              variant="secondary"
+              onClick={onCancel}
+              className={cn("border", cancelCls)}
+            >
+              {cancel}
+            </Button>
+          }
+        />
+      }
+
+      {
+        action &&
+        <Button
+          onClick={onAction}
+          className={actionCls}
+        >
+          {action}
+        </Button>
+      }
+    </SheetFooter>
+  )
+}
+
+type SheetWrapperProps = {
+  title?: React.ReactNode
+  trigger?: React.ReactNode
+  children?: React.ReactNode
+  description?: React.ReactNode
+  triggerCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  headerCls?: string
+  titleCls?: string
+  side?: "top" | "bottom" | "right" | "left"
+} & SheetFooterWrapperProps
+
+function SheetWrapper({
+  trigger,
+  title,
+  description,
+  children,
+  contentCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+
+  cancel = "Cancel",
+  action,
+  triggerCls,
+  footerCls,
+  actionCls,
+  cancelCls,
+  onAction,
+  onCancel,
+
+  side = "right",
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Root> & SheetWrapperProps) {
+  return (
+    <Sheet {...props}>
+      {
+        trigger &&
+        <SheetTrigger className={triggerCls}>{trigger}</SheetTrigger>
+      }
+
+      <SheetContent side={side} className={contentCls}>
+        <SheetHeader className={headerCls}>
+          <SheetTitle className={titleCls}>{title}</SheetTitle>
+          {description && (
+            <SheetDescription className={descriptionCls}>
+              {description}
+            </SheetDescription>
+          )}
+        </SheetHeader>
+
+        {children}
+
+        {
+          (!!cancel || !!action) &&
+          <SheetFooterWrapper
+            cancel={cancel}
+            action={action}
+            footerCls={footerCls}
+            actionCls={actionCls}
+            cancelCls={cancelCls}
+            onAction={onAction}
+            onCancel={onCancel}
+          />
+        }
+      </SheetContent>
+    </Sheet>
+  )
+}
+
 export {
   Sheet,
   SheetTrigger,
@@ -136,4 +256,6 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
+  SheetWrapper,
+  SheetFooterWrapper,
 }

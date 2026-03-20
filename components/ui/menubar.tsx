@@ -105,25 +105,27 @@ function MenubarCheckboxItem({
   children,
   checked,
   inset,
+  indicatorAt = "right",
   ...props
 }: MenuPrimitive.CheckboxItem.Props & {
   inset?: boolean
+  indicatorAt?: indicatorAtT
 }) {
   return (
     <MenuPrimitive.CheckboxItem
       data-slot="menubar-checkbox-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-1.5 pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        className
+        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        className,
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
       )}
       checked={checked}
       {...props}
     >
-      <span className="pointer-events-none absolute left-1.5 flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
+      <span className={cn("pointer-events-none absolute flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4", indicatorAt === "right" ? "right-2" : "left-2")}>
         <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon
-          />
+          <CheckIcon />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -139,24 +141,26 @@ function MenubarRadioItem({
   className,
   children,
   inset,
+  indicatorAt = "right",
   ...props
 }: MenuPrimitive.RadioItem.Props & {
   inset?: boolean
+  indicatorAt?: indicatorAtT
 }) {
   return (
     <MenuPrimitive.RadioItem
       data-slot="menubar-radio-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-1.5 pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
+        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
       )}
       {...props}
     >
-      <span className="pointer-events-none absolute left-1.5 flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
+      <span className={cn("pointer-events-none absolute flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4", indicatorAt === "right" ? "right-2" : "left-2")}>
         <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon
-          />
+          <CheckIcon />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}

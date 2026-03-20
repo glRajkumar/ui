@@ -13,6 +13,10 @@ function PopoverTrigger(props: PopoverPrimitive.Trigger.Props) {
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />
 }
 
+type popoverContentType = PopoverPrimitive.Popup.Props & Pick<
+  PopoverPrimitive.Positioner.Props,
+  "align" | "alignOffset" | "side" | "sideOffset"
+>
 function PopoverContent({
   className,
   align = "center",
@@ -20,11 +24,7 @@ function PopoverContent({
   side = "bottom",
   sideOffset = 4,
   ...props
-}: PopoverPrimitive.Popup.Props &
-  Pick<
-    PopoverPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) {
+}: popoverContentType) {
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Positioner
@@ -77,6 +77,35 @@ function PopoverDescription({ className, ...props }: PopoverPrimitive.Descriptio
   )
 }
 
+type PopoverWrapperProps = {
+  trigger: React.ReactNode
+  content: React.ReactNode
+  triggerCls?: string
+  contentCls?: string
+  contentProps?: Omit<popoverContentType, "className">
+} & Omit<React.ComponentProps<typeof PopoverPrimitive.Root>, "children">
+
+function PopoverWrapper({
+  trigger,
+  content,
+  triggerCls,
+  contentCls,
+  contentProps,
+  ...props
+}: PopoverWrapperProps) {
+  return (
+    <Popover {...props}>
+      <PopoverTrigger className={triggerCls}>
+        {trigger}
+      </PopoverTrigger>
+
+      <PopoverContent {...contentProps} className={contentCls}>
+        {content}
+      </PopoverContent>
+    </Popover>
+  )
+}
+
 export {
   Popover,
   PopoverContent,
@@ -84,4 +113,5 @@ export {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
+  PopoverWrapper,
 }

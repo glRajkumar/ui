@@ -1,6 +1,6 @@
 import { Apple, Banana } from 'lucide-react';
 
-import { ToggleGroupWrapper, type toggleItemsT } from "@/components/ui-old/toggle-group";
+import { ToggleGroupWrapper, type toggleItemsT } from "@/components/ui/toggle-group";
 
 export function ToggleGroupExample() {
   const options: toggleItemsT = [
@@ -18,7 +18,6 @@ export function ToggleGroupExample() {
   return (
     <ToggleGroupWrapper
       options={options}
-      type="single"
     />
   )
 }

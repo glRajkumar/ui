@@ -94,6 +94,51 @@ function EmptyContent({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+type EmptyWrapperProps = {
+  title?: React.ReactNode
+  description?: React.ReactNode
+  media?: React.ReactNode
+  content?: React.ReactNode
+  wrapperCls?: string
+  headerCls?: string
+  titleCls?: string
+  mediaCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  mediaVariant?: VariantProps<typeof emptyMediaVariants>["variant"]
+}
+
+function EmptyWrapper({
+  title,
+  description,
+  media,
+  content,
+  wrapperCls,
+  headerCls,
+  titleCls,
+  mediaCls,
+  descriptionCls,
+  contentCls,
+  mediaVariant = "default",
+}: EmptyWrapperProps) {
+  return (
+    <Empty className={wrapperCls}>
+      <EmptyHeader className={headerCls}>
+        {media && <EmptyMedia className={mediaCls} variant={mediaVariant}>{media}</EmptyMedia>}
+        {title && <EmptyTitle className={titleCls}>{title}</EmptyTitle>}
+        {description && <EmptyDescription className={descriptionCls}>{description}</EmptyDescription>}
+      </EmptyHeader>
+
+      {
+        content &&
+        <EmptyContent className={contentCls}>
+          {content}
+        </EmptyContent>
+      }
+    </Empty>
+  )
+}
+
 export {
   Empty,
   EmptyHeader,
@@ -101,4 +146,5 @@ export {
   EmptyDescription,
   EmptyContent,
   EmptyMedia,
+  EmptyWrapper,
 }

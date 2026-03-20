@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { SheetWrapper } from "@/components/ui-old/sheet";
-import { Button } from "@/components/ui-old/button";
+import { buttonVariants } from "@/components/ui/button";
+import { SheetWrapper } from "@/components/ui/sheet";
 
 export function SheetExample() {
   const [open, setOpen] = useState(false)
@@ -11,7 +11,8 @@ export function SheetExample() {
   return (
     <>
       <SheetWrapper
-        trigger={<Button variant="outline" size="sm">Delete</Button>}
+        trigger="Delete"
+        triggerCls={buttonVariants({ variant: "outline", size: "sm" })}
         title="Are you absolutely sure?"
         description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
       />
@@ -19,7 +20,8 @@ export function SheetExample() {
       <SheetWrapper
         open={open}
         onOpenChange={setOpen}
-        trigger={<Button variant="outline" size="sm">Controlled</Button>}
+        trigger="Controlled"
+        triggerCls={buttonVariants({ variant: "outline", size: "sm" })}
         title="Do you want to leave page"
         description=""
         action="Proceed"
@@ -27,7 +29,8 @@ export function SheetExample() {
       />
 
       <SheetWrapper
-        trigger={<Button variant="outline" size="sm">No Action</Button>}
+        trigger="No Action"
+        triggerCls={buttonVariants({ variant: "outline", size: "sm" })}
         title="Are you absolutely sure?"
         description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
       />

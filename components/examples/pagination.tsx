@@ -1,4 +1,4 @@
-import { PaginationWrapper } from "@/components/ui-old/pagination";
+import { PaginationWrapper } from "@/components/ui/pagination";
 
 export function PaginationExample() {
   return (

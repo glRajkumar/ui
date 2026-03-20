@@ -5,7 +5,7 @@ import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import { type VariantProps } from "class-variance-authority"
 
-import { cn } from "@/lib/utils"
+import { cn, getKey, getLabel, getValue, isOption } from "@/lib/utils"
 
 import { toggleVariants } from "@/components/ui/toggle"
 
@@ -21,6 +21,11 @@ const ToggleGroupContext = React.createContext<
   orientation: "horizontal",
 })
 
+type toggleGrpT = ToggleGroupPrimitive.Props &
+  VariantProps<typeof toggleVariants> & {
+    spacing?: number
+    orientation?: "horizontal" | "vertical"
+  }
 function ToggleGroup({
   className,
   variant,
@@ -29,11 +34,7 @@ function ToggleGroup({
   orientation = "horizontal",
   children,
   ...props
-}: ToggleGroupPrimitive.Props &
-  VariantProps<typeof toggleVariants> & {
-    spacing?: number
-    orientation?: "horizontal" | "vertical"
-  }) {
+}: toggleGrpT) {
   return (
     <ToggleGroupPrimitive
       data-slot="toggle-group"
@@ -87,4 +88,60 @@ function ToggleGroupItem({
   )
 }
 
-export { ToggleGroup, ToggleGroupItem }
+type toggleItemT = allowedPrimitiveT | (optionT & {
+  "aria-label"?: string
+})
+
+type toggleItemsT = toggleItemT[]
+
+type itemProps = {
+  option: toggleItemT
+  className?: string
+}
+
+function Item({ option, className }: itemProps) {
+  const value = getValue(option)
+  const label = getLabel(option)
+  const isObj = isOption(option)
+
+  return (
+    <ToggleGroupItem
+      value={`${value}`}
+      className={cn("border", className, isObj && option.className)}
+      aria-label={isObj ? option["aria-label"] : undefined}
+    >
+      {isObj ? label : `${label}`}
+    </ToggleGroupItem>
+  )
+}
+
+type props = toggleGrpT & {
+  options: toggleItemT[]
+  itemCls?: string
+}
+
+function ToggleGroupWrapper({
+  options,
+  itemCls,
+  ...props
+}: props) {
+  return (
+    <ToggleGroup {...props}>
+      {options.map((option, i) => (
+        <Item
+          key={getKey(option, i)}
+          option={option}
+          className={itemCls}
+        />
+      ))}
+    </ToggleGroup>
+  )
+}
+
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+  ToggleGroupWrapper,
+  type toggleItemT,
+  type toggleItemsT,
+}

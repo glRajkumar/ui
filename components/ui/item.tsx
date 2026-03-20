@@ -57,13 +57,14 @@ const itemVariants = cva(
   }
 )
 
+type itemDivProps = useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>
 function Item({
   className,
   variant = "default",
   size = "default",
   render,
   ...props
-}: useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
+}: itemDivProps) {
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(
@@ -98,11 +99,12 @@ const itemMediaVariants = cva(
   }
 )
 
+type itemMediaProps = React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>
 function ItemMedia({
   className,
   variant = "default",
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>) {
+}: itemMediaProps) {
   return (
     <div
       data-slot="item-media"
@@ -188,6 +190,100 @@ function ItemFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+type commonCls = {
+  itemWrapperCls?: string
+  headerCls?: string
+  titleCls?: string
+  mediaCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  actionsCls?: string
+  footerCls?: string
+  itemProps?: Omit<itemDivProps, "className">
+  itemMediaProps?: Omit<itemMediaProps, "className">
+}
+
+type itemT = commonCls & {
+  header?: React.ReactNode
+  title?: React.ReactNode
+  media?: React.ReactNode
+  description?: React.ReactNode
+  actions?: React.ReactNode
+  content?: React.ReactNode
+  footer?: React.ReactNode
+}
+
+type itemsT = itemT[]
+
+function ItemWrapper({
+  title, description, actions, content, footer, media, header,
+  itemWrapperCls, headerCls, titleCls, descriptionCls,
+  contentCls, mediaCls, actionsCls, footerCls,
+  itemProps, itemMediaProps,
+}: itemT) {
+  return (
+    <Item {...itemProps} className={itemWrapperCls}>
+      {media && <ItemMedia {...itemMediaProps} className={mediaCls}>{media}</ItemMedia>}
+
+      {header && <ItemHeader className={headerCls}>{header}</ItemHeader>}
+
+      {
+        (title || description || content) &&
+        <ItemContent className={contentCls}>
+          {title && <ItemTitle className={titleCls}>{title}</ItemTitle>}
+          {description && <ItemDescription className={descriptionCls}>{description}</ItemDescription>}
+          {content}
+        </ItemContent>
+      }
+
+      {actions && <ItemActions className={actionsCls}>{actions}</ItemActions>}
+
+      {footer && <ItemFooter className={footerCls}>{footer}</ItemFooter>}
+    </Item>
+  )
+}
+
+type itemGroupProps = commonCls & {
+  wrapperCls?: string
+  items: itemsT
+}
+
+function ItemGroupWrapper({
+  wrapperCls,
+  items,
+  itemWrapperCls,
+  headerCls,
+  titleCls,
+  descriptionCls,
+  contentCls,
+  mediaCls,
+  actionsCls,
+  footerCls,
+  itemProps,
+  itemMediaProps,
+}: itemGroupProps) {
+  return (
+    <ItemGroup className={wrapperCls}>
+      {items.map((item, i) => (
+        <ItemWrapper
+          key={i}
+          {...item}
+          itemWrapperCls={cn(itemWrapperCls, item.itemWrapperCls)}
+          headerCls={cn(headerCls, item.headerCls)}
+          titleCls={cn(titleCls, item.titleCls)}
+          descriptionCls={cn(descriptionCls, item.descriptionCls)}
+          contentCls={cn(contentCls, item.contentCls)}
+          mediaCls={cn(mediaCls, item.mediaCls)}
+          actionsCls={cn(actionsCls, item.actionsCls)}
+          footerCls={cn(footerCls, item.footerCls)}
+          itemProps={{ ...itemProps, ...item.itemProps }}
+          itemMediaProps={{ ...itemMediaProps, ...item.itemMediaProps }}
+        />
+      ))}
+    </ItemGroup>
+  )
+}
+
 export {
   Item,
   ItemMedia,
@@ -199,4 +295,8 @@ export {
   ItemDescription,
   ItemHeader,
   ItemFooter,
+  ItemWrapper,
+  ItemGroupWrapper,
+  type itemT,
+  type itemsT,
 }

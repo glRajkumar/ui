@@ -5,7 +5,7 @@ import { useState } from "react";
 import { parseAllowedPrimitive } from "@/lib/utils";
 import { options } from "./data";
 
-import { SelectWrapper } from "@/components/ui-old/select";
+import { SelectWrapper } from "@/components/ui/select";
 
 export function SelectExample() {
   const [val, setVal] = useState<allowedPrimitiveT>(true)
@@ -31,7 +31,7 @@ export function SelectExample() {
         triggerCls="w-40"
         placeholder="Controlled"
         value={`${val}`}
-        onValueChange={v => setVal(parseAllowedPrimitive(v))}
+        onValueChange={v => setVal(parseAllowedPrimitive(v as any))}
       />
     </>
   )

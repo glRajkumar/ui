@@ -1,4 +1,4 @@
-import { PopoverWrapper } from "@/components/ui-old/popover";
+import { PopoverWrapper } from "@/components/ui/popover";
 
 export function PopoverExample() {
   return (
