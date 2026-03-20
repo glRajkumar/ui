@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { dropdownOptions } from "./data";
 
-import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui-old/context-menu-wrapper";
-import { Button } from "@/components/ui-old/button";
+import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/context-menu-wrapper";
+import { Button } from "@/components/ui/button";
 
 export function ContextExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
@@ -23,7 +23,6 @@ export function ContextExample() {
 
       <ContextCheckboxWrapper
         options={dropdownOptions}
-        label="Select Something"
         checked={checked}
         onCheckedChange={(value, isChecked) => {
           setChecked((prev) =>

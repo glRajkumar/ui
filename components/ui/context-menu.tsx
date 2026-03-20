@@ -11,9 +11,7 @@ function ContextMenu(props: ContextMenuPrimitive.Root.Props) {
 }
 
 function ContextMenuPortal(props: ContextMenuPrimitive.Portal.Props) {
-  return (
-    <ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />
-  )
+  return <ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />
 }
 
 function ContextMenuTrigger({ className, ...props }: ContextMenuPrimitive.Trigger.Props) {
@@ -58,9 +56,7 @@ function ContextMenuContent({
 }
 
 function ContextMenuGroup(props: ContextMenuPrimitive.Group.Props) {
-  return (
-    <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />
-  )
+  return <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />
 }
 
 function ContextMenuLabel({
@@ -107,9 +103,7 @@ function ContextMenuItem({
 }
 
 function ContextMenuSub(props: ContextMenuPrimitive.SubmenuRoot.Props) {
-  return (
-    <ContextMenuPrimitive.SubmenuRoot data-slot="context-menu-sub" {...props} />
-  )
+  return <ContextMenuPrimitive.SubmenuRoot data-slot="context-menu-sub" {...props} />
 }
 
 function ContextMenuSubTrigger({
@@ -152,25 +146,27 @@ function ContextMenuCheckboxItem({
   children,
   checked,
   inset,
+  indicatorAt = "right",
   ...props
 }: ContextMenuPrimitive.CheckboxItem.Props & {
   inset?: boolean
+  indicatorAt?: indicatorAtT
 }) {
   return (
     <ContextMenuPrimitive.CheckboxItem
       data-slot="context-menu-checkbox-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
+        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
       )}
       checked={checked}
       {...props}
     >
-      <span className="pointer-events-none absolute right-2">
+      <span className={cn("pointer-events-none absolute", indicatorAt === "right" ? "right-2" : "left-2")}>
         <ContextMenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon
-          />
+          <CheckIcon />
         </ContextMenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -191,24 +187,26 @@ function ContextMenuRadioItem({
   className,
   children,
   inset,
+  indicatorAt = "right",
   ...props
 }: ContextMenuPrimitive.RadioItem.Props & {
   inset?: boolean
+  indicatorAt?: indicatorAtT
 }) {
   return (
     <ContextMenuPrimitive.RadioItem
       data-slot="context-menu-radio-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
+        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className,
+        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
       )}
       {...props}
     >
-      <span className="pointer-events-none absolute right-2">
+      <span className={cn("pointer-events-none absolute", indicatorAt === "right" ? "right-2" : "left-2")}>
         <ContextMenuPrimitive.RadioItemIndicator>
-          <CheckIcon
-          />
+          <CheckIcon />
         </ContextMenuPrimitive.RadioItemIndicator>
       </span>
       {children}
@@ -216,10 +214,7 @@ function ContextMenuRadioItem({
   )
 }
 
-function ContextMenuSeparator({
-  className,
-  ...props
-}: ContextMenuPrimitive.Separator.Props) {
+function ContextMenuSeparator({ className, ...props }: ContextMenuPrimitive.Separator.Props) {
   return (
     <ContextMenuPrimitive.Separator
       data-slot="context-menu-separator"
@@ -229,10 +224,7 @@ function ContextMenuSeparator({
   )
 }
 
-function ContextMenuShortcut({
-  className,
-  ...props
-}: React.ComponentProps<"span">) {
+function ContextMenuShortcut({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       data-slot="context-menu-shortcut"

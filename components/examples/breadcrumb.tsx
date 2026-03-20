@@ -1,5 +1,5 @@
 import { Slash } from "lucide-react";
-import { type breadcrumbItemsT, BreadcrumbWrapper } from "@/components/ui-old/breadcrumb";
+import { type breadcrumbItemsT, BreadcrumbWrapper } from "@/components/ui/breadcrumb";
 
 export function BreadcrumbExample() {
   const items: breadcrumbItemsT = [

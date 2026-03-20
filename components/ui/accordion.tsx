@@ -71,4 +71,61 @@ function AccordionContent({
   )
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+type accordionItemT = {
+  value: string
+  trigger: React.ReactNode
+  content: React.ReactNode
+  className?: string
+  triggerCls?: string
+  contentCls?: string
+  disabled?: boolean
+}
+
+type accordionItemsT = accordionItemT[]
+
+type accordionWrapperProps = {
+  items: accordionItemsT
+  itemCls?: string
+  triggerCls?: string
+  contentCls?: string
+  collapsible?: boolean
+} & Omit<React.ComponentProps<typeof AccordionPrimitive.Root>, "type" | "collapsible">
+
+function AccordionWrapper({
+  items,
+  itemCls,
+  triggerCls,
+  contentCls,
+  ...props
+}: accordionWrapperProps) {
+  return (
+    <Accordion {...(props)}>
+      {items.map((item) => (
+        <AccordionItem
+          key={item.value}
+          value={item.value}
+          className={cn(itemCls, item.className)}
+          disabled={item.disabled}
+        >
+          <AccordionTrigger className={cn("items-center justify-start gap-2 [&_.arrow]:ml-auto", triggerCls, item.triggerCls)}>
+            {item.trigger}
+          </AccordionTrigger>
+
+          <AccordionContent className={cn(contentCls, item.contentCls)}>
+            {item.content}
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  )
+}
+
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  AccordionWrapper,
+  type accordionItemT,
+  type accordionItemsT,
+}

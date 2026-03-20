@@ -1,4 +1,4 @@
-import { AccordionWrapper } from "@/components/ui-old/accordion";
+import { AccordionWrapper } from "@/components/ui/accordion";
 import { accordionItems } from "./data";
 
 export function AccordionExample() {
@@ -11,7 +11,7 @@ export function AccordionExample() {
 
       <AccordionWrapper
         items={accordionItems}
-        type="multiple"
+        multiple
         className="w-96 p-4 border rounded-sm"
       />
     </>

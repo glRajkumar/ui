@@ -1,4 +1,4 @@
-import { CardWrapper } from "@/components/ui-old/card";
+import { CardWrapper } from "@/components/ui/card";
 
 export function CardExample() {
   return (
