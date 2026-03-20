@@ -22,6 +22,11 @@ function TooltipTrigger(props: TooltipPrimitive.Trigger.Props) {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
 }
 
+type tooltipContentT = TooltipPrimitive.Popup.Props & Pick<
+  TooltipPrimitive.Positioner.Props,
+  "align" | "alignOffset" | "side" | "sideOffset"
+>
+
 function TooltipContent({
   className,
   side = "top",
@@ -30,11 +35,7 @@ function TooltipContent({
   alignOffset = 0,
   children,
   ...props
-}: TooltipPrimitive.Popup.Props &
-  Pick<
-    TooltipPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) {
+}: tooltipContentT) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner
@@ -60,4 +61,39 @@ function TooltipContent({
   )
 }
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+type TooltipWrapperProps = {
+  trigger: React.ReactNode
+  content: React.ReactNode
+  triggerCls?: string
+  contentCls?: string
+  contentProps?: Omit<tooltipContentT, "className">
+} & Omit<TooltipPrimitive.Provider.Props, "children">
+
+function TooltipWrapper({
+  trigger,
+  content,
+  triggerCls,
+  contentCls,
+  contentProps,
+  ...props
+}: TooltipWrapperProps) {
+  return (
+    <Tooltip {...props}>
+      <TooltipTrigger className={triggerCls}>
+        {trigger}
+      </TooltipTrigger>
+
+      <TooltipContent {...contentProps} className={contentCls}>
+        {content}
+      </TooltipContent>
+    </Tooltip>
+  )
+}
+
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  TooltipWrapper,
+}

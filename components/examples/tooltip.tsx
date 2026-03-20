@@ -1,4 +1,4 @@
-import { TooltipWrapper } from "@/components/ui-old/tooltip";
+import { TooltipWrapper } from "@/components/ui/tooltip";
 
 export function TooltipExample() {
   return (
