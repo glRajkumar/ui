@@ -3,7 +3,7 @@ import { Column } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui-old/button";
 
 interface ColumnHeaderProps<TData, TValue> {
   className?: string

@@ -12,7 +12,7 @@ import {
   NavigationMenuContent,
   NavigationMenuLink,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui-old/navigation-menu"
 
 type navLinkItemT = LinkProps & {
   children: React.ReactNode

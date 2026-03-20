@@ -15,10 +15,10 @@ import {
   CommandList,
   CommandLoading,
   CommandSeparator,
-} from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/ui-old/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui-old/popover"
+import { Button } from "@/components/ui-old/button"
+import { Badge } from "@/components/ui-old/badge"
 
 const extractText = (node: any): string => {
   if (node === null || node === undefined) return ""

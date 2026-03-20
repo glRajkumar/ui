@@ -12,28 +12,21 @@ import {
 } from "@/lib/utils"
 
 import {
-  Menubar,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarGroup,
-  MenubarLabel,
-  MenubarItem,
-  MenubarCheckboxItem,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubTrigger,
-  MenubarSubContent,
-  MenubarMenu,
-} from "@/components/ui/menubar"
-
-type commomClsT = {
-  itemCls?: string
-  groupCls?: string
-  groupLabelCls?: string
-}
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "@/components/ui-old/dropdown-menu"
 
 type commonCheckboxProps = {
   checked?: allowedPrimitiveT[]
@@ -47,32 +40,20 @@ type commonRadioProps = {
   onValueChange?: (value: allowedPrimitiveT) => void
 }
 
-type commonInner = commomClsT & {
-  trigger: React.ReactNode
-  contentProps?: React.ComponentProps<typeof MenubarContent>
+type commonSubMenuT = {
+  itemCls?: string
+  groupCls?: string
+  groupLabelCls?: string
 }
 
-type menubarBaseT = commomClsT & {
-  key: string
-  trigger: React.ReactNode
-  contentProps?: React.ComponentProps<typeof MenubarContent>
-}
-
-type menubarOptionsT = (menubarBaseT & {
-  options: menuOptionsT
+type commonPropsT = {
+  children: React.ReactNode
+  itemCls?: string
+  groupCls?: string
+  groupLabelCls?: string
+  contentProps?: React.ComponentProps<typeof DropdownMenuContent>
   onSelect?: (value: allowedPrimitiveT) => void
-})[]
-
-type menubarInputOptionT = menubarBaseT & {
-  options: menuInputOptionsT
-}
-
-type menubarCheckboxOptionsT = (menubarInputOptionT & commonCheckboxProps)[]
-type menubarRadioOptionsT = (menubarInputOptionT & commonRadioProps)[]
-
-type commonWrapT = commomClsT & Omit<React.ComponentProps<typeof Menubar>, "children" | "asChild" | "value"> & {
-  contentProps?: React.ComponentProps<typeof MenubarContent>
-}
+} & React.ComponentProps<typeof DropdownMenu>
 
 // -------
 
@@ -88,21 +69,21 @@ function Item({
 }: itemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <MenubarSeparator className={className} />
+  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
 
   const label = getLabel(option)
   const opt: any = typeof option === "object" ? option : {}
   const shortcut = opt?.shortcut
 
   return (
-    <MenubarItem
+    <DropdownMenuItem
       {...opt}
       onSelect={onSelect}
       className={cn(className, opt?.className)}
     >
       {label}
-      {shortcut && <MenubarShortcut>{shortcut}</MenubarShortcut>}
-    </MenubarItem>
+      {shortcut && <DropdownMenuShortcut>{shortcut}</DropdownMenuShortcut>}
+    </DropdownMenuItem>
   )
 }
 
@@ -122,13 +103,13 @@ function CheckboxItem({
 }: checkboxItemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <MenubarSeparator className={className} />
+  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
 
   const label = getLabel(option)
   const disabled = (option as any)?.disabled
 
   return (
-    <MenubarCheckboxItem
+    <DropdownMenuCheckboxItem
       checked={checked}
       disabled={disabled}
       className={className}
@@ -136,7 +117,7 @@ function CheckboxItem({
       onCheckedChange={onCheckedChange}
     >
       {label}
-    </MenubarCheckboxItem>
+    </DropdownMenuCheckboxItem>
   )
 }
 
@@ -152,24 +133,24 @@ function RadioItem({
 }: radioItemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <MenubarSeparator className={className} />
+  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
 
   const label = getLabel(option)
   const disabled = (option as any)?.disabled
 
   return (
-    <MenubarRadioItem
+    <DropdownMenuRadioItem
       value={`${value}`}
       disabled={disabled}
       className={className}
       indicatorAt={indicatorAt}
     >
       {label}
-    </MenubarRadioItem>
+    </DropdownMenuRadioItem>
   )
 }
 
-type SubMenuProps = commomClsT & {
+type SubMenuProps = commonSubMenuT & {
   submenu: subMenuT
   onSelect?: (value: allowedPrimitiveT) => void
 }
@@ -181,19 +162,19 @@ function SubMenu({
   onSelect
 }: SubMenuProps) {
   return (
-    <MenubarSub>
-      <MenubarSubTrigger className={submenu.triggerCls}>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger className={submenu.triggerCls}>
         {submenu.submenu}
-      </MenubarSubTrigger>
+      </DropdownMenuSubTrigger>
 
-      <MenubarSubContent className={submenu.contentCls}>
+      <DropdownMenuSubContent className={submenu.contentCls}>
         {submenu.options.map((option, i) => {
           if (isGroupMenu(option)) {
             return (
-              <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
-                <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+              <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
                   {option.group}
-                </MenubarLabel>
+                </DropdownMenuLabel>
 
                 {option.options.map((grOpt, j) => (
                   <Item
@@ -203,7 +184,7 @@ function SubMenu({
                     onSelect={() => onSelect?.(getValue(grOpt))}
                   />
                 ))}
-              </MenubarGroup>
+              </DropdownMenuGroup>
             )
           }
 
@@ -228,12 +209,12 @@ function SubMenu({
             />
           )
         })}
-      </MenubarSubContent>
-    </MenubarSub>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
   )
 }
 
-type CheckboxSubMenuProps = commomClsT & commonCheckboxProps & {
+type CheckboxSubMenuProps = commonSubMenuT & commonCheckboxProps & {
   submenu: inputSubMenuT
 }
 function CheckboxSubMenu({
@@ -246,19 +227,19 @@ function CheckboxSubMenu({
   onCheckedChange = () => { }
 }: CheckboxSubMenuProps) {
   return (
-    <MenubarSub>
-      <MenubarSubTrigger className={submenu.triggerCls}>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger className={submenu.triggerCls}>
         {submenu.submenu}
-      </MenubarSubTrigger>
+      </DropdownMenuSubTrigger>
 
-      <MenubarSubContent className={submenu.contentCls}>
+      <DropdownMenuSubContent className={submenu.contentCls}>
         {submenu.options.map((option, i) => {
           if (isInputGroupMenu(option)) {
             return (
-              <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
-                <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+              <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
                   {option.group}
-                </MenubarLabel>
+                </DropdownMenuLabel>
 
                 {option.options.map((grOpt, j) => {
                   const v = getValue(grOpt)
@@ -273,7 +254,7 @@ function CheckboxSubMenu({
                     />
                   )
                 })}
-              </MenubarGroup>
+              </DropdownMenuGroup>
             )
           }
 
@@ -304,12 +285,12 @@ function CheckboxSubMenu({
             />
           )
         })}
-      </MenubarSubContent>
-    </MenubarSub>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
   )
 }
 
-type RadioSubMenuProps = commomClsT & commonRadioProps & {
+type RadioSubMenuProps = commonSubMenuT & commonRadioProps & {
   submenu: inputSubMenuT
 }
 function RadioSubMenu({
@@ -322,20 +303,20 @@ function RadioSubMenu({
   onValueChange = () => { }
 }: RadioSubMenuProps) {
   return (
-    <MenubarSub>
-      <MenubarSubTrigger className={submenu.triggerCls}>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger className={submenu.triggerCls}>
         {submenu.submenu}
-      </MenubarSubTrigger>
+      </DropdownMenuSubTrigger>
 
-      <MenubarSubContent className={submenu.contentCls}>
-        <MenubarRadioGroup value={`${value}`} onValueChange={onValueChange}>
+      <DropdownMenuSubContent className={submenu.contentCls}>
+        <DropdownMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
           {submenu.options.map((option, i) => {
             if (isInputGroupMenu(option)) {
               return (
-                <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                  <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
                     {option.group}
-                  </MenubarLabel>
+                  </DropdownMenuLabel>
 
                   {option.options.map((grOpt, j) => (
                     <RadioItem
@@ -345,7 +326,7 @@ function RadioSubMenu({
                       indicatorAt={indicatorAt}
                     />
                   ))}
-                </MenubarGroup>
+                </DropdownMenuGroup>
               )
             }
 
@@ -373,39 +354,39 @@ function RadioSubMenu({
               />
             )
           })}
-        </MenubarRadioGroup>
-      </MenubarSubContent>
-    </MenubarSub>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
   )
 }
 
-type wrapperInner = commonInner & {
+type DropdownWrapperProps = commonPropsT & {
   options: menuOptionsT
-  onSelect?: (value: allowedPrimitiveT) => void
 }
-function MenubarWrapperInner({
-  trigger,
+function DropdownWrapper({
+  children,
   options,
   itemCls,
   groupCls,
   groupLabelCls,
   contentProps,
-  onSelect
-}: wrapperInner) {
+  onSelect,
+  ...props
+}: DropdownWrapperProps) {
   return (
-    <MenubarMenu>
-      <MenubarTrigger asChild={typeof trigger !== "string"}>
-        {trigger}
-      </MenubarTrigger>
+    <DropdownMenu {...props}>
+      <DropdownMenuTrigger asChild>
+        {children}
+      </DropdownMenuTrigger>
 
-      <MenubarContent {...contentProps}>
+      <DropdownMenuContent {...contentProps}>
         {options.map((option, i) => {
           if (isGroupMenu(option)) {
             return (
-              <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
-                <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+              <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
                   {option.group}
-                </MenubarLabel>
+                </DropdownMenuLabel>
 
                 {option.options.map((grOpt, j) => (
                   <Item
@@ -415,7 +396,7 @@ function MenubarWrapperInner({
                     onSelect={() => onSelect?.(getValue(grOpt))}
                   />
                 ))}
-              </MenubarGroup>
+              </DropdownMenuGroup>
             )
           }
 
@@ -441,17 +422,17 @@ function MenubarWrapperInner({
             />
           )
         })}
-      </MenubarContent>
-    </MenubarMenu>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
-type checkboxWrapperInner = commonInner & commonCheckboxProps & {
+type DropdownCheckboxWrapperProps = commonPropsT & commonCheckboxProps & {
   options: menuInputOptionsT
   label?: string
 }
-function MenubarCheckboxWrapperInner({
-  trigger,
+function DropdownCheckboxWrapper({
+  children,
   options,
 
   label,
@@ -464,7 +445,8 @@ function MenubarCheckboxWrapperInner({
   onCheckedChange: o_onCheckedChange,
 
   indicatorAt,
-}: checkboxWrapperInner) {
+  ...props
+}: DropdownCheckboxWrapperProps) {
   const [i_checked, setIChecked] = useState<allowedPrimitiveT[]>([])
 
   function i_Checked(v: allowedPrimitiveT, c: boolean) {
@@ -475,25 +457,25 @@ function MenubarCheckboxWrapperInner({
   const onCheckedChange = o_onCheckedChange ?? i_Checked
 
   return (
-    <MenubarMenu>
-      <MenubarTrigger asChild={typeof trigger !== "string"}>
-        {trigger}
-      </MenubarTrigger>
+    <DropdownMenu {...props}>
+      <DropdownMenuTrigger asChild>
+        {children}
+      </DropdownMenuTrigger>
 
-      <MenubarContent {...contentProps}>
+      <DropdownMenuContent {...contentProps}>
         {label && (
           <>
-            <MenubarLabel>{label}</MenubarLabel>
-            <MenubarSeparator />
+            <DropdownMenuLabel>{label}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
           </>
         )}
         {options.map((option, i) => {
           if (isInputGroupMenu(option)) {
             return (
-              <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
-                <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+              <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
                   {option.group}
-                </MenubarLabel>
+                </DropdownMenuLabel>
 
                 {option.options.map((grOpt, j) => {
                   const v = getValue(grOpt)
@@ -508,7 +490,7 @@ function MenubarCheckboxWrapperInner({
                     />
                   )
                 })}
-              </MenubarGroup>
+              </DropdownMenuGroup>
             )
           }
 
@@ -539,17 +521,17 @@ function MenubarCheckboxWrapperInner({
             />
           )
         })}
-      </MenubarContent>
-    </MenubarMenu>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
-type radioWrapperInner = commonInner & commonRadioProps & {
+type DropdownRadioWrapperProps = commonPropsT & commonRadioProps & {
   options: menuInputOptionsT
   label?: string
 }
-function MenubarRadioWrapperInner({
-  trigger,
+function DropdownRadioWrapper({
+  children,
   options,
 
   label,
@@ -562,33 +544,34 @@ function MenubarRadioWrapperInner({
   onValueChange: o_onValueChange,
 
   indicatorAt,
-}: radioWrapperInner) {
+  ...props
+}: DropdownRadioWrapperProps) {
   const [i_value, setIValue] = useState<allowedPrimitiveT>("")
 
   const value = o_value ?? i_value
   const onValueChange = o_onValueChange ?? setIValue
 
   return (
-    <MenubarMenu>
-      <MenubarTrigger asChild={typeof trigger !== "string"}>
-        {trigger}
-      </MenubarTrigger>
+    <DropdownMenu {...props}>
+      <DropdownMenuTrigger asChild>
+        {children}
+      </DropdownMenuTrigger>
 
-      <MenubarContent {...contentProps}>
+      <DropdownMenuContent {...contentProps}>
         {label && (
           <>
-            <MenubarLabel>{label}</MenubarLabel>
-            <MenubarSeparator />
+            <DropdownMenuLabel>{label}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
           </>
         )}
-        <MenubarRadioGroup value={`${value}`} onValueChange={v => onValueChange(parseAllowedPrimitive(v))}>
+        <DropdownMenuRadioGroup value={`${value}`} onValueChange={v => onValueChange(parseAllowedPrimitive(v))}>
           {options.map((option, i) => {
             if (isInputGroupMenu(option)) {
               return (
-                <MenubarGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <MenubarLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                <DropdownMenuGroup key={option.group} className={cn(groupCls, option.className)}>
+                  <DropdownMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
                     {option.group}
-                  </MenubarLabel>
+                  </DropdownMenuLabel>
 
                   {option.options.map((grOpt, j) => (
                     <RadioItem
@@ -598,7 +581,7 @@ function MenubarRadioWrapperInner({
                       indicatorAt={indicatorAt}
                     />
                   ))}
-                </MenubarGroup>
+                </DropdownMenuGroup>
               )
             }
 
@@ -626,124 +609,14 @@ function MenubarRadioWrapperInner({
               />
             )
           })}
-        </MenubarRadioGroup>
-      </MenubarContent>
-    </MenubarMenu>
-  )
-}
-
-type wrap = commonWrapT & {
-  options: menubarOptionsT
-  onSelect?: (value: allowedPrimitiveT) => void
-}
-function MenubarWrapper({
-  options,
-  itemCls,
-  groupCls,
-  groupLabelCls,
-  contentProps,
-  onSelect,
-  ...props
-}: wrap) {
-  return (
-    <Menubar {...props}>
-      {
-        options.map(op => (
-          <MenubarWrapperInner
-            key={op.key}
-            trigger={op.trigger}
-            options={op.options}
-            itemCls={cn(itemCls, op.itemCls)}
-            groupCls={cn(groupCls, op.groupCls)}
-            groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
-            contentProps={{ ...contentProps, ...op?.contentProps }}
-            onSelect={op?.onSelect || onSelect}
-          />
-        ))
-      }
-    </Menubar>
-  )
-}
-
-type wrapCheckboxT = commonWrapT & commonCheckboxProps & {
-  options: menubarCheckboxOptionsT
-}
-function MenubarCheckboxWrapper({
-  options,
-
-  contentProps,
-  itemCls,
-  groupCls,
-  groupLabelCls,
-
-  checked,
-  onCheckedChange,
-
-  indicatorAt,
-  ...props
-}: wrapCheckboxT) {
-  return (
-    <Menubar {...props}>
-      {options.map(op => (
-        <MenubarCheckboxWrapperInner
-          key={op.key}
-          trigger={op.trigger}
-          options={op.options}
-          itemCls={cn(itemCls, op.itemCls)}
-          groupCls={cn(groupCls, op.groupCls)}
-          groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
-          contentProps={{ ...contentProps, ...op?.contentProps }}
-          onCheckedChange={op.onCheckedChange ?? onCheckedChange}
-          indicatorAt={op.indicatorAt ?? indicatorAt}
-          checked={op.checked ?? checked}
-        />
-      ))}
-    </Menubar>
-  )
-}
-
-type wrapRadioT = commonWrapT & commonRadioProps & {
-  options: menubarRadioOptionsT
-}
-function MenubarRadioWrapper({
-  options,
-
-  contentProps,
-  itemCls,
-  groupCls,
-  groupLabelCls,
-
-  value,
-  onValueChange,
-
-  indicatorAt,
-  ...props
-}: wrapRadioT) {
-  return (
-    <Menubar {...props}>
-      {options.map(op => (
-        <MenubarRadioWrapperInner
-          key={op.key}
-          trigger={op.trigger}
-          options={op.options}
-          itemCls={cn(itemCls, op.itemCls)}
-          groupCls={cn(groupCls, op.groupCls)}
-          groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
-          contentProps={{ ...contentProps, ...op?.contentProps }}
-          onValueChange={op.onValueChange ?? onValueChange}
-          indicatorAt={op.indicatorAt ?? indicatorAt}
-          value={op.value ?? value}
-        />
-      ))}
-    </Menubar>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
 export {
-  MenubarWrapper,
-  MenubarCheckboxWrapper,
-  MenubarRadioWrapper,
-  type menubarOptionsT,
-  type menubarCheckboxOptionsT,
-  type menubarRadioOptionsT,
+  DropdownWrapper,
+  DropdownCheckboxWrapper,
+  DropdownRadioWrapper,
 }

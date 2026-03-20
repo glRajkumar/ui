@@ -6,7 +6,7 @@ import Link from "next/link"
 
 import { cn, getKey, isSeparator } from "@/lib/utils"
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui-old/button"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
