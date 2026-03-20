@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { AlertDialogWrapper } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { AlertDialogWrapper } from "@/components/ui-old/alert-dialog";
+import { Button } from "@/components/ui-old/button";
 
 export function AlertDialogExample() {
   const [open, setOpen] = useState(false)

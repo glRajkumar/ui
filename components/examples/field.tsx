@@ -12,8 +12,8 @@ import {
   CheckboxWrapper,
   DatePickerWrapper,
   MultiSelectComboboxWrapper,
-} from "@/components/ui/field-wrapper"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui-old/field-wrapper"
+import { Button } from "@/components/ui-old/button"
 
 export function FieldExample() {
   const [value, setValue] = useState({

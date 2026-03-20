@@ -5,7 +5,7 @@ import { useState } from "react";
 import { parseAllowedPrimitive } from "@/lib/utils";
 import { options } from "./data";
 
-import { SelectWrapper } from "@/components/ui/select";
+import { SelectWrapper } from "@/components/ui-old/select";
 
 export function SelectExample() {
   const [val, setVal] = useState<allowedPrimitiveT>(true)

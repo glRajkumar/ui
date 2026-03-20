@@ -1,5 +1,5 @@
-import { type itemsT, ItemGroupWrapper, ItemWrapper } from "@/components/ui/item"
-import { Button } from "@/components/ui/button"
+import { type itemsT, ItemGroupWrapper, ItemWrapper } from "@/components/ui-old/item"
+import { Button } from "@/components/ui-old/button"
 
 export function ItemExample() {
   const items: itemsT = [

@@ -12,8 +12,8 @@ import {
   CheckboxWrapper,
   DatePickerWrapper,
   MultiSelectComboboxWrapper,
-} from "@/components/ui/form-wrapper"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui-old/form-wrapper"
+import { Button } from "@/components/ui-old/button"
 
 export function FormExample() {
   const form = useForm({

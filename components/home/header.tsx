@@ -1,8 +1,8 @@
 import { Layers, Puzzle, Zap } from "lucide-react";
 import Link from "next/link";
 
-import { CardWrapper } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { CardWrapper } from "@/components/ui-old/card";
+import { Button } from "@/components/ui-old/button";
 
 function Header() {
   return (

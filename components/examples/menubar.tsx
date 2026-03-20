@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { dropdownOptions } from "./data";
 
-import { type menubarOptionsT, MenubarCheckboxWrapper, MenubarRadioWrapper, MenubarWrapper } from "@/components/ui/menubar-wrapper";
+import { type menubarOptionsT, MenubarCheckboxWrapper, MenubarRadioWrapper, MenubarWrapper } from "@/components/ui-old/menubar-wrapper";
 
 export function MenubarExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([true])

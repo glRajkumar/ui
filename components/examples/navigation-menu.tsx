@@ -1,6 +1,6 @@
 import { CircleHelpIcon } from "lucide-react"
 
-import { NavigationMenuWrapper, NavLinkItem, NavList } from "@/components/ui/navigation-menu-wrapper"
+import { NavigationMenuWrapper, NavLinkItem, NavList } from "@/components/ui-old/navigation-menu-wrapper"
 
 export function NavigationMenuExample() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form"
-import { SelectWrapper } from "@/components/ui/select"
+import { SelectWrapper } from "@/components/ui-old/select"
 
 import { isGroup, isOption, isSeparator } from "@/lib/utils"
 import { options as optionsStr } from "./data"

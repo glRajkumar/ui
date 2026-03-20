@@ -1,6 +1,6 @@
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
-import { CheckboxWrapper, InputWrapper, SelectWrapper, SwitchWrapper } from "@/components/ui/form-wrapper";
+import { CheckboxWrapper, InputWrapper, SelectWrapper, SwitchWrapper } from "@/components/ui-old/form-wrapper";
 
 type props = {
   settings: settingObjT

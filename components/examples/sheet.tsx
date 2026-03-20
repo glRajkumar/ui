@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { SheetWrapper } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { SheetWrapper } from "@/components/ui-old/sheet";
+import { Button } from "@/components/ui-old/button";
 
 export function SheetExample() {
   const [open, setOpen] = useState(false)

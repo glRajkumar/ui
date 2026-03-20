@@ -1,4 +1,4 @@
-import { AccordionWrapper } from "@/components/ui/accordion";
+import { AccordionWrapper } from "@/components/ui-old/accordion";
 import { accordionItems } from "./data";
 
 export function AccordionExample() {

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { DrawerWrapper } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import { DrawerWrapper } from "@/components/ui-old/drawer";
+import { Button } from "@/components/ui-old/button";
 
 export function DrawerExample() {
   const [open, setOpen] = useState(false)

@@ -1,6 +1,6 @@
 import { Apple, Banana } from 'lucide-react';
 
-import { ToggleGroupWrapper, type toggleItemsT } from "../ui/toggle-group";
+import { ToggleGroupWrapper, type toggleItemsT } from "@/components/ui-old/toggle-group";
 
 export function ToggleGroupExample() {
   const options: toggleItemsT = [

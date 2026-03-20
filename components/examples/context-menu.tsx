@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { dropdownOptions } from "./data";
 
-import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui/context-menu-wrapper";
-import { Button } from "@/components/ui/button";
+import { ContextCheckboxWrapper, ContextRadioWrapper, ContextWrapper } from "@/components/ui-old/context-menu-wrapper";
+import { Button } from "@/components/ui-old/button";
 
 export function ContextExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])

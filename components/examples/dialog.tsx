@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { DialogWrapper } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { DialogWrapper } from "@/components/ui-old/dialog";
+import { Button } from "@/components/ui-old/button";
 
 export function DialogExample() {
   const [open, setOpen] = useState(false)

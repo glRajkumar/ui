@@ -4,8 +4,8 @@ import { useState } from "react";
 
 import { dropdownOptions } from "./data";
 
-import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui/dropdown-menu-wrapper";
-import { Button } from "@/components/ui/button";
+import { DropdownCheckboxWrapper, DropdownRadioWrapper, DropdownWrapper } from "@/components/ui-old/dropdown-menu-wrapper";
+import { Button } from "@/components/ui-old/button";
 
 export function DropdownExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
