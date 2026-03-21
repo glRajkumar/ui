@@ -23,52 +23,13 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-The Combobox is built using a composition of the `<Popover />`, `<Badge />`, `<Button />` and the `<Command />` components.
+The Combobox is built using a composition of the `<Popover />`, `<Badge />`, `<Button />` components.
 
 See installation instructions for the components from shadcn.
 
 <include cwd meta='title="ui/combobox.tsx"'>
   ./components/ui/combobox.tsx
 </include>
-
-Copy and paste the following code shadcn `command` component.
-
-```tsx
-function CommandLoading({
-  className,
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.Loading>) {
-  return (
-    <CommandPrimitive.Loading
-      data-slot="command-loading"
-      className={cn(
-        "flex items-center justify-center min-h-20 text-sm",
-        className
-      )}
-      {...props}
-    />
-  )
-}
-```
-
-Add `CommandLoading` at the export block.
-
-```tsx
-export {
-  Command,
-  CommandDialog,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandShortcut,
-  CommandSeparator,
-// [!code focus] [!code ++:1]
-  CommandLoading,
-}
-```
-
 
 </Tab>
 
@@ -92,26 +53,6 @@ Copy and paste the following code into your project.
 ### utils.ts
 <include cwd meta='title="lib/utils.ts"'>
   ./lib/utils-no-drop.ts
-</include>
-
-### badge.tsx
-<include cwd meta='title="ui/badge.tsx"'>
-  ./components/ui/badge.tsx
-</include>
-
-### button.tsx
-<include cwd meta='title="ui/button.tsx"'>
-  ./components/ui/button.tsx
-</include>
-
-### popover.tsx
-<include cwd meta='title="ui/popover.tsx"'>
-  ./components/ui/popover.tsx
-</include>
-
-### command.tsx
-<include cwd meta='title="ui/command.tsx"'>
-  ./components/ui/command.tsx
 </include>
 
 ### combobox.tsx
@@ -411,6 +352,3 @@ type={`export interface MultiSelectCombobox {
 ## Related Components
 
 - [Shadcn Combobox](https://ui.shadcn.com/docs/components/combobox)
-- [Shadcn Command](https://ui.shadcn.com/docs/components/command)
-- [Shadcn Popover](https://ui.shadcn.com/docs/components/popover)
-- [CMDK](https://github.com/dip/cmdk)
