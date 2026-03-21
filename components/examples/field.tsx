@@ -12,8 +12,8 @@ import {
   CheckboxWrapper,
   DatePickerWrapper,
   MultiSelectComboboxWrapper,
-} from "@/components/ui-old/field-wrapper"
-import { Button } from "@/components/ui-old/button"
+} from "@/components/ui/field-wrapper"
+import { Button } from "@/components/ui/button"
 
 export function FieldExample() {
   const [value, setValue] = useState({
@@ -128,7 +128,7 @@ export function FieldExample() {
         label="Favorite Fruit"
         value={value.fruit}
         options={fruitOptions}
-        onValueChange={val => onChange("fruit", val)}
+        onValueChange={val => onChange("fruit", val as any)}
       />
 
       <MultiSelectComboboxWrapper

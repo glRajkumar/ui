@@ -1,7 +1,7 @@
 "use client"
 
-import { useAppForm } from '@/components/ui-old/field-wrapper-tf'
-import { Button } from '@/components/ui-old/button'
+import { useAppForm } from '@/components/ui/field-wrapper-tf'
+import { Button } from '@/components/ui/button'
 
 type FormData = {
   firstName: string

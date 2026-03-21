@@ -12,8 +12,8 @@ import {
   CheckboxWrapper,
   DatePickerWrapper,
   MultiSelectComboboxWrapper,
-} from "@/components/ui-old/field-wrapper-rhf"
-import { Button } from "@/components/ui-old/button"
+} from "@/components/ui/field-wrapper-rhf"
+import { Button } from "@/components/ui/button"
 
 export function Field_RHF_Example() {
   const form = useForm({
