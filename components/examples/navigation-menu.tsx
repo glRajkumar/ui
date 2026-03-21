@@ -1,6 +1,6 @@
 import { CircleHelpIcon } from "lucide-react"
 
-import { NavigationMenuWrapper, NavLinkItem, NavList } from "@/components/ui-old/navigation-menu-wrapper"
+import { NavigationMenuWrapper, NavLinkItem, NavList } from "@/components/ui/navigation-menu-wrapper"
 
 export function NavigationMenuExample() {
   return (
@@ -10,7 +10,7 @@ export function NavigationMenuExample() {
           key: "home",
           trigger: "Home",
           content: (
-            <div className="p-2 w-[250px]">
+            <div className="p-2 w-62">
               <NavList
                 items={[
                   { href: "/", children: "Dashboard" },
@@ -28,7 +28,7 @@ export function NavigationMenuExample() {
           key: "features",
           trigger: "Features",
           content: (
-            <div className="p-2 w-[300px]">
+            <div className="p-2 w-75">
               <div className="text-lg font-semibold">Product Features</div>
 
               <NavList
