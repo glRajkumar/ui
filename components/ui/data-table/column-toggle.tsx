@@ -4,14 +4,14 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { Settings2 } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui-old/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/components/ui-old/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 interface ColumnToggleProps<TData> {
   table: Table<TData>
@@ -20,11 +20,9 @@ interface ColumnToggleProps<TData> {
 export function ColumnToggle<TData>({ table }: ColumnToggleProps<TData>) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">
-          <Settings2 />
-          View
-        </Button>
+      <DropdownMenuTrigger className={buttonVariants({ variant: "outline" })}>
+        <Settings2 />
+        View
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[150px]">

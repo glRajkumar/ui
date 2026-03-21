@@ -21,7 +21,6 @@ import { EmptyExample } from "./empty";
 import { FieldExample } from "./field";
 import { CardExample } from "./card";
 import { TabsExample } from "./tabs";
-import { FormExample } from "./form";
 import { ItemExample } from "./item";
 import Wrapper from "../wrapper";
 
@@ -125,14 +124,6 @@ export function DataTableEx() {
   return (
     <Wrapper path="/components/examples/data-table.tsx">
       <DataTableExample />
-    </Wrapper>
-  )
-}
-
-export function FormEx() {
-  return (
-    <Wrapper path="/components/examples/form.tsx">
-      <FormExample />
     </Wrapper>
   )
 }

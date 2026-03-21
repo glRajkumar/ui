@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui-old/table";
+} from "@/components/ui/table";
 
 interface DataTableProps<TData> {
   table: TanstackTable<TData>

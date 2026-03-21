@@ -1,7 +1,7 @@
 import path from "path";
 import fs from 'fs';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui-old/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CodeBlock } from "./extended/code-block";
 
 type props = {

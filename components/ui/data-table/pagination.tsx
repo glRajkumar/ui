@@ -1,8 +1,8 @@
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
-import { SelectWrapper } from "@/components/ui-old/select";
-import { Button } from "@/components/ui-old/button";
+import { SelectWrapper } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface PaginationProps<TData> {
   table: Table<TData>

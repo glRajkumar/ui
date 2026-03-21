@@ -71,7 +71,7 @@ type menubarInputOptionT = menubarBaseT & {
 type menubarCheckboxOptionsT = (menubarInputOptionT & commonCheckboxProps)[]
 type menubarRadioOptionsT = (menubarInputOptionT & commonRadioProps)[]
 
-type commonWrapT = commomClsT & Omit<React.ComponentProps<typeof Menubar>, "children" | "asChild" | "value"> & {
+type commonWrapT = commomClsT & Omit<React.ComponentProps<typeof Menubar>, "children" | "value"> & {
   contentProps?: React.ComponentProps<typeof MenubarContent>
 }
 

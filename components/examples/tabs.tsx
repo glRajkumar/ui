@@ -1,6 +1,6 @@
 import { User } from "lucide-react";
 
-import { TabsWrapper } from "@/components/ui-old/tabs";
+import { TabsWrapper } from "@/components/ui/tabs";
 
 export function TabsExample() {
   return (

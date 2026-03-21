@@ -1,6 +1,6 @@
 import { Apple, Banana } from "lucide-react";
 
-import { type accordionItemsT } from "@/components/ui-old/accordion";
+import { type accordionItemsT } from "@/components/ui/accordion";
 
 import { delay } from "@/utils";
 

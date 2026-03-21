@@ -1,8 +1,8 @@
 import { Layers, Puzzle, Zap } from "lucide-react";
 import Link from "next/link";
 
-import { CardWrapper } from "@/components/ui-old/card";
-import { Button } from "@/components/ui-old/button";
+import { CardWrapper } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 function Header() {
   return (
@@ -18,11 +18,15 @@ function Header() {
           improved DX.
         </p>
 
-        <Button variant="outline" asChild>
-          <Link href="/docs/shadcn-wrappers">
-            View Components
-          </Link>
-        </Button>
+        <Button
+          variant="outline"
+          render={
+            <Link href="/docs/shadcn-wrappers">
+              View Components
+            </Link>
+          }
+          nativeButton={false}
+        />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6 w-full max-w-xl mx-auto lg:max-w-none">

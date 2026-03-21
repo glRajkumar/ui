@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAsyncOptions } from "@/hooks/use-options";
 import { options } from "./data";
 
-import { Combobox, MultiSelectCombobox } from "@/components/ui-old/combobox";
+import { ComboboxWrapper as Combobox, MultiSelectCombobox } from "@/components/ui/combobox";
 
 export function ComboboxExample() {
   const { data: list, isLoading } = useAsyncOptions()
@@ -31,7 +31,7 @@ export function ComboboxExample() {
         value={value}
         options={list || []}
         isLoading={isLoading}
-        onValueChange={setValue}
+        onValueChange={v => setValue(v as any)}
         placeholder="Select item"
         triggerCls="w-40"
       />
