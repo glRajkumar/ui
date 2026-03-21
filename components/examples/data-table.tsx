@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Employee, employees } from "./data";
 
-import { Input } from '@/components/ui-old/input';
+import { Input } from '@/components/ui/input';
 import {
   ColumnFacetedFilter,
   ColumnFilter,
@@ -16,7 +16,7 @@ import {
   FilterGroup,
   Pagination,
   useTable,
-} from "@/components/ui-old/data-table";
+} from "@/components/ui/data-table";
 
 const StatusBadge = ({ status }: { status: Employee['status'] }) => {
   const statusConfig = {
