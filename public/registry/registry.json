@@ -74,7 +74,6 @@
       "title": "Combobox",
       "description": "Combobox componet with wrapper",
       "registryDependencies": [
-        "command",
         "popover",
         "button",
         "badge"
@@ -155,7 +154,6 @@
       "registryDependencies": [
         "dropdown-menu",
         "select",
-        "command",
         "popover",
         "button",
         "badge",
@@ -310,7 +308,6 @@
       "description": "Field componet with wrapper",
       "registryDependencies": [
         "field",
-        "command",
         "select",
         "popover",
         "radio-group",
@@ -331,10 +328,6 @@
           "path": "lib/utils-no-drop.ts",
           "type": "registry:lib",
           "target": "lib/utils.ts"
-        },
-        {
-          "path": "components/ui/command.tsx",
-          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -364,7 +357,6 @@
       ],
       "registryDependencies": [
         "field",
-        "command",
         "select",
         "popover",
         "radio-group",
@@ -385,10 +377,6 @@
           "path": "lib/utils-no-drop.ts",
           "type": "registry:lib",
           "target": "lib/utils.ts"
-        },
-        {
-          "path": "components/ui/command.tsx",
-          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -422,7 +410,6 @@
       ],
       "registryDependencies": [
         "field",
-        "command",
         "select",
         "popover",
         "radio-group",
@@ -443,10 +430,6 @@
           "path": "lib/utils-no-drop.ts",
           "type": "registry:lib",
           "target": "lib/utils.ts"
-        },
-        {
-          "path": "components/ui/command.tsx",
-          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -466,57 +449,6 @@
         },
         {
           "path": "components/ui/field-wrapper-tf.tsx",
-          "type": "registry:ui"
-        }
-      ]
-    },
-    {
-      "name": "form-wrapper",
-      "type": "registry:ui",
-      "title": "Form",
-      "description": "Form componet with wrapper",
-      "registryDependencies": [
-        "form",
-        "command",
-        "select",
-        "popover",
-        "radio-group",
-        "calendar",
-        "textarea",
-        "button",
-        "input",
-        "checkbox",
-        "switch"
-      ],
-      "files": [
-        {
-          "path": "types/general.d.ts",
-          "type": "registry:file",
-          "target": "types/general.d.ts"
-        },
-        {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
-        },
-        {
-          "path": "components/ui/command.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "components/ui/combobox.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "components/ui/select.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "components/ui/form.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "components/ui/form-wrapper.tsx",
           "type": "registry:ui"
         }
       ]

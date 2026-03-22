@@ -1,7 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table-virtual",
-  "type": "registry:ui",
   "title": "Data Table Virtualized",
   "description": "Data Table Virtualized componet with wrapper",
   "dependencies": [
@@ -18,5 +17,6 @@
       "content": "export * from \"./data-table-virtualized\";\r\nexport * from \"./column-faceted-filter\";\r\nexport * from \"./column-header\";\r\nexport * from \"./column-filter\";\r\nexport * from \"./column-sorter\";\r\nexport * from \"./column-toggle\";\r\nexport * from \"./filter-group\";\r\nexport * from \"./pagination\";\r\nexport * from \"./data-table\";\r\nexport * from \"./use-table\";",
       "type": "registry:ui"
     }
-  ]
+  ],
+  "type": "registry:ui"
 }
