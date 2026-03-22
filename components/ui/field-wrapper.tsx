@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 import { cn, getKey, getLabel, getValue, parseAllowedPrimitive } from "@/lib/utils";
 
-import { type ComboboxWrapperProps, type MultiSelectComboboxProps, ComboboxWrapper as Combobox, MultiSelectCombobox } from "./combobox";
+import { type ComboboxWrapperProps, ComboboxWrapper as Combobox } from "./combobox";
 import { type selectProps, SelectWrapper as SelectPrimitiveWrapper } from "./select";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Field, FieldLabel, FieldError } from "./field";
@@ -242,26 +242,6 @@ export function ComboboxWrapper({ name, label, error, invalid, className, placeh
     <Field className={className} data-invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <Combobox
-        {...rest}
-        id={name}
-        value={value}
-        placeholder={placeholder || `Select ${label}`}
-        onValueChange={onValueChange}
-        aria-invalid={isInvalid}
-      />
-      {isInvalid && <FieldError errors={[error]} />}
-    </Field>
-  )
-}
-
-type MultiSelectComboboxPropsT = BaseProps & MultiSelectComboboxProps
-export function MultiSelectComboboxWrapper({ name, label, error, invalid, className, placeholder, value, onValueChange, ...rest }: MultiSelectComboboxPropsT) {
-  const isInvalid = invalid || !!error
-
-  return (
-    <Field className={className} data-invalid={isInvalid}>
-      {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
-      <MultiSelectCombobox
         {...rest}
         id={name}
         value={value}

@@ -1,9 +1,9 @@
 import { Column } from "@tanstack/react-table";
 
-import { MultiSelectCombobox, type multiSelectComboboxProps } from "../combobox";
+import { ComboboxWrapper, type ComboboxWrapperProps } from "../combobox";
 
 interface ColumndFilterProps<TData, TValue>
-  extends Omit<multiSelectComboboxProps, 'options' | 'value' | 'onValueChange' | 'label'> {
+  extends Omit<ComboboxWrapperProps, 'options' | 'value' | 'onValueChange' | 'label'> {
   column?: Column<TData, TValue>
   title: React.ReactNode
   options: optionsT
@@ -20,13 +20,13 @@ export function ColumnFilter<TData, TValue>({
   }
 
   return (
-    <MultiSelectCombobox
-      options={options}
+    <ComboboxWrapper
+      items={options}
       value={column?.getFilterValue() as string[]}
-      onValueChange={onSelect}
-      label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}
+      onValueChange={v => onSelect(v as any)}
+      // label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}
       contentCls="w-fit"
-      matchTriggerWidth={false}
+      // matchTriggerWidth={false}
       {...props}
     />
   )

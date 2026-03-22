@@ -2,7 +2,7 @@
 
 import { createFormHookContexts, createFormHook } from '@tanstack/react-form'
 
-import { type MultiSelectComboboxProps, type ComboboxWrapperProps } from './combobox'
+import { type ComboboxWrapperProps } from './combobox'
 import { type selectProps } from './select'
 
 import {
@@ -14,7 +14,6 @@ import {
   SelectWrapper as Select,
   DatePickerWrapper as DatePicker,
   ComboboxWrapper as Combobox,
-  MultiSelectComboboxWrapper as MultiSelectCombobox,
 } from './field-wrapper'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
@@ -176,7 +175,7 @@ function DatePickerField(props: datePickerFieldProps) {
   )
 }
 
-type comboboxFieldProps = Omit<ComboboxWrapperProps, 'value' | 'onValueChange' | 'name'> & {
+type comboboxFieldProps = ComboboxWrapperProps & {
   label?: React.ReactNode
 }
 function ComboboxField(props: comboboxFieldProps) {
@@ -188,28 +187,6 @@ function ComboboxField(props: comboboxFieldProps) {
       name={field.name}
       value={field.state.value}
       onValueChange={(value) => field.handleChange(value as any)}
-      error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
-      }
-      invalid={field.state.meta.errors.length > 0}
-    />
-  )
-}
-
-type multiSelectComboboxFieldProps = Omit<MultiSelectComboboxProps, 'value' | 'onValueChange' | 'name'> & {
-  label?: React.ReactNode
-}
-function MultiSelectComboboxField(props: multiSelectComboboxFieldProps) {
-  const field = useFieldContext<allowedPrimitiveT[]>()
-
-  return (
-    <MultiSelectCombobox
-      {...props}
-      name={field.name}
-      value={field.state.value ?? []}
-      onValueChange={(value) => field.handleChange(value)}
       error={
         field.state.meta.errors.length > 0
           ? { message: field.state.meta.errors[0] }
@@ -232,7 +209,6 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     SelectField,
     DatePickerField,
     ComboboxField,
-    MultiSelectComboboxField,
   },
   formComponents: {},
 })

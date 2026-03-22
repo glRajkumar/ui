@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronDownIcon, XIcon, CheckIcon } from "lucide-react"
+import { ChevronDownIcon, XIcon, CheckIcon, PlusIcon, Loader2 } from "lucide-react"
 import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 
 import { cn, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
@@ -274,6 +274,19 @@ function ComboboxChipsInput({ className, ...props }: ComboboxPrimitive.Input.Pro
   )
 }
 
+function ComboboxStatus({ className, ...props }: ComboboxPrimitive.Status.Props) {
+  return (
+    <ComboboxPrimitive.Status
+      data-slot="combobox-status"
+      className={cn(
+        "flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground empty:hidden",
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
 function useComboboxAnchor() {
   return React.useRef<HTMLDivElement | null>(null)
 }
@@ -332,9 +345,14 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
   )
 }
 
+type CreatableItem = { __creatable: true; label: string; value: string }
+
+const isCreatable = (item: unknown): item is CreatableItem =>
+  !!item && typeof item === "object" && "__creatable" in (item as object)
+
 type ComboboxWrapperProps<
-  Value = unknown,
-  Multiple extends boolean | undefined = boolean | undefined
+  Value extends allowedPrimitiveT = allowedPrimitiveT,
+  Multiple extends boolean | undefined = boolean | undefined,
 > = ComboboxPrimitive.Root.Props<Value, Multiple> & {
   isLoading?: boolean
   placeholder?: string
@@ -343,9 +361,15 @@ type ComboboxWrapperProps<
   contentCls?: string
   groupCls?: string
   itemCls?: string
+  onSearch?: (query: string) => void
+  canCreateNew?: boolean
+  onCreateOption?: (query: string) => void
 }
 
-function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
+function ComboboxWrapper<
+  Value extends allowedPrimitiveT = allowedPrimitiveT,
+  Multiple extends boolean | undefined = boolean | undefined,
+>({
   isLoading,
   placeholder,
   emptyMessage,
@@ -355,32 +379,170 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
   itemCls,
   multiple,
   disabled,
+  onSearch,
+  canCreateNew,
+  onCreateOption,
+  onValueChange,
+  onInputValueChange,
+  onOpenChange,
+  inputValue: controlledInputValue,
   ...props
 }: ComboboxWrapperProps<Value, Multiple>) {
   const multiAnchor = React.useRef<HTMLDivElement | null>(null)
+  const isAsync = !!onSearch
+
+  const [internalQuery, setInternalQuery] = React.useState("")
+  const query = controlledInputValue !== undefined ? String(controlledInputValue) : internalQuery
+  const trimmedQuery = query.trim()
+
+  const flatOptions = React.useMemo(() => {
+    if (!props.items || props.items.length === 0) return []
+
+    const acc: (allowedPrimitiveT | optionT)[] = []
+    for (const o of props?.items) {
+      if (isGroup(o)) {
+        for (const io of o.options) {
+          if (!isSeparator(io)) {
+            acc.push(io as allowedPrimitiveT | optionT)
+          }
+        }
+      }
+      else if (!isSeparator(o)) acc.push(o as allowedPrimitiveT | optionT)
+    }
+    return acc
+  }, [props?.items])
+
+  const hasExactMatch = React.useMemo(() => {
+    const lower = trimmedQuery.toLowerCase()
+    return flatOptions.some((o) => String(getLabel(o)).toLowerCase() === lower)
+  }, [flatOptions, trimmedQuery])
+
+  const creatableItem: CreatableItem | null =
+    canCreateNew && trimmedQuery && !hasExactMatch
+      ? { __creatable: true, label: `Create "${trimmedQuery}"`, value: trimmedQuery }
+      : null
+
+  const rootItems = React.useMemo(() => {
+    if (!isAsync && !creatableItem) return undefined
+    const base = flatOptions as unknown as Value[]
+    return creatableItem ? [...base, creatableItem as unknown as Value] : base
+  }, [isAsync, creatableItem, flatOptions])
+
+  function handleInputValueChange(
+    value: string,
+    meta: ComboboxPrimitive.Root.ChangeEventDetails,
+  ) {
+    if (controlledInputValue === undefined) setInternalQuery(value)
+    onInputValueChange?.(value as Value & string, meta)
+    onSearch?.(value)
+  }
+
+  function handleValueChange(
+    value: Value | Value[] | null,
+    meta: ComboboxPrimitive.Root.ChangeEventDetails,
+  ) {
+    const selected = Array.isArray(value) ? value : value ? [value] : []
+    const creatable = selected.find(isCreatable) as CreatableItem | undefined
+
+    if (creatable) {
+      onCreateOption?.(creatable.value)
+      if (controlledInputValue === undefined) setInternalQuery("")
+      if (Array.isArray(value)) {
+        const clean = (value as unknown[]).filter((v) => !isCreatable(v)) as Value[]
+        onValueChange?.((clean as any), meta)
+      }
+      return
+    }
+
+    onValueChange?.((value as any), meta)
+  }
+
+  function renderAsyncStatus() {
+    if (isLoading) {
+      return (
+        <span className="flex items-center gap-1.5">
+          <Loader2 className="size-3.5 animate-spin" />
+          Searching…
+        </span>
+      )
+    }
+    if (!trimmedQuery) return "Start typing to search…"
+    return null
+  }
+
+  const listContent = (
+    <>
+      {isAsync && (
+        <ComboboxStatus>{renderAsyncStatus()}</ComboboxStatus>
+      )}
+
+      {!isLoading && (
+        <ComboboxEmpty>{emptyMessage ?? "No options found"}</ComboboxEmpty>
+      )}
+
+      <ComboboxList>
+        {(item: optionsT[number] | CreatableItem, i: number) => {
+          if (isCreatable(item)) {
+            return (
+              <ComboboxItem
+                key="__creatable__"
+                value={item as unknown as Value}
+                className={cn("gap-1.5 italic text-muted-foreground", itemCls)}
+              >
+                <PlusIcon className="size-3.5 shrink-0 not-italic" />
+                {item.label}
+              </ComboboxItem>
+            )
+          }
+
+          return (
+            <OptionsBody
+              key={
+                isGroup(item)
+                  ? (item as groupT).group
+                  : isSeparator(item)
+                    ? `sep-${i}`
+                    : String(getValue(item as allowedPrimitiveT | optionT))
+              }
+              item={item as optionsT[number]}
+              index={i}
+              groupCls={groupCls}
+              itemCls={itemCls}
+            />
+          )
+        }}
+      </ComboboxList>
+    </>
+  )
 
   return (
-    <ComboboxRoot multiple={multiple} disabled={disabled} {...props}>
+    <ComboboxRoot
+      multiple={multiple}
+      disabled={disabled}
+      filter={isAsync ? null : undefined}
+      items={rootItems}
+      inputValue={query as Value & string}
+      onInputValueChange={handleInputValueChange}
+      onValueChange={handleValueChange as ComboboxPrimitive.Root.Props<Value, Multiple>["onValueChange"]}
+      onOpenChange={onOpenChange}
+      {...props}
+    >
       {multiple ? (
         <ComboboxChips ref={multiAnchor} className={cn("w-full", triggerCls)}>
           <ComboboxValue>
-            {(values: allowedPrimitiveT[]) => (
+            {(values: Value[]) => (
               <>
                 {values?.map((v) => (
-                  <ComboboxChip key={String(v)}>
-                    {String(v)}
+                  <ComboboxChip
+                    key={String(getValue(v as allowedPrimitiveT | optionT))}
+                  >
+                    {String(getLabel(v as allowedPrimitiveT | optionT))}
                   </ComboboxChip>
                 ))}
-
                 <ComboboxChipsInput
                   placeholder={!values?.length ? placeholder : undefined}
                   disabled={disabled}
                 />
-
-                <div className="flex shrink-0 items-center">
-                  <ComboboxClear disabled={disabled} />
-                  <ComboboxTrigger disabled={disabled} />
-                </div>
               </>
             )}
           </ComboboxValue>
@@ -396,27 +558,7 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
       )}
 
       <ComboboxContent anchor={multiple ? multiAnchor : undefined} className={contentCls}>
-        <ComboboxEmpty>
-          {isLoading ? "Loading..." : (emptyMessage ?? "No options found")}
-        </ComboboxEmpty>
-
-        <ComboboxList>
-          {(item: optionsT[number], i: number) => (
-            <OptionsBody
-              key={
-                isGroup(item)
-                  ? item.group
-                  : isSeparator(item)
-                    ? `sep-${i}`
-                    : String(getValue(item as allowedPrimitiveT | optionT))
-              }
-              item={item}
-              index={i}
-              groupCls={groupCls}
-              itemCls={itemCls}
-            />
-          )}
-        </ComboboxList>
+        {listContent}
       </ComboboxContent>
     </ComboboxRoot>
   )
@@ -439,6 +581,7 @@ export {
   ComboboxTrigger,
   ComboboxClear,
   ComboboxValue,
+  ComboboxStatus,
   useComboboxAnchor,
   ComboboxWrapper,
   type ComboboxWrapperProps,

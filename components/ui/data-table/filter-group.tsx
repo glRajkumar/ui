@@ -3,8 +3,8 @@ import { CirclePlus } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 
 import { DropdownCheckboxWrapper } from "../dropdown-menu-wrapper";
+import { buttonVariants } from "../button";
 import { ColumnFilter } from "./column-filter";
-import { Button } from "../button";
 
 interface FilterGroupProps<TData> {
   table: Table<TData>
@@ -39,12 +39,9 @@ export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupP
         onCheckedChange={(val, checked) => setSelected(prev => !checked ? prev.filter(p => !p) : [...prev, val])}
         options={options.map(m => ({ label: m.lable, value: m.value }))}
         indicatorAt={indicatorAt}
-      >
-        <Button variant="outline">
-          <CirclePlus className="size-4" />
-          <span>Filter</span>
-        </Button>
-      </DropdownCheckboxWrapper>
+        trigger={<><CirclePlus className="size-4" /> Filter</>}
+        triggerCls={buttonVariants({ variant: "outline" })}
+      />
     </>
   )
 }

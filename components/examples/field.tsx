@@ -11,7 +11,6 @@ import {
   ComboboxWrapper,
   CheckboxWrapper,
   DatePickerWrapper,
-  MultiSelectComboboxWrapper,
 } from "@/components/ui/field-wrapper"
 import { Button } from "@/components/ui/button"
 
@@ -127,16 +126,17 @@ export function FieldExample() {
         name="fruit"
         label="Favorite Fruit"
         value={value.fruit}
-        options={fruitOptions}
+        items={fruitOptions}
         onValueChange={val => onChange("fruit", val as any)}
       />
 
-      <MultiSelectComboboxWrapper
+      <ComboboxWrapper
+        multiple
         name="hobbies"
         label="Hobbies"
         value={value.hobbies}
-        options={hobbiesOptions}
-        onValueChange={val => onChange("hobbies", val)}
+        items={hobbiesOptions}
+        onValueChange={val => onChange("hobbies", val as any)}
       />
 
       <Button type="submit">

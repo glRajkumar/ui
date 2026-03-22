@@ -11,7 +11,6 @@ import {
   ComboboxWrapper,
   CheckboxWrapper,
   DatePickerWrapper,
-  MultiSelectComboboxWrapper,
 } from "@/components/ui/field-wrapper-rhf"
 import { Button } from "@/components/ui/button"
 
@@ -105,14 +104,15 @@ export function Field_RHF_Example() {
           name="fruit"
           label="Favorite Fruit"
           control={form.control}
-          options={fruitOptions}
+          items={fruitOptions}
         />
 
-        <MultiSelectComboboxWrapper
+        <ComboboxWrapper
+          multiple
           name="hobbies"
           label="Hobbies"
           control={form.control}
-          options={hobbiesOptions}
+          items={hobbiesOptions}
         />
 
         <DatePickerWrapper

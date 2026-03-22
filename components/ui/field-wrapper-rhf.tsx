@@ -2,7 +2,7 @@
 
 import { Controller, Control, FieldValues, Path } from 'react-hook-form'
 
-import { type MultiSelectComboboxProps, type ComboboxWrapperProps } from './combobox'
+import { type ComboboxWrapperProps } from './combobox'
 import { type selectProps } from './select'
 
 import {
@@ -14,7 +14,6 @@ import {
   SelectWrapper as Select,
   DatePickerWrapper as DatePicker,
   ComboboxWrapper as Combobox,
-  MultiSelectComboboxWrapper as MultiSelectCombobox,
 } from './field-wrapper'
 
 type BaseProps<T extends FieldValues> = {
@@ -173,7 +172,7 @@ export function DatePickerWrapper<T extends FieldValues>({ name, control, ...pro
   )
 }
 
-type ComboboxProps<T extends FieldValues> = BaseProps<T> & Omit<ComboboxWrapperProps, 'value' | 'onValueChange'>
+type ComboboxProps<T extends FieldValues> = BaseProps<T> & ComboboxWrapperProps
 export function ComboboxWrapper<T extends FieldValues>({ name, control, ...props }: ComboboxProps<T>) {
   return (
     <Controller
@@ -184,26 +183,6 @@ export function ComboboxWrapper<T extends FieldValues>({ name, control, ...props
           {...props}
           name={name}
           value={field.value}
-          onValueChange={field.onChange}
-          error={fieldState.error}
-          invalid={fieldState.invalid}
-        />
-      )}
-    />
-  )
-}
-
-type MultiSelectComboboxPropsT<T extends FieldValues> = BaseProps<T> & Omit<MultiSelectComboboxProps, 'value' | 'onValueChange'>
-export function MultiSelectComboboxWrapper<T extends FieldValues>({ name, control, ...props }: MultiSelectComboboxPropsT<T>) {
-  return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field, fieldState }) => (
-        <MultiSelectCombobox
-          {...props}
-          name={name}
-          value={field.value ?? []}
           onValueChange={field.onChange}
           error={fieldState.error}
           invalid={fieldState.invalid}
