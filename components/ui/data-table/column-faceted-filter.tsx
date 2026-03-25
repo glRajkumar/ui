@@ -53,7 +53,7 @@ export function ColumnFacetedFilter<TData, TValue>({
   return (
     <ComboboxWrapper
       multiple
-      options={newOptions}
+      items={newOptions}
       value={column?.getFilterValue() as string[]}
       onValueChange={v => onSelect(v as any)}
       // label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}

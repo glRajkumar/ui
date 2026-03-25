@@ -27,8 +27,8 @@
       "@/*": [
         "./*"
       ],
-      "@/.source": [
-        ".source"
+      "collections/*": [
+        ".source/*"
       ]
     }
   },

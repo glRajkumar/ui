@@ -1,7 +1,6 @@
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { loader } from 'fumadocs-core/source';
-
-import { docs } from '@/.source';
+import { docs } from 'collections/server';
 
 export const source = loader({
   baseUrl: '/docs',
