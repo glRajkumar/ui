@@ -8,8 +8,8 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  // DropdownMenuLabel,
+  // DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
@@ -26,8 +26,8 @@ export function ColumnToggle<TData>({ table }: ColumnToggleProps<TData>) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-38">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuLabel>Toggle columns</DropdownMenuLabel> */}
+        {/* <DropdownMenuSeparator /> */}
         {table
           .getAllColumns()
           .filter(

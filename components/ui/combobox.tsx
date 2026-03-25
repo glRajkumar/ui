@@ -75,7 +75,7 @@ function ComboboxInput({
         className="h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
         {...props}
       />
-      <div className="flex shrink-0 items-center">
+      <div className="flex shrink-0 items-center ml-auto">
         {showClear && <ComboboxClear disabled={disabled} />}
         {showTrigger && <ComboboxTrigger disabled={disabled} />}
       </div>
@@ -102,7 +102,6 @@ function ComboboxContent({
         align={align}
         alignOffset={alignOffset}
         anchor={anchor}
-        className="isolate z-50"
       >
         <ComboboxPrimitive.Popup
           data-slot="combobox-content"
@@ -213,7 +212,7 @@ function ComboboxChips({ className, ...props }: React.ComponentPropsWithRef<type
     <ComboboxPrimitive.Chips
       data-slot="combobox-chips"
       className={cn(
-        "flex min-h-9 w-full flex-wrap items-center gap-1 rounded-md border border-input bg-transparent px-2 py-1.5 text-sm shadow-xs",
+        "flex min-h-9 w-full flex-wrap items-center gap-1 rounded-md border border-input bg-transparent pl-3 pr-1 py-1 text-sm shadow-xs",
         "transition-colors",
         "focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
         "has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20",
@@ -312,7 +311,7 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
         <ComboboxLabel>{item.group}</ComboboxLabel>
         <ComboboxCollection>
           {(opt: allowedPrimitiveT | optionT) => (
-            <OptionItem key={getKey(opt, 0)} option={opt} className={itemCls} />
+            <OptionItem key={getKey(opt, 0)} option={opt} className={cn(itemCls)} />
           )}
         </ComboboxCollection>
       </ComboboxGroup>
@@ -327,7 +326,7 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
     <OptionItem
       key={getKey(item as allowedPrimitiveT | optionT, index)}
       option={item as allowedPrimitiveT | optionT}
-      className={itemCls}
+      className={cn(itemCls)}
     />
   )
 }
@@ -373,11 +372,11 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
                 ))}
 
                 <ComboboxChipsInput
-                  placeholder={!values?.length ? placeholder : undefined}
+                  placeholder={placeholder}
                   disabled={disabled}
                 />
 
-                <div className="flex shrink-0 items-center">
+                <div className="flex shrink-0 items-center ml-auto">
                   <ComboboxClear disabled={disabled} />
                   <ComboboxTrigger disabled={disabled} />
                 </div>

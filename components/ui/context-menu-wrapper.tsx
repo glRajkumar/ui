@@ -69,7 +69,7 @@ function Item({
 }: itemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <ContextMenuSeparator className={className} />
+  if (isSeparator(value)) return <ContextMenuSeparator className={cn(className)} />
 
   const label = getLabel(option)
   const opt: any = typeof option === "object" ? option : {}
@@ -103,7 +103,7 @@ function CheckboxItem({
 }: checkboxItemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <ContextMenuSeparator className={className} />
+  if (isSeparator(value)) return <ContextMenuSeparator className={cn(className)} />
 
   const label = getLabel(option)
   const disabled = (option as any)?.disabled
@@ -112,7 +112,7 @@ function CheckboxItem({
     <ContextMenuCheckboxItem
       checked={checked}
       disabled={disabled}
-      className={className}
+      className={cn(className)}
       indicatorAt={indicatorAt}
       onCheckedChange={onCheckedChange}
     >
@@ -133,7 +133,7 @@ function RadioItem({
 }: radioItemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <ContextMenuSeparator className={className} />
+  if (isSeparator(value)) return <ContextMenuSeparator className={cn(className)} />
 
   const label = getLabel(option)
   const disabled = (option as any)?.disabled
@@ -142,7 +142,7 @@ function RadioItem({
     <ContextMenuRadioItem
       value={`${value}`}
       disabled={disabled}
-      className={className}
+      className={cn(className)}
       indicatorAt={indicatorAt}
     >
       {label}
@@ -163,11 +163,11 @@ function SubMenu({
 }: SubMenuProps) {
   return (
     <ContextMenuSub>
-      <ContextMenuSubTrigger className={submenu.triggerCls}>
+      <ContextMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </ContextMenuSubTrigger>
 
-      <ContextMenuSubContent className={submenu.contentCls}>
+      <ContextMenuSubContent className={cn(submenu.contentCls)}>
         {submenu.options.map((option, i) => {
           if (isGroupMenu(option)) {
             return (
@@ -228,11 +228,11 @@ function CheckboxSubMenu({
 }: CheckboxSubMenuProps) {
   return (
     <ContextMenuSub>
-      <ContextMenuSubTrigger className={submenu.triggerCls}>
+      <ContextMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </ContextMenuSubTrigger>
 
-      <ContextMenuSubContent className={submenu.contentCls}>
+      <ContextMenuSubContent className={cn(submenu.contentCls)}>
         {submenu.options.map((option, i) => {
           if (isInputGroupMenu(option)) {
             return (
@@ -304,11 +304,11 @@ function RadioSubMenu({
 }: RadioSubMenuProps) {
   return (
     <ContextMenuSub>
-      <ContextMenuSubTrigger className={submenu.triggerCls}>
+      <ContextMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </ContextMenuSubTrigger>
 
-      <ContextMenuSubContent className={submenu.contentCls}>
+      <ContextMenuSubContent className={cn(submenu.contentCls)}>
         <ContextMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
           {submenu.options.map((option, i) => {
             if (isInputGroupMenu(option)) {

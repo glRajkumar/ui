@@ -163,9 +163,9 @@ function PaginationWrapper({
   }, [page, siblingCount, total])
 
   return (
-    <Pagination className={wrapperCls}>
-      <PaginationContent className={contentCls}>
-        <PaginationItem className={itemCls}>
+    <Pagination className={cn(wrapperCls)}>
+      <PaginationContent className={cn(contentCls)}>
+        <PaginationItem className={cn(itemCls)}>
           <PaginationPrevious
             href=""
             onClick={() => page > 1 && onPageChange(page - 1)}
@@ -178,14 +178,14 @@ function PaginationWrapper({
 
           if (isSeparator(p)) {
             return (
-              <PaginationItem key={key} className={itemCls}>
+              <PaginationItem key={key} className={cn(itemCls)}>
                 <PaginationEllipsis />
               </PaginationItem>
             )
           }
 
           return (
-            <PaginationItem key={key} className={itemCls}>
+            <PaginationItem key={key} className={cn(itemCls)}>
               <PaginationLink
                 href=""
                 onClick={() => onPageChange(p as number)}
@@ -198,7 +198,7 @@ function PaginationWrapper({
           )
         })}
 
-        <PaginationItem className={itemCls}>
+        <PaginationItem className={cn(itemCls)}>
           <PaginationNext
             href=""
             onClick={() => page < total && onPageChange(page + 1)}

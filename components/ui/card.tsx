@@ -120,24 +120,24 @@ function CardWrapper({
   footerCls,
 }: CardWrapperProps) {
   return (
-    <Card className={wrapperCls}>
-      <CardHeader className={headerCls}>
-        {title && <CardTitle className={titleCls}>{title}</CardTitle>}
-        {description && <CardDescription className={descriptionCls}>{description}</CardDescription>}
+    <Card className={cn(wrapperCls)}>
+      <CardHeader className={cn(headerCls)}>
+        {title && <CardTitle className={cn(titleCls)}>{title}</CardTitle>}
+        {description && <CardDescription className={cn(descriptionCls)}>{description}</CardDescription>}
 
         {actions}
       </CardHeader>
 
       {
         children &&
-        <CardContent className={contentCls}>
+        <CardContent className={cn(contentCls)}>
           {children}
         </CardContent>
       }
 
       {footer
         ? typeof footer === "string"
-          ? <CardFooter className={footerCls}>{footer}</CardFooter>
+          ? <CardFooter className={cn(footerCls)}>{footer}</CardFooter>
           : footer
         : null
       }

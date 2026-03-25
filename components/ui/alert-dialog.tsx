@@ -12,15 +12,11 @@ function AlertDialog(props: AlertDialogPrimitive.Root.Props) {
 }
 
 function AlertDialogTrigger(props: AlertDialogPrimitive.Trigger.Props) {
-  return (
-    <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
-  )
+  return <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
 }
 
 function AlertDialogPortal(props: AlertDialogPrimitive.Portal.Props) {
-  return (
-    <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
-  )
+  return <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
 }
 
 function AlertDialogOverlay({ className, ...props }: AlertDialogPrimitive.Backdrop.Props) {
@@ -28,7 +24,7 @@ function AlertDialogOverlay({ className, ...props }: AlertDialogPrimitive.Backdr
     <AlertDialogPrimitive.Backdrop
       data-slot="alert-dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
       {...props}
@@ -50,7 +46,7 @@ function AlertDialogContent({
         data-slot="alert-dialog-content"
         data-size={size}
         className={cn(
-          "group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-background p-4 ring-1 ring-foreground/10 duration-100 outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "group/alert-dialog-content fixed top-1/2 left-1/2 grid w-full -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-background p-4 ring-1 ring-foreground/10 duration-100 outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
@@ -77,7 +73,7 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<"div">)
     <div
       data-slot="alert-dialog-footer"
       className={cn(
-        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end",
+        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 px-4 py-2.5 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end",
         className
       )}
       {...props}
@@ -171,12 +167,12 @@ function AlertDialogFooterWrapper({
   onCancel = () => { },
 }: AlertDialogFooterWrapperProps) {
   return (
-    <AlertDialogFooter className={footerCls}>
+    <AlertDialogFooter className={cn(footerCls)}>
       {
         cancel &&
         <AlertDialogCancel
           onClick={onCancel}
-          className={cancelCls}
+          className={cn(cancelCls)}
         >
           {cancel}
         </AlertDialogCancel>
@@ -186,7 +182,7 @@ function AlertDialogFooterWrapper({
         action &&
         <AlertDialogAction
           onClick={onAction}
-          className={actionCls}
+          className={cn(actionCls)}
         >
           {action}
         </AlertDialogAction>
@@ -231,16 +227,16 @@ function AlertDialogWrapper({
     <AlertDialog {...props}>
       {
         trigger &&
-        <AlertDialogTrigger className={triggerCls}>
+        <AlertDialogTrigger className={cn(triggerCls)}>
           {trigger}
         </AlertDialogTrigger>
       }
 
-      <AlertDialogContent className={contentCls}>
-        <AlertDialogHeader className={headerCls}>
-          <AlertDialogTitle className={titleCls}>{title}</AlertDialogTitle>
+      <AlertDialogContent className={cn(contentCls)}>
+        <AlertDialogHeader className={cn(headerCls)}>
+          <AlertDialogTitle className={cn(titleCls)}>{title}</AlertDialogTitle>
           {description && (
-            <AlertDialogDescription className={descriptionCls}>
+            <AlertDialogDescription className={cn(descriptionCls)}>
               {description}
             </AlertDialogDescription>
           )}

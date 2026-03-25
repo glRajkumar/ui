@@ -70,7 +70,7 @@ function Item({
 }: itemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
+  if (isSeparator(value)) return <DropdownMenuSeparator className={cn(className)} />
 
   const label = getLabel(option)
   const opt: any = typeof option === "object" ? option : {}
@@ -104,7 +104,7 @@ function CheckboxItem({
 }: checkboxItemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
+  if (isSeparator(value)) return <DropdownMenuSeparator className={cn(className)} />
 
   const label = getLabel(option)
   const disabled = (option as any)?.disabled
@@ -113,7 +113,7 @@ function CheckboxItem({
     <DropdownMenuCheckboxItem
       checked={checked}
       disabled={disabled}
-      className={className}
+      className={cn(className)}
       indicatorAt={indicatorAt}
       onCheckedChange={onCheckedChange}
     >
@@ -134,7 +134,7 @@ function RadioItem({
 }: radioItemProps) {
   const value = getValue(option)
 
-  if (isSeparator(value)) return <DropdownMenuSeparator className={className} />
+  if (isSeparator(value)) return <DropdownMenuSeparator className={cn(className)} />
 
   const label = getLabel(option)
   const disabled = (option as any)?.disabled
@@ -143,7 +143,7 @@ function RadioItem({
     <DropdownMenuRadioItem
       value={`${value}`}
       disabled={disabled}
-      className={className}
+      className={cn(className)}
       indicatorAt={indicatorAt}
     >
       {label}
@@ -164,11 +164,11 @@ function SubMenu({
 }: SubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={submenu.triggerCls}>
+      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent className={submenu.contentCls}>
+      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
         {submenu.options.map((option, i) => {
           if (isGroupMenu(option)) {
             return (
@@ -229,11 +229,11 @@ function CheckboxSubMenu({
 }: CheckboxSubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={submenu.triggerCls}>
+      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent className={submenu.contentCls}>
+      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
         {submenu.options.map((option, i) => {
           if (isInputGroupMenu(option)) {
             return (
@@ -305,11 +305,11 @@ function RadioSubMenu({
 }: RadioSubMenuProps) {
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger className={submenu.triggerCls}>
+      <DropdownMenuSubTrigger className={cn(submenu.triggerCls)}>
         {submenu.submenu}
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent className={submenu.contentCls}>
+      <DropdownMenuSubContent className={cn(submenu.contentCls)}>
         <DropdownMenuRadioGroup value={`${value}`} onValueChange={onValueChange}>
           {submenu.options.map((option, i) => {
             if (isInputGroupMenu(option)) {
@@ -377,7 +377,7 @@ function DropdownWrapper({
 }: DropdownWrapperProps) {
   return (
     <DropdownMenu {...props}>
-      <DropdownMenuTrigger className={triggerCls}>
+      <DropdownMenuTrigger className={cn(triggerCls)}>
         {trigger}
       </DropdownMenuTrigger>
 
@@ -459,7 +459,7 @@ function DropdownCheckboxWrapper({
 
   return (
     <DropdownMenu {...props}>
-      <DropdownMenuTrigger className={triggerCls}>
+      <DropdownMenuTrigger className={cn(triggerCls)}>
         {trigger}
       </DropdownMenuTrigger>
 
@@ -547,7 +547,7 @@ function DropdownRadioWrapper({
 
   return (
     <DropdownMenu {...props}>
-      <DropdownMenuTrigger className={triggerCls}>
+      <DropdownMenuTrigger className={cn(triggerCls)}>
         {trigger}
       </DropdownMenuTrigger>
 

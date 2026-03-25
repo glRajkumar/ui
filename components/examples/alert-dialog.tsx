@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { AlertDialogWrapper } from "@/components/ui/alert-dialog";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export function AlertDialogExample() {
   const [open, setOpen] = useState(false)

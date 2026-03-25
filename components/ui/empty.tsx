@@ -122,16 +122,16 @@ function EmptyWrapper({
   mediaVariant = "default",
 }: EmptyWrapperProps) {
   return (
-    <Empty className={wrapperCls}>
-      <EmptyHeader className={headerCls}>
-        {media && <EmptyMedia className={mediaCls} variant={mediaVariant}>{media}</EmptyMedia>}
-        {title && <EmptyTitle className={titleCls}>{title}</EmptyTitle>}
-        {description && <EmptyDescription className={descriptionCls}>{description}</EmptyDescription>}
+    <Empty className={cn(wrapperCls)}>
+      <EmptyHeader className={cn(headerCls)}>
+        {media && <EmptyMedia className={cn(mediaCls)} variant={mediaVariant}>{media}</EmptyMedia>}
+        {title && <EmptyTitle className={cn(titleCls)}>{title}</EmptyTitle>}
+        {description && <EmptyDescription className={cn(descriptionCls)}>{description}</EmptyDescription>}
       </EmptyHeader>
 
       {
         content &&
-        <EmptyContent className={contentCls}>
+        <EmptyContent className={cn(contentCls)}>
           {content}
         </EmptyContent>
       }

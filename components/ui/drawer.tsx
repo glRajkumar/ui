@@ -37,7 +37,7 @@ function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof Draw
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 bg-black/10 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
       {...props}
@@ -59,7 +59,7 @@ function DrawerContent({
           <DrawerPrimitive.Content
             data-slot="drawer-content"
             className={cn(
-              "group/drawer-content fixed z-50 flex h-auto flex-col bg-background text-sm",
+              "group/drawer-content fixed flex h-auto flex-col bg-background text-sm",
               sideClasses[side],
               className
             )}
@@ -133,11 +133,11 @@ function DrawerFooterWrapper({
   onCancel = () => { },
 }: DrawerFooterWrapperProps) {
   return (
-    <DrawerFooter className={footerCls}>
+    <DrawerFooter className={cn(footerCls)}>
       {
         cancel &&
         <DrawerClose
-          className={cn(buttonVariants({ variant: "secondary" }), "border", cancelCls)}
+          className={cn(buttonVariants({ variant: "outline" }), cancelCls)}
           onClick={onCancel}
         >
           {cancel}
@@ -148,7 +148,7 @@ function DrawerFooterWrapper({
         action &&
         <Button
           onClick={onAction}
-          className={actionCls}
+          className={cn(actionCls)}
         >
           {action}
         </Button>
@@ -196,14 +196,14 @@ function DrawerWrapper({
     <Drawer {...props}>
       {
         trigger &&
-        <DrawerTrigger className={triggerCls}>{trigger}</DrawerTrigger>
+        <DrawerTrigger className={cn(triggerCls)}>{trigger}</DrawerTrigger>
       }
 
-      <DrawerContent side={side} className={contentCls}>
-        <DrawerHeader className={headerCls}>
-          <DrawerTitle className={titleCls}>{title}</DrawerTitle>
+      <DrawerContent side={side} className={cn(contentCls)}>
+        <DrawerHeader className={cn(headerCls)}>
+          <DrawerTitle className={cn(titleCls)}>{title}</DrawerTitle>
           {description &&
-            <DrawerDescription className={descriptionCls}>
+            <DrawerDescription className={cn(descriptionCls)}>
               {description}
             </DrawerDescription>
           }

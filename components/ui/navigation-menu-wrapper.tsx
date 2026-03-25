@@ -55,12 +55,12 @@ type listWrapperProps = {
 
 function NavList({ items, wrapperCls }: listWrapperProps) {
   return (
-    <ul className={wrapperCls}>
+    <ul className={cn(wrapperCls)}>
       {items.map((item, i) => (
         <li key={i}>
           <NavLinkItem
             {...item}
-            className={item.className}
+            className={cn(item.className)}
           />
         </li>
       ))}

@@ -22,7 +22,7 @@ function RootLayout({ children }: readOnlyChildren) {
       <body className={`flex flex-col min-h-screen ${interSans.variable} antialiased`}>
         <RootProvider>
           <ClientWrapper>
-            {children}
+            <div className="isolate">{children}</div>
           </ClientWrapper>
         </RootProvider>
       </body>

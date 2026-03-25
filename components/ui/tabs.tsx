@@ -105,7 +105,7 @@ function TabsWrapper({
 }: React.ComponentProps<typeof TabsPrimitive.Root> & tabsWrapperProps) {
   return (
     <Tabs {...props}>
-      <TabsList className={listCls}>
+      <TabsList className={cn(listCls)}>
         {tabs.map(tab => (
           <TabsTrigger
             key={tab.value}

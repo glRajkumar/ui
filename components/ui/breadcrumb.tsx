@@ -92,9 +92,7 @@ function BreadcrumbSeparator({
       className={cn("[&>svg]:size-3.5", className)}
       {...props}
     >
-      {children ?? (
-        <ChevronRightIcon />
-      )}
+      {children ?? <ChevronRightIcon />}
     </li>
   )
 }
@@ -111,8 +109,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
       )}
       {...props}
     >
-      <MoreHorizontalIcon
-      />
+      <MoreHorizontalIcon />
       <span className="sr-only">More</span>
     </span>
   )
@@ -154,7 +151,7 @@ function Item({
   return (
     <BreadcrumbItem className={cn(itemCls, item?.className)}>
       {isLast
-        ? <BreadcrumbPage className={pageCls}>{item?.label}</BreadcrumbPage>
+        ? <BreadcrumbPage className={cn(pageCls)}>{item?.label}</BreadcrumbPage>
         : Object?.keys(item)?.length > 2
           ? <BreadcrumbLink
             {...item}
@@ -162,7 +159,7 @@ function Item({
           >
             {item?.label}
           </BreadcrumbLink>
-          : <span className={linkCls}>{item?.label}</span>
+          : <span className={cn(linkCls)}>{item?.label}</span>
       }
     </BreadcrumbItem>
   )
@@ -188,7 +185,7 @@ function BreadcrumbFullItems({
           {...rest}
         />
         {!isLast && (
-          <BreadcrumbSeparator className={separatorCls}>
+          <BreadcrumbSeparator className={cn(separatorCls)}>
             {separator}
           </BreadcrumbSeparator>
         )}
@@ -211,7 +208,7 @@ function BreadcrumbDropdown({
         <BreadcrumbEllipsis />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className={dropdownCls}>
+      <DropdownMenuContent className={cn(dropdownCls)}>
         {hiddenItems.map((itemObj, index) => {
           const item = typeof itemObj === "string" ? { label: itemObj } : itemObj
           return (
@@ -258,8 +255,8 @@ function BreadcrumbWrapper({
 
   if (!shouldCollapse) {
     return (
-      <Breadcrumb className={containerCls}>
-        <BreadcrumbList className={listCls}>
+      <Breadcrumb className={cn(containerCls)}>
+        <BreadcrumbList className={cn(listCls)}>
           <BreadcrumbFullItems
             items={items}
             separator={separator}
@@ -285,7 +282,7 @@ function BreadcrumbWrapper({
               isLast={false}
               {...rest}
             />
-            <BreadcrumbSeparator className={separatorCls}>
+            <BreadcrumbSeparator className={cn(separatorCls)}>
               {separator}
             </BreadcrumbSeparator>
           </React.Fragment>
@@ -307,7 +304,7 @@ function BreadcrumbWrapper({
 
           return (
             <React.Fragment key={`end-${index}`}>
-              <BreadcrumbSeparator className={separatorCls}>
+              <BreadcrumbSeparator className={cn(separatorCls)}>
                 {separator}
               </BreadcrumbSeparator>
               <Item

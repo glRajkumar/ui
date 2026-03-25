@@ -44,7 +44,6 @@ type accordionWrapperProps = {
   itemCls?: string
   triggerCls?: string
   contentCls?: string
-  type?: "single" | "multiple"
   collapsible?: boolean
 } & Omit<React.ComponentProps<typeof AccordionPrimitive.Root>, "type" | "collapsible">
 
@@ -53,11 +52,10 @@ function AccordionWrapper({
   itemCls,
   triggerCls,
   contentCls,
-  type = "single",
   ...props
 }: accordionWrapperProps) {
   return (
-    <Accordion type={type} {...(props as any)}>
+    <Accordion {...(props)}>
       {items.map((item) => (
         <AccordionItem
           key={item.value}
@@ -65,7 +63,7 @@ function AccordionWrapper({
           className={cn(itemCls, item.className)}
           disabled={item.disabled}
         >
-          <AccordionTrigger className={cn("items-center justify-start gap-2 [&_.arrow]:ml-auto", triggerCls, item.triggerCls)}>
+          <AccordionTrigger className={cn("items-center justify-start gap-2", triggerCls, item.triggerCls)}>
             {item.trigger}
           </AccordionTrigger>
 
@@ -92,22 +90,45 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          // [!code ++] [!code word:>.arrow]
-          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>.arrow]:rotate-180",
+          // [!code ++] [!code word:>cursor-pointer]
+          "group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:after:border-ring aria-disabled:pointer-events-none aria-disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground cursor-pointer",
           className
         )}
         {...props}
       >
         {children}
-         // [!code ++] [!code word:arrow ]
-        <ChevronDownIcon className="arrow text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+         // [!code ++] [!code word:transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180]
+        <ChevronDownIcon data-slot="accordion-trigger-icon" className="pointer-events-none shrink-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180" />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   )
 }
-```
 
-Updated `[&[data-state=open]>svg]:rotate-180` to `[&[data-state=open]>.arrow]:rotate-180` in `AccordionPrimitive.Trigger` className and added new className `arrow` in `ChevronDownIcon` svg.
+function AccordionContent({
+  className,
+  children,
+  ...props
+}: AccordionPrimitive.Panel.Props) {
+  return (
+    <AccordionPrimitive.Panel
+      data-slot="accordion-content"
+      // [!code ++] [!code word:h-(--accordion-panel-height) transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0]
+      className="overflow-hidden text-sm h-(--accordion-panel-height) transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0"
+      {...props}
+    >
+      <div
+        className={cn(
+          // [!code --] [!code word:h-(--accordion-panel-height) transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0]
+          "pt-0 pb-2.5 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+          className
+        )}
+      >
+        {children}
+      </div>
+    </AccordionPrimitive.Panel>
+  )
+}
+```
 
 ```tsx
 export {
@@ -131,7 +152,7 @@ export {
 ### Installation
 
 ```npm
-npm install @radix-ui/react-accordion
+npm install @base-ui/react
 ```
 
 ### accordion.tsx
@@ -277,33 +298,7 @@ type={`export interface AccordionWrapper {
   contentCls?: string;
 
   /**
-   * Controls accordion behavior
-   * 
-   * - \`"single"\`: Only one item can be open at a time
-   * - \`"multiple"\`: Multiple items can be open simultaneously
-   * 
-   * @default "single"
-   * 
-   * \`\`\`tsx
-   * type="multiple"
-   * \`\`\`
-   */
-  type?: "single" | "multiple";
-
-  /**
-   * Whether an open item can be collapsed by clicking its trigger again
-   * Only applies when type is "single"
-   * 
-   * @default true
-   * 
-   * \`\`\`tsx
-   * collapsible={false} // User must always have one item open
-   * \`\`\`
-   */
-  collapsible?: boolean;
-
-  /**
-   * ...otherProps: All properties from Radix UI Accordion Root can be passed directly.
+   * ...otherProps: All properties from Base UI Accordion Root can be passed directly.
    */
   otherProps: AccordionPrimitive.Root
 }`} 
@@ -312,4 +307,4 @@ type={`export interface AccordionWrapper {
 ## Related Components
 
 - [Shadcn Accordion](https://ui.shadcn.com/docs/components/accordion)
-- [Radix UI Accordion](https://www.radix-ui.com/primitives/docs/components/accordion)
+- [Base UI Accordion](https://base-ui.com/react/components/accordion)

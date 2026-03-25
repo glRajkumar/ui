@@ -222,23 +222,21 @@ function ItemWrapper({
   itemProps, itemMediaProps,
 }: itemT) {
   return (
-    <Item {...itemProps} className={itemWrapperCls}>
-      {media && <ItemMedia {...itemMediaProps} className={mediaCls}>{media}</ItemMedia>}
-
-      {header && <ItemHeader className={headerCls}>{header}</ItemHeader>}
+    <Item {...itemProps} className={cn(itemWrapperCls)}>
+      {media && <ItemMedia {...itemMediaProps} className={cn(mediaCls)}>{media}</ItemMedia>}
+      {header && <ItemHeader className={cn(headerCls)}>{header}</ItemHeader>}
 
       {
         (title || description || content) &&
-        <ItemContent className={contentCls}>
-          {title && <ItemTitle className={titleCls}>{title}</ItemTitle>}
-          {description && <ItemDescription className={descriptionCls}>{description}</ItemDescription>}
+        <ItemContent className={cn(contentCls)}>
+          {title && <ItemTitle className={cn(titleCls)}>{title}</ItemTitle>}
+          {description && <ItemDescription className={cn(descriptionCls)}>{description}</ItemDescription>}
           {content}
         </ItemContent>
       }
 
-      {actions && <ItemActions className={actionsCls}>{actions}</ItemActions>}
-
-      {footer && <ItemFooter className={footerCls}>{footer}</ItemFooter>}
+      {actions && <ItemActions className={cn(actionsCls)}>{actions}</ItemActions>}
+      {footer && <ItemFooter className={cn(footerCls)}>{footer}</ItemFooter>}
     </Item>
   )
 }
