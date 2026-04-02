@@ -9,7 +9,7 @@ import { ToggleGroupEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,92 +23,6 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `toggle-group` component.
-
-```tsx
-import { cn, getKey, getLabel, getValue, isOption } from "@/lib/utils"
-```
-
-```tsx title="ui/toggle-group.tsx"
-type toggleItemT = allowedPrimitiveT | (optionT & {
-  "aria-label"?: string
-})
-
-type toggleItemsT = toggleItemT[]
-
-type itemProps = {
-  option: toggleItemT
-  className?: string
-}
-
-function Item({ option, className }: itemProps) {
-  const value = getValue(option)
-  const label = getLabel(option)
-  const isObj = isOption(option)
-
-  return (
-    <ToggleGroupItem
-      value={`${value}`}
-      className={cn(className, isObj && option.className)}
-      aria-label={isObj ? option["aria-label"] : undefined}
-    >
-      {isObj ? label : `${label}`}
-    </ToggleGroupItem>
-  )
-}
-
-type props = {
-  options: toggleItemT[]
-  itemCls?: string
-  type?: "single" | "multiple"
-} & Omit<React.ComponentProps<typeof ToggleGroupPrimitive.Root>, "type">
-
-function ToggleGroupWrapper({
-  options,
-  itemCls,
-  type = "single",
-  ...props
-}: props) {
-  return (
-    <ToggleGroup type={type} {...(props as any)}>
-      {options.map((option, i) => (
-        <Item
-          key={getKey(option, i)}
-          option={option}
-          className={itemCls}
-        />
-      ))}
-    </ToggleGroup>
-  )
-}
-```
-
-Updated `ToggleGroupWrapper` in the export block.
-
-```tsx
-export {
-  ToggleGroup,
-  ToggleGroupItem,
-// [!code focus:3] [!code ++:3]
-  ToggleGroupWrapper,
-  type toggleItemT,
-  type toggleItemsT,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-toggle @radix-ui/react-toggle-group
-```
-
-### toggle-group.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/toggle.tsx"'>
@@ -119,11 +33,6 @@ Copy and paste the following code into your project.
   ./components/ui/toggle-group.tsx
 </include>
 
-### Done
-You can now use `ToggleGroupWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -194,7 +103,7 @@ type={`export interface ToggleGroupWrapper {
   type?: "single" | "multiple";
 
   /**
-   * ...otherProps: All properties from Radix UI ToggleGroup Root can be passed directly.
+   * ...otherProps: All properties from Base UI ToggleGroup Root can be passed directly.
    */
   otherProps: ToggleGroupPrimitive.Root
 }`} 
@@ -203,4 +112,4 @@ type={`export interface ToggleGroupWrapper {
 ## Related Components
 
 - [Shadcn Toggle Group](https://ui.shadcn.com/docs/components/toggle-group)
-- [Radix UI Toggle Group](https://www.radix-ui.com/primitives/docs/components/toggle-group)
+- [Base UI Toggle Group](https://base-ui.com/react/components/toggle-group)

@@ -9,7 +9,7 @@ import { CardEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,95 +23,12 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `card` component.
-
-```tsx title="ui/card.tsx"
-type CardWrapperProps = {
-  title?: React.ReactNode
-  description?: React.ReactNode
-  children?: React.ReactNode
-  footer?: React.ReactNode
-  actions?: React.ReactNode
-  wrapperCls?: string
-  headerCls?: string
-  titleCls?: string
-  descriptionCls?: string
-  contentCls?: string
-  footerCls?: string
-}
-
-function CardWrapper({
-  title,
-  description,
-  children,
-  footer,
-  actions,
-  wrapperCls,
-  headerCls,
-  titleCls,
-  descriptionCls,
-  contentCls,
-  footerCls,
-}: CardWrapperProps) {
-  return (
-    <Card className={wrapperCls}>
-      <CardHeader className={headerCls}>
-        {title && <CardTitle className={titleCls}>{title}</CardTitle>}
-        {description && <CardDescription className={descriptionCls}>{description}</CardDescription>}
-
-        {actions}
-      </CardHeader>
-
-      {
-        children &&
-        <CardContent className={contentCls}>
-          {children}
-        </CardContent>
-      }
-
-      {footer
-        ? typeof footer === "string"
-          ? <CardFooter className={footerCls}>{footer}</CardFooter>
-          : footer
-        : null
-      }
-    </Card>
-  )
-}
-```
-
-```tsx
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
-// [!code focus] [!code ++:1]
-  CardWrapper,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### card.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/card.tsx"'>
   ./components/ui/card.tsx
 </include>
 
-### Done
-You can now use `CardWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -274,4 +191,4 @@ type={`export interface CardWrapper {
 ## Related Components
 
 - [Shadcn Card](https://ui.shadcn.com/docs/components/card)
-- [Radix UI Card](https://www.radix-ui.com/primitives/docs/components/card)
+- [Base UI Card](https://base-ui.com/react/components/card)

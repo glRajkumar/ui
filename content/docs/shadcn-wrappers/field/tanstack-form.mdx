@@ -23,7 +23,7 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Add following shadcn components: `select`, `command`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
+Add following shadcn components: `select`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
 
 Update same components from our site.
 
@@ -272,25 +272,6 @@ type comboboxFieldProps = Omit<comboboxProps, 'value' | 'onValueChange' | 'name'
 </form.AppField>
 ```
 
-#### MultiSelectComboboxField
-
-```ts
-type multiSelectComboboxFieldProps = Omit<multiSelectComboboxProps, 'value' | 'onValueChange' | 'name'> & {
-  label?: React.ReactNode
-}
-```
-
-```tsx
-<form.AppField name="country">
-  {(field) => (
-    <field.MultiSelectComboboxField
-      label="Country"
-      options={['USA', 'UK', 'Canada', 'Australia', 'India']}
-      placeholder="Select your country"
-    />
-  )}
-</form.AppField>
-```
 
 ## Related Components
 

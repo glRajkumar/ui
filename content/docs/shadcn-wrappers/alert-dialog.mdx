@@ -10,7 +10,7 @@ import { AlertDialogEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -24,166 +24,12 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `alert-dialog` component.
-
-```tsx title="ui/alert-dialog.tsx"
-type AlertDialogFooterWrapperProps = {
-  cancel?: React.ReactNode
-  action?: React.ReactNode
-  footerCls?: string
-  actionCls?: string
-  cancelCls?: string
-  onAction?: () => void
-  onCancel?: () => void
-}
-
-function AlertDialogFooterWrapper({
-  cancel,
-  action,
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction = () => { },
-  onCancel = () => { },
-}: AlertDialogFooterWrapperProps) {
-  return (
-    <AlertDialogFooter className={footerCls}>
-      {
-        cancel &&
-        <AlertDialogCancel
-          onClick={onCancel}
-          className={cancelCls}
-          asChild={typeof cancel !== "string"}
-        >
-          {cancel}
-        </AlertDialogCancel>
-      }
-
-      {
-        action &&
-        <AlertDialogAction
-          onClick={onAction}
-          className={actionCls}
-          asChild={typeof action !== "string"}
-        >
-          {action}
-        </AlertDialogAction>
-      }
-    </AlertDialogFooter>
-  )
-}
-
-type AlertDialogWrapperProps = {
-  title?: React.ReactNode
-  trigger?: React.ReactNode
-  children?: React.ReactNode
-  description?: React.ReactNode
-  descriptionCls?: string
-  contentCls?: string
-  headerCls?: string
-  titleCls?: string
-} & AlertDialogFooterWrapperProps
-
-function AlertDialogWrapper({
-  trigger,
-  title = "Are you absolutely sure?",
-  description = "This action cannot be undone. This will permanently remove your data from our servers.",
-  children,
-  contentCls,
-  headerCls,
-  titleCls,
-  descriptionCls,
-
-  cancel = "Cancel",
-  action = "Confirm",
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction,
-  onCancel,
-  ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
-  return (
-    <AlertDialog {...props}>
-      {trigger &&
-        <AlertDialogTrigger asChild={typeof trigger !== "string"}>{trigger}</AlertDialogTrigger>
-      }
-
-      <AlertDialogContent className={contentCls}>
-        <AlertDialogHeader className={headerCls}>
-          <AlertDialogTitle className={titleCls}>{title}</AlertDialogTitle>
-          {description && (
-            <AlertDialogDescription className={descriptionCls}>
-              {description}
-            </AlertDialogDescription>
-          )}
-        </AlertDialogHeader>
-
-        {children}
-
-        {
-          (!!cancel || !!action) &&
-          <AlertDialogFooterWrapper
-            cancel={cancel}
-            action={action}
-            footerCls={footerCls}
-            actionCls={actionCls}
-            cancelCls={cancelCls}
-            onAction={onAction}
-            onCancel={onCancel}
-          />
-        }
-      </AlertDialogContent>
-    </AlertDialog>
-  )
-}
-```
-
-Add `AlertDialogWrapper` and `AlertDialogFooterWrapper` at the export block.
-
-```tsx
-export {
-  AlertDialog,
-  AlertDialogPortal,
-  AlertDialogOverlay,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogCancel,
-/* [!code ++:2] [!code focus:2] */
-  AlertDialogWrapper,
-  AlertDialogFooterWrapper,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-alert-dialog
-```
-
-### alert-dialog.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/alert-dialog.tsx"'>
   ./components/ui/alert-dialog.tsx
 </include>
 
-### Done
-You can now use `AlertDialogWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -424,7 +270,7 @@ type={`export interface AlertDialogWrapper {
   descriptionCls?: string;
 
  /**
-   * ...otherProps: All properties from Radix UI Alert Dialog Root can be passed directly.
+   * ...otherProps: All properties from Base UI Alert Dialog Root can be passed directly.
    */
   otherProps: AlertDialogPrimitive.Root
 }`} 
@@ -435,4 +281,4 @@ Properties of `AlertDialogFooterWrapper` can be passed directly.
 ## Related Components
 
 - [Shadcn Alert Dialog](https://ui.shadcn.com/docs/components/alert-dialog)
-- [Radix UI Alert Dialog](https://www.radix-ui.com/primitives/docs/components/alert-dialog)
+- [Base UI Alert Dialog](https://base-ui.com/react/components/alert-dialog)

@@ -10,7 +10,7 @@ import { SheetEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -24,172 +24,12 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `sheet` component.
-
-```tsx title="ui/sheet.tsx"
-type SheetFooterWrapperProps = {
-  cancel?: React.ReactNode
-  action?: React.ReactNode
-  footerCls?: string
-  actionCls?: string
-  cancelCls?: string
-  onAction?: () => void
-  onCancel?: () => void
-}
-
-function SheetFooterWrapper({
-  cancel,
-  action,
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction = () => { },
-  onCancel = () => { },
-}: SheetFooterWrapperProps) {
-  return (
-    <SheetFooter className={footerCls}>
-      {
-        cancel &&
-        <SheetClose asChild>
-          <Button
-            variant="secondary"
-            onClick={onCancel}
-            className={cn("border", cancelCls)}
-            asChild={typeof cancel !== "string"}
-          >
-            {cancel}
-          </Button>
-        </SheetClose>
-      }
-
-      {
-        action &&
-        <Button
-          onClick={onAction}
-          className={actionCls}
-          asChild={typeof action !== "string"}
-        >
-          {action}
-        </Button>
-      }
-    </SheetFooter>
-  )
-}
-
-type SheetWrapperProps = {
-  title?: React.ReactNode
-  trigger?: React.ReactNode
-  children?: React.ReactNode
-  description?: React.ReactNode
-  descriptionCls?: string
-  contentCls?: string
-  headerCls?: string
-  titleCls?: string
-  side?: "top" | "bottom" | "right" | "left"
-} & SheetFooterWrapperProps
-
-function SheetWrapper({
-  trigger,
-  title,
-  description,
-  children,
-  contentCls,
-  headerCls,
-  titleCls,
-  descriptionCls,
-
-  cancel = "Cancel",
-  action,
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction,
-  onCancel,
-
-  side = "right",
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Root> & SheetWrapperProps) {
-  return (
-    <Sheet {...props}>
-      {trigger &&
-        <SheetTrigger asChild={typeof trigger !== "string"}>{trigger}</SheetTrigger>
-      }
-
-      <SheetContent side={side} className={contentCls}>
-        <SheetHeader className={headerCls}>
-          <SheetTitle className={titleCls}>{title}</SheetTitle>
-          {description && (
-            <SheetDescription className={descriptionCls}>
-              {description}
-            </SheetDescription>
-          )}
-        </SheetHeader>
-
-        {children}
-
-        {
-          (!!cancel || !!action) &&
-          <SheetFooterWrapper
-            cancel={cancel}
-            action={action}
-            footerCls={footerCls}
-            actionCls={actionCls}
-            cancelCls={cancelCls}
-            onAction={onAction}
-            onCancel={onCancel}
-          />
-        }
-      </SheetContent>
-    </Sheet>
-  )
-}
-```
-
-Add `SheetWrapper` and `SheetFooterWrapper` at the export block.
-
-```tsx
-export {
-  Sheet,
-  SheetPortal,
-  SheetOverlay,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
-  SheetDescription,
-  SheetAction,
-  SheetClose,
-/* [!code ++:2] [!code focus:2] */
-  SheetWrapper,
-  SheetFooterWrapper,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-dialog
-```
-
-### sheet.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/sheet.tsx"'>
   ./components/ui/sheet.tsx
 </include>
 
-### Done
-You can now use `SheetWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -439,7 +279,7 @@ type={`export interface SheetWrapper {
   side?: "top" | "bottom" | "right" | "left"
 
  /**
-   * ...otherProps: All properties from Radix UI Sheet Root can be passed directly.
+   * ...otherProps: All properties from Base UI Sheet Root can be passed directly.
    */
   otherProps: SheetPrimitive.Root
 }`} 
@@ -450,4 +290,4 @@ Properties of `SheetFooterWrapper` can be passed directly.
 ## Related Components
 
 - [Shadcn Sheet](https://ui.shadcn.com/docs/components/sheet)
-- [Radix UI Dialog](https://www.radix-ui.com/primitives/docs/components/dialog)
+- [Base UI Dialog](https://base-ui.com/react/components/dialog)

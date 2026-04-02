@@ -23,7 +23,7 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Add following shadcn components: `select`, `command`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
+Add following shadcn components: `select`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
 
 Update same components from our site.
 
@@ -241,21 +241,6 @@ type ComboboxProps<T extends FieldValues> = BaseProps<T> &
 />
 ```
 
-#### MultiSelectComboboxWrapper
-
-```ts
-type MultiSelectComboboxProps<T extends FieldValues> = BaseProps<T> &
-  Omit<multiSelectComboboxProps, "value" | "onValueChange">
-```
-
-```tsx
-<MultiSelectComboboxWrapper
-  name="hobbies"
-  label="Hobbies"
-  control={form.control}
-  options={["Music", "Sports", "Travel"]}
-/>
-```
 
 ## Related Components
 

@@ -9,7 +9,7 @@ import { MenubarEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,141 +23,28 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Update following code in `ui/menubar.tsx`
-
-```tsx
-/* [!code focus] */
-function MenubarCheckboxItem({
-  className,
-  children,
-  checked,
-/* [!code ++:1] [!code focus] */
-  indicatorAt = "right",
-  ...props
-/* [!code ++:1] [!code focus] */
-}: React.ComponentProps<typeof MenubarPrimitive.CheckboxItem> & { indicatorAt?: indicatorAtT }) {
-  return (
-    <MenubarPrimitive.CheckboxItem
-      data-slot="menubar-checkbox-item"
-      className={cn(
-/* [!code ++:1] [!code focus] */
-        "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-xs py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-/* [!code ++:1] [!code focus] */
-        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
-      )}
-      checked={checked}
-      {...props}
-    >
-      /* [!code ++:1] [!code focus] */
-      <span className={cn("pointer-events-none absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
-        <MenubarPrimitive.ItemIndicator>
-          <CheckIcon className="size-4" />
-        </MenubarPrimitive.ItemIndicator>
-      </span>
-      {children}
-    </MenubarPrimitive.CheckboxItem>
-  )
-}
-
-/* [!code focus] */
-function MenubarRadioItem({
-  className,
-  children,
-/* [!code ++:1] [!code focus] */
-  indicatorAt = "right",
-  ...props
-/* [!code ++:1] [!code focus] */
-}: React.ComponentProps<typeof MenubarPrimitive.RadioItem> & { indicatorAt?: indicatorAtT }) {
-  return (
-    <MenubarPrimitive.RadioItem
-      data-slot="menubar-radio-item"
-      className={cn(
-/* [!code ++:1] [!code focus] */
-        "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-xs py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-/* [!code ++:1] [!code focus] */
-        indicatorAt === "right" ? "pr-8 pl-2" : "pr-2 pl-8",
-      )}
-      {...props}
-    >
-/* [!code ++:1] [!code focus] */
-      <span className={cn("pointer-events-none absolute flex size-3.5 items-center justify-center", indicatorAt === "right" ? "right-2" : "left-2")}>
-        <MenubarPrimitive.ItemIndicator>
-          <CircleIcon className="size-2 fill-current" />
-        </MenubarPrimitive.ItemIndicator>
-      </span>
-      {children}
-    </MenubarPrimitive.RadioItem>
-  )
-}
-```
-
-Create new file name `types/menu.d.ts`.
-
-<include cwd meta='title="types/menu.d.ts"'>
-  ./types/menu.d.ts
-</include>
-
-Add following lines to `lib/utils.ts`
-
-```tsx
-export const isGroupMenu = optionTypeChecker<menuGroupT>("group")
-export const isSubMenu = optionTypeChecker<subMenuT>("submenu")
-export const isInputGroupMenu = optionTypeChecker<menuInputGroupT>("group")
-export const isInputSubMenu = optionTypeChecker<inputSubMenuT>("submenu")
-```
-
-Create new file name `ui/menubar-wrapper.tsx`.
-
-<include cwd meta='title="ui/menubar-wrapper.tsx"'>
-  ./components/ui/menubar-wrapper.tsx
-</include>
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-menubar
-```
-
 Copy and paste the following code into your project.
 
-### general.d.ts
 <include cwd meta='title="types/general.d.ts"'>
   ./types/general.d.ts
 </include>
 
-### menu.d.ts
 <include cwd meta='title="types/menu.d.ts"'>
   ./types/menu.d.ts
 </include>
 
-### utils.ts
 <include cwd meta='title="lib/utils.ts"'>
   ./lib/utils.ts
 </include>
 
-### menubar.tsx
 <include cwd meta='title="ui/menubar.tsx"'>
   ./components/ui/menubar.tsx
 </include>
 
-### menubar-wrapper.tsx
 <include cwd meta='title="ui/menubar-wrapper.tsx"'>
   ./components/ui/menubar-wrapper.tsx
 </include>
 
-### Done
-You can now use `MenubarCheckboxWrapper`, `MenubarRadioWrapper`, and `MenubarWrapper`.
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -685,7 +572,7 @@ type={`export interface MenubarWrapper {
   onSelect?: (value: string | number | boolean) => void;
 
   /**
-   * ...otherProps: All properties from Radix UI Menubar Root can be passed directly.
+   * ...otherProps: All properties from Base UI Menubar Root can be passed directly.
    * Excludes: children, asChild, value
    */
   otherProps: MenubarPrimitive.Root
@@ -771,7 +658,7 @@ type={`export interface MenubarCheckboxWrapper {
   onCheckedChange?: (value: string | number | boolean, checked: boolean) => void;
 
   /**
-   * ...otherProps: All properties from Radix UI Menubar Root can be passed directly.
+   * ...otherProps: All properties from Base UI Menubar Root can be passed directly.
    * Excludes: children, asChild, value
    */
   otherProps: MenubarPrimitive.Root
@@ -854,7 +741,7 @@ type={`export interface MenubarRadioWrapper {
   onValueChange?: (value: string | number | boolean) => void;
 
   /**
-   * ...otherProps: All properties from Radix UI Menubar Root can be passed directly.
+   * ...otherProps: All properties from Base UI Menubar Root can be passed directly.
    * Excludes: children, asChild, value
    */
   otherProps: MenubarPrimitive.Root
@@ -864,4 +751,4 @@ type={`export interface MenubarRadioWrapper {
 ## Related Components
 
 - [Shadcn Menubar](https://ui.shadcn.com/docs/components/menubar)
-- [Radix UI Menubar](https://www.radix-ui.com/primitives/docs/components/menubar)
+- [Base UI Menubar](https://base-ui.com/react/components/menubar)

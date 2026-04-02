@@ -10,7 +10,7 @@ import { DialogEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -24,169 +24,12 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `dialog` component.
-
-```tsx title="ui/dialog.tsx"
-type DialogFooterWrapperProps = {
-  cancel?: React.ReactNode
-  action?: React.ReactNode
-  footerCls?: string
-  actionCls?: string
-  cancelCls?: string
-  onAction?: () => void
-  onCancel?: () => void
-}
-
-function DialogFooterWrapper({
-  cancel,
-  action,
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction = () => { },
-  onCancel = () => { },
-}: DialogFooterWrapperProps) {
-  return (
-    <DialogFooter className={footerCls}>
-      {
-        cancel &&
-        <DialogClose asChild>
-          <Button
-            variant="secondary"
-            onClick={onCancel}
-            className={cn("border", cancelCls)}
-            asChild={typeof cancel !== "string"}
-          >
-            {cancel}
-          </Button>
-        </DialogClose>
-      }
-
-      {
-        action &&
-        <Button
-          onClick={onAction}
-          className={actionCls}
-          asChild={typeof action !== "string"}
-        >
-          {action}
-        </Button>
-      }
-    </DialogFooter>
-  )
-}
-
-type DialogWrapperProps = {
-  title?: React.ReactNode
-  trigger?: React.ReactNode
-  children?: React.ReactNode
-  description?: React.ReactNode
-  descriptionCls?: string
-  contentCls?: string
-  headerCls?: string
-  titleCls?: string
-} & DialogFooterWrapperProps
-
-function DialogWrapper({
-  trigger,
-  title,
-  description,
-  children,
-  contentCls,
-  headerCls,
-  titleCls,
-  descriptionCls,
-
-  cancel = "Cancel",
-  action,
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction,
-  onCancel,
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Root> & DialogWrapperProps) {
-  return (
-    <Dialog {...props}>
-      {trigger &&
-        <DialogTrigger asChild={typeof trigger !== "string"}>{trigger}</DialogTrigger>
-      }
-
-      <DialogContent className={contentCls}>
-        <DialogHeader className={headerCls}>
-          <DialogTitle className={titleCls}>{title}</DialogTitle>
-          {description && (
-            <DialogDescription className={descriptionCls}>
-              {description}
-            </DialogDescription>
-          )}
-        </DialogHeader>
-
-        {children}
-
-        {
-          (!!cancel || !!action) &&
-          <DialogFooterWrapper
-            cancel={cancel}
-            action={action}
-            footerCls={footerCls}
-            actionCls={actionCls}
-            cancelCls={cancelCls}
-            onAction={onAction}
-            onCancel={onCancel}
-          />
-        }
-      </DialogContent>
-    </Dialog>
-  )
-}
-```
-
-Add `DialogWrapper` and `DialogFooterWrapper` at the export block.
-
-```tsx
-export {
-  Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-  DialogAction,
-  DialogClose,
-/* [!code ++:2] [!code focus:2] */
-  DialogWrapper,
-  DialogFooterWrapper,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-dialog
-```
-
-### dialog.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/dialog.tsx"'>
   ./components/ui/dialog.tsx
 </include>
 
-### Done
-You can now use `DialogWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -425,7 +268,7 @@ type={`export interface DialogWrapper {
   descriptionCls?: string;
 
  /**
-   * ...otherProps: All properties from Radix UI Dialog Root can be passed directly.
+   * ...otherProps: All properties from Base UI Dialog Root can be passed directly.
    */
   otherProps: DialogPrimitive.Root
 }`} 
@@ -436,4 +279,4 @@ Properties of `DialogFooterWrapper` can be passed directly.
 ## Related Components
 
 - [Shadcn Dialog](https://ui.shadcn.com/docs/components/dialog)
-- [Radix UI Dialog](https://www.radix-ui.com/primitives/docs/components/dialog)
+- [Base UI Dialog](https://base-ui.com/react/components/dialog)

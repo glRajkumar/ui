@@ -9,7 +9,7 @@ import { TabsEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,101 +23,12 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `tabs` component.
-
-```tsx title="ui/tabs.tsx"
-type tabItemT = {
-  value: string
-  trigger: React.ReactNode
-  content: React.ReactNode
-  disabled?: boolean
-  triggerCls?: string
-  contentCls?: string
-}
-
-type tabItemsT = tabItemT[]
-type tabsWrapperProps = {
-  tabs: tabItemsT
-  listCls?: string
-  triggerCls?: string
-  contentCls?: string
-}
-
-function TabsWrapper({
-  tabs,
-  listCls,
-  triggerCls,
-  contentCls,
-  ...props
-}: React.ComponentProps<typeof TabsPrimitive.Root> & tabsWrapperProps) {
-  return (
-    <Tabs {...props}>
-      <TabsList className={listCls}>
-        {tabs.map(tab => (
-          <TabsTrigger
-            key={tab.value}
-            value={tab.value}
-            disabled={tab.disabled}
-            className={cn(triggerCls, tab.triggerCls)}
-          >
-            {tab.trigger}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-
-      {tabs.map(tab => (
-        <TabsContent
-          key={tab.value}
-          value={tab.value}
-          className={cn(contentCls, tab.contentCls)}
-        >
-          {tab.content}
-        </TabsContent>
-      ))}
-    </Tabs>
-  )
-}
-```
-
-Updated `TabsWrapper` in the export block.
-
-```tsx
-export {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-// [!code focus:3] [!code ++:3]
-  TabsWrapper,
-  type tabItemT,
-  type tabItemsT,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-tabs
-```
-
-### tabs.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/tabs.tsx"'>
   ./components/ui/tabs.tsx
 </include>
 
-### Done
-You can now use `TabsWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -336,7 +247,7 @@ type={`export interface TabsWrapper {
   contentCls?: string;
 
  /**
-   * ...otherProps: All properties from Radix UI Tabs Root can be passed directly.
+   * ...otherProps: All properties from Base UI Tabs Root can be passed directly.
    */
   otherProps: TabsPrimitive.Root
 }`} 
@@ -345,4 +256,4 @@ type={`export interface TabsWrapper {
 ## Related Components
 
 - [Shadcn Tabs](https://ui.shadcn.com/docs/components/tabs)
-- [Radix UI Tabs](https://www.radix-ui.com/primitives/docs/components/tabs)
+- [Base UI Tabs](https://base-ui.com/react/components/tabs)

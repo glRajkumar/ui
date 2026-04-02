@@ -10,7 +10,7 @@ import { DrawerEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -24,169 +24,12 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `drawer` component.
-
-```tsx title="ui/drawer.tsx"
-type DrawerFooterWrapperProps = {
-  cancel?: React.ReactNode
-  action?: React.ReactNode
-  footerCls?: string
-  actionCls?: string
-  cancelCls?: string
-  onAction?: () => void
-  onCancel?: () => void
-}
-
-function DrawerFooterWrapper({
-  cancel,
-  action,
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction = () => { },
-  onCancel = () => { },
-}: DrawerFooterWrapperProps) {
-  return (
-    <DrawerFooter className={footerCls}>
-      {
-        cancel &&
-        <DrawerClose asChild>
-          <Button
-            variant="secondary"
-            onClick={onCancel}
-            className={cn("border", cancelCls)}
-            asChild={typeof cancel !== "string"}
-          >
-            {cancel}
-          </Button>
-        </DrawerClose>
-      }
-
-      {
-        action &&
-        <Button
-          onClick={onAction}
-          className={actionCls}
-          asChild={typeof action !== "string"}
-        >
-          {action}
-        </Button>
-      }
-    </DrawerFooter>
-  )
-}
-
-type DrawerWrapperProps = {
-  title?: React.ReactNode
-  trigger?: React.ReactNode
-  children?: React.ReactNode
-  description?: React.ReactNode
-  descriptionCls?: string
-  contentCls?: string
-  headerCls?: string
-  titleCls?: string
-} & DrawerFooterWrapperProps
-
-function DrawerWrapper({
-  trigger,
-  title,
-  description,
-  children,
-  contentCls,
-  headerCls,
-  titleCls,
-  descriptionCls,
-
-  cancel = "Cancel",
-  action,
-  footerCls,
-  actionCls,
-  cancelCls,
-  onAction,
-  onCancel,
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root> & DrawerWrapperProps) {
-  return (
-    <Drawer {...props}>
-      {trigger &&
-        <DrawerTrigger asChild={typeof trigger !== "string"}>{trigger}</DrawerTrigger>
-      }
-
-      <DrawerContent className={contentCls}>
-        <DrawerHeader className={headerCls}>
-          <DrawerTitle className={titleCls}>{title}</DrawerTitle>
-          {description && (
-            <DrawerDescription className={descriptionCls}>
-              {description}
-            </DrawerDescription>
-          )}
-        </DrawerHeader>
-
-        {children}
-
-        {
-          (!!cancel || !!action) &&
-          <DrawerFooterWrapper
-            cancel={cancel}
-            action={action}
-            footerCls={footerCls}
-            actionCls={actionCls}
-            cancelCls={cancelCls}
-            onAction={onAction}
-            onCancel={onCancel}
-          />
-        }
-      </DrawerContent>
-    </Drawer>
-  )
-}
-```
-
-Add `DrawerWrapper` and `DrawerFooterWrapper` at the export block.
-
-```tsx
-export {
-  Drawer,
-  DrawerPortal,
-  DrawerOverlay,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerAction,
-  DrawerClose,
-/* [!code ++:2] [!code focus:2] */
-  DrawerWrapper,
-  DrawerFooterWrapper,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install vaul
-```
-
-### drawer.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/drawer.tsx"'>
   ./components/ui/drawer.tsx
 </include>
 
-### Done
-You can now use `DrawerWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -425,7 +268,7 @@ type={`export interface DrawerWrapper {
   descriptionCls?: string;
 
  /**
-   * ...otherProps: All properties from Radix UI Drawer Root can be passed directly.
+   * ...otherProps: All properties from Base UI Drawer Root can be passed directly.
    */
   otherProps: DrawerPrimitive.Root
 }`} 

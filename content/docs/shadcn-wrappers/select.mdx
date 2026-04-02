@@ -9,7 +9,7 @@ import { SelectEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,149 +23,20 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `select` component.
-
-```tsx
-import { cn, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from "@/lib/utils"
-```
-
-```tsx title="ui/select.tsx"
-type itemProps = {
-  option: allowedPrimitiveT | optionT
-  className?: string
-  indicatorAt?: indicatorAtT
-}
-
-function Item({ option, className, indicatorAt }: itemProps) {
-  const value = getValue(option)
-  const label = getLabel(option)
-  const optCls = isOption(option) ? option.className : undefined
-
-  if (isSeparator(value)) return <SelectSeparator className={className} />
-
-  return (
-    <SelectItem
-      value={`${value}`}
-      className={cn(className, optCls)}
-      indicatorAt={indicatorAt}
-    >
-      {label}
-    </SelectItem>
-  )
-}
-
-type selectProps = {
-  id?: string
-  options: optionsT
-  placeholder?: string
-  indicatorAt?: indicatorAtT
-  triggerCls?: string
-  contentCls?: string
-  groupCls?: string
-  groupLabelCls?: string
-  itemCls?: string
-} & React.ComponentProps<typeof SelectPrimitive.Root>
-function SelectWrapper({
-  id, options, placeholder, indicatorAt,
-  triggerCls, contentCls, groupCls, itemCls,
-  groupLabelCls, ...props
-}: selectProps) {
-  return (
-    <Select {...props}>
-      <SelectTrigger id={id} className={cn("w-full", triggerCls)}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-
-      <SelectContent className={contentCls}>
-        {
-          options.map((option, i) => {
-            if (isGroup(option)) {
-              return (
-                <SelectGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <SelectLabel className={cn("pb-0.5", groupLabelCls)}>{option.group}</SelectLabel>
-
-                  {option.options.map((grOpts, j) => (
-                    <Item
-                      key={getKey(grOpts, j)}
-                      option={grOpts}
-                      className={cn("pl-4", itemCls)}
-                      indicatorAt={indicatorAt}
-                    />
-                  ))}
-                </SelectGroup>
-              )
-            }
-
-            return (
-              <Item
-                key={getKey(option, i)}
-                option={option}
-                className={itemCls}
-                indicatorAt={indicatorAt}
-              />
-            )
-          })
-        }
-      </SelectContent>
-    </Select>
-  )
-}
-```
-
-Add `SelectWrapper` at the export block.
-
-```tsx
-export {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-/* [!code ++:2] [!code focus:2] */
-  SelectWrapper,
-  type selectProps,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-select
-```
-
 Copy and paste the following code into your project.
 
-### general.d.ts
 <include cwd meta='title="types/general.d.ts"'>
   ./types/general.d.ts
 </include>
 
-### utils.ts
 <include cwd meta='title="lib/utils.ts"'>
   ./lib/utils-no-drop.ts
 </include>
 
-### select.tsx
 <include cwd meta='title="ui/select.tsx"'>
   ./components/ui/select.tsx
 </include>
 
-### Done
-You can now use `SelectWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -313,7 +184,7 @@ type={`export interface SelectWrapper {
   groupLabelCls?: string
 
   /**
-   * ...otherProps: All properties from Radix UI Select Root can be passed directly.
+   * ...otherProps: All properties from Base UI Select Root can be passed directly.
    */
   otherProps: SelectPrimitive.Root
 }`} 
@@ -322,4 +193,4 @@ type={`export interface SelectWrapper {
 ## Related Components
 
 - [Shadcn Select](https://ui.shadcn.com/docs/components/select)
-- [Radix UI Select](https://www.radix-ui.com/primitives/docs/components/select)
+- [Base UI Select](https://base-ui.com/react/components/select)

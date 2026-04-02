@@ -9,7 +9,7 @@ import { AccordionEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -24,150 +24,14 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `accordion` component.
-
-```tsx title="ui/accordion.tsx"
-type accordionItemT = {
-  value: string
-  trigger: React.ReactNode
-  content: React.ReactNode
-  className?: string
-  triggerCls?: string
-  contentCls?: string
-  disabled?: boolean
-}
-
-type accordionItemsT = accordionItemT[]
-
-type accordionWrapperProps = {
-  items: accordionItemsT
-  itemCls?: string
-  triggerCls?: string
-  contentCls?: string
-  collapsible?: boolean
-} & Omit<React.ComponentProps<typeof AccordionPrimitive.Root>, "type" | "collapsible">
-
-function AccordionWrapper({
-  items,
-  itemCls,
-  triggerCls,
-  contentCls,
-  ...props
-}: accordionWrapperProps) {
-  return (
-    <Accordion {...(props)}>
-      {items.map((item) => (
-        <AccordionItem
-          key={item.value}
-          value={item.value}
-          className={cn(itemCls, item.className)}
-          disabled={item.disabled}
-        >
-          <AccordionTrigger className={cn("items-center justify-start gap-2", triggerCls, item.triggerCls)}>
-            {item.trigger}
-          </AccordionTrigger>
-
-          <AccordionContent className={cn(contentCls, item.contentCls)}>
-            {item.content}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
-  )
-}
-```
-
-Update following changes in `AccordionTrigger` component.
-
-```tsx
-function AccordionTrigger({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {
-  return (
-    <AccordionPrimitive.Header className="flex">
-      <AccordionPrimitive.Trigger
-        data-slot="accordion-trigger"
-        className={cn(
-          // [!code ++] [!code word:>cursor-pointer]
-          "group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:after:border-ring aria-disabled:pointer-events-none aria-disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground cursor-pointer",
-          className
-        )}
-        {...props}
-      >
-        {children}
-         // [!code ++] [!code word:transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180]
-        <ChevronDownIcon data-slot="accordion-trigger-icon" className="pointer-events-none shrink-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180" />
-      </AccordionPrimitive.Trigger>
-    </AccordionPrimitive.Header>
-  )
-}
-
-function AccordionContent({
-  className,
-  children,
-  ...props
-}: AccordionPrimitive.Panel.Props) {
-  return (
-    <AccordionPrimitive.Panel
-      data-slot="accordion-content"
-      // [!code ++] [!code word:h-(--accordion-panel-height) transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0]
-      className="overflow-hidden text-sm h-(--accordion-panel-height) transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0"
-      {...props}
-    >
-      <div
-        className={cn(
-          // [!code --] [!code word:h-(--accordion-panel-height) transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0]
-          "pt-0 pb-2.5 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
-          className
-        )}
-      >
-        {children}
-      </div>
-    </AccordionPrimitive.Panel>
-  )
-}
-```
-
-```tsx
-export {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-// [!code focus:3] [!code ++:3]
-  AccordionWrapper,
-  type accordionItemT,
-  type accordionItemsT,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @base-ui/react
-```
-
-### accordion.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/accordion.tsx"'>
   ./components/ui/accordion.tsx
 </include>
 
-### Done
-You can now use `AccordionWrapper`
-
-</div>
-</section>
 </Tab>
+
 </Tabs>
 
 

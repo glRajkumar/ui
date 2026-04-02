@@ -9,7 +9,7 @@ import { EmptyEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,86 +23,12 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Copy and paste the following code into shadcn `empty` component.
-
-```tsx title="ui/empty.tsx"
-type EmptyWrapperProps = {
-  title?: React.ReactNode
-  description?: React.ReactNode
-  media?: React.ReactNode
-  content?: React.ReactNode
-  wrapperCls?: string
-  headerCls?: string
-  titleCls?: string
-  mediaCls?: string
-  descriptionCls?: string
-  contentCls?: string
-  mediaVariant?: VariantProps<typeof emptyMediaVariants>["variant"]
-}
-
-function EmptyWrapper({
-  title,
-  description,
-  media,
-  content,
-  wrapperCls,
-  headerCls,
-  titleCls,
-  mediaCls,
-  descriptionCls,
-  contentCls,
-  mediaVariant = "default",
-}: EmptyWrapperProps) {
-  return (
-    <Empty className={wrapperCls}>
-      <EmptyHeader className={headerCls}>
-        {media && <EmptyMedia className={mediaCls} variant={mediaVariant}>{media}</EmptyMedia>}
-        {title && <EmptyTitle className={titleCls}>{title}</EmptyTitle>}
-        {description && <EmptyDescription className={descriptionCls}>{description}</EmptyDescription>}
-      </EmptyHeader>
-
-      {
-        content &&
-        <EmptyContent className={contentCls}>
-          {content}
-        </EmptyContent>
-      }
-    </Empty>
-  )
-}
-```
-
-```tsx
-export {
-  Empty,
-  EmptyHeader,
-  EmptyTitle,
-  EmptyDescription,
-  EmptyContent,
-  EmptyMedia,
-// [!code focus] [!code ++:1]
-  EmptyWrapper,
-}
-```
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### empty.tsx
 Copy and paste the following code into your project.
 
 <include cwd meta='title="ui/empty.tsx"'>
   ./components/ui/empty.tsx
 </include>
 
-### Done
-You can now use `EmptyWrapper`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 

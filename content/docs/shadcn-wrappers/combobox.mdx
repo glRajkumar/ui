@@ -9,7 +9,7 @@ import { ComboboxEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,48 +23,20 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-The Combobox is built using a composition of the `<Popover />`, `<Badge />`, `<Button />` components.
-
-See installation instructions for the components from shadcn.
-
-<include cwd meta='title="ui/combobox.tsx"'>
-  ./components/ui/combobox.tsx
-</include>
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-slot @radix-ui/react-popover cmdk
-```
-
 Copy and paste the following code into your project.
 
-### general.d.ts
 <include cwd meta='title="types/general.d.ts"'>
   ./types/general.d.ts
 </include>
 
-### utils.ts
 <include cwd meta='title="lib/utils.ts"'>
   ./lib/utils-no-drop.ts
 </include>
 
-### combobox.tsx
 <include cwd meta='title="ui/combobox.tsx"'>
   ./components/ui/combobox.tsx
 </include>
 
-### Done
-You can now use `Combobox`
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -73,17 +45,18 @@ You can now use `Combobox`
 
 ### Basic
 ```tsx
-import { Combobox, MultiSelectCombobox } from "@/components/ui/combobox"
+import { ComboboxWrapper } from "@/components/ui/combobox"
 
 export function Basic() {
   return (
     <>
-      <Combobox
+      <ComboboxWrapper
         options={["Option 1", "Option 2", "Option 3"]}
         placeholder="Select an option"
       />
       
-      <MultiSelectCombobox
+      <ComboboxWrapper
+        multiple
         options={["Option 1", "Option 2", "Option 3"]}
         placeholder="Select an option"
       />
@@ -95,7 +68,7 @@ export function Basic() {
 ### Controlled
 ```tsx
 import { useState } from "react"
-import { Combobox, MultiSelectCombobox } from "@/components/ui/combobox"
+import { ComboboxWrapper } from "@/components/ui/combobox"
 
 export function Controlled() {
   const [values, setValues] = useState<allowedPrimitiveT[]>([])
@@ -103,14 +76,15 @@ export function Controlled() {
 
   return (
     <>
-      <Combobox
+      <ComboboxWrapper
         options={["Option 1", "Option 2", "Option 3"]}
         placeholder="Select an option"
         value={value}
         onValueChange={setValue}
       />
       
-      <MultiSelectCombobox
+      <ComboboxWrapper
+        multiple
         options={["Option 1", "Option 2", "Option 3"]}
         placeholder="Select an option"
         value={values}
@@ -124,7 +98,7 @@ export function Async() {
   const { data: options, isLoading } = useAsyncOptions()
   
   return (
-    <Combobox
+    <ComboboxWrapper
       options={options || []}
       isLoading={isLoading}
     />
@@ -136,7 +110,7 @@ export function Async() {
 ```tsx
 export function Styled() {
   return (
-    <Combobox
+    <ComboboxWrapper
       options={["Small", "Medium", "Large"]}
       placeholder="Select size"
       triggerCls="w-[200px] bg-slate-50"
@@ -307,48 +281,7 @@ type={`export interface Combobox {
 }`}
 />
 
-#### MultiSelectCombobox
-<AutoTypeTable 
-name="MultiSelectCombobox" 
-type={`export interface MultiSelectCombobox {
-  /**
-   * Maximum number of selected items to display as individual badges
-   * 
-   * When selection count exceeds this number, shows "{count} selected" instead
-   * 
-   * \`\`\`tsx
-   * // Shows "Apple", "Banana" badges
-   * maxVisibleCount={2} value={["apple", "banana"]}
-   * 
-   * // Shows "3 selected" badge
-   * maxVisibleCount={2} value={["apple", "banana", "cherry"]}
-   * \`\`\`
-   * 
-   * @default 2
-   */
-  maxVisibleCount?: number;
-
-  /**
-   * Controlled value - array of currently selected option values
-   * 
-   * \`\`\`tsx
-   * const [values, setValues] = useState<string[]>([]);
-   * <MultiSelectCombobox value={values} onValueChange={setValues} />
-   * \`\`\`
-   */
-  value?: (string | number | boolean)[];
-
-  /**
-   * Callback fired when the selected values change
-   * 
-   * Automatically toggles selection: adds if not present, removes if already selected
-   * 
-   * @param values - The updated array of selected values
-   */
-  onValueChange?: (values: (string | number | boolean)[]) => void;
-}`} 
-/>
 
 ## Related Components
 
-- [Shadcn Combobox](https://ui.shadcn.com/docs/components/combobox)
+- [Base UI Combobox](https://base-ui.com/react/components/combobox)

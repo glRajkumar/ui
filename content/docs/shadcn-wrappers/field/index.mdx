@@ -23,7 +23,7 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Add following shadcn components: `select`, `command`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
+Add following shadcn components: `select`, `popover`, `calendar`, `textarea`, `input`, `radio-group`, `form`, `button`, `label`, `checkbox`, `switch`.
 
 Update same components from our site.
 
@@ -272,22 +272,6 @@ type ComboboxProps = BaseProps & comboboxProps
   name="fruit"
   label="Favorite Fruit"
   options={["Apple", "Banana", "Mango"]}
-  value={value}
-  onValueChange={val => onChange(val)}
-/>
-```
-
-#### MultiSelectComboboxWrapper
-
-```ts
-type MultiSelectComboboxProps = BaseProps & multiSelectComboboxProps
-```
-
-```tsx
-<MultiSelectComboboxWrapper
-  name="hobbies"
-  label="Hobbies"
-  options={["Music", "Sports", "Travel"]}
   value={value}
   onValueChange={val => onChange(val)}
 />

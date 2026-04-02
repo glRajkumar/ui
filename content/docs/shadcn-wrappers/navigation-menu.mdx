@@ -9,7 +9,7 @@ import { NavigationMenuEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual', 'Full Guide']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
 
 <Tab value="CLI">
 
@@ -23,41 +23,16 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 <Tab value="Manual">
 
-Create new file name `ui/navigation-menu-wrapper.tsx`.
-
-<include cwd meta='title="ui/navigation-menu-wrapper.tsx"'>
-  ./components/ui/navigation-menu-wrapper.tsx
-</include>
-
-</Tab>
-
-<Tab value="Full Guide">
-<section id="setup-section">
-<div className="fd-steps [&_h3]:fd-step">
-
-### Installation
-
-```npm
-npm install @radix-ui/react-navigation-menu
-```
-
 Copy and paste the following code into your project.
 
-### navigation-menu.tsx
 <include cwd meta='title="ui/navigation-menu.tsx"'>
   ./components/ui/navigation-menu.tsx
 </include>
 
-### navigation-menu-wrapper.tsx
 <include cwd meta='title="ui/navigation-menu-wrapper.tsx"'>
   ./components/ui/navigation-menu-wrapper.tsx
 </include>
 
-### Done
-You can now use `NavigationMenuWrapper`, `NavList`, and `NavLinkItem`.
-
-</div>
-</section>
 </Tab>
 </Tabs>
 
@@ -450,7 +425,7 @@ type={`export interface NavigationMenuWrapper {
   contentCls?: string;
 
   /**
-   * ...otherProps: All properties from Radix UI NavigationMenuPrimitive Root can be passed directly.
+   * ...otherProps: All properties from Base UI NavigationMenuPrimitive Root can be passed directly.
    */
   otherProps: NavigationMenuPrimitive.Root
 }`}
@@ -459,4 +434,4 @@ type={`export interface NavigationMenuWrapper {
 ## Related Components
 
 - [Shadcn Navigation Menu](https://ui.shadcn.com/docs/components/navigation-menu)
-- [Radix UI Navigation Menu](https://www.radix-ui.com/primitives/docs/components/navigation-menu)
+- [Base UI Navigation Menu](https://base-ui.com/react/components/navigation-menu)

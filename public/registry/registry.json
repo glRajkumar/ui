@@ -73,11 +73,7 @@
       "type": "registry:ui",
       "title": "Combobox",
       "description": "Combobox componet with wrapper",
-      "registryDependencies": [
-        "popover",
-        "button",
-        "badge"
-      ],
+      "registryDependencies": [],
       "files": [
         {
           "path": "types/general.d.ts",
