@@ -54,6 +54,21 @@
       ]
     },
     {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Button componet with wrapper",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
@@ -253,10 +268,7 @@
       "type": "registry:ui",
       "title": "Drawer",
       "description": "drawer componet with wrapper",
-      "registryDependencies": [
-        "drawer",
-        "button"
-      ],
+      "registryDependencies": [],
       "files": [
         {
           "path": "components/ui/drawer.tsx",

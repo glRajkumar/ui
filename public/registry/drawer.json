@@ -3,10 +3,7 @@
   "name": "drawer",
   "title": "Drawer",
   "description": "drawer componet with wrapper",
-  "registryDependencies": [
-    "drawer",
-    "button"
-  ],
+  "registryDependencies": [],
   "files": [
     {
       "path": "components/ui/drawer.tsx",
