@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "card",
   "title": "Card",
-  "description": "cardt componet with wrapper",
+  "description": "card componet with wrapper",
   "registryDependencies": [
     "card"
   ],

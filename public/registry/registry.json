@@ -72,13 +72,28 @@
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
-      "description": "cardt componet with wrapper",
+      "description": "card componet with wrapper",
       "registryDependencies": [
         "card"
       ],
       "files": [
         {
           "path": "components/ui/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "title": "Carousel",
+      "description": "Carousel componet with wrapper",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "components/ui/carousel.tsx",
           "type": "registry:ui"
         }
       ]

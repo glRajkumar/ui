@@ -1,13 +1,12 @@
 "use client"
 
 import * as React from "react"
-import useEmblaCarousel, {
-  type UseEmblaCarouselType,
-} from "embla-carousel-react"
+import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+
 import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -231,12 +230,57 @@ function CarouselNext({
   )
 }
 
+type carouselItemT = {
+  content: React.ReactNode
+  itemCls?: string
+}
+
+type CarouselWrapperProps = {
+  items: carouselItemT[]
+  showControls?: boolean
+  contentCls?: string
+  itemCls?: string
+  previousCls?: string
+  nextCls?: string
+}
+
+function CarouselWrapper({
+  items,
+  showControls = true,
+  contentCls,
+  itemCls,
+  previousCls,
+  nextCls,
+  ...props
+}: React.ComponentProps<typeof Carousel> & CarouselWrapperProps) {
+  return (
+    <Carousel {...props}>
+      <CarouselContent className={cn(contentCls)}>
+        {items.map((item, index) => (
+          <CarouselItem key={index} className={cn(itemCls, item.itemCls)}>
+            {item.content}
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+
+      {showControls && (
+        <>
+          <CarouselPrevious className={cn(previousCls)} />
+          <CarouselNext className={cn(nextCls)} />
+        </>
+      )}
+    </Carousel>
+  )
+}
+
 export {
   type CarouselApi,
+  type carouselItemT,
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselWrapper,
   useCarousel,
 }

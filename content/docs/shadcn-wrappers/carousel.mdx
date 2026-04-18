@@ -1,0 +1,250 @@
+---
+title: Carousel
+description: A simplified wrapper for Shadcn Carousel with data-driven slides and optional navigation controls
+---
+
+import { CarouselEx } from "@/components/examples";
+
+<CarouselEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/carousel
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/carousel.tsx"'>
+  ./components/ui/carousel.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+```tsx
+import { CarouselWrapper, type carouselItemT } from "@/components/ui/carousel";
+
+const slides: carouselItemT[] = [
+  { content: <div className="p-8 bg-muted rounded-lg">Slide 1</div> },
+  { content: <div className="p-8 bg-muted rounded-lg">Slide 2</div> },
+  { content: <div className="p-8 bg-muted rounded-lg">Slide 3</div> },
+]
+
+export function Basic() {
+  return (
+    <CarouselWrapper
+      items={slides}
+      className="w-full max-w-sm mx-auto"
+    />
+  )
+}
+```
+
+### Multi-slide per view
+```tsx
+import { CarouselWrapper, type carouselItemT } from "@/components/ui/carousel";
+
+export function MultiSlide() {
+  const slides: carouselItemT[] = Array.from({ length: 6 }, (_, i) => ({
+    content: (
+      <div className="flex aspect-square items-center justify-center rounded-lg bg-muted text-xl font-semibold">
+        {i + 1}
+      </div>
+    ),
+  }))
+
+  return (
+    <CarouselWrapper
+      items={slides}
+      className="w-full max-w-sm mx-auto"
+      opts={{ align: "start" }}
+      itemCls="basis-1/3"
+    />
+  )
+}
+```
+
+### Vertical
+```tsx
+import { CarouselWrapper, type carouselItemT } from "@/components/ui/carousel";
+
+export function Vertical() {
+  const slides: carouselItemT[] = [
+    { content: <div className="flex h-32 items-center justify-center rounded-lg bg-muted">Slide 1</div> },
+    { content: <div className="flex h-32 items-center justify-center rounded-lg bg-muted">Slide 2</div> },
+    { content: <div className="flex h-32 items-center justify-center rounded-lg bg-muted">Slide 3</div> },
+  ]
+
+  return (
+    <CarouselWrapper
+      items={slides}
+      orientation="vertical"
+      opts={{ align: "start" }}
+      className="w-full max-w-xs mx-auto"
+    />
+  )
+}
+```
+
+### Loop, no controls
+```tsx
+import { CarouselWrapper, type carouselItemT } from "@/components/ui/carousel";
+
+export function LoopNoControls() {
+  const slides: carouselItemT[] = [
+    { content: <img src="/slide-1.jpg" className="rounded-lg w-full" /> },
+    { content: <img src="/slide-2.jpg" className="rounded-lg w-full" /> },
+    { content: <img src="/slide-3.jpg" className="rounded-lg w-full" /> },
+  ]
+
+  return (
+    <CarouselWrapper
+      items={slides}
+      opts={{ loop: true }}
+      showControls={false}
+      className="w-full max-w-sm mx-auto"
+    />
+  )
+}
+```
+
+### Controlled with API
+```tsx
+import { useState } from "react"
+import { CarouselWrapper, type CarouselApi, type carouselItemT } from "@/components/ui/carousel"
+
+export function Controlled() {
+  const [api, setApi] = useState<CarouselApi>()
+
+  const slides: carouselItemT[] = Array.from({ length: 5 }, (_, i) => ({
+    content: <div className="flex aspect-video items-center justify-center rounded-lg bg-muted text-lg">Slide {i + 1}</div>,
+  }))
+
+  return (
+    <CarouselWrapper
+      items={slides}
+      setApi={setApi}
+      className="w-full max-w-sm mx-auto"
+    />
+  )
+}
+```
+
+## Reference
+
+#### carouselItemT
+<AutoTypeTable 
+name="carouselItemT" 
+type={`export type carouselItemT = {
+  /**
+   * Content to render inside the carousel slide
+   * Can be any React element
+   * 
+   * \`\`\`tsx
+   * content: <img src="/photo.jpg" className="rounded-lg w-full" />
+   * \`\`\`
+   */
+  content: React.ReactNode;
+
+  /**
+   * Optional CSS classes for this specific slide item
+   * Merges with the global \`itemCls\` prop
+   * 
+   * \`\`\`tsx
+   * itemCls="basis-1/2 pl-2"
+   * \`\`\`
+   */
+  itemCls?: string;
+}`} 
+/>
+
+#### CarouselWrapper
+<AutoTypeTable 
+name="CarouselWrapper" 
+type={`export interface CarouselWrapper {
+  /**
+   * Array of slide items to render
+   * Each item contains the content and optional per-slide class
+   * 
+   * \`\`\`tsx
+   * items={[
+   *   { content: <Slide1 /> },
+   *   { content: <Slide2 />, itemCls: "basis-1/2" },
+   * ]}
+   * \`\`\`
+   */
+  items: carouselItemT[];
+
+  /**
+   * Whether to render Previous and Next navigation buttons
+   * Defaults to true
+   * 
+   * \`\`\`tsx
+   * showControls={false}
+   * \`\`\`
+   */
+  showControls?: boolean;
+
+  /**
+   * Additional CSS classes for the CarouselContent container
+   * 
+   * \`\`\`tsx
+   * contentCls="-ml-2"
+   * \`\`\`
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes applied to all CarouselItem elements
+   * Individual items can override with their own \`itemCls\`
+   * 
+   * \`\`\`tsx
+   * itemCls="basis-1/3 pl-2"
+   * \`\`\`
+   */
+  itemCls?: string;
+
+  /**
+   * Additional CSS classes for the Previous button
+   * 
+   * \`\`\`tsx
+   * previousCls="-left-6"
+   * \`\`\`
+   */
+  previousCls?: string;
+
+  /**
+   * Additional CSS classes for the Next button
+   * 
+   * \`\`\`tsx
+   * nextCls="-right-6"
+   * \`\`\`
+   */
+  nextCls?: string;
+
+  /**
+   * ...otherProps: All Carousel root props (opts, plugins, orientation, setApi) can be passed directly.
+   */
+  otherProps: CarouselProps;
+}`} 
+/>
+
+## Related Components
+
+- [Shadcn Carousel](https://ui.shadcn.com/docs/components/carousel)
+- [Embla Carousel](https://www.embla-carousel.com)

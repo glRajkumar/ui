@@ -1,3 +1,4 @@
+import { CarouselExample } from "./carousel";
 import { NavigationMenuExample } from "./navigation-menu";
 import { ToggleGroupExample } from "./toggle-group";
 import { AlertDialogExample } from "./alert-dialog";
@@ -212,6 +213,14 @@ export function Field_TF_Ex() {
   return (
     <Wrapper path="/components/examples/field-tf.tsx">
       <Field_TF_Example />
+    </Wrapper>
+  )
+}
+
+export function CarouselEx() {
+  return (
+    <Wrapper path="/components/examples/carousel.tsx">
+      <CarouselExample />
     </Wrapper>
   )
 }
