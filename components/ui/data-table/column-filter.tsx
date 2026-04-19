@@ -1,6 +1,6 @@
-import { Column } from "@tanstack/react-table";
+import { Column } from '@tanstack/react-table'
 
-import { ComboboxWrapper, type ComboboxWrapperProps } from "../combobox";
+import { ComboboxWrapper, type ComboboxWrapperProps } from '../combobox'
 
 interface ColumndFilterProps<TData, TValue>
   extends Omit<ComboboxWrapperProps, 'options' | 'value' | 'onValueChange' | 'label'> {

@@ -1,8 +1,11 @@
-type menuOptionT = allowedPrimitiveT | optionT | (optionT & {
-  variant?: "default" | "destructive"
-  shortcut?: string
-  disabled?: boolean
-})
+type menuOptionT =
+  | allowedPrimitiveT
+  | optionT
+  | (optionT & {
+      variant?: 'default' | 'destructive'
+      shortcut?: string
+      disabled?: boolean
+    })
 
 type menuGroupT = {
   group: string
@@ -20,9 +23,12 @@ type subMenuT = {
 
 type menuOptionsT = (menuOptionT | menuGroupT | subMenuT)[]
 
-type menuInputOptionT = allowedPrimitiveT | optionT | (optionT & {
-  disabled?: boolean
-})
+type menuInputOptionT =
+  | allowedPrimitiveT
+  | optionT
+  | (optionT & {
+      disabled?: boolean
+    })
 
 type menuInputGroupT = {
   group: string

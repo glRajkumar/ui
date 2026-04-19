@@ -1,10 +1,10 @@
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 
 export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
       title: 'Glrk UI',
     },
-    githubUrl: "https://github.com/glRajkumar/ui"
-  };
+    githubUrl: 'https://github.com/glRajkumar/ui',
+  }
 }

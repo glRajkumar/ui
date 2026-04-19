@@ -1,6 +1,6 @@
-import { User } from "lucide-react";
+import { User } from 'lucide-react'
 
-import { TabsWrapper } from "@/components/ui/tabs";
+import { TabsWrapper } from '@/components/ui/tabs'
 
 export function TabsExample() {
   return (
@@ -9,8 +9,8 @@ export function TabsExample() {
       className="w-80"
       tabs={[
         {
-          value: "overview",
-          trigger: "Overview",
+          value: 'overview',
+          trigger: 'Overview',
           content: (
             <div>
               <h3 className="text-lg font-semibold mb-2">Welcome</h3>
@@ -19,8 +19,12 @@ export function TabsExample() {
           ),
         },
         {
-          value: "details",
-          trigger: <><User /> Details</>,
+          value: 'details',
+          trigger: (
+            <>
+              <User /> Details
+            </>
+          ),
           content: (
             <div>
               <h3 className="text-lg font-semibold mb-2">Details</h3>

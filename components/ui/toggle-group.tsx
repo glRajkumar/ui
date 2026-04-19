@@ -1,37 +1,37 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group"
-import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
-import { type VariantProps } from "class-variance-authority"
+import * as React from 'react'
+import { ToggleGroup as ToggleGroupPrimitive } from '@base-ui/react/toggle-group'
+import { Toggle as TogglePrimitive } from '@base-ui/react/toggle'
+import { type VariantProps } from 'class-variance-authority'
 
-import { cn, getKey, getLabel, getValue, isOption } from "@/lib/utils"
+import { cn, getKey, getLabel, getValue, isOption } from '@/lib/utils'
 
-import { toggleVariants } from "@/components/ui/toggle"
+import { toggleVariants } from '@/components/ui/toggle'
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {
     spacing?: number
-    orientation?: "horizontal" | "vertical"
+    orientation?: 'horizontal' | 'vertical'
   }
 >({
-  size: "default",
-  variant: "default",
+  size: 'default',
+  variant: 'default',
   spacing: 0,
-  orientation: "horizontal",
+  orientation: 'horizontal',
 })
 
 type toggleGrpT = ToggleGroupPrimitive.Props &
   VariantProps<typeof toggleVariants> & {
     spacing?: number
-    orientation?: "horizontal" | "vertical"
+    orientation?: 'horizontal' | 'vertical'
   }
 function ToggleGroup({
   className,
   variant,
   size,
   spacing = 0,
-  orientation = "horizontal",
+  orientation = 'horizontal',
   children,
   ...props
 }: toggleGrpT) {
@@ -42,16 +42,14 @@ function ToggleGroup({
       data-size={size}
       data-spacing={spacing}
       data-orientation={orientation}
-      style={{ "--gap": spacing } as React.CSSProperties}
+      style={{ '--gap': spacing } as React.CSSProperties}
       className={cn(
-        "group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch",
-        className
+        'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch',
+        className,
       )}
       {...props}
     >
-      <ToggleGroupContext.Provider
-        value={{ variant, size, spacing, orientation }}
-      >
+      <ToggleGroupContext.Provider value={{ variant, size, spacing, orientation }}>
         {children}
       </ToggleGroupContext.Provider>
     </ToggleGroupPrimitive>
@@ -61,8 +59,8 @@ function ToggleGroup({
 function ToggleGroupItem({
   className,
   children,
-  variant = "default",
-  size = "default",
+  variant = 'default',
+  size = 'default',
   ...props
 }: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {
   const context = React.useContext(ToggleGroupContext)
@@ -74,12 +72,12 @@ function ToggleGroupItem({
       data-size={context.size || size}
       data-spacing={context.spacing}
       className={cn(
-        "shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t",
+        'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
         toggleVariants({
           variant: context.variant || variant,
           size: context.size || size,
         }),
-        className
+        className,
       )}
       {...props}
     >
@@ -88,9 +86,11 @@ function ToggleGroupItem({
   )
 }
 
-type toggleItemT = allowedPrimitiveT | (optionT & {
-  "aria-label"?: string
-})
+type toggleItemT =
+  | allowedPrimitiveT
+  | (optionT & {
+      'aria-label'?: string
+    })
 
 type toggleItemsT = toggleItemT[]
 
@@ -107,8 +107,8 @@ function Item({ option, className }: itemProps) {
   return (
     <ToggleGroupItem
       value={`${value}`}
-      className={cn("border", className, isObj && option.className)}
-      aria-label={isObj ? option["aria-label"] : undefined}
+      className={cn('border', className, isObj && option.className)}
+      aria-label={isObj ? option['aria-label'] : undefined}
     >
       {isObj ? label : `${label}`}
     </ToggleGroupItem>
@@ -120,28 +120,14 @@ type props = toggleGrpT & {
   itemCls?: string
 }
 
-function ToggleGroupWrapper({
-  options,
-  itemCls,
-  ...props
-}: props) {
+function ToggleGroupWrapper({ options, itemCls, ...props }: props) {
   return (
     <ToggleGroup {...props}>
       {options.map((option, i) => (
-        <Item
-          key={getKey(option, i)}
-          option={option}
-          className={itemCls}
-        />
+        <Item key={getKey(option, i)} option={option} className={itemCls} />
       ))}
     </ToggleGroup>
   )
 }
 
-export {
-  ToggleGroup,
-  ToggleGroupItem,
-  ToggleGroupWrapper,
-  type toggleItemT,
-  type toggleItemsT,
-}
+export { ToggleGroup, ToggleGroupItem, ToggleGroupWrapper, type toggleItemT, type toggleItemsT }

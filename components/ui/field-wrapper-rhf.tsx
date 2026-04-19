@@ -47,7 +47,11 @@ export function InputWrapper<T extends FieldValues>({ name, control, ...props }:
 
 type TextareaProps<T extends FieldValues> = BaseProps<T> &
   Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'name' | 'value' | 'onChange' | 'onBlur'>
-export function TextareaWrapper<T extends FieldValues>({ name, control, ...props }: TextareaProps<T>) {
+export function TextareaWrapper<T extends FieldValues>({
+  name,
+  control,
+  ...props
+}: TextareaProps<T>) {
   return (
     <Controller
       name={name}
@@ -92,7 +96,11 @@ export function RadioWrapper<T extends FieldValues>({ name, control, ...props }:
 type CheckboxProps<T extends FieldValues> = BaseProps<T> & {
   options: (allowedPrimitiveT | optionT)[]
 }
-export function CheckboxWrapper<T extends FieldValues>({ name, control, ...props }: CheckboxProps<T>) {
+export function CheckboxWrapper<T extends FieldValues>({
+  name,
+  control,
+  ...props
+}: CheckboxProps<T>) {
   return (
     <Controller
       name={name}
@@ -131,7 +139,8 @@ export function SwitchWrapper<T extends FieldValues>({ name, control, ...props }
   )
 }
 
-type SelectProps<T extends FieldValues> = BaseProps<T> & Omit<selectProps, 'value' | 'onValueChange'>
+type SelectProps<T extends FieldValues> = BaseProps<T> &
+  Omit<selectProps, 'value' | 'onValueChange'>
 export function SelectWrapper<T extends FieldValues>({ name, control, ...props }: SelectProps<T>) {
   return (
     <Controller
@@ -153,7 +162,11 @@ export function SelectWrapper<T extends FieldValues>({ name, control, ...props }
 
 type DatePickerProps<T extends FieldValues> = BaseProps<T> &
   Omit<React.ComponentProps<typeof DatePicker>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'>
-export function DatePickerWrapper<T extends FieldValues>({ name, control, ...props }: DatePickerProps<T>) {
+export function DatePickerWrapper<T extends FieldValues>({
+  name,
+  control,
+  ...props
+}: DatePickerProps<T>) {
   return (
     <Controller
       name={name}
@@ -173,7 +186,11 @@ export function DatePickerWrapper<T extends FieldValues>({ name, control, ...pro
 }
 
 type ComboboxProps<T extends FieldValues> = BaseProps<T> & ComboboxWrapperProps
-export function ComboboxWrapper<T extends FieldValues>({ name, control, ...props }: ComboboxProps<T>) {
+export function ComboboxWrapper<T extends FieldValues>({
+  name,
+  control,
+  ...props
+}: ComboboxProps<T>) {
   return (
     <Controller
       name={name}

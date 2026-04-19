@@ -1,8 +1,8 @@
-import path from "path";
-import fs from 'fs';
+import path from 'path'
+import fs from 'fs'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CodeBlock } from "./extended/code-block";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { CodeBlock } from './extended/code-block'
 
 type props = {
   children: React.ReactNode
@@ -11,7 +11,7 @@ type props = {
 
 async function Code({ path: filePath }: { path: string }) {
   const absolute = path.join(process.cwd(), filePath)
-  const code = await fs.promises.readFile(absolute, "utf8")
+  const code = await fs.promises.readFile(absolute, 'utf8')
 
   return <CodeBlock>{code}</CodeBlock>
 }

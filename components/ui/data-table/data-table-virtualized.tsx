@@ -1,19 +1,13 @@
-"use client";
+'use client'
 
-import { useEffect, useRef } from "react";
-import { type VirtualizerOptions, useVirtualizer } from "@tanstack/react-virtual";
-import { flexRender, Table as TanstackTable } from "@tanstack/react-table";
-import { Loader } from "lucide-react";
+import { useEffect, useRef } from 'react'
+import { type VirtualizerOptions, useVirtualizer } from '@tanstack/react-virtual'
+import { flexRender, Table as TanstackTable } from '@tanstack/react-table'
+import { Loader } from 'lucide-react'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 interface DataTableProps<TData> {
   table: TanstackTable<TData>
@@ -22,16 +16,18 @@ interface DataTableProps<TData> {
   hasNextPage?: boolean
   isFetchingNextPage?: boolean
   fetchNextPage?: () => void
-  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>>
+  virtualizerOptions?: Partial<
+    Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>
+  >
 }
 
 export function DataTableVirtualized<TData>({
   table,
-  emptyMessage = "No matching results.",
-  className = "",
+  emptyMessage = 'No matching results.',
+  className = '',
   hasNextPage = false,
   isFetchingNextPage = false,
-  fetchNextPage = () => { },
+  fetchNextPage = () => {},
   virtualizerOptions,
 }: DataTableProps<TData>) {
   const rows = table.getRowModel().rows
@@ -61,23 +57,17 @@ export function DataTableVirtualized<TData>({
   }, [rows.length, hasNextPage, virtualItems, isFetchingNextPage, fetchNextPage])
 
   return (
-    <div
-      ref={parentRef}
-      className={cn("overflow-auto", className)}
-    >
+    <div ref={parentRef} className={cn('overflow-auto', className)}>
       <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
         <table className="w-full caption-bottom text-sm">
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map(header => (
                   <TableHead key={header.id} className="text-theme-grey-text">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -117,7 +107,7 @@ export function DataTableVirtualized<TData>({
                   <TableRow
                     key={row.id}
                     ref={virtualizer.measureElement}
-                    data-state={row?.getIsSelected?.() && "selected"}
+                    data-state={row?.getIsSelected?.() && 'selected'}
                     data-index={virtualRow.index}
                     className="hover:bg-muted/40"
                     style={{
@@ -125,19 +115,11 @@ export function DataTableVirtualized<TData>({
                       transform: `translateY(${virtualRow.start - (isLoaderRow ? index - 1 : index) * virtualRow.size}px)`,
                     }}
                   >
-                    {
-                      row?.getVisibleCells()?.map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          className="text-[13px] capitalize"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))
-                    }
+                    {row?.getVisibleCells()?.map(cell => (
+                      <TableCell key={cell.id} className="text-[13px] capitalize">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 )
               })

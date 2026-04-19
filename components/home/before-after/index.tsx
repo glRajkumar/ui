@@ -1,9 +1,7 @@
-import { SelectDemo } from "./select"
+import { SelectDemo } from './select'
 
 function BeforeAfter() {
-  return (
-    <SelectDemo />
-  )
+  return <SelectDemo />
 }
 
 export default BeforeAfter

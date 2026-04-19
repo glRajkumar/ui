@@ -1,9 +1,9 @@
-import { ChevronsDown, ChevronsUp, ChevronsUpDown } from "lucide-react";
-import { Column } from "@tanstack/react-table";
+import { ChevronsDown, ChevronsUp, ChevronsUpDown } from 'lucide-react'
+import { Column } from '@tanstack/react-table'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
 interface ColumnHeaderProps<TData, TValue> {
   className?: string
@@ -21,9 +21,9 @@ export function ColumnSorter<TData, TValue>({
   const sorted = column.getIsSorted()
 
   function onSort() {
-    if (sorted === "asc") {
+    if (sorted === 'asc') {
       column.toggleSorting(true)
-    } else if (sorted === "desc") {
+    } else if (sorted === 'desc') {
       column.clearSorting()
     } else {
       column.toggleSorting(false)
@@ -31,15 +31,11 @@ export function ColumnSorter<TData, TValue>({
   }
 
   return (
-    <Button
-      variant="ghost"
-      className={cn("-ml-2", className)}
-      onClick={onSort}
-    >
+    <Button variant="ghost" className={cn('-ml-2', className)} onClick={onSort}>
       {title}
-      {sorted === "desc" ? (
+      {sorted === 'desc' ? (
         <ChevronsDown className="ml-4 opacity-80" />
-      ) : sorted === "asc" ? (
+      ) : sorted === 'asc' ? (
         <ChevronsUp className="ml-4 opacity-80" />
       ) : (
         <ChevronsUpDown className="ml-4 opacity-80" />

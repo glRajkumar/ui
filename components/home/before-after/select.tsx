@@ -1,60 +1,55 @@
-"use client";
+'use client'
 
-import { useForm } from "react-hook-form"
-import { SelectWrapper } from "@/components/ui/select"
+import { useForm } from 'react-hook-form'
+import { SelectWrapper } from '@/components/ui/select'
 
-import { isGroup, isOption, isSeparator } from "@/lib/utils"
-import { options as optionsStr } from "./data"
-import { filterOpt, indent } from "./utils"
-import { options } from "../../examples/data"
+import { isGroup, isOption, isSeparator } from '@/lib/utils'
+import { options as optionsStr } from './data'
+import { filterOpt, indent } from './utils'
+import { options } from '../../examples/data'
 
-import Wrapper from "./wrapper";
+import Wrapper from './wrapper'
 
 const settings: settingObjT = {
   placeholder: {
-    type: "input",
-    default: "Select a item...",
-    description: "The placeholder text to display when no option is selected.",
+    type: 'input',
+    default: 'Select a item...',
+    description: 'The placeholder text to display when no option is selected.',
   },
   indicatorAt: {
-    type: "select",
-    default: "right",
-    description: "The position of the indicator. Not available in the before version by default.",
-    options: ["left", "right"],
+    type: 'select',
+    default: 'right',
+    description: 'The position of the indicator. Not available in the before version by default.',
+    options: ['left', 'right'],
   },
   components: {
-    type: "checkbox",
+    type: 'checkbox',
     default: [],
-    options: [
-      "icon / diff value than label",
-      "group",
-      "target style",
-      "seperator",
-    ]
+    options: ['icon / diff value than label', 'group', 'target style', 'seperator'],
   },
   groupCls: {
-    type: "switch",
+    type: 'switch',
     default: false,
-    description: "The class name to apply to the group.",
-  }
+    description: 'The class name to apply to the group.',
+  },
 }
 
 function trans(options: optionsT, level = 2): string {
-  let str = ""
+  let str = ''
 
-  options.forEach((o) => {
+  options.forEach(o => {
     if (isGroup(o)) {
       str +=
-        `${indent(level)}<SelectGroup${o.className ? ` className="${o.className}"` : ""}>\n` +
+        `${indent(level)}<SelectGroup${o.className ? ` className="${o.className}"` : ''}>\n` +
         `${indent(level + 1)}<SelectLabel>${o.group}</SelectLabel>\n` +
-        trans(o.options, level + 1) + "\n" +
+        trans(o.options, level + 1) +
+        '\n' +
         `${indent(level)}</SelectGroup>\n`
       return
     }
 
     if (isOption(o)) {
-      str +=
-        `${indent(level)}<SelectItem value="${o.value}"${o.className ? ` className="${o.className}"` : ""}>${o.label}</SelectItem>\n`
+      str += `${indent(level)}<SelectItem value="${o.value}"${o.className ? ` className="${o.className}"` : ''}>${o.label}</SelectItem>\n`
       return
     }
 
@@ -69,7 +64,7 @@ function trans(options: optionsT, level = 2): string {
   return str.trimEnd()
 }
 
-const before = ({ options, placeholder }: Pick<afterParams, "options" | "placeholder">) => {
+const before = ({ options, placeholder }: Pick<afterParams, 'options' | 'placeholder'>) => {
   return `<Select>
   <SelectTrigger>
     <SelectValue placeholder="${placeholder}" />
@@ -97,10 +92,10 @@ const after = ({ options, placeholder, indicatorAt, groupCls }: afterParams) => 
 `
 
   if (groupCls) {
-    base = base + '  groupCls="bg-pink-100"' + "\n"
+    base = base + '  groupCls="bg-pink-100"' + '\n'
   }
 
-  base = base + "/>"
+  base = base + '/>'
 
   return base
 }
@@ -108,12 +103,12 @@ const after = ({ options, placeholder, indicatorAt, groupCls }: afterParams) => 
 export function SelectDemo() {
   const form = useForm({
     defaultValues: {
-      placeholder: "Select a item...",
-      indicatorAt: "right",
+      placeholder: 'Select a item...',
+      indicatorAt: 'right',
       groupCls: false,
       components: [],
     },
-    mode: "onChange",
+    mode: 'onChange',
   })
 
   const val = form.watch()
@@ -126,20 +121,20 @@ export function SelectDemo() {
       settings={settings}
       before={before({
         options: base,
-        placeholder: val.placeholder
+        placeholder: val.placeholder,
       })}
       after={after({
         options: base,
         placeholder: val.placeholder,
         indicatorAt: val.indicatorAt,
-        groupCls: val.groupCls
+        groupCls: val.groupCls,
       })}
     >
       <SelectWrapper
         options={filterOpt(options, val.components)}
         placeholder={val.placeholder}
         indicatorAt={val.indicatorAt as indicatorAtT}
-        groupCls={val.groupCls ? "bg-pink-100" : ""}
+        groupCls={val.groupCls ? 'bg-pink-100' : ''}
         triggerCls="w-52"
       />
     </Wrapper>

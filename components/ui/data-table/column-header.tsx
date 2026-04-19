@@ -1,16 +1,16 @@
-import { ArrowDown, ArrowUp, ChevronsUpDown, EyeOff } from "lucide-react";
-import { Column } from "@tanstack/react-table";
+import { ArrowDown, ArrowUp, ChevronsUpDown, EyeOff } from 'lucide-react'
+import { Column } from '@tanstack/react-table'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 
 interface ColumnHeaderProps<TData, TValue> {
   className?: string
@@ -27,11 +27,11 @@ export function ColumnHeader<TData, TValue>({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className={cn(buttonVariants({ variant: "ghost", className }), "-ml-2")}>
+      <DropdownMenuTrigger className={cn(buttonVariants({ variant: 'ghost', className }), '-ml-2')}>
         {title}
-        {column.getIsSorted() === "desc" ? (
+        {column.getIsSorted() === 'desc' ? (
           <ArrowDown />
-        ) : column.getIsSorted() === "asc" ? (
+        ) : column.getIsSorted() === 'asc' ? (
           <ArrowUp />
         ) : (
           <ChevronsUpDown />
@@ -40,14 +40,18 @@ export function ColumnHeader<TData, TValue>({
 
       <DropdownMenuContent align="start">
         <DropdownMenuItem
-          onClick={() => column.getIsSorted() !== "asc" ? column.toggleSorting(false) : column.clearSorting()}
+          onClick={() =>
+            column.getIsSorted() !== 'asc' ? column.toggleSorting(false) : column.clearSorting()
+          }
         >
           <ArrowUp className="h-3.5 w-3.5 text-muted-foreground/70" />
           Asc
         </DropdownMenuItem>
 
         <DropdownMenuItem
-          onClick={() => column.getIsSorted() !== "desc" ? column.toggleSorting(true) : column.clearSorting()}
+          onClick={() =>
+            column.getIsSorted() !== 'desc' ? column.toggleSorting(true) : column.clearSorting()
+          }
         >
           <ArrowDown className="h-3.5 w-3.5 text-muted-foreground/70" />
           Desc

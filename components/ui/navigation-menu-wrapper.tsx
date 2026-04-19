@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import Link, { type LinkProps } from "next/link"
+import Link, { type LinkProps } from 'next/link'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 import {
   NavigationMenu,
@@ -12,7 +12,7 @@ import {
   NavigationMenuContent,
   NavigationMenuLink,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+} from '@/components/ui/navigation-menu'
 
 type navLinkItemT = LinkProps & {
   children: React.ReactNode
@@ -24,15 +24,15 @@ type navMenuItemT = {
   key: string
   itemProps?: React.ComponentProps<typeof NavigationMenuItem>
 } & (
-    | {
+  | {
       trigger: React.ReactNode
       content: React.ReactNode
       triggerCls?: string
       contentCls?: string
       contentProps?: React.ComponentProps<typeof NavigationMenuContent>
     }
-    | navLinkItemT
-  )
+  | navLinkItemT
+)
 
 type navMenuItemsT = navMenuItemT[]
 
@@ -40,7 +40,7 @@ function NavLinkItem({ children, className, ...props }: navLinkItemT) {
   return (
     <NavigationMenuLink
       render={
-        <Link {...props} className={cn("flex flex-row items-center gap-2", className)}>
+        <Link {...props} className={cn('flex flex-row items-center gap-2', className)}>
           {children}
         </Link>
       }
@@ -58,10 +58,7 @@ function NavList({ items, wrapperCls }: listWrapperProps) {
     <ul className={cn(wrapperCls)}>
       {items.map((item, i) => (
         <li key={i}>
-          <NavLinkItem
-            {...item}
-            className={cn(item.className)}
-          />
+          <NavLinkItem {...item} className={cn(item.className)} />
         </li>
       ))}
     </ul>
@@ -86,7 +83,7 @@ function NavigationMenuWrapper({
       <NavigationMenuList>
         {items.map(itemWrap => {
           const { key, ...item } = itemWrap
-          if ("trigger" in item) {
+          if ('trigger' in item) {
             return (
               <NavigationMenuItem key={key} {...item.itemProps}>
                 <NavigationMenuTrigger className={cn(triggerCls, item.triggerCls)}>

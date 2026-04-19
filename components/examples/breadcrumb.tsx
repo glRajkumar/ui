@@ -1,26 +1,23 @@
-import { Slash } from "lucide-react";
-import { type breadcrumbItemsT, BreadcrumbWrapper } from "@/components/ui/breadcrumb";
+import { Slash } from 'lucide-react'
+import { type breadcrumbItemsT, BreadcrumbWrapper } from '@/components/ui/breadcrumb'
 
 export function BreadcrumbExample() {
   const items: breadcrumbItemsT = [
-    { label: "Home", href: "/docs/shadcn-wrappers/breadcrumb" },
-    "Store",
-    "Products",
-    "Electronics",
-    "Computers",
-    "Laptops",
-    "Apple",
-    "MacBook",
-    "MacBook Air",
-    "M3 2025 Edition"
+    { label: 'Home', href: '/docs/shadcn-wrappers/breadcrumb' },
+    'Store',
+    'Products',
+    'Electronics',
+    'Computers',
+    'Laptops',
+    'Apple',
+    'MacBook',
+    'MacBook Air',
+    'M3 2025 Edition',
   ]
 
   return (
     <div>
-      <BreadcrumbWrapper
-        items={items}
-        itemsAfterCollapse={2}
-      />
+      <BreadcrumbWrapper items={items} itemsAfterCollapse={2} />
 
       <BreadcrumbWrapper
         items={items}

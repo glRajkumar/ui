@@ -1,12 +1,12 @@
-import { ServerCodeBlock } from 'fumadocs-ui/components/codeblock.rsc';
-import * as Base from 'fumadocs-ui/components/codeblock';
+import { ServerCodeBlock } from 'fumadocs-ui/components/codeblock.rsc'
+import * as Base from 'fumadocs-ui/components/codeblock'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
 type props = { children: string } & Base.CodeBlockProps
 
 export function CodeBlock({ children, title, className, ...rest }: props) {
-  const lang = title?.split(".")?.pop() || "tsx"
+  const lang = title?.split('.')?.pop() || 'tsx'
 
   return (
     <ServerCodeBlock
@@ -21,5 +21,5 @@ export function CodeBlock({ children, title, className, ...rest }: props) {
         pre: Base.Pre,
       }}
     />
-  );
+  )
 }

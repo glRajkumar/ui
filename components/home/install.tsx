@@ -1,14 +1,14 @@
-import { CSSProperties } from "react"
-import path from "path"
-import fs from "fs"
-import { CodeBlock } from "../extended/code-block"
+import { CSSProperties } from 'react'
+import path from 'path'
+import fs from 'fs'
+import { CodeBlock } from '../extended/code-block'
 
 async function Install() {
-  const folderPath = path.join(process.cwd(), "content/docs/shadcn-wrappers")
+  const folderPath = path.join(process.cwd(), 'content/docs/shadcn-wrappers')
   const files = await fs.promises.readdir(folderPath)
   const filtered = files
-    .filter(f => f !== "index.mdx" && f !== "meta.json")
-    .map(f => f.replace(".mdx", ""))
+    .filter(f => f !== 'index.mdx' && f !== 'meta.json')
+    .map(f => f.replace('.mdx', ''))
 
   return (
     <section>
@@ -18,12 +18,17 @@ async function Install() {
         <div className="shrink-0">npx shadcn@latest add @glrk-ui/</div>
 
         <div className="h-7 overflow-y-hidden">
-          <p className="words group-hover:paused" style={{ "--steps": filtered.length, "--steps-duration": `${filtered.length}s` } as CSSProperties}>
+          <p
+            className="words group-hover:paused"
+            style={
+              {
+                '--steps': filtered.length,
+                '--steps-duration': `${filtered.length}s`,
+              } as CSSProperties
+            }
+          >
             {filtered.map(f => (
-              <span
-                key={f}
-                className="block p-0 h-7 text-start"
-              >
+              <span key={f} className="block p-0 h-7 text-start">
                 {f}
               </span>
             ))}
@@ -32,7 +37,10 @@ async function Install() {
       </div>
 
       <div className="mt-8">
-        <p className="pb-2 text-center"><strong className="font-medium">Note:</strong> Before proceeding, make sure you have the Shadcn base set up and apply the following updates.</p>
+        <p className="pb-2 text-center">
+          <strong className="font-medium">Note:</strong> Before proceeding, make sure you have the
+          Shadcn base set up and apply the following updates.
+        </p>
         <CodeBlock title="components.json" className="max-w-md mx-auto">
           {`{
   "registries": {
@@ -40,7 +48,6 @@ async function Install() {
   }
 }`}
         </CodeBlock>
-
       </div>
     </section>
   )

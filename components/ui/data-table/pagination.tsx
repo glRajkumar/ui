@@ -1,8 +1,8 @@
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
-import { Table } from "@tanstack/react-table";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { Table } from '@tanstack/react-table'
 
-import { SelectWrapper } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { SelectWrapper } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 
 interface PaginationProps<TData> {
   table: Table<TData>
@@ -19,7 +19,7 @@ export function Pagination<TData>({ table }: PaginationProps<TData>) {
         <p className="text-xs">Rows per page</p>
         <SelectWrapper
           value={`${table.getState().pagination.pageSize}`}
-          onValueChange={(value) => table.setPageSize(Number(value))}
+          onValueChange={value => table.setPageSize(Number(value))}
           options={[10, 20, 30, 40, 50]}
           placeholder={`${table.getState().pagination.pageSize}`}
           triggerCls="h-8 w-[70px]"
@@ -27,8 +27,7 @@ export function Pagination<TData>({ table }: PaginationProps<TData>) {
       </div>
 
       <div className="text-xs mx-2">
-        Page {table.getState().pagination.pageIndex + 1} of{" "}
-        {table.getPageCount()}
+        Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
       </div>
 
       <div className="flex items-center gap-2">

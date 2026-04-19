@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import { CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react';
-import { ColumnDef } from '@tanstack/react-table';
+import { CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react'
+import { ColumnDef } from '@tanstack/react-table'
 
-import { Employee, employees } from "./data";
+import { Employee, employees } from './data'
 
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/ui/input'
 import {
   ColumnFacetedFilter,
   ColumnFilter,
@@ -16,20 +16,22 @@ import {
   FilterGroup,
   Pagination,
   useTable,
-} from "@/components/ui/data-table";
+} from '@/components/ui/data-table'
 
 const StatusBadge = ({ status }: { status: Employee['status'] }) => {
   const statusConfig = {
     active: { icon: CheckCircle2, color: 'text-green-600 bg-green-50', label: 'Active' },
     inactive: { icon: XCircle, color: 'text-red-600 bg-red-50', label: 'Inactive' },
     pending: { icon: Clock, color: 'text-yellow-600 bg-yellow-50', label: 'Pending' },
-    'on-leave': { icon: AlertCircle, color: 'text-blue-600 bg-blue-50', label: 'On Leave' }
+    'on-leave': { icon: AlertCircle, color: 'text-blue-600 bg-blue-50', label: 'On Leave' },
   }
 
   const config = statusConfig[status]
 
   return (
-    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${config.color}`}>
+    <div
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${config.color}`}
+    >
       {config.label}
     </div>
   )
@@ -114,18 +116,18 @@ const filterOptions = [
   {
     value: 'department',
     lable: 'Department',
-    options: ['Engineering', 'Marketing', 'Sales', 'HR', 'Finance']
+    options: ['Engineering', 'Marketing', 'Sales', 'HR', 'Finance'],
   },
   {
     value: 'role',
     lable: 'Role',
-    options: ['Manager', 'Senior', 'Junior', 'Lead', 'Intern']
+    options: ['Manager', 'Senior', 'Junior', 'Lead', 'Intern'],
   },
   {
     value: 'location',
     lable: 'Location',
-    options: ['New York', 'San Francisco', 'London', 'Tokyo', 'Berlin']
-  }
+    options: ['New York', 'San Francisco', 'London', 'Tokyo', 'Berlin'],
+  },
 ]
 
 export function DataTableExample() {
@@ -135,10 +137,10 @@ export function DataTableExample() {
     <div className="w-full">
       <div className="flex items-center gap-4 mb-3">
         <Input
-          className='w-60'
+          className="w-60"
           value={table.getState().globalFilter}
           onChange={e => table.setGlobalFilter(e.target.value)}
-          placeholder='Search anything...'
+          placeholder="Search anything..."
         />
 
         <ColumnFilter
@@ -153,20 +155,14 @@ export function DataTableExample() {
           options={statusOptions}
         />
 
-        <FilterGroup
-          table={table}
-          options={filterOptions}
-        />
+        <FilterGroup table={table} options={filterOptions} />
 
         <ColumnToggle table={table} />
       </div>
 
       <div className="rounded-lg shadow-sm border overflow-hidden">
         <div className="overflow-x-auto">
-          <DataTable
-            table={table}
-            emptyMessage="No employees found."
-          />
+          <DataTable table={table} emptyMessage="No employees found." />
         </div>
       </div>
 

@@ -1,15 +1,18 @@
-"use client"
+'use client'
 
-import { useState } from "react"
+import { useState } from 'react'
 import {
-  cn, getKey, getLabel, getValue,
+  cn,
+  getKey,
+  getLabel,
+  getValue,
   isSeparator,
   isSubMenu,
   isGroupMenu,
   isInputSubMenu,
   isInputGroupMenu,
   parseAllowedPrimitive,
-} from "@/lib/utils"
+} from '@/lib/utils'
 
 import {
   ContextMenu,
@@ -26,7 +29,7 @@ import {
   ContextMenuSub,
   ContextMenuSubTrigger,
   ContextMenuSubContent,
-} from "@/components/ui/context-menu"
+} from '@/components/ui/context-menu'
 
 type commonCheckboxProps = {
   checked?: allowedPrimitiveT[]
@@ -62,25 +65,17 @@ type itemProps = {
   className?: string
   onSelect?: () => void
 }
-function Item({
-  option,
-  className,
-  onSelect
-}: itemProps) {
+function Item({ option, className, onSelect }: itemProps) {
   const value = getValue(option)
 
   if (isSeparator(value)) return <ContextMenuSeparator className={cn(className)} />
 
   const label = getLabel(option)
-  const opt: any = typeof option === "object" ? option : {}
+  const opt: any = typeof option === 'object' ? option : {}
   const shortcut = opt?.shortcut
 
   return (
-    <ContextMenuItem
-      {...opt}
-      onSelect={onSelect}
-      className={cn(className, opt?.className)}
-    >
+    <ContextMenuItem {...opt} onSelect={onSelect} className={cn(className, opt?.className)}>
       {label}
       {shortcut && <ContextMenuShortcut>{shortcut}</ContextMenuShortcut>}
     </ContextMenuItem>
@@ -99,7 +94,7 @@ function CheckboxItem({
   className,
   checked = false,
   indicatorAt,
-  onCheckedChange = () => { }
+  onCheckedChange = () => {},
 }: checkboxItemProps) {
   const value = getValue(option)
 
@@ -126,11 +121,7 @@ type radioItemProps = {
   className?: string
   indicatorAt?: indicatorAtT
 }
-function RadioItem({
-  option,
-  className,
-  indicatorAt
-}: radioItemProps) {
+function RadioItem({ option, className, indicatorAt }: radioItemProps) {
   const value = getValue(option)
 
   if (isSeparator(value)) return <ContextMenuSeparator className={cn(className)} />
@@ -154,13 +145,7 @@ type SubMenuProps = commonSubMenuT & {
   submenu: subMenuT
   onSelect?: (value: allowedPrimitiveT) => void
 }
-function SubMenu({
-  submenu,
-  itemCls,
-  groupCls,
-  groupLabelCls,
-  onSelect
-}: SubMenuProps) {
+function SubMenu({ submenu, itemCls, groupCls, groupLabelCls, onSelect }: SubMenuProps) {
   return (
     <ContextMenuSub>
       <ContextMenuSubTrigger className={cn(submenu.triggerCls)}>
@@ -172,7 +157,13 @@ function SubMenu({
           if (isGroupMenu(option)) {
             return (
               <ContextMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <ContextMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                <ContextMenuLabel
+                  className={cn(
+                    'pb-0.5 text-xs text-muted-foreground font-normal',
+                    groupLabelCls,
+                    option.groupLabelCls,
+                  )}
+                >
                   {option.group}
                 </ContextMenuLabel>
 
@@ -214,9 +205,10 @@ function SubMenu({
   )
 }
 
-type CheckboxSubMenuProps = commonSubMenuT & commonCheckboxProps & {
-  submenu: inputSubMenuT
-}
+type CheckboxSubMenuProps = commonSubMenuT &
+  commonCheckboxProps & {
+    submenu: inputSubMenuT
+  }
 function CheckboxSubMenu({
   submenu,
   itemCls,
@@ -224,7 +216,7 @@ function CheckboxSubMenu({
   groupLabelCls,
   checked = [],
   indicatorAt,
-  onCheckedChange = () => { }
+  onCheckedChange = () => {},
 }: CheckboxSubMenuProps) {
   return (
     <ContextMenuSub>
@@ -237,7 +229,13 @@ function CheckboxSubMenu({
           if (isInputGroupMenu(option)) {
             return (
               <ContextMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <ContextMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                <ContextMenuLabel
+                  className={cn(
+                    'pb-0.5 text-xs text-muted-foreground font-normal',
+                    groupLabelCls,
+                    option.groupLabelCls,
+                  )}
+                >
                   {option.group}
                 </ContextMenuLabel>
 
@@ -250,7 +248,7 @@ function CheckboxSubMenu({
                       checked={checked.includes(v)}
                       className={itemCls}
                       indicatorAt={indicatorAt}
-                      onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+                      onCheckedChange={checked => onCheckedChange?.(v, checked)}
                     />
                   )
                 })}
@@ -281,7 +279,7 @@ function CheckboxSubMenu({
               checked={checked.includes(v)}
               className={itemCls}
               indicatorAt={indicatorAt}
-              onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+              onCheckedChange={checked => onCheckedChange?.(v, checked)}
             />
           )
         })}
@@ -290,17 +288,18 @@ function CheckboxSubMenu({
   )
 }
 
-type RadioSubMenuProps = commonSubMenuT & commonRadioProps & {
-  submenu: inputSubMenuT
-}
+type RadioSubMenuProps = commonSubMenuT &
+  commonRadioProps & {
+    submenu: inputSubMenuT
+  }
 function RadioSubMenu({
   submenu,
   itemCls,
   groupCls,
   groupLabelCls,
-  value = "",
+  value = '',
   indicatorAt,
-  onValueChange = () => { }
+  onValueChange = () => {},
 }: RadioSubMenuProps) {
   return (
     <ContextMenuSub>
@@ -314,7 +313,13 @@ function RadioSubMenu({
             if (isInputGroupMenu(option)) {
               return (
                 <ContextMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <ContextMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                  <ContextMenuLabel
+                    className={cn(
+                      'pb-0.5 text-xs text-muted-foreground font-normal',
+                      groupLabelCls,
+                      option.groupLabelCls,
+                    )}
+                  >
                     {option.group}
                   </ContextMenuLabel>
 
@@ -382,7 +387,13 @@ function ContextWrapper({
           if (isGroupMenu(option)) {
             return (
               <ContextMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <ContextMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                <ContextMenuLabel
+                  className={cn(
+                    'pb-0.5 text-xs text-muted-foreground font-normal',
+                    groupLabelCls,
+                    option.groupLabelCls,
+                  )}
+                >
                   {option.group}
                 </ContextMenuLabel>
 
@@ -425,9 +436,10 @@ function ContextWrapper({
   )
 }
 
-type ContextCheckboxWrapperProps = commonPropsT & commonCheckboxProps & {
-  options: menuInputOptionsT
-}
+type ContextCheckboxWrapperProps = commonPropsT &
+  commonCheckboxProps & {
+    options: menuInputOptionsT
+  }
 function ContextCheckboxWrapper({
   children,
   options,
@@ -446,7 +458,7 @@ function ContextCheckboxWrapper({
   const [i_checked, setIChecked] = useState<allowedPrimitiveT[]>([])
 
   function i_Checked(v: allowedPrimitiveT, c: boolean) {
-    setIChecked(prev => !c ? prev.filter(p => p !== v) : [...prev, v])
+    setIChecked(prev => (!c ? prev.filter(p => p !== v) : [...prev, v]))
   }
 
   const checked = o_checked ?? i_checked
@@ -461,7 +473,13 @@ function ContextCheckboxWrapper({
           if (isInputGroupMenu(option)) {
             return (
               <ContextMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                <ContextMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                <ContextMenuLabel
+                  className={cn(
+                    'pb-0.5 text-xs text-muted-foreground font-normal',
+                    groupLabelCls,
+                    option.groupLabelCls,
+                  )}
+                >
                   {option.group}
                 </ContextMenuLabel>
 
@@ -474,7 +492,7 @@ function ContextCheckboxWrapper({
                       checked={checked.includes(v)}
                       className={itemCls}
                       indicatorAt={indicatorAt}
-                      onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+                      onCheckedChange={checked => onCheckedChange?.(v, checked)}
                     />
                   )
                 })}
@@ -505,7 +523,7 @@ function ContextCheckboxWrapper({
               checked={checked.includes(v)}
               className={itemCls}
               indicatorAt={indicatorAt}
-              onCheckedChange={(checked) => onCheckedChange?.(v, checked)}
+              onCheckedChange={checked => onCheckedChange?.(v, checked)}
             />
           )
         })}
@@ -514,9 +532,10 @@ function ContextCheckboxWrapper({
   )
 }
 
-type ContextRadioWrapperProps = commonPropsT & commonRadioProps & {
-  options: menuInputOptionsT
-}
+type ContextRadioWrapperProps = commonPropsT &
+  commonRadioProps & {
+    options: menuInputOptionsT
+  }
 function ContextRadioWrapper({
   children,
   options,
@@ -532,7 +551,7 @@ function ContextRadioWrapper({
   indicatorAt,
   ...props
 }: ContextRadioWrapperProps) {
-  const [i_value, setIValue] = useState<allowedPrimitiveT>("")
+  const [i_value, setIValue] = useState<allowedPrimitiveT>('')
 
   const value = o_value ?? i_value
   const onValueChange = o_onValueChange ?? setIValue
@@ -542,12 +561,21 @@ function ContextRadioWrapper({
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
 
       <ContextMenuContent {...contentProps}>
-        <ContextMenuRadioGroup value={`${value}`} onValueChange={v => onValueChange(parseAllowedPrimitive(v))}>
+        <ContextMenuRadioGroup
+          value={`${value}`}
+          onValueChange={v => onValueChange(parseAllowedPrimitive(v))}
+        >
           {options.map((option, i) => {
             if (isInputGroupMenu(option)) {
               return (
                 <ContextMenuGroup key={option.group} className={cn(groupCls, option.className)}>
-                  <ContextMenuLabel className={cn("pb-0.5 text-xs text-muted-foreground font-normal", groupLabelCls, option.groupLabelCls)}>
+                  <ContextMenuLabel
+                    className={cn(
+                      'pb-0.5 text-xs text-muted-foreground font-normal',
+                      groupLabelCls,
+                      option.groupLabelCls,
+                    )}
+                  >
                     {option.group}
                   </ContextMenuLabel>
 
@@ -593,8 +621,4 @@ function ContextRadioWrapper({
   )
 }
 
-export {
-  ContextWrapper,
-  ContextCheckboxWrapper,
-  ContextRadioWrapper,
-}
+export { ContextWrapper, ContextCheckboxWrapper, ContextRadioWrapper }

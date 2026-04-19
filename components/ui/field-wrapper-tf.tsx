@@ -19,7 +19,10 @@ import {
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
   createFormHookContexts()
 
-type inputFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur'> & {
+type inputFieldProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'onBlur'
+> & {
   label?: React.ReactNode
 }
 function InputField(props: inputFieldProps) {
@@ -30,19 +33,20 @@ function InputField(props: inputFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value ?? ''}
-      onChange={(e) => field.handleChange(e.target.value)}
+      onChange={e => field.handleChange(e.target.value)}
       onBlur={field.handleBlur}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />
   )
 }
 
-type textareaFieldProps = Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange' | 'onBlur'> & {
+type textareaFieldProps = Omit<
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  'value' | 'onChange' | 'onBlur'
+> & {
   label?: React.ReactNode
 }
 function TextareaField(props: textareaFieldProps) {
@@ -53,12 +57,10 @@ function TextareaField(props: textareaFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value ?? ''}
-      onChange={(e) => field.handleChange(e.target.value)}
+      onChange={e => field.handleChange(e.target.value)}
       onBlur={field.handleBlur}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />
@@ -78,11 +80,9 @@ function RadioField(props: radioFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value}
-      onValueChange={(value) => field.handleChange(value)}
+      onValueChange={value => field.handleChange(value)}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />
@@ -97,11 +97,9 @@ function CheckboxField(props: radioFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value ?? []}
-      onValueChange={(value) => field.handleChange(value)}
+      onValueChange={value => field.handleChange(value)}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />
@@ -120,11 +118,9 @@ function SwitchField(props: switchFieldProps) {
       {...props}
       name={field.name}
       checked={field.state.value ?? false}
-      onCheckedChange={(checked) => field.handleChange(checked)}
+      onCheckedChange={checked => field.handleChange(checked)}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />
@@ -142,18 +138,19 @@ function SelectField(props: selectFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value}
-      onValueChange={(value) => field.handleChange(value)}
+      onValueChange={value => field.handleChange(value)}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />
   )
 }
 
-type datePickerFieldProps = Omit<React.ComponentProps<typeof DatePicker>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'> & {
+type datePickerFieldProps = Omit<
+  React.ComponentProps<typeof DatePicker>,
+  'name' | 'value' | 'onSelect' | 'error' | 'invalid'
+> & {
   label?: React.ReactNode
 }
 function DatePickerField(props: datePickerFieldProps) {
@@ -164,11 +161,9 @@ function DatePickerField(props: datePickerFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value}
-      onSelect={(date) => field.handleChange(date as Date)}
+      onSelect={date => field.handleChange(date as Date)}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />
@@ -186,11 +181,9 @@ function ComboboxField(props: comboboxFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value}
-      onValueChange={(value) => field.handleChange(value as any)}
+      onValueChange={value => field.handleChange(value as any)}
       error={
-        field.state.meta.errors.length > 0
-          ? { message: field.state.meta.errors[0] }
-          : undefined
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
       invalid={field.state.meta.errors.length > 0}
     />

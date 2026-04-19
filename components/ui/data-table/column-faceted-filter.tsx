@@ -1,8 +1,8 @@
-import { Column } from "@tanstack/react-table";
+import { Column } from '@tanstack/react-table'
 
-import { getLabel, getValue, isGroup } from "@/lib/utils";
+import { getLabel, getValue, isGroup } from '@/lib/utils'
 
-import { ComboboxWrapper, type ComboboxWrapperProps } from "../combobox";
+import { ComboboxWrapper, type ComboboxWrapperProps } from '../combobox'
 
 interface ColumnFacetedFilterProps<TData, TValue>
   extends Omit<ComboboxWrapperProps, 'options' | 'value' | 'onValueChange' | 'label'> {
@@ -16,13 +16,16 @@ function change(option: allowedPrimitiveT | optionT, facets?: Map<any, number>) 
   const label = getLabel(option)
 
   return {
-    label: <>
-      {label}
-      {facets?.get(value) && (
-        <span className="ml-auto flex h-4 w-4 items-center justify-center text-xs">
-          {facets.get(value)}
-        </span>
-      )}</>,
+    label: (
+      <>
+        {label}
+        {facets?.get(value) && (
+          <span className="ml-auto flex h-4 w-4 items-center justify-center text-xs">
+            {facets.get(value)}
+          </span>
+        )}
+      </>
+    ),
     value,
   }
 }
@@ -39,7 +42,7 @@ export function ColumnFacetedFilter<TData, TValue>({
     if (isGroup(option)) {
       return {
         ...option,
-        options: option.options.map(o => change(o, facets))
+        options: option.options.map(o => change(o, facets)),
       }
     }
 

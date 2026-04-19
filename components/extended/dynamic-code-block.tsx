@@ -1,8 +1,11 @@
-"use client";
+'use client'
 
-import { DynamicCodeBlock as DynamicCodeBlockCore, DynamicCodeblockProps } from 'fumadocs-ui/components/dynamic-codeblock';
+import {
+  DynamicCodeBlock as DynamicCodeBlockCore,
+  DynamicCodeblockProps,
+} from 'fumadocs-ui/components/dynamic-codeblock'
 
-type Props = Omit<DynamicCodeblockProps, "lang" | "options">
+type Props = Omit<DynamicCodeblockProps, 'lang' | 'options'>
 
 export function DynamicCodeBlock({ code, ...rest }: Props) {
   return (
@@ -14,7 +17,7 @@ export function DynamicCodeBlock({ code, ...rest }: Props) {
         themes: {
           light: 'github-light',
           dark: 'github-dark',
-        }
+        },
       }}
     />
   )

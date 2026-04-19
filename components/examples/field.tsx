@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useState } from "react"
+import { useState } from 'react'
 
 import {
   InputWrapper,
@@ -11,52 +11,52 @@ import {
   ComboboxWrapper,
   CheckboxWrapper,
   DatePickerWrapper,
-} from "@/components/ui/field-wrapper"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/field-wrapper'
+import { Button } from '@/components/ui/button'
 
 export function FieldExample() {
   const [value, setValue] = useState({
-    name: "",
-    description: "",
-    gender: "",
+    name: '',
+    description: '',
+    gender: '',
     interest: [],
-    country: "",
-    fruit: "",
+    country: '',
+    fruit: '',
     hobbies: [],
     dob: undefined,
     isCompleted: false,
   })
 
-  const genderOptions = ["male", "female", "other"]
-  const interestOptions = ["Book reading", "Music", "TV", "Movie"]
+  const genderOptions = ['male', 'female', 'other']
+  const interestOptions = ['Book reading', 'Music', 'TV', 'Movie']
 
   const countryOptions = [
-    { value: "in", label: "India" },
-    { value: "us", label: "USA" },
-    { value: "uk", label: "United Kingdom" },
-    { value: "ca", label: "Canada" },
+    { value: 'in', label: 'India' },
+    { value: 'us', label: 'USA' },
+    { value: 'uk', label: 'United Kingdom' },
+    { value: 'ca', label: 'Canada' },
   ]
 
   const fruitOptions = [
-    "Apple",
-    "Banana",
-    "Mango",
-    "Grapes",
-    { value: "berry", label: "Blueberry" },
+    'Apple',
+    'Banana',
+    'Mango',
+    'Grapes',
+    { value: 'berry', label: 'Blueberry' },
   ]
 
   const hobbiesOptions = [
-    "Music",
-    "Sports",
-    "Travel",
-    { value: "coding", label: "Coding" },
-    "Gaming",
+    'Music',
+    'Sports',
+    'Travel',
+    { value: 'coding', label: 'Coding' },
+    'Gaming',
   ]
 
   function onChange(key: string, value: allowedPrimitiveT | allowedPrimitiveT[]) {
     setValue(prev => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }))
   }
 
@@ -66,22 +66,19 @@ export function FieldExample() {
   }
 
   return (
-    <form
-      onSubmit={onSubit}
-      className="space-y-6 my-8 w-96"
-    >
+    <form onSubmit={onSubit} className="space-y-6 my-8 w-96">
       <InputWrapper
         name="name"
         label="Full Name"
         value={value.name}
-        onChange={e => onChange("name", e.target.value)}
+        onChange={e => onChange('name', e.target.value)}
       />
 
       <TextareaWrapper
         name="description"
         label="Description"
         value={value.description}
-        onChange={e => onChange("description", e.target.value)}
+        onChange={e => onChange('description', e.target.value)}
       />
 
       <RadioWrapper
@@ -89,7 +86,7 @@ export function FieldExample() {
         label="Gender"
         value={value.gender}
         options={genderOptions}
-        onValueChange={val => onChange("gender", val)}
+        onValueChange={val => onChange('gender', val)}
       />
 
       <CheckboxWrapper
@@ -97,14 +94,14 @@ export function FieldExample() {
         label="Interest"
         value={value.interest}
         options={interestOptions}
-        onValueChange={val => onChange("interest", val)}
+        onValueChange={val => onChange('interest', val)}
       />
 
       <SwitchWrapper
         name="isCompleted"
         label="Is completed"
         checked={value.isCompleted}
-        onCheckedChange={val => onChange("isCompleted", val)}
+        onCheckedChange={val => onChange('isCompleted', val)}
       />
 
       <SelectWrapper
@@ -112,14 +109,14 @@ export function FieldExample() {
         label="Country"
         value={value.country}
         options={countryOptions}
-        onValueChange={val => onChange("country", val)}
+        onValueChange={val => onChange('country', val)}
       />
 
       <DatePickerWrapper
         name="dob"
         label="Date of Birth"
         value={value.dob}
-        onSelect={val => onChange("dob", val?.toISOString() || "")}
+        onSelect={val => onChange('dob', val?.toISOString() || '')}
       />
 
       <ComboboxWrapper
@@ -127,7 +124,7 @@ export function FieldExample() {
         label="Favorite Fruit"
         value={value.fruit}
         items={fruitOptions}
-        onValueChange={val => onChange("fruit", val as any)}
+        onValueChange={val => onChange('fruit', val as any)}
       />
 
       <ComboboxWrapper
@@ -136,12 +133,10 @@ export function FieldExample() {
         label="Hobbies"
         value={value.hobbies}
         items={hobbiesOptions}
-        onValueChange={val => onChange("hobbies", val as any)}
+        onValueChange={val => onChange('hobbies', val as any)}
       />
 
-      <Button type="submit">
-        Submit
-      </Button>
+      <Button type="submit">Submit</Button>
     </form>
   )
 }

@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { CarouselWrapper, type carouselItemT } from "@/components/ui/carousel"
+import { CarouselWrapper, type carouselItemT } from '@/components/ui/carousel'
 
 function Content({ val }: { val: number }) {
   return (
@@ -20,11 +20,7 @@ const slides: carouselItemT[] = [
 export function CarouselExample() {
   return (
     <div className="flex flex-col gap-8">
-      <CarouselWrapper
-        items={slides}
-        className="w-full max-w-sm mx-auto"
-        itemCls="basis-1/3"
-      />
+      <CarouselWrapper items={slides} className="w-full max-w-sm mx-auto" itemCls="basis-1/3" />
 
       <CarouselWrapper
         items={slides}

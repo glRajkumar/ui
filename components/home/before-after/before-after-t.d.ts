@@ -1,4 +1,4 @@
-type SettingType = "input" | "select" | "switch" | "checkbox"
+type SettingType = 'input' | 'select' | 'switch' | 'checkbox'
 
 type BaseSetting = {
   description?: string
@@ -6,20 +6,20 @@ type BaseSetting = {
 
 type SettingByType = {
   input: BaseSetting & {
-    type: "input"
+    type: 'input'
     default: allowedPrimitiveT
   }
   switch: BaseSetting & {
-    type: "switch"
+    type: 'switch'
     default: boolean
   }
   select: BaseSetting & {
-    type: "select"
+    type: 'select'
     default: allowedPrimitiveT
     options: allowedPrimitiveT[]
   }
   checkbox: BaseSetting & {
-    type: "checkbox"
+    type: 'checkbox'
     default: allowedPrimitiveT[]
     options: allowedPrimitiveT[]
   }

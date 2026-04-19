@@ -1,4 +1,3 @@
-
 function Philosophy() {
   return (
     <section>
@@ -9,11 +8,21 @@ function Philosophy() {
       </div>
 
       <ul className="grid gap-4 justify-center my-8 text-sm">
-        <li className="p-4 bg-muted rounded-md">1. Minimal to Zero CSS modifications - keep shadcn styling intact.</li>
-        <li className="p-4 bg-muted rounded-md">2. API improvements only - no breaking underlying behavior.</li>
-        <li className="p-4 bg-muted rounded-md">3. Shared types & utilities - powered by general.d.ts + utils.</li>
-        <li className="p-4 bg-muted rounded-md">4. Emotionless components - purely functional and predictable.</li>
-        <li className="p-4 bg-muted rounded-md">5. Consistent handling of controlled/uncontrolled props.</li>
+        <li className="p-4 bg-muted rounded-md">
+          1. Minimal to Zero CSS modifications - keep shadcn styling intact.
+        </li>
+        <li className="p-4 bg-muted rounded-md">
+          2. API improvements only - no breaking underlying behavior.
+        </li>
+        <li className="p-4 bg-muted rounded-md">
+          3. Shared types & utilities - powered by general.d.ts + utils.
+        </li>
+        <li className="p-4 bg-muted rounded-md">
+          4. Emotionless components - purely functional and predictable.
+        </li>
+        <li className="p-4 bg-muted rounded-md">
+          5. Consistent handling of controlled/uncontrolled props.
+        </li>
       </ul>
     </section>
   )

@@ -1,7 +1,7 @@
-import { Inbox } from "lucide-react"
+import { Inbox } from 'lucide-react'
 
-import { EmptyWrapper } from "@/components/ui/empty"
-import { Button } from "@/components/ui/button"
+import { EmptyWrapper } from '@/components/ui/empty'
+import { Button } from '@/components/ui/button'
 
 export function EmptyExample() {
   return (

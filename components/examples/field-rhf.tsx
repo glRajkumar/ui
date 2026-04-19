@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { FormProvider, useForm } from "react-hook-form"
+import { FormProvider, useForm } from 'react-hook-form'
 
 import {
   InputWrapper,
@@ -11,74 +11,58 @@ import {
   ComboboxWrapper,
   CheckboxWrapper,
   DatePickerWrapper,
-} from "@/components/ui/field-wrapper-rhf"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/field-wrapper-rhf'
+import { Button } from '@/components/ui/button'
 
 export function Field_RHF_Example() {
   const form = useForm({
     defaultValues: {
-      name: "",
-      description: "",
-      gender: "",
+      name: '',
+      description: '',
+      gender: '',
       interest: [],
-      country: "",
-      fruit: "",
+      country: '',
+      fruit: '',
       hobbies: [],
       dob: undefined,
       isCompleted: false,
     },
   })
 
-  const genderOptions = ["male", "female", "other"]
-  const interestOptions = ["Book reading", "Music", "TV", "Movie"]
+  const genderOptions = ['male', 'female', 'other']
+  const interestOptions = ['Book reading', 'Music', 'TV', 'Movie']
 
   const countryOptions = [
-    { value: "in", label: "India" },
-    { value: "us", label: "USA" },
-    { value: "uk", label: "United Kingdom" },
-    { value: "ca", label: "Canada" },
+    { value: 'in', label: 'India' },
+    { value: 'us', label: 'USA' },
+    { value: 'uk', label: 'United Kingdom' },
+    { value: 'ca', label: 'Canada' },
   ]
 
   const fruitOptions = [
-    "Apple",
-    "Banana",
-    "Mango",
-    "Grapes",
-    { value: "berry", label: "Blueberry" },
+    'Apple',
+    'Banana',
+    'Mango',
+    'Grapes',
+    { value: 'berry', label: 'Blueberry' },
   ]
 
   const hobbiesOptions = [
-    "Music",
-    "Sports",
-    "Travel",
-    { value: "coding", label: "Coding" },
-    "Gaming",
+    'Music',
+    'Sports',
+    'Travel',
+    { value: 'coding', label: 'Coding' },
+    'Gaming',
   ]
 
   return (
     <FormProvider {...form}>
-      <form
-        onSubmit={form.handleSubmit((d) => console.log(d))}
-        className="space-y-6 my-8 w-96"
-      >
-        <InputWrapper
-          name="name"
-          label="Full Name"
-          control={form.control}
-        />
+      <form onSubmit={form.handleSubmit(d => console.log(d))} className="space-y-6 my-8 w-96">
+        <InputWrapper name="name" label="Full Name" control={form.control} />
 
-        <TextareaWrapper
-          name="description"
-          label="Description"
-          control={form.control}
-        />
+        <TextareaWrapper name="description" label="Description" control={form.control} />
 
-        <RadioWrapper
-          name="gender"
-          label="Gender"
-          control={form.control}
-          options={genderOptions}
-        />
+        <RadioWrapper name="gender" label="Gender" control={form.control} options={genderOptions} />
 
         <CheckboxWrapper
           name="interest"
@@ -87,11 +71,7 @@ export function Field_RHF_Example() {
           options={interestOptions}
         />
 
-        <SwitchWrapper
-          name="isCompleted"
-          label="Is completed"
-          control={form.control}
-        />
+        <SwitchWrapper name="isCompleted" label="Is completed" control={form.control} />
 
         <SelectWrapper
           name="country"
@@ -115,15 +95,9 @@ export function Field_RHF_Example() {
           items={hobbiesOptions}
         />
 
-        <DatePickerWrapper
-          name="dob"
-          label="Date of Birth"
-          control={form.control}
-        />
+        <DatePickerWrapper name="dob" label="Date of Birth" control={form.control} />
 
-        <Button type="submit">
-          Submit
-        </Button>
+        <Button type="submit">Submit</Button>
       </form>
     </FormProvider>
   )

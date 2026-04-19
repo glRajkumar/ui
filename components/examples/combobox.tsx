@@ -1,33 +1,23 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
-import { useAsyncOptions } from "@/hooks/use-options";
-import { options } from "./data";
+import { useAsyncOptions } from '@/hooks/use-options'
+import { options } from './data'
 
-import { ComboboxWrapper } from "@/components/ui/combobox";
+import { ComboboxWrapper } from '@/components/ui/combobox'
 
 export function ComboboxExample() {
   const { data: list, isLoading } = useAsyncOptions()
 
   const [values, setValues] = useState<allowedPrimitiveT[]>([])
-  const [value, setValue] = useState<allowedPrimitiveT>("")
+  const [value, setValue] = useState<allowedPrimitiveT>('')
 
   return (
     <>
-      <ComboboxWrapper
-        items={options}
-        placeholder="Select item"
-        triggerCls="w-40"
+      <ComboboxWrapper items={options} placeholder="Select item" triggerCls="w-40" />
 
-      />
-
-      <ComboboxWrapper
-        multiple
-        items={options}
-        placeholder="Multi-Select item"
-        triggerCls="w-40"
-      />
+      <ComboboxWrapper multiple items={options} placeholder="Multi-Select item" triggerCls="w-40" />
 
       <ComboboxWrapper
         value={value ? `${value}` : undefined}

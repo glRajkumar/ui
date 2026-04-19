@@ -1,7 +1,7 @@
-import { type UseFormReturn } from "react-hook-form"
+import { type UseFormReturn } from 'react-hook-form'
 
-import { DynamicCodeBlock } from "../../extended/dynamic-code-block"
-import Settings from "./settings"
+import { DynamicCodeBlock } from '../../extended/dynamic-code-block'
+import Settings from './settings'
 
 type props = {
   form: UseFormReturn<any>
@@ -17,7 +17,10 @@ function Wrapper({ before, after, form, settings, children }: props) {
         <div className="mb-0.5 pl-1.5 text-xs font-medium">Before</div>
         <DynamicCodeBlock
           code={before}
-          codeblock={{ allowCopy: false, className: "flex-1 py-1 [&>div]:py-1 [&>div]:max-h-none [&>div]:h-full" }}
+          codeblock={{
+            allowCopy: false,
+            className: 'flex-1 py-1 [&>div]:py-1 [&>div]:max-h-none [&>div]:h-full',
+          }}
         />
       </div>
 
@@ -25,7 +28,10 @@ function Wrapper({ before, after, form, settings, children }: props) {
         <div className="mb-0.5 pl-1.5 text-xs font-medium">After</div>
         <DynamicCodeBlock
           code={after}
-          codeblock={{ allowCopy: false, className: "flex-1 py-1 [&>div]:py-1 [&>div]:max-h-none [&>div]:h-full" }}
+          codeblock={{
+            allowCopy: false,
+            className: 'flex-1 py-1 [&>div]:py-1 [&>div]:max-h-none [&>div]:h-full',
+          }}
         />
       </div>
 
@@ -39,10 +45,7 @@ function Wrapper({ before, after, form, settings, children }: props) {
 
         <div>
           <div className="mb-0.5 pl-1.5 text-xs font-medium">Component Properties</div>
-          <Settings
-            settings={settings}
-            form={form}
-          />
+          <Settings settings={settings} form={form} />
         </div>
       </div>
     </section>

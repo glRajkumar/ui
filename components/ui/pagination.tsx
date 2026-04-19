@@ -1,58 +1,53 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
+import * as React from 'react'
+import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from 'lucide-react'
 
-import { cn, getKey, isSeparator } from "@/lib/utils"
+import { cn, getKey, isSeparator } from '@/lib/utils'
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 
-function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (
     <nav
       role="navigation"
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={cn('mx-auto flex w-full justify-center', className)}
       {...props}
     />
   )
 }
 
-function PaginationContent({ className, ...props }: React.ComponentProps<"ul">) {
+function PaginationContent({ className, ...props }: React.ComponentProps<'ul'>) {
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-0.5", className)}
+      className={cn('flex items-center gap-0.5', className)}
       {...props}
     />
   )
 }
 
-function PaginationItem(props: React.ComponentProps<"li">) {
+function PaginationItem(props: React.ComponentProps<'li'>) {
   return <li data-slot="pagination-item" {...props} />
 }
 
-type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a"> & {
+type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, 'size'> &
+  React.ComponentProps<'a'> & {
     isActive?: boolean
   }
 
-function PaginationLink({
-  className,
-  isActive,
-  size = "icon",
-  ...props
-}: PaginationLinkProps) {
+function PaginationLink({ className, isActive, size = 'icon', ...props }: PaginationLinkProps) {
   return (
     <Button
-      variant={isActive ? "outline" : "ghost"}
+      variant={isActive ? 'outline' : 'ghost'}
       size={size}
       className={cn(className)}
       nativeButton={false}
       render={
         <a
-          aria-current={isActive ? "page" : undefined}
+          aria-current={isActive ? 'page' : undefined}
           data-slot="pagination-link"
           data-active={isActive}
           {...props}
@@ -64,14 +59,14 @@ function PaginationLink({
 
 function PaginationPrevious({
   className,
-  text = "Previous",
+  text = 'Previous',
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("pl-1.5!", className)}
+      className={cn('pl-1.5!', className)}
       {...props}
     >
       <ChevronLeftIcon data-icon="inline-start" />
@@ -82,14 +77,14 @@ function PaginationPrevious({
 
 function PaginationNext({
   className,
-  text = "Next",
+  text = 'Next',
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("pr-1.5!", className)}
+      className={cn('pr-1.5!', className)}
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
@@ -98,19 +93,18 @@ function PaginationNext({
   )
 }
 
-function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span">) {
+function PaginationEllipsis({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
         "flex size-8 items-center justify-center [&_svg:not([class*='size-'])]:size-4",
-        className
+        className,
       )}
       {...props}
     >
-      <MoreHorizontalIcon
-      />
+      <MoreHorizontalIcon />
       <span className="sr-only">More pages</span>
     </span>
   )
@@ -145,17 +139,17 @@ function PaginationWrapper({
   const paginationRange = React.useMemo(() => {
     if (total <= 1) return [1]
 
-    const pages: (number | "---")[] = []
+    const pages: (number | '---')[] = []
     const start = Math.max(2, page - siblingCount)
     const end = Math.min(total - 1, page + siblingCount)
 
     pages.push(1)
 
-    if (start > 2) pages.push("---")
+    if (start > 2) pages.push('---')
 
     for (let i = start; i <= end; i++) pages.push(i)
 
-    if (end < total - 1) pages.push("---")
+    if (end < total - 1) pages.push('---')
 
     if (total > 1) pages.push(total)
 
@@ -169,7 +163,7 @@ function PaginationWrapper({
           <PaginationPrevious
             href=""
             onClick={() => page > 1 && onPageChange(page - 1)}
-            className={cn(linkCls, page === 1 && "pointer-events-none opacity-50")}
+            className={cn(linkCls, page === 1 && 'pointer-events-none opacity-50')}
           />
         </PaginationItem>
 
@@ -202,7 +196,7 @@ function PaginationWrapper({
           <PaginationNext
             href=""
             onClick={() => page < total && onPageChange(page + 1)}
-            className={cn(linkCls, page === total && "pointer-events-none opacity-50")}
+            className={cn(linkCls, page === total && 'pointer-events-none opacity-50')}
           />
         </PaginationItem>
       </PaginationContent>
