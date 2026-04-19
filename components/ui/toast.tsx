@@ -1,9 +1,64 @@
 'use client'
 
 import { Toast as ToastPrimitive } from '@base-ui/react/toast'
-import { XIcon } from 'lucide-react'
+import { AlertTriangleIcon, CheckCircle2Icon, InfoIcon, Loader2Icon, XCircleIcon, XIcon } from 'lucide-react'
+import type { ToastManagerAddOptions, ToastManagerPromiseOptions } from '@base-ui/react/toast'
 
 import { cn } from '@/lib/utils'
+
+type toastTypeT = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading'
+
+type toastCustomDataT = {
+  icon?: React.ReactNode | null
+  titleCls?: string
+  descriptionCls?: string
+  actionCls?: string
+  closeCls?: string
+}
+
+type toastOptsT = Omit<ToastManagerAddOptions<toastCustomDataT>, 'data'> & toastCustomDataT & {
+  data?: Record<string, unknown>
+}
+
+type toastPromiseMessages<V> = {
+  loading: string
+  success: string | ((value: V) => string)
+  error: string | ((err: unknown) => string)
+}
+
+const typeStyles: Record<toastTypeT, string> = {
+  default: '',
+  success: 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30',
+  error: 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950/30',
+  warning: 'border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30',
+  info: 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30',
+  loading: '',
+}
+
+const typeIcons: Partial<Record<toastTypeT, React.ElementType>> = {
+  success: CheckCircle2Icon,
+  error: XCircleIcon,
+  warning: AlertTriangleIcon,
+  info: InfoIcon,
+  loading: Loader2Icon,
+}
+
+const iconStyles: Record<toastTypeT, string> = {
+  default: '',
+  success: 'text-green-600 dark:text-green-400',
+  error: 'text-red-600 dark:text-red-400',
+  warning: 'text-amber-600 dark:text-amber-400',
+  info: 'text-blue-600 dark:text-blue-400',
+  loading: 'text-muted-foreground animate-spin',
+}
+
+function extractCustomData(opts: Partial<toastOptsT>): ToastManagerAddOptions<toastCustomDataT> {
+  const { icon, titleCls, descriptionCls, actionCls, closeCls, data, ...rest } = opts
+  return {
+    ...rest,
+    data: { ...data, icon, titleCls, descriptionCls, actionCls, closeCls },
+  }
+}
 
 function ToastProvider(props: ToastPrimitive.Provider.Props) {
   return <ToastPrimitive.Provider data-slot="toast-provider" {...props} />
@@ -97,6 +152,20 @@ function ToastDescription({ className, ...props }: ToastPrimitive.Description.Pr
   )
 }
 
+function ToastAction({ className, ...props }: ToastPrimitive.Action.Props) {
+  return (
+    <ToastPrimitive.Action
+      data-slot="toast-action"
+      className={cn(
+        'mt-2 inline-flex h-7 cursor-pointer items-center justify-center rounded-md border px-3 text-xs font-medium',
+        'transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
 function ToastClose({ className, ...props }: ToastPrimitive.Close.Props) {
   return (
     <ToastPrimitive.Close
@@ -121,6 +190,7 @@ type toasterProps = {
   contentCls?: string
   titleCls?: string
   descriptionCls?: string
+  actionCls?: string
   closeCls?: string
   showClose?: boolean
 } & ToastPrimitive.Provider.Props
@@ -131,6 +201,7 @@ function Toaster({
   contentCls,
   titleCls,
   descriptionCls,
+  actionCls,
   closeCls,
   showClose = true,
   children,
@@ -146,6 +217,7 @@ function Toaster({
             contentCls={contentCls}
             titleCls={titleCls}
             descriptionCls={descriptionCls}
+            actionCls={actionCls}
             closeCls={closeCls}
             showClose={showClose}
           />
@@ -160,6 +232,7 @@ type toastListProps = {
   contentCls?: string
   titleCls?: string
   descriptionCls?: string
+  actionCls?: string
   closeCls?: string
   showClose?: boolean
 }
@@ -169,19 +242,96 @@ function ToastList({
   contentCls,
   titleCls,
   descriptionCls,
+  actionCls,
   closeCls,
   showClose = true,
 }: toastListProps) {
-  const { toasts } = ToastPrimitive.useToastManager()
-  return toasts.map(toast => (
-    <ToastRoot key={toast.id} toast={toast} className={toastCls}>
-      <ToastContent className={contentCls}>
-        <ToastTitle className={titleCls} />
-        <ToastDescription className={descriptionCls} />
-        {showClose && <ToastClose className={closeCls} />}
-      </ToastContent>
-    </ToastRoot>
-  ))
+  const { toasts } = ToastPrimitive.useToastManager<toastCustomDataT>()
+
+  return toasts.map(toast => {
+    const type = (toast.type as toastTypeT | undefined) ?? 'default'
+    const custom = toast.data
+
+    const hasCustomIcon = custom && 'icon' in custom
+    const DefaultIcon = typeIcons[type]
+
+    const iconNode = hasCustomIcon
+      ? custom.icon !== null && custom.icon !== undefined
+        ? <span className="mt-0.5 shrink-0 *:h-4 *:w-4">{custom.icon as React.ReactNode}</span>
+        : null
+      : DefaultIcon
+        ? <DefaultIcon className={cn('mt-0.5 h-4 w-4 shrink-0', iconStyles[type])} />
+        : null
+
+    const effectiveTitleCls = cn(titleCls, custom?.titleCls)
+    const effectiveDescCls = cn(descriptionCls, custom?.descriptionCls)
+    const effectiveActionCls = cn(actionCls, custom?.actionCls)
+    const effectiveCloseCls = cn(closeCls, custom?.closeCls)
+
+    return (
+      <ToastRoot
+        key={toast.id}
+        toast={toast}
+        className={cn(type !== 'default' && typeStyles[type], toastCls)}
+      >
+        <ToastContent className={contentCls}>
+          <div className="flex items-start gap-3">
+            {iconNode}
+            <div className="flex-1 space-y-0.5 pr-5">
+              <ToastTitle className={effectiveTitleCls} />
+              <ToastDescription className={effectiveDescCls} />
+              {toast.actionProps && (
+                <ToastAction className={effectiveActionCls} />
+              )}
+            </div>
+          </div>
+          {showClose && <ToastClose className={effectiveCloseCls} />}
+        </ToastContent>
+      </ToastRoot>
+    )
+  })
+}
+
+function useToast() {
+  const manager = ToastPrimitive.useToastManager<toastCustomDataT>()
+
+  function add(opts: toastOptsT) {
+    return manager.add(extractCustomData(opts))
+  }
+
+  function success(description: string, opts?: Partial<toastOptsT>) {
+    return manager.add(extractCustomData({ description, type: 'success', ...opts }))
+  }
+
+  function error(description: string, opts?: Partial<toastOptsT>) {
+    return manager.add(extractCustomData({ description, type: 'error', ...opts }))
+  }
+
+  function warning(description: string, opts?: Partial<toastOptsT>) {
+    return manager.add(extractCustomData({ description, type: 'warning', ...opts }))
+  }
+
+  function info(description: string, opts?: Partial<toastOptsT>) {
+    return manager.add(extractCustomData({ description, type: 'info', ...opts }))
+  }
+
+  function promise<V>(p: Promise<V>, messages: toastPromiseMessages<V>) {
+    return manager.promise<V>(p, {
+      loading: { description: messages.loading, type: 'loading', timeout: 0 },
+      success: typeof messages.success === 'function'
+        ? (v: V) => ({ description: (messages.success as (v: V) => string)(v), type: 'success' })
+        : { description: messages.success as string, type: 'success' },
+      error: typeof messages.error === 'function'
+        ? (e: unknown) => ({ description: (messages.error as (e: unknown) => string)(e), type: 'error' })
+        : { description: messages.error as string, type: 'error' },
+    } as ToastManagerPromiseOptions<V, toastCustomDataT>)
+  }
+
+  function update(id: string, opts: Partial<toastOptsT>) {
+    manager.update(id, extractCustomData(opts))
+  }
+
+  return { add, success, error, warning, info, promise, update, close: manager.close }
 }
 
 const createToastManager = ToastPrimitive.createToastManager
@@ -195,8 +345,14 @@ export {
   ToastContent,
   ToastTitle,
   ToastDescription,
+  ToastAction,
   ToastClose,
   Toaster,
+  useToast,
   createToastManager,
   useToastManager,
+  type toastTypeT,
+  type toastCustomDataT,
+  type toastOptsT,
+  type toastPromiseMessages,
 }

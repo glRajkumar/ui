@@ -1,6 +1,6 @@
 ---
 title: Toast
-description: A wrapper for Base UI Toast with stacked notifications, swipe-to-dismiss, and a convenience Toaster component.
+description: A wrapper for Base UI Toast with type variants, icons, promise support, action buttons, and a useToast hook.
 ---
 
 import { ToastEx } from "@/components/examples";
@@ -35,50 +35,90 @@ Copy and paste the following code into your project.
 
 ## Usage
 
-### Basic — Toaster wrapper
+### Basic
 
-Wrap your app (or subtree) with `<Toaster>`. Call `useToastManager().add()` from any child component to fire a toast.
+Wrap your app (or subtree) with `<Toaster>`. Use `useToast()` from any child component.
 
 ```tsx
-import { Toaster, useToastManager } from "@/components/ui/toast";
+import { Toaster, useToast } from "@/components/ui/toast";
 
-function TriggerButton() {
-  const { add } = useToastManager();
+function SaveButton() {
+  const toast = useToast();
   return (
-    <button onClick={() => add({ title: "Saved", description: "Changes saved." })}>
-      Save
-    </button>
+    <button onClick={() => toast.success("Changes saved.")}>Save</button>
   );
 }
 
 export function App() {
   return (
     <Toaster>
-      <TriggerButton />
+      <SaveButton />
     </Toaster>
   );
 }
 ```
 
+### Variants
+
+```tsx
+const toast = useToast();
+
+toast.add({ description: "Notification sent." });          // default
+toast.success("Changes saved.");
+toast.error("Something went wrong.", { title: "Error" });
+toast.warning("Session expires soon.");
+toast.info("Update available.", { title: "v2.0" });
+```
+
+### Promise
+
+Automatically transitions loading → success or error when the promise resolves.
+
+```tsx
+toast.promise(uploadFile(file), {
+  loading: "Uploading...",
+  success: (data) => `${data.name} uploaded.`,
+  error: "Upload failed.",
+});
+```
+
+### Action button
+
+Pass `actionProps` to render a button inside the toast.
+
+```tsx
+toast.add({
+  title: "File deleted",
+  description: "document.pdf removed.",
+  actionProps: {
+    children: "Undo",
+    onClick: () => restoreFile(),
+  },
+});
+```
+
 ### Global manager
 
-Create a manager instance outside the React tree so you can fire toasts from anywhere (e.g. axios interceptors, utility functions).
+Create a manager outside React to trigger toasts from anywhere (axios interceptors, utils, etc.).
 
 ```tsx
 import { createToastManager, Toaster } from "@/components/ui/toast";
 
 export const toast = createToastManager();
 
-// In your root layout
+// Root layout
 <Toaster toastManager={toast} />
 
-// Anywhere in the app — no hook needed
-toast.add({ title: "Uploaded", description: "File upload complete." });
+// Anywhere — no hook needed
+toast.add({ description: "Done.", type: "success" });
+toast.promise(fetch("/api/data"), {
+  loading: { description: "Loading...", type: "loading" },
+  success: { description: "Loaded.", type: "success" },
+  error: { description: "Failed.", type: "error" },
+});
 ```
 
 ### Composing primitives
-
-Use the individual primitives for full control.
 
 ```tsx
 import {
@@ -89,6 +129,7 @@ import {
   ToastContent,
   ToastTitle,
   ToastDescription,
+  ToastAction,
   ToastClose,
   useToastManager,
 } from "@/components/ui/toast";
@@ -100,29 +141,33 @@ function ToastList() {
       <ToastContent>
         <ToastTitle />
         <ToastDescription />
+        {toast.actionProps && <ToastAction {...toast.actionProps} />}
         <ToastClose />
       </ToastContent>
     </ToastRoot>
   ));
 }
-
-export function App() {
-  return (
-    <ToastProvider>
-      {/* app content */}
-      <ToastPortal>
-        <ToastViewport>
-          <ToastList />
-        </ToastViewport>
-      </ToastPortal>
-    </ToastProvider>
-  );
-}
 ```
 
 ## Reference
 
-#### Toaster
+### useToast
+
+```ts
+const toast = useToast();
+
+toast.add(options)                          // → string (toast id)
+toast.success(description, options?)        // → string
+toast.error(description, options?)          // → string
+toast.warning(description, options?)        // → string
+toast.info(description, options?)           // → string
+toast.promise(promise, messages)            // → Promise<Value>
+toast.update(id, partialOptions)
+toast.close(id?)
+```
+
+### Toaster
+
 <AutoTypeTable
 name="Toaster"
 type={`export interface Toaster {
@@ -153,6 +198,11 @@ type={`export interface Toaster {
   descriptionCls?: string;
 
   /**
+   * Additional CSS classes applied to each action button.
+   */
+  actionCls?: string;
+
+  /**
    * Additional CSS classes applied to the close button.
    */
   closeCls?: string;
@@ -170,6 +220,14 @@ type={`export interface Toaster {
   otherProps: Toast.Provider
 }`}
 />
+
+### toastTypeT
+
+```ts
+type toastTypeT = "default" | "success" | "error" | "warning" | "info" | "loading"
+```
+
+Each type renders a colored border/background and a corresponding icon.
 
 ## Related Components
 
