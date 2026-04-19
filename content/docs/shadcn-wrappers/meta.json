@@ -26,6 +26,7 @@
     "select",
     "sheet",
     "tabs",
+    "toast",
     "toggle-group",
     "tooltip"
   ]

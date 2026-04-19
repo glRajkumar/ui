@@ -1,0 +1,177 @@
+---
+title: Toast
+description: A wrapper for Base UI Toast with stacked notifications, swipe-to-dismiss, and a convenience Toaster component.
+---
+
+import { ToastEx } from "@/components/examples";
+
+<ToastEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/toast
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/toast.tsx"'>
+  ./components/ui/toast.tsx
+</include>
+
+</Tab>
+
+</Tabs>
+
+## Usage
+
+### Basic — Toaster wrapper
+
+Wrap your app (or subtree) with `<Toaster>`. Call `useToastManager().add()` from any child component to fire a toast.
+
+```tsx
+import { Toaster, useToastManager } from "@/components/ui/toast";
+
+function TriggerButton() {
+  const { add } = useToastManager();
+  return (
+    <button onClick={() => add({ title: "Saved", description: "Changes saved." })}>
+      Save
+    </button>
+  );
+}
+
+export function App() {
+  return (
+    <Toaster>
+      <TriggerButton />
+    </Toaster>
+  );
+}
+```
+
+### Global manager
+
+Create a manager instance outside the React tree so you can fire toasts from anywhere (e.g. axios interceptors, utility functions).
+
+```tsx
+import { createToastManager, Toaster } from "@/components/ui/toast";
+
+export const toast = createToastManager();
+
+// In your root layout
+<Toaster toastManager={toast} />
+
+// Anywhere in the app — no hook needed
+toast.add({ title: "Uploaded", description: "File upload complete." });
+```
+
+### Composing primitives
+
+Use the individual primitives for full control.
+
+```tsx
+import {
+  ToastProvider,
+  ToastPortal,
+  ToastViewport,
+  ToastRoot,
+  ToastContent,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  useToastManager,
+} from "@/components/ui/toast";
+
+function ToastList() {
+  const { toasts } = useToastManager();
+  return toasts.map((toast) => (
+    <ToastRoot key={toast.id} toast={toast}>
+      <ToastContent>
+        <ToastTitle />
+        <ToastDescription />
+        <ToastClose />
+      </ToastContent>
+    </ToastRoot>
+  ));
+}
+
+export function App() {
+  return (
+    <ToastProvider>
+      {/* app content */}
+      <ToastPortal>
+        <ToastViewport>
+          <ToastList />
+        </ToastViewport>
+      </ToastPortal>
+    </ToastProvider>
+  );
+}
+```
+
+## Reference
+
+#### Toaster
+<AutoTypeTable
+name="Toaster"
+type={`export interface Toaster {
+  /**
+   * Additional CSS classes for the Viewport container.
+   * Defaults to fixed bottom-right position.
+   */
+  viewportCls?: string;
+
+  /**
+   * Additional CSS classes applied to each ToastRoot.
+   */
+  toastCls?: string;
+
+  /**
+   * Additional CSS classes applied to each ToastContent.
+   */
+  contentCls?: string;
+
+  /**
+   * Additional CSS classes applied to each ToastTitle.
+   */
+  titleCls?: string;
+
+  /**
+   * Additional CSS classes applied to each ToastDescription.
+   */
+  descriptionCls?: string;
+
+  /**
+   * Additional CSS classes applied to the close button.
+   */
+  closeCls?: string;
+
+  /**
+   * Whether to render the close button on each toast.
+   * @default true
+   */
+  showClose?: boolean;
+
+  /**
+   * ...otherProps: All properties from Base UI Toast.Provider can be passed directly.
+   * Includes toastManager, timeout, limit, etc.
+   */
+  otherProps: Toast.Provider
+}`}
+/>
+
+## Related Components
+
+- [Shadcn Sonner](https://ui.shadcn.com/docs/components/sonner)
+- [Base UI Toast](https://base-ui.com/react/components/toast)

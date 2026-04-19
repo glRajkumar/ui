@@ -1,4 +1,3 @@
-import { CarouselExample } from './carousel'
 import { NavigationMenuExample } from './navigation-menu'
 import { ToggleGroupExample } from './toggle-group'
 import { AlertDialogExample } from './alert-dialog'
@@ -9,6 +8,7 @@ import { Field_TF_Example } from './field-tf'
 import { DataTableExample } from './data-table'
 import { AccordionExample } from './accordion'
 import { DropdownExample } from './dropdown-menu'
+import { CarouselExample } from './carousel'
 import { ComboboxExample } from './combobox'
 import { ContextExample } from './context-menu'
 import { TooltipExample } from './tooltip'
@@ -17,6 +17,7 @@ import { PopoverExample } from './popover'
 import { SelectExample } from './select'
 import { DialogExample } from './dialog'
 import { DrawerExample } from './drawer'
+import { ToastExample } from './toast'
 import { SheetExample } from './sheet'
 import { EmptyExample } from './empty'
 import { FieldExample } from './field'
@@ -221,6 +222,14 @@ export function CarouselEx() {
   return (
     <Wrapper path="/components/examples/carousel.tsx">
       <CarouselExample />
+    </Wrapper>
+  )
+}
+
+export function ToastEx() {
+  return (
+    <Wrapper path="/components/examples/toast.tsx">
+      <ToastExample />
     </Wrapper>
   )
 }
