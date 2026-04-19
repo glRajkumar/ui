@@ -1,7 +1,3 @@
-type readOnlyChildren = Readonly<{
-  children: React.ReactNode;
-}>
-
 type allowedPrimitiveT = string | number | boolean
 
 type optionT = {

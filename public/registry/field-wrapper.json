@@ -18,7 +18,7 @@
   "files": [
     {
       "path": "types/general.d.ts",
-      "content": "type readOnlyChildren = Readonly<{\r\n  children: React.ReactNode;\r\n}>\r\n\r\ntype allowedPrimitiveT = string | number | boolean\r\n\r\ntype optionT = {\r\n  label: React.ReactNode\r\n  value: allowedPrimitiveT\r\n  className?: string\r\n}\r\n\r\ntype groupT = {\r\n  group: string\r\n  options: (allowedPrimitiveT | optionT)[]\r\n  className?: string\r\n}\r\n\r\ntype optionsT = (allowedPrimitiveT | optionT | groupT)[]\r\n\r\ntype indicatorAtT = \"right\" | \"left\"",
+      "content": "type allowedPrimitiveT = string | number | boolean\r\n\r\ntype optionT = {\r\n  label: React.ReactNode\r\n  value: allowedPrimitiveT\r\n  className?: string\r\n}\r\n\r\ntype groupT = {\r\n  group: string\r\n  options: (allowedPrimitiveT | optionT)[]\r\n  className?: string\r\n}\r\n\r\ntype optionsT = (allowedPrimitiveT | optionT | groupT)[]\r\n\r\ntype indicatorAtT = \"right\" | \"left\"",
       "type": "registry:file",
       "target": "types/general.d.ts"
     },

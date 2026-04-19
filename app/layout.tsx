@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Raj kumar", url: "https://glrk.dev" }]
 }
 
-function RootLayout({ children }: readOnlyChildren) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`flex flex-col min-h-screen ${interSans.variable} antialiased`}>
