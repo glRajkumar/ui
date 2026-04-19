@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronDownIcon, XIcon, CheckIcon } from 'lucide-react'
+import { ChevronDownIcon, XIcon, CheckIcon, PlusIcon, Loader2 } from 'lucide-react'
 import { Combobox as ComboboxPrimitive } from '@base-ui/react'
 
 import { cn, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from '@/lib/utils'
@@ -141,12 +141,13 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   )
 }
 
-function ComboboxItem({ className, children, ...props }: ComboboxPrimitive.Item.Props) {
+function ComboboxItem({ className, children, indicatorAt, ...props }: ComboboxPrimitive.Item.Props & { indicatorAt?: indicatorAtT }) {
   return (
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
       className={cn(
-        'relative flex w-full cursor-default select-none items-center gap-2 rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none',
+        'relative flex w-full cursor-default select-none items-center gap-2 rounded-sm py-1.5 text-sm outline-none',
+        indicatorAt === 'right' ? 'pl-2 pr-8' : 'pl-8 pr-2',
         'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -155,7 +156,12 @@ function ComboboxItem({ className, children, ...props }: ComboboxPrimitive.Item.
       {...props}
     >
       {children}
-      <ComboboxPrimitive.ItemIndicator className="pointer-events-none absolute right-2 flex size-4 items-center justify-center text-foreground">
+      <ComboboxPrimitive.ItemIndicator
+        className={cn(
+          'pointer-events-none absolute flex size-4 items-center justify-center text-foreground',
+          indicatorAt === 'right' ? 'right-2' : 'left-2',
+        )}
+      >
         <CheckIcon className="size-3.5" />
       </ComboboxPrimitive.ItemIndicator>
     </ComboboxPrimitive.Item>
@@ -279,6 +285,19 @@ function ComboboxChipsInput({ className, ...props }: ComboboxPrimitive.Input.Pro
   )
 }
 
+function ComboboxStatus({ className, ...props }: ComboboxPrimitive.Status.Props) {
+  return (
+    <ComboboxPrimitive.Status
+      data-slot="combobox-status"
+      className={cn(
+        'flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground empty:hidden',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
 function useComboboxAnchor() {
   return React.useRef<HTMLDivElement | null>(null)
 }
@@ -286,15 +305,16 @@ function useComboboxAnchor() {
 type OptionItemProps = {
   option: allowedPrimitiveT | optionT
   className?: string
+  indicatorAt?: indicatorAtT
 }
 
-function OptionItem({ option, className }: OptionItemProps) {
+function OptionItem({ option, className, indicatorAt }: OptionItemProps) {
   const value = getValue(option)
   const label = getLabel(option)
   const optCls = isOption(option) ? option.className : undefined
 
   return (
-    <ComboboxItem value={value} className={cn(className, optCls)}>
+    <ComboboxItem value={value} className={cn(className, optCls)} indicatorAt={indicatorAt}>
       {label}
     </ComboboxItem>
   )
@@ -305,9 +325,10 @@ type OptionsBodyProps = {
   index: number
   itemCls?: string
   groupCls?: string
+  indicatorAt?: indicatorAtT
 }
 
-function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
+function OptionsBody({ item, index, itemCls, groupCls, indicatorAt }: OptionsBodyProps) {
   if (isGroup(item)) {
     return (
       <ComboboxGroup
@@ -317,7 +338,12 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
         <ComboboxLabel>{item.group}</ComboboxLabel>
         <ComboboxCollection>
           {(opt: allowedPrimitiveT | optionT) => (
-            <OptionItem key={getKey(opt, 0)} option={opt} className={cn(itemCls)} />
+            <OptionItem
+              key={getKey(opt, 0)}
+              option={opt}
+              className={cn(itemCls)}
+              indicatorAt={indicatorAt}
+            />
           )}
         </ComboboxCollection>
       </ComboboxGroup>
@@ -333,6 +359,7 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
       key={getKey(item as allowedPrimitiveT | optionT, index)}
       option={item as allowedPrimitiveT | optionT}
       className={cn(itemCls)}
+      indicatorAt={indicatorAt}
     />
   )
 }
@@ -340,7 +367,8 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
 type ComboboxWrapperProps<
   Value = unknown,
   Multiple extends boolean | undefined = boolean | undefined,
-> = ComboboxPrimitive.Root.Props<Value, Multiple> & {
+> = Omit<ComboboxPrimitive.Root.Props<Value, Multiple>, 'items'> & {
+  items?: optionsT
   isLoading?: boolean
   placeholder?: string
   emptyMessage?: string
@@ -348,6 +376,11 @@ type ComboboxWrapperProps<
   contentCls?: string
   groupCls?: string
   itemCls?: string
+  indicatorAt?: 'left' | 'right'
+  showTrigger?: boolean
+  showClear?: boolean
+  inputProps?: React.ComponentProps<'input'>
+  hideList?: boolean
 }
 
 function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
@@ -358,8 +391,13 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
   contentCls,
   groupCls,
   itemCls,
+  indicatorAt = 'right',
+  showTrigger = true,
+  showClear = false,
   multiple,
   disabled,
+  inputProps,
+  hideList,
   ...props
 }: ComboboxWrapperProps<Value, Multiple>) {
   const multiAnchor = React.useRef<HTMLDivElement | null>(null)
@@ -372,15 +410,23 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
             {(values: allowedPrimitiveT[]) => (
               <>
                 {values?.map(v => (
-                  <ComboboxChip key={String(v)}>{String(v)}</ComboboxChip>
+                  <ComboboxChip key={String(v)}>
+                    {String(v)}
+                  </ComboboxChip>
                 ))}
 
-                <ComboboxChipsInput placeholder={placeholder} disabled={disabled} />
+                <ComboboxChipsInput
+                  placeholder={placeholder}
+                  disabled={disabled}
+                  {...inputProps}
+                />
 
-                <div className="flex shrink-0 items-center ml-auto">
-                  <ComboboxClear disabled={disabled} />
-                  <ComboboxTrigger disabled={disabled} />
-                </div>
+                {(showClear || showTrigger) && (
+                  <div className="flex shrink-0 items-center ml-auto">
+                    {showClear && <ComboboxClear disabled={disabled} />}
+                    {showTrigger && <ComboboxTrigger disabled={disabled} />}
+                  </div>
+                )}
               </>
             )}
           </ComboboxValue>
@@ -389,19 +435,20 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
         <ComboboxInput
           placeholder={placeholder}
           disabled={disabled}
-          showTrigger
-          showClear
+          showTrigger={showTrigger}
+          showClear={showClear}
           className={cn('w-full', triggerCls)}
+          {...inputProps}
         />
       )}
 
-      <ComboboxContent anchor={multiple ? multiAnchor : undefined} className={contentCls}>
+      <ComboboxContent anchor={multiple ? multiAnchor : undefined} className={cn(contentCls, hideList && "hidden")}>
         <ComboboxEmpty>
           {isLoading ? 'Loading...' : (emptyMessage ?? 'No options found')}
         </ComboboxEmpty>
 
         <ComboboxList>
-          {(item: optionsT[number], i: number) => (
+          {(item: optionT, i: number) => (
             <OptionsBody
               key={
                 isGroup(item)
@@ -410,10 +457,11 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
                     ? `sep-${i}`
                     : String(getValue(item as allowedPrimitiveT | optionT))
               }
-              item={item}
+              item={item as optionsT[number]}
               index={i}
               groupCls={groupCls}
               itemCls={itemCls}
+              indicatorAt={indicatorAt}
             />
           )}
         </ComboboxList>
@@ -439,6 +487,7 @@ export {
   ComboboxTrigger,
   ComboboxClear,
   ComboboxValue,
+  ComboboxStatus,
   useComboboxAnchor,
   ComboboxWrapper,
   type ComboboxWrapperProps,
