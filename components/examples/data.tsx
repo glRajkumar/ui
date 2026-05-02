@@ -16,7 +16,7 @@ export const options: optionsT = [
   {
     label: 'Obj 2',
     value: 'obj-2',
-    className: 'bg-red-50',
+    className: 'bg-red-50 dark:bg-red-900',
   },
   {
     value: 'apple',
@@ -40,7 +40,7 @@ export const options: optionsT = [
             <Banana /> Banana
           </>
         ),
-        className: 'bg-amber-50',
+        className: 'bg-amber-50 dark:bg-amber-900',
       },
     ],
   },
@@ -106,7 +106,7 @@ export const accordionItems: accordionItemsT = [
     value: 'item-2',
     trigger: 'Is it styled?',
     content: "Yes. It comes with default styles that matches the other components' aesthetic.",
-    contentCls: 'bg-red-50',
+    contentCls: 'bg-red-50 dark:bg-red-900',
   },
   {
     value: 'item 3',
