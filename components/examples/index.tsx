@@ -55,7 +55,7 @@ export function AccordionEx() {
     <Wrapper
       path={[
         '/components/examples/accordion.tsx',
-        '/components/examples/data/accordion.tsx',
+        '/components/examples/data/accordion-items.tsx',
       ]}
     >
       <AccordionExample />

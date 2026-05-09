@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { ShieldCheck } from 'lucide-react'
 
-import { ExRow } from '@/components/examples/common'
+import { ExRow, ExItem } from '@/components/examples/common'
 import { AccordionWrapper } from '@/components/ui/accordion'
 import { accordionItems } from './data'
 
@@ -157,30 +157,52 @@ function CustomHeadingExample() {
 export function AccordionExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
-      <ExRow label="Basic">
-        <SingleOpenExample />
-        <MultipleOpenExample />
-        <IndicatorLeftExample />
+      <ExRow className='[&_.row-container]:gap-8' label="Basic">
+        <ExItem label="Single open — only one panel expands at a time">
+          <SingleOpenExample />
+        </ExItem>
+        <ExItem label="Multiple — several panels can be open simultaneously">
+          <MultipleOpenExample />
+        </ExItem>
+        <ExItem label="Left indicator — chevron on the left side">
+          <IndicatorLeftExample />
+        </ExItem>
       </ExRow>
 
-      <ExRow label="State">
-        <DefaultOpenExample />
-        <DisabledItemExample />
-        <DisabledRootExample />
+      <ExRow className='[&_.row-container]:gap-8' label="State">
+        <ExItem label="Default open — item-1 expanded on mount">
+          <DefaultOpenExample />
+        </ExItem>
+        <ExItem label="Disabled item — middle item non-interactive">
+          <DisabledItemExample />
+        </ExItem>
+        <ExItem label="Disabled root — all items non-interactive">
+          <DisabledRootExample />
+        </ExItem>
       </ExRow>
 
-      <ExRow label="Panel Behaviour">
-        <PersistStateExample />
-        <HiddenUntilFoundExample />
+      <ExRow className='[&_.row-container]:gap-8' label="Panel Behaviour">
+        <ExItem label="Keep mounted — panel DOM preserved on close, state persists">
+          <PersistStateExample />
+        </ExItem>
+        <ExItem label="Hidden until found — closed panels findable by browser Ctrl+F">
+          <HiddenUntilFoundExample />
+        </ExItem>
       </ExRow>
 
-      <ExRow label="Controlled">
-        <ControlledExample />
+      <ExRow className='[&_.row-container]:gap-8' label="Controlled">
+        <ExItem label="Controlled — open state managed externally via value/onValueChange">
+          <ControlledExample />
+        </ExItem>
       </ExRow>
 
-      <ExRow label="Custom Style">
-        <CustomStyleExample />
-        <CustomHeadingExample />
+      <ExRow className='[&_.row-container]:gap-8' label="Custom Style">
+        <ExItem label="Per-item content colours, bold triggers, left border">
+          <CustomStyleExample />
+        </ExItem>
+        <ExItem label="Custom heading level — triggers render as h2 elements">
+          <CustomHeadingExample />
+        </ExItem>
       </ExRow>
     </div>
   )
