@@ -126,8 +126,12 @@ function AlertDialogDescription({
   )
 }
 
-function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof Button>) {
-  return <Button data-slot="alert-dialog-action" className={cn(className)} {...props} />
+function AlertDialogAction({
+  className,
+  variant = 'destructive',
+  ...props
+}: React.ComponentProps<typeof Button>) {
+  return <Button data-slot="alert-dialog-action" variant={variant} className={cn(className)} {...props} />
 }
 
 function AlertDialogCancel({
@@ -188,7 +192,9 @@ type AlertDialogWrapperProps = {
   trigger?: React.ReactNode
   children?: React.ReactNode
   description?: React.ReactNode
+  media?: React.ReactNode
   triggerCls?: string
+  triggerProps?: Omit<AlertDialogPrimitive.Trigger.Props, 'children' | 'className'>
   descriptionCls?: string
   contentCls?: string
   headerCls?: string
@@ -200,12 +206,13 @@ function AlertDialogWrapper({
   title = 'Are you absolutely sure?',
   description = 'This action cannot be undone. This will permanently remove your data from our servers.',
   children,
+  media,
   triggerCls,
+  triggerProps,
   contentCls,
   headerCls,
   titleCls,
   descriptionCls,
-
   cancel = 'Cancel',
   action = 'Confirm',
   footerCls,
@@ -217,10 +224,15 @@ function AlertDialogWrapper({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
   return (
     <AlertDialog {...props}>
-      {trigger && <AlertDialogTrigger className={cn(triggerCls)}>{trigger}</AlertDialogTrigger>}
+      {trigger && (
+        <AlertDialogTrigger className={cn(triggerCls)} {...triggerProps}>
+          {trigger}
+        </AlertDialogTrigger>
+      )}
 
       <AlertDialogContent className={cn(contentCls)}>
         <AlertDialogHeader className={cn(headerCls)}>
+          {media && <AlertDialogMedia>{media}</AlertDialogMedia>}
           <AlertDialogTitle className={cn(titleCls)}>{title}</AlertDialogTitle>
           {description && (
             <AlertDialogDescription className={cn(descriptionCls)}>

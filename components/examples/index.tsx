@@ -60,7 +60,15 @@ export function AccordionEx() {
 
 export function AlertDialogEx() {
   return (
-    <Wrapper path="/components/examples/alert-dialog.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/alert-dialog/index.tsx',
+        '/components/examples/alert-dialog/basic.tsx',
+        '/components/examples/alert-dialog/controlled.tsx',
+        '/components/examples/alert-dialog/detached.tsx',
+        '/components/examples/alert-dialog/async-action.tsx',
+      ]}
+    >
       <AlertDialogExample />
     </Wrapper>
   )
