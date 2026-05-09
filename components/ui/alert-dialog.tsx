@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog'
+import { Loader } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -151,9 +152,11 @@ function AlertDialogCancel({
   )
 }
 
+
 type AlertDialogFooterWrapperProps = {
   cancel?: React.ReactNode
   action?: React.ReactNode
+  loading?: boolean
   footerCls?: string
   actionCls?: string
   cancelCls?: string
@@ -164,23 +167,24 @@ type AlertDialogFooterWrapperProps = {
 function AlertDialogFooterWrapper({
   cancel,
   action,
+  loading = false,
   footerCls,
   actionCls,
   cancelCls,
-  onAction = () => {},
-  onCancel = () => {},
+  onAction = () => { },
+  onCancel = () => { },
 }: AlertDialogFooterWrapperProps) {
   return (
     <AlertDialogFooter className={cn(footerCls)}>
       {cancel && (
-        <AlertDialogCancel onClick={onCancel} className={cn(cancelCls)}>
+        <AlertDialogCancel onClick={onCancel} className={cn(cancelCls)} disabled={loading}>
           {cancel}
         </AlertDialogCancel>
       )}
 
       {action && (
-        <AlertDialogAction onClick={onAction} className={cn(actionCls)}>
-          {action}
+        <AlertDialogAction onClick={onAction} className={cn(actionCls)} disabled={loading}>
+          {loading && <Loader className="animate-spin" />}{action}
         </AlertDialogAction>
       )}
     </AlertDialogFooter>
@@ -215,15 +219,26 @@ function AlertDialogWrapper({
   descriptionCls,
   cancel = 'Cancel',
   action = 'Confirm',
+  loading = false,
   footerCls,
   actionCls,
   cancelCls,
   onAction,
   onCancel,
+  onOpenChange,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
   return (
-    <AlertDialog {...props}>
+    <AlertDialog
+      {...props}
+      onOpenChange={(open, eventDetails) => {
+        if (!open && loading) {
+          eventDetails.cancel()
+          return
+        }
+        onOpenChange?.(open, eventDetails)
+      }}
+    >
       {trigger && (
         <AlertDialogTrigger className={cn(triggerCls)} {...triggerProps}>
           {trigger}
@@ -247,6 +262,7 @@ function AlertDialogWrapper({
           <AlertDialogFooterWrapper
             cancel={cancel}
             action={action}
+            loading={loading}
             footerCls={footerCls}
             actionCls={actionCls}
             cancelCls={cancelCls}

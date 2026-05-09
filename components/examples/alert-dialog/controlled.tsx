@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 
-import { buttonVariants } from '@/components/ui/button'
 import { AlertDialogWrapper } from '@/components/ui/alert-dialog'
+import { buttonVariants } from '@/components/ui/button'
 
 export function ControlledExample() {
   const [open, setOpen] = useState(false)

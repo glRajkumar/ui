@@ -2,8 +2,8 @@
 
 import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog'
 
-import { buttonVariants } from '@/components/ui/button'
 import { AlertDialogTrigger, AlertDialogWrapper } from '@/components/ui/alert-dialog'
+import { buttonVariants } from '@/components/ui/button'
 
 const singleHandle = AlertDialogPrimitive.createHandle()
 

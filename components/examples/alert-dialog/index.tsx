@@ -2,14 +2,19 @@
 
 import {
   BasicExample,
+  IconTriggerExample,
+  IconOnlyTriggerExample,
+  CustomElementTriggerExample,
+  AnchorTriggerExample,
+  CustomComponentTriggerExample,
   NoDescriptionExample,
   NoActionExample,
   WithMediaExample,
   CustomStylingExample,
 } from './basic'
 import { ControlledExample, ControlledWithTriggerExample } from './controlled'
-import { AsyncActionExample } from './async-action'
 import { DetachedTriggerExample, MultipleDetachedExample } from './detached'
+import { AsyncActionExample } from './async-action'
 
 function ExRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -29,6 +34,14 @@ export function AlertDialogExample() {
         <NoActionExample />
         <WithMediaExample />
         <CustomStylingExample />
+      </ExRow>
+
+      <ExRow label="Triggers">
+        <IconTriggerExample />
+        <IconOnlyTriggerExample />
+        <CustomElementTriggerExample />
+        <AnchorTriggerExample />
+        <CustomComponentTriggerExample />
       </ExRow>
 
       <ExRow label="Controlled">

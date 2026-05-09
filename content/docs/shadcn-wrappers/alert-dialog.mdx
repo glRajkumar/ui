@@ -1,6 +1,6 @@
 ---
 title: Alert Dialog
-description: A simplified wrapper for Shadcn Alert Dialog with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Alert Dialog with flexible trigger composition, async loading state, media slot, and detached trigger support.
 ---
 
 import { AlertDialogEx } from "@/components/examples";
@@ -37,248 +37,318 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
+
 ```tsx
-import { AlertDialogWrapper } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { AlertDialogWrapper } from "@/components/ui/alert-dialog"
 
 export function Basic() {
   return (
     <AlertDialogWrapper
-      trigger={<Button>Delete</Button>}
+      trigger="Delete"
+      triggerCls={buttonVariants({ variant: 'outline' })}
     />
   )
 }
 ```
 
-### Controlled
-```tsx
-import { useState } from "react"
-import { AlertDialogWrapper } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+### Icon trigger
 
+Pass any ReactNode as `trigger` — icon only, icon + text, or any element:
+
+```tsx
+<AlertDialogWrapper
+  trigger={<><Trash2 /> Delete</>}
+  triggerCls={buttonVariants({ variant: 'destructive' })}
+  action="Delete"
+/>
+```
+
+### Custom element trigger
+
+Use `triggerProps.render` to replace the default `<button>` with any element. Set `nativeButton={false}` for non-button elements:
+
+```tsx
+// Anchor link trigger
+<AlertDialogWrapper
+  trigger="Delete file"
+  triggerProps={{
+    render: <a href="#" />,
+    nativeButton: false,
+  }}
+  triggerCls="text-sm text-destructive underline underline-offset-4"
+/>
+
+// Custom forwardRef component trigger
+const MyTrigger = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
+  ({ children, ...props }, ref) => <div ref={ref} {...props}>{children}</div>
+)
+
+<AlertDialogWrapper
+  trigger="Open"
+  triggerProps={{ render: <MyTrigger />, nativeButton: false }}
+/>
+```
+
+### With media
+
+Pass an icon or image to the `media` prop to render it in the header:
+
+```tsx
+<AlertDialogWrapper
+  trigger="Delete account"
+  media={<Trash2 />}
+  title="Delete account?"
+  description="All your data will be permanently deleted."
+  action="Delete"
+/>
+```
+
+### Controlled
+
+```tsx
 export function Controlled() {
   const [open, setOpen] = useState(false)
 
   return (
-    <AlertDialogWrapper
-      open={open}
-      onOpenChange={setOpen}
-      trigger={<Button>Controlled</Button>}
-      onAction={() => setOpen(false)}
-    />
-  )
-}
-
-// Programaticaly open model without trigger
-export function Controlled2() {
-  const [open, setOpen] = useState(false)
- 
-  const updateOpen = () => setOpen(p => !p)
-
-  return (
     <>
-      <Button onClick={updateOpen}>Controlled 2</Button>
+      <button onClick={() => setOpen(true)}>Open</button>
 
       <AlertDialogWrapper
         open={open}
-        onOpenChange={updateOpen}
-        onAction={updateOpen}
+        onOpenChange={setOpen}
+        title="Leave page?"
+        description="You have unsaved changes."
+        action="Leave"
+        onAction={() => setOpen(false)}
       />
     </>
   )
 }
 ```
 
-### Custom
+### Async action with loading state
+
+Pass `loading` to disable buttons and show a spinner on the action button. Dialog blocks Escape and backdrop close while loading:
+
 ```tsx
-export function Custom() {
+export function AsyncDelete() {
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  async function handleDelete() {
+    setLoading(true)
+    await deleteRecord()
+    setLoading(false)
+    setOpen(false)
+  }
+
   return (
     <AlertDialogWrapper
-      trigger={<Button>Delete</Button>}
-      title="Some Custom Modal"
-      description=""
-
-      // to remove footer make cancel and action empty
-      cancel=""
-      action=""
-    >
-      <div>...</div>
-    </AlertDialogWrapper>
+      open={open}
+      onOpenChange={setOpen}
+      trigger="Delete"
+      title="Delete this record?"
+      description="This will permanently delete the record."
+      loading={loading}
+      onAction={handleDelete}
+    />
   )
 }
+```
+
+### Detached trigger
+
+Place the trigger outside the wrapper using `AlertDialog.createHandle()`:
+
+```tsx
+import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
+import { AlertDialogTrigger, AlertDialogWrapper } from "@/components/ui/alert-dialog"
+
+const handle = AlertDialogPrimitive.createHandle()
+
+<AlertDialogTrigger handle={handle}>Open</AlertDialogTrigger>
+
+<AlertDialogWrapper
+  handle={handle}
+  title="Are you sure?"
+  description="This cannot be undone."
+/>
+```
+
+### Multiple detached triggers
+
+Multiple triggers can share one dialog via the same handle:
+
+```tsx
+const handle = AlertDialogPrimitive.createHandle()
+
+<AlertDialogTrigger handle={handle}>Trigger 1</AlertDialogTrigger>
+<AlertDialogTrigger handle={handle}>Trigger 2</AlertDialogTrigger>
+
+<AlertDialogWrapper handle={handle} title="Shared dialog" />
+```
+
+### Custom footer content
+
+Set `action=""` and `cancel=""` to hide the default footer, then pass custom footer via `children`:
+
+```tsx
+<AlertDialogWrapper
+  trigger="Open"
+  action=""
+  cancel=""
+>
+  <AlertDialogFooter>
+    <AlertDialogCancel>Cancel</AlertDialogCancel>
+    <AlertDialogAction onClick={handleAction}>Confirm</AlertDialogAction>
+  </AlertDialogFooter>
+</AlertDialogWrapper>
 ```
 
 ## Reference
 
 #### AlertDialogFooterWrapper
-<AutoTypeTable 
-name="AlertDialogFooterWrapper" 
+<AutoTypeTable
+name="AlertDialogFooterWrapper"
 type={`export interface AlertDialogFooterWrapper {
-    /**
-   * Text or element for the cancel button
-   * Set to \`""\` or \`null\` or \`false\` to hide the cancel button
-   * 
+  /**
+   * Text or element for the cancel button.
+   * Set to \`""\` or \`null\` to hide.
    * @default "Cancel"
-   * 
-   * \`\`\`tsx
-   * cancel="No, keep it"
-   * // or custom element
-   * cancel={<button><XIcon />Nevermind</button>}
-   * // or hide it
-   * cancel={null}
-   * \`\`\`
    */
   cancel?: React.ReactNode;
 
   /**
-   * Text or element for the confirm/action button
-   * Set to \`""\` or \`null\` or \`false\` to hide the action button
-   * 
+   * Text or element for the action button.
+   * Set to \`""\` or \`null\` to hide.
    * @default "Confirm"
-   * 
-   * \`\`\`tsx
-   * action="Yes, delete"
-   * // or custom element
-   * action={<button><TrashIcon />Delete Forever</button>}
-   * \`\`\`
    */
   action?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the footer container
+   * When true, disables both buttons and shows a spinner on the action button.
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
+   * Additional CSS classes for the footer container.
    */
   footerCls?: string;
 
   /**
-   * Additional CSS classes for the action/confirm button
-   * 
-   * \`\`\`tsx
-   * actionCls="bg-red-600 hover:bg-red-700"
-   * \`\`\`
+   * Additional CSS classes for the action button.
    */
   actionCls?: string;
 
   /**
-   * Additional CSS classes for the cancel button
+   * Additional CSS classes for the cancel button.
    */
   cancelCls?: string;
 
   /**
-   * Callback fired when the action/confirm button is clicked
-   * Dialog remains open after this callback - close it via state if needed
-   * 
-   * \`\`\`tsx
-   * onAction={() => {
-   *   deleteAccount()
-   *   setOpen(false)
-   * }}
-   * \`\`\`
+   * Callback fired when the action button is clicked.
+   * Dialog stays open — close it manually via state if needed.
    */
   onAction?: () => void;
 
   /**
-   * Callback fired when the cancel button is clicked
-   * Dialog automatically closes after this callback
-   * 
-   * \`\`\`tsx
-   * onCancel={() => {
-   *   console.log("User cancelled")
-   * }}
-   * \`\`\`
+   * Callback fired when the cancel button is clicked.
    */
   onCancel?: () => void;
-}`} 
+}`}
 />
 
 #### AlertDialogWrapper
-<AutoTypeTable 
-name="AlertDialogWrapper" 
+<AutoTypeTable
+name="AlertDialogWrapper"
 type={`export interface AlertDialogWrapper {
   /**
-   * Optional trigger element that opens the dialog when clicked
-   * If not provided, control the dialog via the \`open\` prop
-   * 
-   * Automatically uses \`asChild\` when React element is provided
-   * 
+   * Content rendered inside the auto-wrapped trigger button.
+   * Accepts strings, icons, or any ReactNode.
+   * Omit to use a detached trigger or controlled open state instead.
+   *
    * \`\`\`tsx
-   * trigger={<Button variant="destructive">Delete Account</Button>}
-   * // or
-   * trigger="Click to open"
+   * trigger="Delete"
+   * trigger={<><Trash2 /> Delete</>}
    * \`\`\`
    */
   trigger?: React.ReactNode;
 
   /**
-   * Dialog title displayed in the header
-   * 
-   * @default "Are you absolutely sure?"
-   * 
+   * CSS class applied to the trigger element.
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional props for the trigger — use to pass handle, payload, id,
+   * or a custom render element (for non-button triggers).
+   *
    * \`\`\`tsx
-   * title="Delete User Account"
-   * // or
-   * title={<span className="text-red-600">Warning!</span>}
+   * triggerProps={{ render: <a href="#" />, nativeButton: false }}
+   * triggerProps={{ handle: myHandle, payload: { id: '1' } }}
    * \`\`\`
+   */
+  triggerProps?: Omit<AlertDialogPrimitive.Trigger.Props, 'children' | 'className'>;
+
+  /**
+   * Dialog title.
+   * @default "Are you absolutely sure?"
    */
   title?: React.ReactNode;
 
   /**
-   * Description text explaining the action's consequences
-   * Set to \`"null"\` or \`undefined\` to hide the description
-   * 
-   * @default "This action cannot be undone. This will permanently remove your data from our servers."
-   * 
-   * \`\`\`tsx
-   * description="All files and data will be permanently deleted."
-   * // or hide it
-   * description={null}
-   * \`\`\`
+   * Dialog description. Set to \`""\` to hide.
+   * @default "This action cannot be undone..."
    */
   description?: React.ReactNode;
 
   /**
-   * Additional content rendered between description and footer
-   * Use for custom forms, warnings, or additional information
-   * 
+   * Icon or image rendered above the title in the header.
+   *
    * \`\`\`tsx
-   * <AlertDialogWrapper>
-   *   <div className="my-4">
-   *     <input placeholder="Type 'DELETE' to confirm" />
-   *   </div>
-   * </AlertDialogWrapper>
+   * media={<Trash2 />}
    * \`\`\`
+   */
+  media?: React.ReactNode;
+
+  /**
+   * Additional content rendered between the header and footer.
+   * Use for custom forms or extra information.
    */
   children?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the dialog content container
+   * Additional CSS classes for the dialog content panel.
    */
   contentCls?: string;
 
   /**
-   * Additional CSS classes for the header section
+   * Additional CSS classes for the header section.
    */
   headerCls?: string;
 
   /**
-   * Additional CSS classes for the title
+   * Additional CSS classes for the title.
    */
   titleCls?: string;
 
   /**
-   * Additional CSS classes for the description
+   * Additional CSS classes for the description.
    */
   descriptionCls?: string;
 
- /**
-   * ...otherProps: All properties from Base UI Alert Dialog Root can be passed directly.
+  /**
+   * ...otherProps: All AlertDialogFooterWrapper props (cancel, action, loading,
+   * footerCls, actionCls, cancelCls, onAction, onCancel) can be passed directly.
+   * All Base UI AlertDialog.Root props (open, onOpenChange, handle, defaultOpen, etc.)
+   * are also forwarded to the root.
    */
-  otherProps: AlertDialogPrimitive.Root
-}`} 
+  otherProps?: never;
+}`}
 />
-
-Properties of `AlertDialogFooterWrapper` can be passed directly.
 
 ## Related Components
 
-- [Shadcn Alert Dialog](https://ui.shadcn.com/docs/components/alert-dialog)
 - [Base UI Alert Dialog](https://base-ui.com/react/components/alert-dialog)
+- [Shadcn Alert Dialog](https://ui.shadcn.com/docs/components/alert-dialog)
