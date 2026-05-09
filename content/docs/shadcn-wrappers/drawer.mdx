@@ -1,6 +1,6 @@
 ---
 title: Drawer
-description: A simplified wrapper for Shadcn Drawer with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Drawer with side support, swipe-to-dismiss, snap points, async loading, and nested drawer support.
 ---
 
 import { DrawerEx } from "@/components/examples";
@@ -37,245 +37,256 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
+
 ```tsx
-import { DrawerWrapper } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import { DrawerWrapper } from "@/components/ui/drawer"
 
 export function Basic() {
   return (
     <DrawerWrapper
-      trigger={<Button>Delete</Button>}
-      title="Are you absolutely sure?"
-      description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+      trigger="Open"
+      triggerCls={buttonVariants({ variant: 'outline' })}
+      title="Basic drawer"
+      description="Swipe down to dismiss."
+      action="Confirm"
     />
   )
 }
 ```
 
-### Controlled
-```tsx
-import { useState } from "react"
-import { DrawerWrapper } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+### Sides
 
+Use `side` to set which edge the drawer slides from. Pair with `swipeDirection` to match:
+
+```tsx
+<DrawerWrapper side="bottom" swipeDirection="down" trigger="Bottom" title="Bottom drawer" />
+<DrawerWrapper side="top"    swipeDirection="up"   trigger="Top"    title="Top drawer" />
+<DrawerWrapper side="left"   swipeDirection="left" trigger="Left"   title="Left drawer" />
+<DrawerWrapper side="right"  swipeDirection="right" trigger="Right" title="Right drawer" />
+```
+
+### Snap points
+
+```tsx
+<DrawerWrapper
+  trigger="Snap Points"
+  title="Snap points"
+  description="Drawer snaps to 40% or 100% height. Drag to switch."
+  snapPoints={[0.4, 1]}
+  action="Confirm"
+/>
+```
+
+### Non-modal
+
+Page content stays interactive while the drawer is open:
+
+```tsx
+<DrawerWrapper
+  trigger="Non-modal"
+  modal={false}
+  title="Non-modal drawer"
+  description="The page behind remains interactive."
+  action="Close"
+/>
+```
+
+### Nested drawers
+
+```tsx
+<DrawerWrapper trigger="Open outer" title="Outer drawer" action="">
+  <DrawerWrapper
+    trigger="Open inner"
+    title="Inner drawer"
+    description="Nested inside the outer drawer."
+    action="Confirm"
+  />
+</DrawerWrapper>
+```
+
+### Controlled
+
+```tsx
 export function Controlled() {
   const [open, setOpen] = useState(false)
 
   return (
-    <DrawerWrapper
-      open={open}
-      onOpenChange={setOpen}
-      trigger={<Button>Controlled</Button>}
-      onAction={() => setOpen(false)}
-      title="Are you absolutely sure?"
-      description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-    />
-  )
-}
-
-// Programaticaly open model without trigger
-export function Controlled2() {
-  const [open, setOpen] = useState(false)
- 
-  const updateOpen = () => setOpen(p => !p)
-
-  return (
     <>
-      <Button onClick={updateOpen}>Controlled 2</Button>
+      <button onClick={() => setOpen(true)}>Open</button>
 
       <DrawerWrapper
         open={open}
-        onOpenChange={updateOpen}
-        onAction={updateOpen}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+        onOpenChange={setOpen}
+        title="Controlled drawer"
+        action="Confirm"
+        onAction={() => setOpen(false)}
       />
     </>
   )
 }
 ```
 
-### Custom
+### Async action with loading state
+
 ```tsx
-export function Custom() {
+export function AsyncSubmit() {
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit() {
+    setLoading(true)
+    await submitData()
+    setLoading(false)
+    setOpen(false)
+  }
+
   return (
     <DrawerWrapper
-      trigger={<Button>Delete</Button>}
-      title="Some Custom Modal"
-
-      // to remove footer make cancel empty
-      cancel=""
-    >
-      <div>...</div>
-    </DrawerWrapper>
+      open={open}
+      onOpenChange={setOpen}
+      trigger="Submit"
+      title="Submit form?"
+      action="Submit"
+      loading={loading}
+      onAction={handleSubmit}
+    />
   )
 }
+```
+
+### Custom footer content
+
+```tsx
+<DrawerWrapper trigger="Open" title="Custom footer" action="" cancel="">
+  <DrawerFooter>
+    <DrawerClose className={buttonVariants({ variant: 'outline' })}>Cancel</DrawerClose>
+    <Button onClick={handleAction}>Confirm</Button>
+  </DrawerFooter>
+</DrawerWrapper>
 ```
 
 ## Reference
 
 #### DrawerFooterWrapper
-<AutoTypeTable 
-name="DrawerFooterWrapper" 
+<AutoTypeTable
+name="DrawerFooterWrapper"
 type={`export interface DrawerFooterWrapper {
-    /**
-   * Text or element for the cancel button
-   * Set to \`""\` or \`null\` or \`false\` to hide the cancel button
-   * 
+  /**
+   * Text or element for the cancel button. Set to \`""\` or \`null\` to hide.
    * @default "Cancel"
-   * 
-   * \`\`\`tsx
-   * cancel="No, keep it"
-   * // or custom element
-   * cancel={<button><XIcon />Nevermind</button>}
-   * // or hide it
-   * cancel={null}
-   * \`\`\`
    */
   cancel?: React.ReactNode;
 
   /**
-   * Text or element for the confirm/action button
-   * Set to \`""\` or \`null\` or \`false\` to hide the action button
-   * 
-   * \`\`\`tsx
-   * action="Yes, delete"
-   * // or custom element
-   * action={<button><TrashIcon />Delete Forever</button>}
-   * \`\`\`
+   * Text or element for the action button. Set to \`""\` or \`null\` to hide.
    */
   action?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the footer container
+   * When true, disables both buttons and shows a spinner on the action button.
+   * Blocks swipe-to-dismiss and backdrop close while loading.
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
+   * Additional CSS classes for the footer container.
    */
   footerCls?: string;
 
   /**
-   * Additional CSS classes for the action/confirm button
-   * 
-   * \`\`\`tsx
-   * actionCls="bg-red-600 hover:bg-red-700"
-   * \`\`\`
+   * Additional CSS classes for the action button.
    */
   actionCls?: string;
 
   /**
-   * Additional CSS classes for the cancel button
+   * Additional CSS classes for the cancel button.
    */
   cancelCls?: string;
 
   /**
-   * Callback fired when the action/confirm button is clicked
-   * Drawer remains open after this callback - close it via state if needed
-   * 
-   * \`\`\`tsx
-   * onAction={() => {
-   *   deleteAccount()
-   *   setOpen(false)
-   * }}
-   * \`\`\`
+   * Callback fired when the action button is clicked.
    */
   onAction?: () => void;
 
   /**
-   * Callback fired when the cancel button is clicked
-   * Drawer automatically closes after this callback
-   * 
-   * \`\`\`tsx
-   * onCancel={() => {
-   *   console.log("User cancelled")
-   * }}
-   * \`\`\`
+   * Callback fired when the cancel button is clicked.
    */
   onCancel?: () => void;
-}`} 
+}`}
 />
 
 #### DrawerWrapper
-<AutoTypeTable 
-name="DrawerWrapper" 
+<AutoTypeTable
+name="DrawerWrapper"
 type={`export interface DrawerWrapper {
   /**
-   * Optional trigger element that opens the drawer when clicked
-   * If not provided, control the drawer via the \`open\` prop
-   * 
-   * Automatically uses \`asChild\` when React element is provided
-   * 
-   * \`\`\`tsx
-   * trigger={<Button variant="destructive">Delete Account</Button>}
-   * // or
-   * trigger="Click to open"
-   * \`\`\`
+   * Content rendered inside the auto-wrapped trigger button.
    */
   trigger?: React.ReactNode;
 
   /**
-   * Drawer title displayed in the header
-   * 
-   * \`\`\`tsx
-   * title="Delete User Account"
-   * // or
-   * title={<span className="text-red-600">Warning!</span>}
-   * \`\`\`
+   * CSS class applied to the trigger element.
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional props for the trigger — handle, payload, render, nativeButton.
+   */
+  triggerProps?: Omit<DrawerPrimitive.Trigger.Props, 'children' | 'className'>;
+
+  /**
+   * Drawer title.
    */
   title?: React.ReactNode;
 
   /**
-   * Description text explaining the action's consequences
-   * Set to \`"null"\` or \`undefined\` to hide the description
-   * 
-   * \`\`\`tsx
-   * description="All files and data will be permanently deleted."
-   * // or hide it
-   * description={null}
-   * \`\`\`
+   * Drawer description. Set to \`""\` to hide.
    */
   description?: React.ReactNode;
 
   /**
-   * Additional content rendered between description and footer
-   * Use for custom forms, warnings, or additional information
-   * 
-   * \`\`\`tsx
-   * <DrawerWrapper>
-   *   <div className="my-4">
-   *     <input placeholder="Type 'DELETE' to confirm" />
-   *   </div>
-   * </DrawerWrapper>
-   * \`\`\`
+   * Additional content rendered between header and footer.
    */
   children?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the drawer content container
+   * Which edge the drawer slides from.
+   * @default "bottom"
+   */
+  side?: 'bottom' | 'top' | 'left' | 'right';
+
+  /**
+   * Additional CSS classes for the drawer content panel.
    */
   contentCls?: string;
 
   /**
-   * Additional CSS classes for the header section
+   * Additional CSS classes for the header section.
    */
   headerCls?: string;
 
   /**
-   * Additional CSS classes for the title
+   * Additional CSS classes for the title.
    */
   titleCls?: string;
 
   /**
-   * Additional CSS classes for the description
+   * Additional CSS classes for the description.
    */
   descriptionCls?: string;
 
- /**
-   * ...otherProps: All properties from Base UI Drawer Root can be passed directly.
+  /**
+   * ...otherProps: All DrawerFooterWrapper props (cancel, action, loading,
+   * footerCls, actionCls, cancelCls, onAction, onCancel) can be passed directly.
+   * All Base UI Drawer.Root props (open, onOpenChange, snapPoints, swipeDirection,
+   * modal, defaultOpen, etc.) are also forwarded to the root.
    */
-  otherProps: DrawerPrimitive.Root
-}`} 
+  otherProps?: never;
+}`}
 />
-
-Properties of `DrawerFooterWrapper` can be passed directly.
 
 ## Related Components
 
+- [Base UI Drawer](https://base-ui.com/react/components/drawer)
 - [Shadcn Drawer](https://ui.shadcn.com/docs/components/drawer)

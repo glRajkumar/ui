@@ -2,10 +2,11 @@
 
 import * as React from 'react'
 import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer'
+import { Loader } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-import { Button, buttonVariants } from '../ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 
 type DrawerSide = 'bottom' | 'top' | 'left' | 'right'
 
@@ -122,6 +123,7 @@ function DrawerDescription({
 type DrawerFooterWrapperProps = {
   cancel?: React.ReactNode
   action?: React.ReactNode
+  loading?: boolean
   footerCls?: string
   actionCls?: string
   cancelCls?: string
@@ -132,6 +134,7 @@ type DrawerFooterWrapperProps = {
 function DrawerFooterWrapper({
   cancel,
   action,
+  loading = false,
   footerCls,
   actionCls,
   cancelCls,
@@ -144,13 +147,15 @@ function DrawerFooterWrapper({
         <DrawerClose
           className={cn(buttonVariants({ variant: 'outline' }), cancelCls)}
           onClick={onCancel}
+          disabled={loading}
         >
           {cancel}
         </DrawerClose>
       )}
 
       {action && (
-        <Button onClick={onAction} className={cn(actionCls)}>
+        <Button onClick={onAction} className={cn(actionCls)} disabled={loading}>
+          {loading && <Loader className="animate-spin" />}
           {action}
         </Button>
       )}
@@ -162,6 +167,7 @@ type DrawerWrapperProps = {
   title?: React.ReactNode
   trigger?: React.ReactNode
   triggerCls?: string
+  triggerProps?: Omit<React.ComponentProps<typeof DrawerPrimitive.Trigger>, 'children' | 'className'>
   children?: React.ReactNode
   description?: React.ReactNode
   descriptionCls?: string
@@ -177,25 +183,39 @@ function DrawerWrapper({
   description,
   children,
   triggerCls,
+  triggerProps,
   contentCls,
   headerCls,
   titleCls,
   descriptionCls,
-
   cancel = 'Cancel',
   action,
+  loading = false,
   footerCls,
   actionCls,
   cancelCls,
   onAction,
   onCancel,
-
+  onOpenChange,
   side,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root> & DrawerWrapperProps) {
   return (
-    <Drawer {...props}>
-      {trigger && <DrawerTrigger className={cn(triggerCls)}>{trigger}</DrawerTrigger>}
+    <Drawer
+      {...props}
+      onOpenChange={(open, eventDetails) => {
+        if (!open && loading) {
+          eventDetails.cancel()
+          return
+        }
+        onOpenChange?.(open, eventDetails)
+      }}
+    >
+      {trigger && (
+        <DrawerTrigger className={cn(triggerCls)} {...triggerProps}>
+          {trigger}
+        </DrawerTrigger>
+      )}
 
       <DrawerContent side={side} className={cn(contentCls)}>
         <DrawerHeader className={cn(headerCls)}>
@@ -211,6 +231,7 @@ function DrawerWrapper({
           <DrawerFooterWrapper
             cancel={cancel}
             action={action}
+            loading={loading}
             footerCls={footerCls}
             actionCls={actionCls}
             cancelCls={cancelCls}

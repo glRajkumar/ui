@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { Dialog as SheetPrimitive } from '@base-ui/react/dialog'
-import { XIcon } from 'lucide-react'
+import { Loader, XIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -117,6 +117,7 @@ function SheetDescription({ className, ...props }: SheetPrimitive.Description.Pr
 type SheetFooterWrapperProps = {
   cancel?: React.ReactNode
   action?: React.ReactNode
+  loading?: boolean
   footerCls?: string
   actionCls?: string
   cancelCls?: string
@@ -127,6 +128,7 @@ type SheetFooterWrapperProps = {
 function SheetFooterWrapper({
   cancel,
   action,
+  loading = false,
   footerCls,
   actionCls,
   cancelCls,
@@ -138,15 +140,16 @@ function SheetFooterWrapper({
       {cancel && (
         <SheetClose
           render={
-            <Button variant="secondary" onClick={onCancel} className={cn('border', cancelCls)}>
-              {cancel}
-            </Button>
+            <Button variant="secondary" onClick={onCancel} className={cn('border', cancelCls)} disabled={loading} />
           }
-        />
+        >
+          {cancel}
+        </SheetClose>
       )}
 
       {action && (
-        <Button onClick={onAction} className={cn(actionCls)}>
+        <Button onClick={onAction} className={cn(actionCls)} disabled={loading}>
+          {loading && <Loader className="animate-spin" />}
           {action}
         </Button>
       )}
@@ -157,14 +160,16 @@ function SheetFooterWrapper({
 type SheetWrapperProps = {
   title?: React.ReactNode
   trigger?: React.ReactNode
+  triggerCls?: string
+  triggerProps?: Omit<SheetPrimitive.Trigger.Props, 'children' | 'className'>
   children?: React.ReactNode
   description?: React.ReactNode
-  triggerCls?: string
   descriptionCls?: string
   contentCls?: string
   headerCls?: string
   titleCls?: string
   side?: 'top' | 'bottom' | 'right' | 'left'
+  showCloseButton?: boolean
 } & SheetFooterWrapperProps
 
 function SheetWrapper({
@@ -176,24 +181,39 @@ function SheetWrapper({
   headerCls,
   titleCls,
   descriptionCls,
-
   cancel = 'Cancel',
   action,
+  loading = false,
   triggerCls,
+  triggerProps,
   footerCls,
   actionCls,
   cancelCls,
   onAction,
   onCancel,
-
+  onOpenChange,
   side = 'right',
+  showCloseButton,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Root> & SheetWrapperProps) {
   return (
-    <Sheet {...props}>
-      {trigger && <SheetTrigger className={cn(triggerCls)}>{trigger}</SheetTrigger>}
+    <Sheet
+      {...props}
+      onOpenChange={(open, eventDetails) => {
+        if (!open && loading) {
+          eventDetails.cancel()
+          return
+        }
+        onOpenChange?.(open, eventDetails)
+      }}
+    >
+      {trigger && (
+        <SheetTrigger className={cn(triggerCls)} {...triggerProps}>
+          {trigger}
+        </SheetTrigger>
+      )}
 
-      <SheetContent side={side} className={cn(contentCls)}>
+      <SheetContent side={side} className={cn(contentCls)} showCloseButton={showCloseButton}>
         <SheetHeader className={cn(headerCls)}>
           <SheetTitle className={cn(titleCls)}>{title}</SheetTitle>
           {description && (
@@ -207,6 +227,7 @@ function SheetWrapper({
           <SheetFooterWrapper
             cancel={cancel}
             action={action}
+            loading={loading}
             footerCls={footerCls}
             actionCls={actionCls}
             cancelCls={cancelCls}
@@ -230,4 +251,6 @@ export {
   SheetDescription,
   SheetWrapper,
   SheetFooterWrapper,
+  SheetPortal,
+  SheetOverlay,
 }

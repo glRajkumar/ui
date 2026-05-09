@@ -1,6 +1,6 @@
 ---
 title: Dialog
-description: A simplified wrapper for Shadcn Dialog with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Dialog with flexible trigger composition, async loading state, nested dialogs, and detached trigger support.
 ---
 
 import { DialogEx } from "@/components/examples";
@@ -37,246 +37,309 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
+
 ```tsx
-import { DialogWrapper } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { DialogWrapper } from "@/components/ui/dialog"
 
 export function Basic() {
   return (
     <DialogWrapper
-      trigger={<Button>Delete</Button>}
-      title="Are you absolutely sure?"
-      description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+      trigger="Open"
+      triggerCls={buttonVariants({ variant: 'outline' })}
+      title="Edit profile"
+      description="Make changes to your profile here."
+      action="Save"
     />
   )
 }
 ```
 
-### Controlled
-```tsx
-import { useState } from "react"
-import { DialogWrapper } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+### Icon trigger
 
+```tsx
+<DialogWrapper
+  trigger={<><Settings /> Settings</>}
+  triggerCls={buttonVariants({ variant: 'secondary' })}
+  title="Settings"
+  action="Save changes"
+/>
+```
+
+### Custom element trigger
+
+Use `triggerProps.render` to replace the default `<button>` with any element:
+
+```tsx
+<DialogWrapper
+  trigger="Open"
+  triggerProps={{
+    render: <a href="#" />,
+    nativeButton: false,
+  }}
+  triggerCls="text-sm text-primary underline underline-offset-4"
+  title="Opened via anchor"
+/>
+```
+
+### Hide close button
+
+```tsx
+<DialogWrapper
+  trigger="Open"
+  title="No close button"
+  showCloseButton={false}
+  action="Done"
+/>
+```
+
+### Controlled
+
+```tsx
 export function Controlled() {
   const [open, setOpen] = useState(false)
 
   return (
-    <DialogWrapper
-      open={open}
-      onOpenChange={setOpen}
-      trigger={<Button>Controlled</Button>}
-      onAction={() => setOpen(false)}
-      title="Are you absolutely sure?"
-      description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-    />
-  )
-}
-
-// Programaticaly open model without trigger
-export function Controlled2() {
-  const [open, setOpen] = useState(false)
- 
-  const updateOpen = () => setOpen(p => !p)
-
-  return (
     <>
-      <Button onClick={updateOpen}>Controlled 2</Button>
+      <button onClick={() => setOpen(true)}>Open</button>
 
       <DialogWrapper
         open={open}
-        onOpenChange={updateOpen}
-        onAction={updateOpen}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+        onOpenChange={setOpen}
+        title="Controlled dialog"
+        action="Confirm"
+        onAction={() => setOpen(false)}
       />
     </>
   )
 }
 ```
 
-### Custom
+### Async action with loading state
+
 ```tsx
-export function Custom() {
+export function AsyncSave() {
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  async function handleSave() {
+    setLoading(true)
+    await saveData()
+    setLoading(false)
+    setOpen(false)
+  }
+
   return (
     <DialogWrapper
-      trigger={<Button>Delete</Button>}
-      title="Some Custom Modal"
-
-      // to remove footer make cancel empty
-      cancel=""
-    >
-      <div>...</div>
-    </DialogWrapper>
+      open={open}
+      onOpenChange={setOpen}
+      trigger="Save"
+      title="Save changes?"
+      loading={loading}
+      onAction={handleSave}
+    />
   )
 }
+```
+
+### Detached trigger
+
+```tsx
+import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
+import { DialogTrigger, DialogWrapper } from "@/components/ui/dialog"
+
+const handle = DialogPrimitive.createHandle()
+
+<DialogTrigger handle={handle}>Open</DialogTrigger>
+
+<DialogWrapper
+  handle={handle}
+  title="Detached dialog"
+  description="Trigger is outside the wrapper."
+/>
+```
+
+### Multiple triggers with payload
+
+```tsx
+const handle = DialogPrimitive.createHandle<{ name: string; role: string }>()
+
+<DialogTrigger handle={handle} payload={{ name: 'Alice', role: 'Admin' }}>Alice</DialogTrigger>
+<DialogTrigger handle={handle} payload={{ name: 'Bob', role: 'Editor' }}>Bob</DialogTrigger>
+
+<DialogPrimitive.Root handle={handle}>
+  {({ payload }) => (
+    <DialogPrimitive.Portal>
+      <DialogPrimitive.Popup>
+        <DialogPrimitive.Title>{payload?.name}</DialogPrimitive.Title>
+        <DialogPrimitive.Description>Role: {payload?.role}</DialogPrimitive.Description>
+      </DialogPrimitive.Popup>
+    </DialogPrimitive.Portal>
+  )}
+</DialogPrimitive.Root>
+```
+
+### Nested dialogs
+
+```tsx
+<DialogWrapper trigger="Open outer" title="Outer dialog" action="">
+  <DialogWrapper
+    trigger="Open inner"
+    title="Inner dialog"
+    description="Nested inside the outer dialog."
+    action="Confirm"
+  />
+</DialogWrapper>
+```
+
+### Custom footer content
+
+Set `action=""` and `cancel=""` to hide the default footer, then pass content via `children`:
+
+```tsx
+<DialogWrapper trigger="Open" title="Custom footer" action="" cancel="">
+  <DialogFooter>
+    <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+    <Button onClick={handleAction}>Save</Button>
+  </DialogFooter>
+</DialogWrapper>
 ```
 
 ## Reference
 
 #### DialogFooterWrapper
-<AutoTypeTable 
-name="DialogFooterWrapper" 
+<AutoTypeTable
+name="DialogFooterWrapper"
 type={`export interface DialogFooterWrapper {
-    /**
-   * Text or element for the cancel button
-   * Set to \`""\` or \`null\` or \`false\` to hide the cancel button
-   * 
+  /**
+   * Text or element for the cancel button. Set to \`""\` or \`null\` to hide.
    * @default "Cancel"
-   * 
-   * \`\`\`tsx
-   * cancel="No, keep it"
-   * // or custom element
-   * cancel={<button><XIcon />Nevermind</button>}
-   * // or hide it
-   * cancel={null}
-   * \`\`\`
    */
   cancel?: React.ReactNode;
 
   /**
-   * Text or element for the confirm/action button
-   * Set to \`""\` or \`null\` or \`false\` to hide the action button
-   * 
-   * \`\`\`tsx
-   * action="Yes, delete"
-   * // or custom element
-   * action={<button><TrashIcon />Delete Forever</button>}
-   * \`\`\`
+   * Text or element for the action button. Set to \`""\` or \`null\` to hide.
    */
   action?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the footer container
+   * When true, disables both buttons and shows a spinner on the action button.
+   * Dialog blocks close (Escape, backdrop) while loading.
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
+   * Additional CSS classes for the footer container.
    */
   footerCls?: string;
 
   /**
-   * Additional CSS classes for the action/confirm button
-   * 
-   * \`\`\`tsx
-   * actionCls="bg-red-600 hover:bg-red-700"
-   * \`\`\`
+   * Additional CSS classes for the action button.
    */
   actionCls?: string;
 
   /**
-   * Additional CSS classes for the cancel button
+   * Additional CSS classes for the cancel button.
    */
   cancelCls?: string;
 
   /**
-   * Callback fired when the action/confirm button is clicked
-   * Dialog remains open after this callback - close it via state if needed
-   * 
-   * \`\`\`tsx
-   * onAction={() => {
-   *   deleteAccount()
-   *   setOpen(false)
-   * }}
-   * \`\`\`
+   * Callback fired when the action button is clicked.
+   * Dialog stays open — close manually via state if needed.
    */
   onAction?: () => void;
 
   /**
-   * Callback fired when the cancel button is clicked
-   * Dialog automatically closes after this callback
-   * 
-   * \`\`\`tsx
-   * onCancel={() => {
-   *   console.log("User cancelled")
-   * }}
-   * \`\`\`
+   * Callback fired when the cancel button is clicked.
    */
   onCancel?: () => void;
-}`} 
+}`}
 />
 
 #### DialogWrapper
-<AutoTypeTable 
-name="DialogWrapper" 
+<AutoTypeTable
+name="DialogWrapper"
 type={`export interface DialogWrapper {
   /**
-   * Optional trigger element that opens the dialog when clicked
-   * If not provided, control the dialog via the \`open\` prop
-   * 
-   * Automatically uses \`asChild\` when React element is provided
-   * 
+   * Content rendered inside the auto-wrapped trigger button.
+   * Accepts strings, icons, or any ReactNode.
+   * Omit to use a detached trigger or controlled open state.
+   *
    * \`\`\`tsx
-   * trigger={<Button variant="destructive">Delete Account</Button>}
-   * // or
-   * trigger="Click to open"
+   * trigger="Open"
+   * trigger={<><Settings /> Settings</>}
    * \`\`\`
    */
   trigger?: React.ReactNode;
 
   /**
-   * Dialog title displayed in the header
-   * 
+   * CSS class applied to the trigger element.
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional props for the trigger — use to pass handle, payload, id,
+   * or a custom render element (for non-button triggers).
+   *
    * \`\`\`tsx
-   * title="Delete User Account"
-   * // or
-   * title={<span className="text-red-600">Warning!</span>}
+   * triggerProps={{ render: <a href="#" />, nativeButton: false }}
+   * triggerProps={{ handle: myHandle }}
    * \`\`\`
+   */
+  triggerProps?: Omit<DialogPrimitive.Trigger.Props, 'children' | 'className'>;
+
+  /**
+   * Dialog title.
    */
   title?: React.ReactNode;
 
   /**
-   * Description text explaining the action's consequences
-   * Set to \`"null"\` or \`undefined\` to hide the description
-   * 
-   * \`\`\`tsx
-   * description="All files and data will be permanently deleted."
-   * // or hide it
-   * description={null}
-   * \`\`\`
+   * Dialog description. Set to \`""\` to hide.
    */
   description?: React.ReactNode;
 
   /**
-   * Additional content rendered between description and footer
-   * Use for custom forms, warnings, or additional information
-   * 
-   * \`\`\`tsx
-   * <DialogWrapper>
-   *   <div className="my-4">
-   *     <input placeholder="Type 'DELETE' to confirm" />
-   *   </div>
-   * </DialogWrapper>
-   * \`\`\`
+   * Additional content rendered between header and footer.
    */
   children?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the dialog content container
+   * Whether to show the X close button in the top-right corner.
+   * @default true
+   */
+  showCloseButton?: boolean;
+
+  /**
+   * Additional CSS classes for the dialog content panel.
    */
   contentCls?: string;
 
   /**
-   * Additional CSS classes for the header section
+   * Additional CSS classes for the header section.
    */
   headerCls?: string;
 
   /**
-   * Additional CSS classes for the title
+   * Additional CSS classes for the title.
    */
   titleCls?: string;
 
   /**
-   * Additional CSS classes for the description
+   * Additional CSS classes for the description.
    */
   descriptionCls?: string;
 
- /**
-   * ...otherProps: All properties from Base UI Dialog Root can be passed directly.
+  /**
+   * ...otherProps: All DialogFooterWrapper props (cancel, action, loading,
+   * footerCls, actionCls, cancelCls, onAction, onCancel) can be passed directly.
+   * All Base UI Dialog.Root props (open, onOpenChange, handle, defaultOpen, etc.)
+   * are also forwarded to the root.
    */
-  otherProps: DialogPrimitive.Root
-}`} 
+  otherProps?: never;
+}`}
 />
-
-Properties of `DialogFooterWrapper` can be passed directly.
 
 ## Related Components
 
-- [Shadcn Dialog](https://ui.shadcn.com/docs/components/dialog)
 - [Base UI Dialog](https://base-ui.com/react/components/dialog)
+- [Shadcn Dialog](https://ui.shadcn.com/docs/components/dialog)

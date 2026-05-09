@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
-import { XIcon } from 'lucide-react'
+import { Loader, XIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -116,6 +116,7 @@ function DialogDescription({ className, ...props }: DialogPrimitive.Description.
 type DialogFooterWrapperProps = {
   cancel?: React.ReactNode
   action?: React.ReactNode
+  loading?: boolean
   footerCls?: string
   actionCls?: string
   cancelCls?: string
@@ -126,6 +127,7 @@ type DialogFooterWrapperProps = {
 function DialogFooterWrapper({
   cancel,
   action,
+  loading = false,
   footerCls,
   actionCls,
   cancelCls,
@@ -137,15 +139,16 @@ function DialogFooterWrapper({
       {cancel && (
         <DialogClose
           render={
-            <Button variant="outline" onClick={onCancel} className={cn(cancelCls)}>
-              {cancel}
-            </Button>
+            <Button variant="outline" onClick={onCancel} className={cn(cancelCls)} disabled={loading} />
           }
-        />
+        >
+          {cancel}
+        </DialogClose>
       )}
 
       {action && (
-        <Button onClick={onAction} className={actionCls}>
+        <Button onClick={onAction} className={cn(actionCls)} disabled={loading}>
+          {loading && <Loader className="animate-spin" />}
           {action}
         </Button>
       )}
@@ -157,12 +160,14 @@ type DialogWrapperProps = {
   title?: React.ReactNode
   trigger?: React.ReactNode
   triggerCls?: string
+  triggerProps?: Omit<DialogPrimitive.Trigger.Props, 'children' | 'className'>
   children?: React.ReactNode
   description?: React.ReactNode
   descriptionCls?: string
   contentCls?: string
   headerCls?: string
   titleCls?: string
+  showCloseButton?: boolean
 } & DialogFooterWrapperProps
 
 function DialogWrapper({
@@ -171,29 +176,45 @@ function DialogWrapper({
   description,
   children,
   triggerCls,
+  triggerProps,
   contentCls,
   headerCls,
   titleCls,
   descriptionCls,
-
+  showCloseButton,
   cancel = 'Cancel',
   action,
+  loading = false,
   footerCls,
   actionCls,
   cancelCls,
   onAction,
   onCancel,
+  onOpenChange,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root> & DialogWrapperProps) {
   return (
-    <Dialog {...props}>
-      {trigger && <DialogTrigger className={triggerCls}>{trigger}</DialogTrigger>}
+    <Dialog
+      {...props}
+      onOpenChange={(open, eventDetails) => {
+        if (!open && loading) {
+          eventDetails.cancel()
+          return
+        }
+        onOpenChange?.(open, eventDetails)
+      }}
+    >
+      {trigger && (
+        <DialogTrigger className={cn(triggerCls)} {...triggerProps}>
+          {trigger}
+        </DialogTrigger>
+      )}
 
-      <DialogContent className={contentCls}>
-        <DialogHeader className={headerCls}>
-          <DialogTitle className={titleCls}>{title}</DialogTitle>
+      <DialogContent className={cn(contentCls)} showCloseButton={showCloseButton}>
+        <DialogHeader className={cn(headerCls)}>
+          <DialogTitle className={cn(titleCls)}>{title}</DialogTitle>
           {description && (
-            <DialogDescription className={descriptionCls}>{description}</DialogDescription>
+            <DialogDescription className={cn(descriptionCls)}>{description}</DialogDescription>
           )}
         </DialogHeader>
 
@@ -203,6 +224,7 @@ function DialogWrapper({
           <DialogFooterWrapper
             cancel={cancel}
             action={action}
+            loading={loading}
             footerCls={footerCls}
             actionCls={actionCls}
             cancelCls={cancelCls}

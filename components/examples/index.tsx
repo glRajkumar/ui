@@ -17,8 +17,8 @@ import { PopoverExample } from './popover'
 import { SelectExample } from './select'
 import { DialogExample } from './dialog'
 import { DrawerExample } from './drawer'
-import { ToastExample } from './toast'
 import { SheetExample } from './sheet'
+import { ToastExample } from './toast'
 import { EmptyExample } from './empty'
 import { FieldExample } from './field'
 import { CardExample } from './card'
@@ -84,7 +84,15 @@ export function CardEx() {
 
 export function DialogEx() {
   return (
-    <Wrapper path="/components/examples/dialog.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/dialog/index.tsx',
+        '/components/examples/dialog/basic.tsx',
+        '/components/examples/dialog/triggers.tsx',
+        '/components/examples/dialog/controlled.tsx',
+        '/components/examples/dialog/advanced.tsx',
+      ]}
+    >
       <DialogExample />
     </Wrapper>
   )
@@ -92,7 +100,14 @@ export function DialogEx() {
 
 export function DrawerEx() {
   return (
-    <Wrapper path="/components/examples/drawer.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/drawer/index.tsx',
+        '/components/examples/drawer/basic.tsx',
+        '/components/examples/drawer/advanced.tsx',
+        '/components/examples/drawer/controlled.tsx',
+      ]}
+    >
       <DrawerExample />
     </Wrapper>
   )
@@ -100,7 +115,14 @@ export function DrawerEx() {
 
 export function SheetEx() {
   return (
-    <Wrapper path="/components/examples/sheet.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/sheet/index.tsx',
+        '/components/examples/sheet/basic.tsx',
+        '/components/examples/sheet/advanced.tsx',
+        '/components/examples/sheet/controlled.tsx',
+      ]}
+    >
       <SheetExample />
     </Wrapper>
   )

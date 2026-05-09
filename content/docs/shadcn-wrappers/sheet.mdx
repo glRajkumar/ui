@@ -1,6 +1,6 @@
 ---
 title: Sheet
-description: A simplified wrapper for Shadcn Sheet with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Dialog styled as a side panel, with side support, async loading, nested sheets, and custom trigger composition.
 ---
 
 import { SheetEx } from "@/components/examples";
@@ -37,257 +37,264 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
+
 ```tsx
-import { SheetWrapper } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { SheetWrapper } from "@/components/ui/sheet"
 
 export function Basic() {
   return (
-    <>
-      <SheetWrapper
-        trigger={<Button>Delete</Button>}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-      />
-    </>
+    <SheetWrapper
+      trigger="Open"
+      triggerCls={buttonVariants({ variant: 'outline' })}
+      title="Settings"
+      description="Adjust your preferences."
+      action="Save"
+    />
   )
 }
 ```
 
-### Controlled
-```tsx
-import { useState } from "react"
-import { SheetWrapper } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+### Sides
 
+```tsx
+<SheetWrapper side="right"  trigger="Right"  title="Right sheet" />
+<SheetWrapper side="left"   trigger="Left"   title="Left sheet" />
+<SheetWrapper side="top"    trigger="Top"    title="Top sheet" />
+<SheetWrapper side="bottom" trigger="Bottom" title="Bottom sheet" />
+```
+
+### Hide close button
+
+```tsx
+<SheetWrapper
+  trigger="Open"
+  title="No close button"
+  showCloseButton={false}
+  action="Done"
+/>
+```
+
+### Custom element trigger
+
+```tsx
+<SheetWrapper
+  trigger="Open settings"
+  triggerProps={{
+    render: <a href="#" />,
+    nativeButton: false,
+  }}
+  triggerCls="text-sm text-primary underline underline-offset-4"
+  title="Settings"
+/>
+```
+
+### Controlled
+
+```tsx
 export function Controlled() {
   const [open, setOpen] = useState(false)
 
   return (
     <>
+      <button onClick={() => setOpen(true)}>Open</button>
+
       <SheetWrapper
         open={open}
         onOpenChange={setOpen}
-        trigger={<Button>Controlled</Button>}
+        title="Controlled sheet"
+        action="Save"
         onAction={() => setOpen(false)}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-      />
-    </>
-  )
-}
-
-// Programaticaly open model without trigger
-export function Controlled2() {
-  const [open, setOpen] = useState(false)
- 
-  const updateOpen = () => setOpen(p => !p)
-
-  return (
-    <>
-      <Button onClick={updateOpen}>Controlled 2</Button>
-
-      <SheetWrapper
-        open={open}
-        onOpenChange={updateOpen}
-        onAction={updateOpen}
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
       />
     </>
   )
 }
 ```
 
-### Custom
+### Async action with loading state
+
 ```tsx
-export function Custom() {
+export function AsyncSave() {
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  async function handleSave() {
+    setLoading(true)
+    await saveSettings()
+    setLoading(false)
+    setOpen(false)
+  }
+
   return (
     <SheetWrapper
-      trigger={<Button>Delete</Button>}
-      title="Some Custom Modal"
-
-      // to remove footer make cancel empty
-      cancel=""
-    >
-      <div>...</div>
-    </SheetWrapper>
+      open={open}
+      onOpenChange={setOpen}
+      trigger="Settings"
+      title="Save settings?"
+      action="Save"
+      loading={loading}
+      onAction={handleSave}
+    />
   )
 }
+```
+
+### Nested sheets
+
+```tsx
+<SheetWrapper trigger="Open outer" side="right" title="Outer sheet" action="">
+  <SheetWrapper
+    trigger="Open inner"
+    side="left"
+    title="Inner sheet"
+    description="Slides from the opposite side."
+    action="Confirm"
+  />
+</SheetWrapper>
+```
+
+### Custom footer content
+
+```tsx
+<SheetWrapper trigger="Open" title="Custom footer" action="" cancel="">
+  <SheetFooter>
+    <SheetClose render={<Button variant="secondary" className="border" />}>Cancel</SheetClose>
+    <Button onClick={handleAction}>Save</Button>
+  </SheetFooter>
+</SheetWrapper>
 ```
 
 ## Reference
 
 #### SheetFooterWrapper
-<AutoTypeTable 
-name="SheetFooterWrapper" 
+<AutoTypeTable
+name="SheetFooterWrapper"
 type={`export interface SheetFooterWrapper {
-    /**
-   * Text or element for the cancel button
-   * Set to \`""\` or \`null\` or \`false\` to hide the cancel button
-   * 
+  /**
+   * Text or element for the cancel button. Set to \`""\` or \`null\` to hide.
    * @default "Cancel"
-   * 
-   * \`\`\`tsx
-   * cancel="No, keep it"
-   * // or custom element
-   * cancel={<button><XIcon />Nevermind</button>}
-   * // or hide it
-   * cancel={null}
-   * \`\`\`
    */
   cancel?: React.ReactNode;
 
   /**
-   * Text or element for the confirm/action button
-   * Set to \`""\` or \`null\` or \`false\` to hide the action button
-   * 
-   * \`\`\`tsx
-   * action="Yes, delete"
-   * // or custom element
-   * action={<button><TrashIcon />Delete Forever</button>}
-   * \`\`\`
+   * Text or element for the action button. Set to \`""\` or \`null\` to hide.
    */
   action?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the footer container
+   * When true, disables both buttons and shows a spinner on the action button.
+   * Sheet blocks close (Escape, backdrop) while loading.
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
+   * Additional CSS classes for the footer container.
    */
   footerCls?: string;
 
   /**
-   * Additional CSS classes for the action/confirm button
-   * 
-   * \`\`\`tsx
-   * actionCls="bg-red-600 hover:bg-red-700"
-   * \`\`\`
+   * Additional CSS classes for the action button.
    */
   actionCls?: string;
 
   /**
-   * Additional CSS classes for the cancel button
+   * Additional CSS classes for the cancel button.
    */
   cancelCls?: string;
 
   /**
-   * Callback fired when the action/confirm button is clicked
-   * Sheet remains open after this callback - close it via state if needed
-   * 
-   * \`\`\`tsx
-   * onAction={() => {
-   *   deleteAccount()
-   *   setOpen(false)
-   * }}
-   * \`\`\`
+   * Callback fired when the action button is clicked.
    */
   onAction?: () => void;
 
   /**
-   * Callback fired when the cancel button is clicked
-   * Sheet automatically closes after this callback
-   * 
-   * \`\`\`tsx
-   * onCancel={() => {
-   *   console.log("User cancelled")
-   * }}
-   * \`\`\`
+   * Callback fired when the cancel button is clicked.
    */
   onCancel?: () => void;
-}`} 
+}`}
 />
 
 #### SheetWrapper
-<AutoTypeTable 
-name="SheetWrapper" 
+<AutoTypeTable
+name="SheetWrapper"
 type={`export interface SheetWrapper {
   /**
-   * Optional trigger element that opens the sheet when clicked
-   * If not provided, control the sheet via the \`open\` prop
-   * 
-   * Automatically uses \`asChild\` when React element is provided
-   * 
-   * \`\`\`tsx
-   * trigger={<Button variant="destructive">Delete Account</Button>}
-   * // or
-   * trigger="Click to open"
-   * \`\`\`
+   * Content rendered inside the auto-wrapped trigger button.
    */
   trigger?: React.ReactNode;
 
   /**
-   * Sheet title displayed in the header
-   * 
+   * CSS class applied to the trigger element.
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional props for the trigger — handle, payload, render, nativeButton.
+   *
    * \`\`\`tsx
-   * title="Delete User Account"
-   * // or
-   * title={<span className="text-red-600">Warning!</span>}
+   * triggerProps={{ render: <a href="#" />, nativeButton: false }}
    * \`\`\`
+   */
+  triggerProps?: Omit<SheetPrimitive.Trigger.Props, 'children' | 'className'>;
+
+  /**
+   * Sheet title.
    */
   title?: React.ReactNode;
 
   /**
-   * Description text explaining the action's consequences
-   * Set to \`"null"\` or \`undefined\` to hide the description
-   * 
-   * \`\`\`tsx
-   * description="All files and data will be permanently deleted."
-   * // or hide it
-   * description={null}
-   * \`\`\`
+   * Sheet description. Set to \`""\` to hide.
    */
   description?: React.ReactNode;
 
   /**
-   * Additional content rendered between description and footer
-   * Use for custom forms, warnings, or additional information
-   * 
-   * \`\`\`tsx
-   * <SheetWrapper>
-   *   <div className="my-4">
-   *     <input placeholder="Type 'DELETE' to confirm" />
-   *   </div>
-   * </SheetWrapper>
-   * \`\`\`
+   * Additional content rendered between header and footer.
    */
   children?: React.ReactNode;
 
   /**
-   * Additional CSS classes for the sheet content container
+   * Which edge the sheet slides from.
+   * @default "right"
+   */
+  side?: 'top' | 'bottom' | 'right' | 'left';
+
+  /**
+   * Whether to show the X close button.
+   * @default true
+   */
+  showCloseButton?: boolean;
+
+  /**
+   * Additional CSS classes for the sheet content panel.
    */
   contentCls?: string;
 
   /**
-   * Additional CSS classes for the header section
+   * Additional CSS classes for the header section.
    */
   headerCls?: string;
 
   /**
-   * Additional CSS classes for the title
+   * Additional CSS classes for the title.
    */
   titleCls?: string;
 
   /**
-   * Additional CSS classes for the description
+   * Additional CSS classes for the description.
    */
   descriptionCls?: string;
 
   /**
-   * Position of the sheet
-   * 
-   * @default "right"
+   * ...otherProps: All SheetFooterWrapper props (cancel, action, loading,
+   * footerCls, actionCls, cancelCls, onAction, onCancel) can be passed directly.
+   * All Base UI Dialog.Root props (open, onOpenChange, handle, defaultOpen, etc.)
+   * are also forwarded to the root.
    */
-  side?: "top" | "bottom" | "right" | "left"
-
- /**
-   * ...otherProps: All properties from Base UI Sheet Root can be passed directly.
-   */
-  otherProps: SheetPrimitive.Root
-}`} 
+  otherProps?: never;
+}`}
 />
-
-Properties of `SheetFooterWrapper` can be passed directly.
 
 ## Related Components
 
-- [Shadcn Sheet](https://ui.shadcn.com/docs/components/sheet)
 - [Base UI Dialog](https://base-ui.com/react/components/dialog)
+- [Shadcn Sheet](https://ui.shadcn.com/docs/components/sheet)
