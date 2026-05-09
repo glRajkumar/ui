@@ -53,12 +53,15 @@ type commonRadioProps = {
 type commonInner = commomClsT & {
   trigger: React.ReactNode
   triggerCls?: string
+  triggerProps?: Omit<React.ComponentProps<typeof MenubarTrigger>, 'children' | 'className'>
   contentProps?: React.ComponentProps<typeof MenubarContent>
 }
 
 type menubarBaseT = commomClsT & {
   key: string
   trigger: React.ReactNode
+  triggerCls?: string
+  triggerProps?: Omit<React.ComponentProps<typeof MenubarTrigger>, 'children' | 'className'>
   contentProps?: React.ComponentProps<typeof MenubarContent>
 }
 
@@ -76,6 +79,8 @@ type menubarRadioOptionsT = (menubarInputOptionT & commonRadioProps)[]
 
 type commonWrapT = commomClsT &
   Omit<React.ComponentProps<typeof Menubar>, 'children' | 'value'> & {
+    triggerCls?: string
+    triggerProps?: Omit<React.ComponentProps<typeof MenubarTrigger>, 'children' | 'className'>
     contentProps?: React.ComponentProps<typeof MenubarContent>
   }
 
@@ -115,7 +120,7 @@ function CheckboxItem({
   className,
   checked = false,
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: checkboxItemProps) {
   const value = getValue(option)
 
@@ -235,7 +240,7 @@ function CheckboxSubMenu({
   groupLabelCls,
   checked = [],
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: CheckboxSubMenuProps) {
   return (
     <MenubarSub>
@@ -316,7 +321,7 @@ function RadioSubMenu({
   groupLabelCls,
   value = '',
   indicatorAt,
-  onValueChange = () => {},
+  onValueChange = () => { },
 }: RadioSubMenuProps) {
   return (
     <MenubarSub>
@@ -388,6 +393,7 @@ function MenubarWrapperInner({
   trigger,
   options,
   triggerCls,
+  triggerProps,
   itemCls,
   groupCls,
   groupLabelCls,
@@ -396,7 +402,7 @@ function MenubarWrapperInner({
 }: wrapperInner) {
   return (
     <MenubarMenu>
-      <MenubarTrigger className={triggerCls}>{trigger}</MenubarTrigger>
+      <MenubarTrigger className={triggerCls} {...triggerProps}>{trigger}</MenubarTrigger>
 
       <MenubarContent {...contentProps}>
         {options.map((option, i) => {
@@ -461,6 +467,7 @@ function MenubarCheckboxWrapperInner({
   options,
 
   triggerCls,
+  triggerProps,
   contentProps,
   itemCls,
   groupCls,
@@ -482,7 +489,7 @@ function MenubarCheckboxWrapperInner({
 
   return (
     <MenubarMenu>
-      <MenubarTrigger className={triggerCls}>{trigger}</MenubarTrigger>
+      <MenubarTrigger className={triggerCls} {...triggerProps}>{trigger}</MenubarTrigger>
 
       <MenubarContent {...contentProps}>
         {options.map((option, i) => {
@@ -557,6 +564,7 @@ function MenubarRadioWrapperInner({
   options,
 
   triggerCls,
+  triggerProps,
   itemCls,
   groupCls,
   groupLabelCls,
@@ -574,7 +582,7 @@ function MenubarRadioWrapperInner({
 
   return (
     <MenubarMenu>
-      <MenubarTrigger className={cn(triggerCls)}>{trigger}</MenubarTrigger>
+      <MenubarTrigger className={cn(triggerCls)} {...triggerProps}>{trigger}</MenubarTrigger>
 
       <MenubarContent {...contentProps}>
         <MenubarRadioGroup
@@ -643,6 +651,8 @@ type wrap = commonWrapT & {
 }
 function MenubarWrapper({
   options,
+  triggerCls,
+  triggerProps,
   itemCls,
   groupCls,
   groupLabelCls,
@@ -657,6 +667,8 @@ function MenubarWrapper({
           key={op.key}
           trigger={op.trigger}
           options={op.options}
+          triggerCls={cn(triggerCls, op.triggerCls)}
+          triggerProps={{ ...triggerProps, ...op.triggerProps }}
           itemCls={cn(itemCls, op.itemCls)}
           groupCls={cn(groupCls, op.groupCls)}
           groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
@@ -675,6 +687,8 @@ type wrapCheckboxT = commonWrapT &
 function MenubarCheckboxWrapper({
   options,
 
+  triggerCls,
+  triggerProps,
   contentProps,
   itemCls,
   groupCls,
@@ -693,6 +707,8 @@ function MenubarCheckboxWrapper({
           key={op.key}
           trigger={op.trigger}
           options={op.options}
+          triggerCls={cn(triggerCls, op.triggerCls)}
+          triggerProps={{ ...triggerProps, ...op.triggerProps }}
           itemCls={cn(itemCls, op.itemCls)}
           groupCls={cn(groupCls, op.groupCls)}
           groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}
@@ -713,6 +729,8 @@ type wrapRadioT = commonWrapT &
 function MenubarRadioWrapper({
   options,
 
+  triggerCls,
+  triggerProps,
   contentProps,
   itemCls,
   groupCls,
@@ -731,6 +749,8 @@ function MenubarRadioWrapper({
           key={op.key}
           trigger={op.trigger}
           options={op.options}
+          triggerCls={cn(triggerCls, op.triggerCls)}
+          triggerProps={{ ...triggerProps, ...op.triggerProps }}
           itemCls={cn(itemCls, op.itemCls)}
           groupCls={cn(groupCls, op.groupCls)}
           groupLabelCls={cn(groupLabelCls, op.groupLabelCls)}

@@ -2,45 +2,161 @@
 
 import { useState } from 'react'
 
+import { ExRow, ExItem } from '@/components/examples/common'
 import { dropdownOptions } from './data'
-
 import {
   type menubarOptionsT,
+  type menubarCheckboxOptionsT,
+  type menubarRadioOptionsT,
   MenubarCheckboxWrapper,
   MenubarRadioWrapper,
   MenubarWrapper,
 } from '@/components/ui/menubar-wrapper'
 
-export function MenubarExample() {
-  const [checked, setChecked] = useState<allowedPrimitiveT[]>([true])
-  const [val, setVal] = useState<allowedPrimitiveT>(true)
+const fileMenuOpts: menubarOptionsT = [
+  { key: 'file', trigger: 'File', options: dropdownOptions },
+  { key: 'edit', trigger: 'Edit', options: ['Cut', 'Copy', 'Paste', '---', 'Select All'] },
+  { key: 'view', trigger: 'View', options: ['Zoom In', 'Zoom Out', '---', 'Fullscreen'] },
+]
 
-  const opts: menubarOptionsT = [
-    {
-      key: '1',
-      trigger: 'Option 1',
-      options: dropdownOptions,
-    },
-    {
-      key: '2',
-      trigger: 'Option 2',
-      options: dropdownOptions,
-    },
+const groupedCheckboxOptions: menuInputOptionsT = [
+  {
+    group: 'Panels',
+    options: ['Sidebar', 'Toolbar', 'Status Bar'],
+  },
+  {
+    group: 'Overlays',
+    options: ['Grid', 'Rulers', { label: 'Guides', value: 'guides', disabled: true }],
+  },
+]
+
+const groupedRadioOptions: menuInputOptionsT = [
+  {
+    group: 'Light',
+    options: ['Default', 'Warm', 'Cool'],
+  },
+  {
+    group: 'Dark',
+    options: ['Midnight', 'Slate'],
+  },
+]
+
+function BasicExample() {
+  return <MenubarWrapper options={fileMenuOpts} />
+}
+
+function CheckboxDefaultExample() {
+  const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
+
+  const opts: menubarCheckboxOptionsT = [
+    { key: 'view', trigger: 'View', options: ['Sidebar', 'Toolbar', 'Status Bar'] },
+    { key: 'format', trigger: 'Format', options: ['Bold', 'Italic', 'Underline'] },
   ]
 
   return (
-    <>
-      <MenubarWrapper options={opts} contentProps={{ align: 'end' }} />
+    <MenubarCheckboxWrapper
+      options={opts}
+      checked={checked}
+      onCheckedChange={(v, c) =>
+        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
+      }
+    />
+  )
+}
 
-      <MenubarCheckboxWrapper
-        options={opts}
-        checked={checked}
-        onCheckedChange={(value, isChecked) => {
-          setChecked(prev => (isChecked ? [...prev, value] : prev.filter(x => x !== value)))
-        }}
-      />
+function CheckboxLeftExample() {
+  const opts: menubarCheckboxOptionsT = [
+    { key: 'view', trigger: 'View', options: ['Sidebar', 'Toolbar', 'Status Bar'] },
+  ]
+  return <MenubarCheckboxWrapper options={opts} indicatorAt="left" />
+}
 
-      <MenubarRadioWrapper value={val} options={opts} onValueChange={setVal} />
-    </>
+function CheckboxGroupedExample() {
+  const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
+  const opts: menubarCheckboxOptionsT = [
+    { key: 'view', trigger: 'View', options: groupedCheckboxOptions },
+  ]
+  return (
+    <MenubarCheckboxWrapper
+      options={opts}
+      checked={checked}
+      onCheckedChange={(v, c) =>
+        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
+      }
+    />
+  )
+}
+
+function RadioControlledExample() {
+  const [val, setVal] = useState<allowedPrimitiveT>('Light')
+
+  const opts: menubarRadioOptionsT = [
+    { key: 'theme', trigger: 'Theme', options: ['Light', 'Dark', 'System'] },
+    { key: 'lang', trigger: 'Language', options: ['English', 'Spanish', 'French'] },
+  ]
+
+  return (
+    <MenubarRadioWrapper
+      options={opts}
+      value={val}
+      onValueChange={setVal}
+    />
+  )
+}
+
+function RadioLeftExample() {
+  const opts: menubarRadioOptionsT = [
+    { key: 'theme', trigger: 'Theme', options: ['Light', 'Dark', 'System'] },
+  ]
+  return <MenubarRadioWrapper options={opts} indicatorAt="left" />
+}
+
+function RadioGroupedExample() {
+  const [val, setVal] = useState<allowedPrimitiveT>('Default')
+  const opts: menubarRadioOptionsT = [
+    { key: 'theme', trigger: 'Theme', options: groupedRadioOptions },
+  ]
+  return (
+    <MenubarRadioWrapper
+      options={opts}
+      value={val}
+      onValueChange={setVal}
+    />
+  )
+}
+
+export function MenubarExample() {
+  return (
+    <div className="flex flex-col gap-6 w-full">
+      <ExRow label="Default">
+        <ExItem label="Multiple menus">
+          <BasicExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Checkbox">
+        <ExItem label="Indicator right (default)">
+          <CheckboxDefaultExample />
+        </ExItem>
+        <ExItem label="Indicator left">
+          <CheckboxLeftExample />
+        </ExItem>
+        <ExItem label="With group labels">
+          <CheckboxGroupedExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Radio">
+        <ExItem label="Controlled">
+          <RadioControlledExample />
+        </ExItem>
+        <ExItem label="Indicator left">
+          <RadioLeftExample />
+        </ExItem>
+        <ExItem label="With group labels">
+          <RadioGroupedExample />
+        </ExItem>
+      </ExRow>
+    </div>
   )
 }

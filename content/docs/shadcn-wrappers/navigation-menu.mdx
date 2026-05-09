@@ -1,6 +1,6 @@
 ---
 title: Navigation Menu
-description: A simplified wrapper for Shadcn Navigation Menu with flexible option handling and automatic type conversion
+description: A wrapper for Shadcn Navigation Menu — horizontal nav with trigger+content dropdowns, direct link items, hover support, and controlled state.
 ---
 
 import { NavigationMenuEx } from "@/components/examples";
@@ -39,399 +39,290 @@ Copy and paste the following code into your project.
 
 ## Usage
 
-### Complex
+### Trigger item (with dropdown content)
+
 ```tsx
-import { CircleHelpIcon } from "lucide-react"
-import { NavigationMenuWrapper, NavLinkItem, NavList } from "@/components/ui/navigation-menu-wrapper"
+import { NavigationMenuWrapper, NavList } from "@/components/ui/navigation-menu-wrapper"
 
-export function Complex() {
-  const dropdownOptions = ["Option 1", "Option 2", "Option 3"]
+<NavigationMenuWrapper
+  items={[
+    {
+      key: "products",
+      trigger: "Products",
+      content: (
+        <div className="p-4 w-64">
+          <NavList
+            items={[
+              { href: "/analytics", children: "Analytics" },
+              { href: "/reporting", children: "Reporting" },
+            ]}
+          />
+        </div>
+      ),
+    },
+  ]}
+/>
+```
 
-  return (
-    <NavigationMenuWrapper
-      items={[
-        {
-          key: "home",
-          trigger: "Home",
-          content: (
-            <div className="p-2 w-[250px]">
-              <NavList
-                items={[
-                  { href: "/", children: "Dashboard" },
-                  { href: "/about", children: "About Us" },
-                ]}
-              />
-            </div>
-          ),
-        }, {
-          key: "pricing",
-          href: "/pricing",
-          children: "Pricing",
-        },
-        {
-          key: "features",
-          trigger: "Features",
-          content: (
-            <div className="p-2 w-[300px]">
-              <div className="text-lg font-semibold">Product Features</div>
+### Link item (no dropdown)
 
-              <NavList
-                items={[
-                  { href: "/fast", children: "Fast Performance" },
-                  { href: "/secure", children: "Secure Infrastructure" },
-                  {
-                    href: "/todo",
-                    children: <><CircleHelpIcon className="size-4" /> Backlog</>,
-                  },
-                ]}
-              />
+```tsx
+<NavigationMenuWrapper
+  items={[
+    { key: "pricing", href: "/pricing", children: "Pricing" },
+    { key: "blog", href: "/blog", children: "Blog" },
+  ]}
+/>
+```
 
-              <NavLinkItem href="/dashbard" >
-                Dashboard
-              </NavLinkItem>
-            </div>
-          ),
-        }
-      ]}
-    />
-  )
+### Mixed (triggers + links)
+
+```tsx
+<NavigationMenuWrapper
+  items={[
+    {
+      key: "home",
+      trigger: "Home",
+      content: <div className="p-4"><NavList items={[...]} /></div>,
+    },
+    { key: "pricing", href: "/pricing", children: "Pricing" },
+  ]}
+/>
+```
+
+### Group labels in content
+
+```tsx
+{
+  key: "platform",
+  trigger: "Platform",
+  content: (
+    <div className="p-3 w-72">
+      <p className="mb-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+        Tools
+      </p>
+      <NavList items={[{ href: "/formatter", children: "Formatter" }]} />
+      <p className="mt-3 mb-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+        Security
+      </p>
+      <NavList items={[{ href: "/audit", children: "Audit Log" }]} />
+    </div>
+  ),
 }
+```
+
+### Default open
+
+```tsx
+<NavigationMenuWrapper
+  defaultValue="products"
+  items={[
+    { key: "products", trigger: "Products", content: <div>...</div> },
+  ]}
+/>
+```
+
+### Hover delay (instant open on hover)
+
+Base UI Navigation Menu opens on hover by default (50ms delay). Adjust with `delay` and `closeDelay`:
+
+```tsx
+<NavigationMenuWrapper
+  delay={0}
+  closeDelay={150}
+  items={[...]}
+/>
+```
+
+### Controlled (external open/close)
+
+```tsx
+const [value, setValue] = useState<string | null>(null)
+
+<NavigationMenuWrapper
+  value={value}
+  onValueChange={v => setValue(v)}
+  items={[
+    { key: "tools", trigger: "Tools", content: <div>...</div> },
+  ]}
+/>
+
+// Close programmatically:
+<button onClick={() => setValue(null)}>Close</button>
+// Open specific item:
+<button onClick={() => setValue("tools")}>Open Tools</button>
+```
+
+### Per-item trigger props
+
+```tsx
+{
+  key: "products",
+  trigger: "Products",
+  triggerCls: "font-semibold",
+  triggerProps: { disabled: true },
+  contentCls: "w-96",
+  content: <div>...</div>,
+}
+```
+
+### NavList helper
+
+```tsx
+import { NavList } from "@/components/ui/navigation-menu-wrapper"
+
+<NavList
+  wrapperCls="space-y-1"
+  items={[
+    { href: "/dashboard", children: "Dashboard" },
+    { href: "/settings", children: <><SettingsIcon className="size-4" /> Settings</> },
+  ]}
+/>
+```
+
+### NavLinkItem helper
+
+```tsx
+import { NavLinkItem } from "@/components/ui/navigation-menu-wrapper"
+
+<NavLinkItem href="/dashboard">Dashboard</NavLinkItem>
 ```
 
 ## Reference
 
-#### Component Hierarchy
-
-```bash
-NavigationMenuWrapper (Main component)
-  └─ NavigationMenuList
-      └─ NavigationMenuItem (repeated for each item)
-          ├─ NavLinkItem (for type="link")
-          │   └─ Next.js Link
-          │
-          └─ NavigationMenuTrigger + Content (for type="trigger")
-              ├─ Trigger element
-              └─ NavigationMenuContent
-                  └─ Custom content (can include NavList)
-
-NavList (Standalone component)
-  └─ <ul>
-      └─ <li> (repeated for each item)
-          └─ NavLinkItem
-              └─ Next.js Link
-```
-
-
-#### NavLinkItem
-<AutoTypeTable 
-name="NavLinkItem" 
-type={`export interface NavLinkItem {
+#### NavigationMenuWrapper
+<AutoTypeTable
+name="NavigationMenuWrapper"
+type={`export interface NavigationMenuWrapper {
   /**
-   * Navigation link item with Next.js Link integration
-   * 
-   * Combines Next.js LinkProps with custom styling and content
-   * 
+   * Array of navigation items.
+   *
+   * ## Link item
    * \`\`\`tsx
-   * const linkItem: navLinkItemT = {
-   *   href: "/about",
-   *   children: "About Us",
-   *   className: "text-blue-600"
-   * };
+   * { key: "pricing", href: "/pricing", children: "Pricing" }
+   * \`\`\`
+   *
+   * ## Trigger item
+   * \`\`\`tsx
+   * {
+   *   key: "products",
+   *   trigger: "Products",
+   *   content: <div>dropdown content</div>,
+   *   triggerCls?: string,
+   *   contentCls?: string,
+   *   triggerProps?: Omit<NavigationMenuTrigger.Props, "children" | "className">,
+   *   contentProps?: React.ComponentProps<typeof NavigationMenuContent>,
+   * }
    * \`\`\`
    */
-  item: {
-    /**
-     * Content displayed inside the link
-     * Can be text, icons, or any React elements
-     * 
-     * \`\`\`tsx
-     * children: "Home"
-     * children: <><HomeIcon /> Home</>
-     * \`\`\`
-     */
-    children: React.ReactNode;
+  items: navMenuItemsT;
 
-    /**
-     * Additional CSS classes for the link
-     * 
-     * Default applies: \`flex flex-row items-center gap-2\`
-     */
-    className?: string;
+  /**
+   * Uncontrolled initial open item. Use the item's key value.
+   */
+  defaultValue?: string | null;
 
-    /**
-     * ...otherProps: All properties from Next.js Link can be passed directly.
-     */
-    otherProps: Link
-  };
+  /**
+   * Controlled open item. Set to null to close all.
+   */
+  value?: string | null;
+
+  /**
+   * Callback when the open item changes. Receives null when closed.
+   */
+  onValueChange?: (value: string | null) => void;
+
+  /**
+   * How long to wait before opening on hover (ms).
+   * @default 50
+   */
+  delay?: number;
+
+  /**
+   * How long to wait before closing (ms).
+   * @default 50
+   */
+  closeDelay?: number;
+
+  /**
+   * Orientation of the navigation menu.
+   * @default "horizontal"
+   */
+  orientation?: "horizontal" | "vertical";
+
+  /**
+   * Global CSS class for all trigger buttons.
+   */
+  triggerCls?: string;
+
+  /**
+   * Global props for all trigger buttons (merged with per-item triggerProps).
+   */
+  triggerProps?: Omit<React.ComponentProps<typeof NavigationMenuTrigger>, "children" | "className">;
+
+  /**
+   * Global CSS class for all content panels.
+   */
+  contentCls?: string;
+
+  /**
+   * Content alignment relative to the trigger.
+   * @default "start"
+   */
+  align?: "start" | "center" | "end";
+
+  /**
+   * ...rootProps: All NavigationMenu Root props forwarded to the root (openOnHover, loop, orientation, closeDelay, etc.)
+   */
+  otherProps?: never;
 }`}
 />
 
-
 #### NavList
-<AutoTypeTable 
-name="NavList" 
+<AutoTypeTable
+name="NavList"
 type={`export interface NavList {
   /**
-   * Array of navigation link items
-   * 
+   * Array of navigation link items rendered as an \`<ul>\`.
+   *
    * \`\`\`tsx
    * items={[
-   *   { 
-   *     href: "/home", 
-   *     children: "Home",
-   *     className: "font-semibold"
-   *   },
-   *   { 
-   *     href: "/products", 
-   *     children: <><ShoppingCart /> Products</>,
-   *     prefetch: true
-   *   }
+   *   { href: "/home", children: "Home" },
+   *   { href: "/about", children: <><Info className="size-4" /> About</> },
    * ]}
    * \`\`\`
    */
-  items: Array<{
-    href: string;
-    children: React.ReactNode;
-    className?: string;
-    [key: string]: any; // Additional Link Props
-  }>;
+  items: navLinkItemsT;
 
   /**
-   * Additional CSS classes for the \`<ul>\` wrapper element
-   * 
-   * \`\`\`tsx
-   * wrapperCls="space-y-4 p-4"
-   * \`\`\`
+   * CSS class applied to the \`<ul>\` wrapper.
    */
   wrapperCls?: string;
 }`}
 />
 
-#### NavigationMenuItem
-##### Common
-<AutoTypeTable 
-name="NavigationMenuItem" 
-type={`export interface NavigationMenuItem {
+#### NavLinkItem
+<AutoTypeTable
+name="NavLinkItem"
+type={`export interface NavLinkItem {
   /**
-   * Unique identifier for the menu item
-   * Required for React key prop
+   * Content displayed inside the link.
    */
-  key: string;
+  children: React.ReactNode;
 
   /**
-   * Additional props passed to the NavigationMenuItem component
-   * 
-   * \`\`\`tsx
-   * itemProps={{
-   *   className: "custom-item-class",
-   *   onMouseEnter: () => console.log("hover")
-   * }}
-   * \`\`\`
-   */
-  itemProps?: React.ComponentProps<typeof NavigationMenuItem>;
-
-  /**
-   * Type of navigation item
-   * 
-   * ## Link Type
-   * Simple navigation link without dropdown
-   * 
-   * \`\`\`tsx
-   * {
-   *   key: "home",
-   *   href: "/",
-   *   children: "Home"
-   * }
-   * \`\`\`
-   * 
-   * ## Trigger Type  
-   * Navigation item with dropdown content
-   * 
-   * \`\`\`tsx
-   * {
-   *   key: "products",
-   *   trigger: "Products",
-   *   content: <div>Product list here</div>,
-   *   contentProps: {
-   *     className: "w-[400px]"
-   *   }
-   * }
-   * \`\`\`
-   */
-   item?: {
-      trigger: React.ReactNode
-      content: React.ReactNode
-      triggerCls?: string
-      contentCls?: string
-      contentProps?: React.ComponentProps<typeof NavigationMenuContent>
-    } | navLinkItemT
-}`}
-/>
-
-##### Link type
-<AutoTypeTable 
-name="NavigationMenuItem" 
-type={`export interface NavigationMenuItem {
-  /**
-   * // When type is "link"
-   * Navigation link configuration
-   * Only applicable when \`type="link"\`
-   * 
-   * \`\`\`tsx
-   * item: {
-   *   href: "/dashboard",
-   *   children: <><DashboardIcon /> Dashboard</>,
-   *   className: "font-bold",
-   *   prefetch: true
-   * }
-   * \`\`\`
-   */
-  href: string;
-
-  /**
-   * ...otherProps: All properties of Link from Next.js can be passed directly.
-   */
-  otherProps: Link
-
-}`}
-/>
-
-##### Trigger-Content
-<AutoTypeTable 
-name="NavigationMenuItem" 
-type={`export interface NavigationMenuItem {
-  /**
-   * // When type is "trigger"
-   * Trigger element for dropdown menu
-   * Only applicable when \`type="trigger"\`
-   * 
-   * Can be a string or custom React component
-   * 
-   * \`\`\`tsx
-   * trigger: "Products"
-   * trigger: <Button variant="ghost">Products</Button>
-   * \`\`\`
-   */
-  trigger?: React.ReactNode;
-
-  /**
-   * Dropdown content displayed when trigger is activated
-   * Only applicable when \`type="trigger"\`
-   * 
-   * Can contain any React elements - lists, grids, custom layouts
-   * 
-   * \`\`\`tsx
-   * content: (
-   *   <div className="grid grid-cols-2 gap-4 p-4">
-   *     <NavList items={[...]} />
-   *     <div>Featured content</div>
-   *   </div>
-   * )
-   * \`\`\`
-   */
-  content?: React.ReactNode;
-
-  /**
-   * Optional CSS classes for this specific accordion trigger
-   */
-  triggerCls?: string;
-
-  /**
-   * Additional CSS classes for the content
-   */
-  contentCls?: string;
-
-  /**
-   * Props passed to the NavigationMenuContent component
-   * Only applicable when \`type="trigger"\`
-   * 
-   * \`\`\`tsx
-   * contentProps={{
-   *   className: "w-[600px] p-4",
-   *   onPointerEnter: () => console.log("entered")
-   * }}
-   * \`\`\`
-   */
-  contentProps?: React.ComponentProps<typeof NavigationMenuContent>;
-}`}
-/>
-
-#### NavigationMenuWrapper
-<AutoTypeTable 
-name="NavigationMenuWrapper" 
-type={`export interface NavigationMenuWrapper {
-  /**
-   *  Array<{
-   *   key: string;
-   *   type: "link" | "trigger";
-   *   itemProps?: React.ComponentProps<typeof NavigationMenuItem>;
-   *   
-   *   // For type="link"
-   *   item?: {
-   *     href: string;
-   *     children: React.ReactNode;
-   *     className?: string;
-   *     [key: string]: any;
-   *   };
-   *   
-   *   // For type="trigger"
-   *   trigger?: React.ReactNode;
-   *   content?: React.ReactNode;
-   *   contentProps?: React.ComponentProps<typeof NavigationMenuContent>;
-   *  }>;
-   * 
-   * \`\`\`tsx
-   * items={[
-   *   // Simple link
-   *   {
-   *     key: "dashboard",
-   *     type: "link",
-   *     item: {
-   *       href: "/dashboard",
-   *       children: "Dashboard"
-   *     }
-   *   },
-   *   
-   *   // Dropdown trigger
-   *   {
-   *     key: "settings",
-   *     type: "trigger",
-   *     trigger: "Settings",
-   *     content: <SettingsMenu />,
-   *     contentProps: { className: "w-96" }
-   *   }
-   * ]}
-   * \`\`\`
-   */
-  items: NavigationMenuItem[]
-
-  /**
-   * Additional CSS classes for the NavigationMenu container
-   * 
-   * \`\`\`tsx
-   * className="border-b bg-background"
-   * \`\`\`
+   * CSS class applied to the link element. Default adds: \`flex items-center gap-2 text-sm\`.
    */
   className?: string;
 
   /**
-   * Optional CSS classes for this specific accordion trigger
+   * ...otherProps: All Next.js Link props (href, prefetch, replace, etc.)
    */
-  triggerCls?: string;
-
-  /**
-   * Additional CSS classes for the content
-   */
-  contentCls?: string;
-
-  /**
-   * ...otherProps: All properties from Base UI NavigationMenuPrimitive Root can be passed directly.
-   */
-  otherProps: NavigationMenuPrimitive.Root
+  otherProps?: never;
 }`}
 />
 
 ## Related Components
 
-- [Shadcn Navigation Menu](https://ui.shadcn.com/docs/components/navigation-menu)
 - [Base UI Navigation Menu](https://base-ui.com/react/components/navigation-menu)
+- [Shadcn Navigation Menu](https://ui.shadcn.com/docs/components/navigation-menu)

@@ -94,7 +94,7 @@ function CheckboxItem({
   className,
   checked = false,
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: checkboxItemProps) {
   const value = getValue(option)
 
@@ -216,7 +216,7 @@ function CheckboxSubMenu({
   groupLabelCls,
   checked = [],
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: CheckboxSubMenuProps) {
   return (
     <ContextMenuSub>
@@ -299,7 +299,7 @@ function RadioSubMenu({
   groupLabelCls,
   value = '',
   indicatorAt,
-  onValueChange = () => {},
+  onValueChange = () => { },
 }: RadioSubMenuProps) {
   return (
     <ContextMenuSub>

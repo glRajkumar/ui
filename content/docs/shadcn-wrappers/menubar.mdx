@@ -1,6 +1,6 @@
 ---
 title: Menubar
-description: A simplified wrapper for Shadcn Menubar with flexible option handling and automatic type conversion
+description: A wrapper for Shadcn Menubar — multiple dropdown menus in a horizontal bar with plain, checkbox, and radio variants.
 ---
 
 import { MenubarEx } from "@/components/examples";
@@ -52,703 +52,310 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
+
 ```tsx
-import { type menubarOptionsT, MenubarCheckboxWrapper, MenubarRadioWrapper, MenubarWrapper } from "@/components/ui/menubar-wrapper"
+import { type menubarOptionsT, MenubarWrapper } from "@/components/ui/menubar-wrapper"
 
-export function Basic() {
-    const opts: menubarOptionsT = [
-    {
-      key: "1",
-      trigger: "Option 1",
-      options: dropdownOptions
-    },
-    {
-      key: "2",
-      trigger: "Option 2",
-      options: dropdownOptions,
-    }
-  ]
+const opts: menubarOptionsT = [
+  { key: "file", trigger: "File", options: ["New", "Open", "Save"] },
+  { key: "edit", trigger: "Edit", options: ["Cut", "Copy", "Paste"] },
+]
 
-  return (
-    <>
-      <MenubarWrapper
-        options={opts}
-        contentProps={{ align: "end" }}
-      />
-
-      <MenubarCheckboxWrapper 
-        options={opts}
-      />
-
-
-      <MenubarRadioWrapper 
-        options={opts}
-      />
-    </>
-  )
-}
+<MenubarWrapper options={opts} />
 ```
 
-### Controlled
+### Checkbox
+
 ```tsx
-import { useState } from "react"
-import { type menubarOptionsT, MenubarCheckboxWrapper, MenubarRadioWrapper, MenubarWrapper } from "@/components/ui/menubar-wrapper"
-import { Button } from "@/components/ui/button"
+import { type menubarCheckboxOptionsT, MenubarCheckboxWrapper } from "@/components/ui/menubar-wrapper"
 
-export function Controlled() {
-  const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
-  const [val, setVal] = useState<allowedPrimitiveT>(true)
+const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 
-  const opts: menubarOptionsT = [
-    {
-      key: "1",
-      trigger: "Option 1",
-      options: dropdownOptions
-    },
-    {
-      key: "2",
-      trigger: "Option 2",
-      options: dropdownOptions,
-    }
-  ]
+const opts: menubarCheckboxOptionsT = [
+  { key: "view", trigger: "View", options: ["Sidebar", "Toolbar", "Status Bar"] },
+]
 
-  return (
-    <>
-      <MenubarWrapper
-        options={opts}
-        onSelect={v => console.log(v)}
-      />
-
-      <MenubarCheckboxWrapper
-        checked={checked}
-        options={opts}
-        onCheckedChange={(value, isChecked) => {
-          setChecked((prev) =>
-            isChecked
-              ? [...prev, value]
-              : prev.filter((x) => x !== value)
-          )
-        }}
-      />
-
-      <MenubarRadioWrapper
-        value={val}
-        options={opts}
-        onValueChange={setVal}
-      />
-    </>
-  )
-}
+<MenubarCheckboxWrapper
+  options={opts}
+  checked={checked}
+  onCheckedChange={(v, c) =>
+    setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
+  }
+/>
 ```
 
-### Nested Complex Data
+### Radio
+
 ```tsx
-const dropdownOptions = [
-  { label: "New File", value: "new", shortcut: "Ctrl+N" },
-  "Save",
-  12,
-  { label: <><Banana /> Banana</>, value: "banana" },
-  "---",
+import { type menubarRadioOptionsT, MenubarRadioWrapper } from "@/components/ui/menubar-wrapper"
+
+const [val, setVal] = useState<allowedPrimitiveT>("Light")
+
+const opts: menubarRadioOptionsT = [
+  { key: "theme", trigger: "Theme", options: ["Light", "Dark", "System"] },
+]
+
+<MenubarRadioWrapper options={opts} value={val} onValueChange={setVal} />
+```
+
+### Indicator position
+
+```tsx
+<MenubarCheckboxWrapper options={opts} indicatorAt="right" />
+<MenubarRadioWrapper options={opts} indicatorAt="right" />
+```
+
+### Per-menu overrides
+
+Each menu item in the `options` array can override global props:
+
+```tsx
+const opts: menubarOptionsT = [
   {
-    group: "Settings",
-    options: [
-      { label: "Appearance", value: "appearance" },
-      22,
-      true
-    ],
+    key: "file",
+    trigger: "File",
+    options: fileOptions,
+    triggerCls: "font-semibold",
+    onSelect: v => handleFileAction(v),
+    contentProps: { align: "start" },
   },
-
   {
-    submenu: "More",
+    key: "edit",
+    trigger: "Edit",
+    options: editOptions,
+  },
+]
+```
+
+### Complex options (groups, submenus, separators)
+
+```tsx
+const opts: menubarOptionsT = [
+  {
+    key: "file",
+    trigger: "File",
     options: [
-      { label: <><Apple /> Apple</>, value: "apple" },
-      {
-        group: "Tools",
-        options: [
-          { label: "Formatter", value: "formatter" },
-          false,
-        ],
-      },
+      { label: "New", value: "new", shortcut: "⌘N" },
+      "Open",
+      "---",
+      { group: "Recent", options: ["file1.txt", "file2.txt"] },
+      { submenu: "Export", options: ["PDF", "HTML"] },
     ],
   },
 ]
-
-export function Complex() {
-  const opts: menubarOptionsT = [
-    {
-      key: "1",
-      trigger: "Option 1",
-      options: dropdownOptions
-    }
-  ]
-
-  return (
-    <MenubarWrapper
-      options={opts}
-    />
-  )
-}
 ```
 
 ## Reference
 
-### MenubarOption
-<AutoTypeTable 
-name="MenubarOption" 
-type={`export interface MenubarOption {
-  /**
-   * Unique identifier for this menu item
-   * Required for React key prop
-   */
-  key: string;
-
-  /**
-   * Trigger element for the menu
-   * Can be a string or any React component
-   * 
-   * \`\`\`tsx
-   * trigger="File"
-   * trigger={<Button>File</Button>}
-   * \`\`\`
-   */
-  trigger: React.ReactNode;
-
-  /**
-   * Array of menu options
-   * 
-   * Supports:
-   * - Primitives: \`string | number | boolean\`
-   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, shortcut?: string, className?: string, ...otherProps }\`
-   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
-   * - Submenus: \`{ submenu: React.ReactNode, options: Array, triggerCls?: string, contentCls?: string }\`
-   * - Separators: Use \`"---"\` as a value
-   * 
-   * \`\`\`tsx
-   * options={[
-   *   "New File",
-   *   { label: "Open", value: "open", shortcut: "⌘O" },
-   *   "---",
-   *   { 
-   *     group: "Recent", 
-   *     options: ["File 1", "File 2"] 
-   *   },
-   *   {
-   *     submenu: "Export",
-   *     options: ["PDF", "HTML", "Markdown"]
-   *   }
-   * ]}
-   * \`\`\`
-   */
-  options: (string | number | boolean | {
-    label: React.ReactNode;
-    value: string | number | boolean;
-    shortcut?: string;
-    className?: string;
-    [key: string]: any;
-  } | {
-    group: string;
-    options: Array<any>;
-    className?: string;
-    groupLabelCls?: string;
-  } | {
-    submenu: React.ReactNode;
-    options: Array<any>;
-    triggerCls?: string;
-    contentCls?: string;
-  })[];
-
-  /**
-   * Additional CSS classes for menu items
-   * Can override the global \`itemCls\`
-   */
-  itemCls?: string;
-
-  /**
-   * Additional CSS classes for menu groups
-   * Can override the global \`groupCls\`
-   */
-  groupCls?: string;
-
-  /**
-   * Additional CSS classes for group labels
-   * Can override the global \`groupLabelCls\`
-   */
-  groupLabelCls?: string;
-
-  /**
-   * Props passed to the MenubarContent component
-   * 
-   * \`\`\`tsx
-   * contentProps={{
-   *   align: "start",
-   *   sideOffset: 5,
-   *   className: "w-48"
-   * }}
-   * \`\`\`
-   */
-  contentProps?: React.ComponentProps<typeof MenubarContent>;
-
-  /**
-   * Callback fired when a menu item is selected
-   * Can override the global \`onSelect\`
-   * 
-   * @param value - The value of the selected item
-   */
-  onSelect?: (value: string | number | boolean) => void;
-}`}
-/>
-
-
-### MenubarCheckboxOption
-<AutoTypeTable 
-name="MenubarCheckboxOption" 
-type={`export interface MenubarCheckboxOption {
-  /**
-   * Unique identifier for this menu item
-   * Required for React key prop
-   */
-  key: string;
-
-  /**
-   * Trigger element for the menu
-   * Can be a string or any React component
-   */
-  trigger: React.ReactNode;
-
-  /**
-   * Array of checkbox menu options
-   * 
-   * Supports:
-   * - Primitives: \`string | number | boolean\`
-   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
-   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
-   * - Submenus: \`{ submenu: React.ReactNode, options: Array, triggerCls?: string, contentCls?: string }\`
-   * - Separators: Use \`"---"\` as a value
-   * 
-   * \`\`\`tsx
-   * options={[
-   *   "Option 1",
-   *   { label: "Option 2", value: "opt2", disabled: true },
-   *   "---",
-   *   { 
-   *     group: "Features", 
-   *     options: ["Feature A", "Feature B"] 
-   *   }
-   * ]}
-   * \`\`\`
-   */
-  options: (string | number | boolean | {
-    label: React.ReactNode;
-    value: string | number | boolean;
-    disabled?: boolean;
-  } | {
-    group: string;
-    options: Array<any>;
-    className?: string;
-    groupLabelCls?: string;
-  } | {
-    submenu: React.ReactNode;
-    options: Array<any>;
-    triggerCls?: string;
-    contentCls?: string;
-  })[];
-
-  /**
-   * Additional CSS classes for menu items
-   */
-  itemCls?: string;
-
-  /**
-   * Additional CSS classes for menu groups
-   */
-  groupCls?: string;
-
-  /**
-   * Additional CSS classes for group labels
-   */
-  groupLabelCls?: string;
-
-  /**
-   * Props passed to the MenubarContent component
-   */
-  contentProps?: React.ComponentProps<typeof MenubarContent>;
-
-  /**
-   * Controlled checked state - array of selected values
-   * Can override the global \`checked\`
-   * 
-   * \`\`\`tsx
-   * const [checked, setChecked] = useState(["opt1", "opt2"]);
-   * checked={checked}
-   * \`\`\`
-   */
-  checked?: (string | number | boolean)[];
-
-  /**
-   * Position of the checkbox indicator
-   * Can override the global \`indicatorAt\`
-   * 
-   * @default "left"
-   */
-  indicatorAt?: "left" | "right";
-
-  /**
-   * Callback fired when checkbox state changes
-   * Can override the global \`onCheckedChange\`
-   * 
-   * @param value - The value of the checkbox item
-   * @param checked - The new checked state
-   */
-  onCheckedChange?: (value: string | number | boolean, checked: boolean) => void;
-}`}
-/>
-
-### MenubarRadioOption
-<AutoTypeTable 
-name="MenubarRadioOption" 
-type={`export interface MenubarRadioOption {
-  /**
-   * Unique identifier for this menu item
-   * Required for React key prop
-   */
-  key: string;
-
-  /**
-   * Trigger element for the menu
-   * Can be a string or any React component
-   */
-  trigger: React.ReactNode;
-
-  /**
-   * Array of radio menu options
-   * 
-   * Supports:
-   * - Primitives: \`string | number | boolean\`
-   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, disabled?: boolean }\`
-   * - Groups: \`{ group: string, options: Array, className?: string, groupLabelCls?: string }\`
-   * - Submenus: \`{ submenu: React.ReactNode, options: Array, triggerCls?: string, contentCls?: string }\`
-   * - Separators: Use \`"---"\` as a value
-   * 
-   * \`\`\`tsx
-   * options={[
-   *   "Light",
-   *   "Dark",
-   *   { label: "System", value: "system", disabled: false },
-   *   "---",
-   *   { 
-   *     group: "Custom", 
-   *     options: ["Blue", "Green"] 
-   *   }
-   * ]}
-   * \`\`\`
-   */
-  options: (string | number | boolean | {
-    label: React.ReactNode;
-    value: string | number | boolean;
-    disabled?: boolean;
-  } | {
-    group: string;
-    options: Array<any>;
-    className?: string;
-    groupLabelCls?: string;
-  } | {
-    submenu: React.ReactNode;
-    options: Array<any>;
-    triggerCls?: string;
-    contentCls?: string;
-  })[];
-
-  /**
-   * Additional CSS classes for menu items
-   */
-  itemCls?: string;
-
-  /**
-   * Additional CSS classes for menu groups
-   */
-  groupCls?: string;
-
-  /**
-   * Additional CSS classes for group labels
-   */
-  groupLabelCls?: string;
-
-  /**
-   * Props passed to the MenubarContent component
-   */
-  contentProps?: React.ComponentProps<typeof MenubarContent>;
-
-  /**
-   * Controlled value - the currently selected radio option
-   * Can override the global \`value\`
-   * 
-   * \`\`\`tsx
-   * const [theme, setTheme] = useState("light");
-   * value={theme}
-   * \`\`\`
-   */
-  value?: string | number | boolean;
-
-  /**
-   * Position of the radio indicator
-   * Can override the global \`indicatorAt\`
-   * 
-   * @default "left"
-   */
-  indicatorAt?: "left" | "right";
-
-  /**
-   * Callback fired when radio selection changes
-   * Can override the global \`onValueChange\`
-   * 
-   * @param value - The newly selected value
-   */
-  onValueChange?: (value: string | number | boolean) => void;
-}`}
-/>
-
 #### MenubarWrapper
-<AutoTypeTable 
-name="MenubarWrapper" 
+<AutoTypeTable
+name="MenubarWrapper"
 type={`export interface MenubarWrapper {
   /**
-   * Array of menubar menu configurations
-   * Each menu is a separate dropdown in the menubar
-   * 
+   * Array of menu configurations — each becomes a separate dropdown in the bar.
+   *
    * \`\`\`tsx
    * options={[
-   *   {
-   *     key: "file",
-   *     trigger: "File",
-   *     options: ["New", "Open", "Save"]
-   *   },
-   *   {
-   *     key: "edit",
-   *     trigger: "Edit",
-   *     options: ["Cut", "Copy", "Paste"]
-   *   }
+   *   { key: "file", trigger: "File", options: ["New", "Open"] },
+   *   { key: "edit", trigger: "Edit", options: ["Cut", "Copy"] },
    * ]}
    * \`\`\`
    */
-  options: MenubarOption[];
+  options: {
+    key: string;
+    trigger: React.ReactNode;
+    options: menuOptionsT;
+    triggerCls?: string;
+    itemCls?: string;
+    groupCls?: string;
+    groupLabelCls?: string;
+    contentProps?: React.ComponentProps<typeof MenubarContent>;
+    onSelect?: (value: allowedPrimitiveT) => void;
+  }[];
 
   /**
-   * Additional CSS classes applied to all menu items
-   * Can be overridden per menu or per item
+   * Global trigger CSS class — merged with per-menu triggerCls.
+   */
+  triggerCls?: string;
+
+  /**
+   * Global props forwarded to all MenubarTrigger elements (merged with per-menu triggerProps).
+   * Use for render prop (custom element), disabled, etc.
+   */
+  triggerProps?: Omit<React.ComponentProps<typeof MenubarTrigger>, "children" | "className">;
+
+  /**
+   * Global CSS class for all menu items.
    */
   itemCls?: string;
 
   /**
-   * Additional CSS classes applied to all menu groups
-   * Can be overridden per menu or per group
+   * Global CSS class for all groups.
    */
   groupCls?: string;
 
   /**
-   * Additional CSS classes applied to all group labels
-   * Can be overridden per menu or per group
+   * Global CSS class for all group labels.
    */
   groupLabelCls?: string;
 
   /**
-   * Default props passed to all MenubarContent components
-   * Can be overridden per menu via \`contentProps\`
-   * 
-   * \`\`\`tsx
-   * contentProps={{
-   *   align: "start",
-   *   sideOffset: 5
-   * }}
-   * \`\`\`
+   * Global props for all MenubarContent components.
    */
   contentProps?: React.ComponentProps<typeof MenubarContent>;
 
   /**
-   * Global callback fired when any menu item is selected
-   * Can be overridden per menu via individual \`onSelect\`
-   * 
-   * @param value - The value of the selected item
+   * Global callback fired when any item is selected. Per-menu onSelect takes precedence.
    */
-  onSelect?: (value: string | number | boolean) => void;
+  onSelect?: (value: allowedPrimitiveT) => void;
 
   /**
-   * ...otherProps: All properties from Base UI Menubar Root can be passed directly.
-   * Excludes: children, asChild, value
+   * ...rootProps: All Menubar Root props forwarded to the root.
    */
-  otherProps: MenubarPrimitive.Root
+  otherProps?: never;
 }`}
 />
 
 #### MenubarCheckboxWrapper
-<AutoTypeTable 
-name="MenubarCheckboxWrapper" 
+<AutoTypeTable
+name="MenubarCheckboxWrapper"
 type={`export interface MenubarCheckboxWrapper {
   /**
-   * Array of menubar checkbox menu configurations
-   * 
-   * \`\`\`tsx
-   * options={[
-   *   {
-   *     key: "view",
-   *     trigger: "View",
-   *     options: ["Show Sidebar", "Show Toolbar"],
-   *     checked: ["Show Sidebar"]
-   *   },
-   *   {
-   *     key: "settings",
-   *     trigger: "Settings",
-   *     options: ["Auto-save", "Notifications"]
-   *   }
-   * ]}
-   * \`\`\`
+   * Array of checkbox menu configurations.
    */
-  options: MenubarCheckboxOption[];
+  options: {
+    key: string;
+    trigger: React.ReactNode;
+    options: menuInputOptionsT;
+    triggerCls?: string;
+    itemCls?: string;
+    groupCls?: string;
+    groupLabelCls?: string;
+    contentProps?: React.ComponentProps<typeof MenubarContent>;
+    checked?: allowedPrimitiveT[];
+    indicatorAt?: "left" | "right";
+    onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void;
+  }[];
 
   /**
-   * Additional CSS classes applied to all menu items
+   * Global trigger CSS class.
    */
-  itemCls?: string;
+  triggerCls?: string;
 
   /**
-   * Additional CSS classes applied to all menu groups
+   * Global controlled checked state. Per-menu checked takes precedence.
    */
-  groupCls?: string;
+  checked?: allowedPrimitiveT[];
 
   /**
-   * Additional CSS classes applied to all group labels
+   * Global callback for checkbox changes. Per-menu onCheckedChange takes precedence.
    */
-  groupLabelCls?: string;
+  onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void;
 
   /**
-   * Default props passed to all MenubarContent components
-   */
-  contentProps?: React.ComponentProps<typeof MenubarContent>;
-
-  /**
-   * Global controlled checked state
-   * Can be overridden per menu
-   * 
-   * \`\`\`tsx
-   * const [checked, setChecked] = useState(["opt1"]);
-   * <MenubarCheckboxWrapper 
-   *   checked={checked} 
-   *   onCheckedChange={(v, c) => {
-   *     setChecked(prev => c ? [...prev, v] : prev.filter(x => x !== v))
-   *   }}
-   * />
-   * \`\`\`
-   */
-  checked?: (string | number | boolean)[];
-
-  /**
-   * Global position of checkbox indicators
-   * Can be overridden per menu
-   * 
+   * Global indicator position. Per-menu indicatorAt takes precedence.
    * @default "left"
    */
   indicatorAt?: "left" | "right";
 
   /**
-   * Global callback fired when any checkbox changes
-   * Can be overridden per menu
-   * 
-   * @param value - The value of the checkbox item
-   * @param checked - The new checked state
+   * Global CSS class for all items.
    */
-  onCheckedChange?: (value: string | number | boolean, checked: boolean) => void;
+  itemCls?: string;
 
   /**
-   * ...otherProps: All properties from Base UI Menubar Root can be passed directly.
-   * Excludes: children, asChild, value
+   * Global CSS class for all groups.
    */
-  otherProps: MenubarPrimitive.Root
+  groupCls?: string;
+
+  /**
+   * Global CSS class for all group labels.
+   */
+  groupLabelCls?: string;
+
+  /**
+   * Global props for all MenubarContent components.
+   */
+  contentProps?: React.ComponentProps<typeof MenubarContent>;
+
+  /**
+   * ...rootProps: All Menubar Root props forwarded to the root.
+   */
+  otherProps?: never;
 }`}
 />
 
 #### MenubarRadioWrapper
-<AutoTypeTable 
-name="MenubarRadioWrapper" 
+<AutoTypeTable
+name="MenubarRadioWrapper"
 type={`export interface MenubarRadioWrapper {
   /**
-   * Array of menubar radio menu configurations
-   * 
-   * \`\`\`tsx
-   * options={[
-   *   {
-   *     key: "theme",
-   *     trigger: "Theme",
-   *     options: ["Light", "Dark", "System"],
-   *     value: "light"
-   *   },
-   *   {
-   *     key: "language",
-   *     trigger: "Language",
-   *     options: ["English", "Spanish", "French"]
-   *   }
-   * ]}
-   * \`\`\`
+   * Array of radio menu configurations.
    */
-  options: MenubarRadioOption[];
+  options: {
+    key: string;
+    trigger: React.ReactNode;
+    options: menuInputOptionsT;
+    triggerCls?: string;
+    itemCls?: string;
+    groupCls?: string;
+    groupLabelCls?: string;
+    contentProps?: React.ComponentProps<typeof MenubarContent>;
+    value?: allowedPrimitiveT;
+    indicatorAt?: "left" | "right";
+    onValueChange?: (value: allowedPrimitiveT) => void;
+  }[];
 
   /**
-   * Additional CSS classes applied to all menu items
+   * Global trigger CSS class.
    */
-  itemCls?: string;
+  triggerCls?: string;
 
   /**
-   * Additional CSS classes applied to all menu groups
+   * Global controlled selected value. Per-menu value takes precedence.
    */
-  groupCls?: string;
+  value?: allowedPrimitiveT;
 
   /**
-   * Additional CSS classes applied to all group labels
+   * Global callback for selection changes. Per-menu onValueChange takes precedence.
    */
-  groupLabelCls?: string;
+  onValueChange?: (value: allowedPrimitiveT) => void;
 
   /**
-   * Default props passed to all MenubarContent components
-   */
-  contentProps?: React.ComponentProps<typeof MenubarContent>;
-
-  /**
-   * Global controlled value
-   * Can be overridden per menu
-   * 
-   * \`\`\`tsx
-   * const [value, setValue] = useState("light");
-   * <MenubarRadioWrapper 
-   *   value={value} 
-   *   onValueChange={setValue}
-   * />
-   * \`\`\`
-   */
-  value?: string | number | boolean;
-
-  /**
-   * Global position of radio indicators
-   * Can be overridden per menu
-   * 
+   * Global indicator position. Per-menu indicatorAt takes precedence.
    * @default "left"
    */
   indicatorAt?: "left" | "right";
 
   /**
-   * Global callback fired when any radio selection changes
-   * Can be overridden per menu
-   * 
-   * @param value - The newly selected value
+   * Global CSS class for all items.
    */
-  onValueChange?: (value: string | number | boolean) => void;
+  itemCls?: string;
 
   /**
-   * ...otherProps: All properties from Base UI Menubar Root can be passed directly.
-   * Excludes: children, asChild, value
+   * Global CSS class for all groups.
    */
-  otherProps: MenubarPrimitive.Root
+  groupCls?: string;
+
+  /**
+   * Global CSS class for all group labels.
+   */
+  groupLabelCls?: string;
+
+  /**
+   * Global props for all MenubarContent components.
+   */
+  contentProps?: React.ComponentProps<typeof MenubarContent>;
+
+  /**
+   * ...rootProps: All Menubar Root props forwarded to the root.
+   */
+  otherProps?: never;
 }`}
 />
 
 ## Related Components
 
-- [Shadcn Menubar](https://ui.shadcn.com/docs/components/menubar)
 - [Base UI Menubar](https://base-ui.com/react/components/menubar)
+- [Shadcn Menubar](https://ui.shadcn.com/docs/components/menubar)
+- [Dropdown Menu](/docs/shadcn-wrappers/dropdown-menu) — single dropdown, same options API

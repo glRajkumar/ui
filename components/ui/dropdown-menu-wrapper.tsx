@@ -52,6 +52,7 @@ type commonSubMenuT = {
 type commonPropsT = {
   trigger: React.ReactNode
   triggerCls?: string
+  triggerProps?: Omit<React.ComponentProps<typeof DropdownMenuTrigger>, 'children' | 'className'>
   itemCls?: string
   groupCls?: string
   groupLabelCls?: string
@@ -95,7 +96,7 @@ function CheckboxItem({
   className,
   checked = false,
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: checkboxItemProps) {
   const value = getValue(option)
 
@@ -217,7 +218,7 @@ function CheckboxSubMenu({
   groupLabelCls,
   checked = [],
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: CheckboxSubMenuProps) {
   return (
     <DropdownMenuSub>
@@ -300,7 +301,7 @@ function RadioSubMenu({
   groupLabelCls,
   value = '',
   indicatorAt,
-  onValueChange = () => {},
+  onValueChange = () => { },
 }: RadioSubMenuProps) {
   return (
     <DropdownMenuSub>
@@ -373,6 +374,7 @@ function DropdownWrapper({
   trigger,
   options,
   triggerCls,
+  triggerProps,
   itemCls,
   groupCls,
   groupLabelCls,
@@ -382,7 +384,7 @@ function DropdownWrapper({
 }: DropdownWrapperProps) {
   return (
     <DropdownMenu {...props}>
-      <DropdownMenuTrigger className={cn(triggerCls)}>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger className={cn(triggerCls)} {...triggerProps}>{trigger}</DropdownMenuTrigger>
 
       <DropdownMenuContent {...contentProps}>
         {options.map((option, i) => {
@@ -447,6 +449,7 @@ function DropdownCheckboxWrapper({
   options,
 
   triggerCls,
+  triggerProps,
   contentProps,
   itemCls,
   groupCls,
@@ -469,7 +472,7 @@ function DropdownCheckboxWrapper({
 
   return (
     <DropdownMenu {...props}>
-      <DropdownMenuTrigger className={cn(triggerCls)}>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger className={cn(triggerCls)} {...triggerProps}>{trigger}</DropdownMenuTrigger>
 
       <DropdownMenuContent {...contentProps}>
         {options.map((option, i) => {
@@ -544,6 +547,7 @@ function DropdownRadioWrapper({
   options,
 
   triggerCls,
+  triggerProps,
   itemCls,
   groupCls,
   groupLabelCls,
@@ -562,7 +566,7 @@ function DropdownRadioWrapper({
 
   return (
     <DropdownMenu {...props}>
-      <DropdownMenuTrigger className={cn(triggerCls)}>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger className={cn(triggerCls)} {...triggerProps}>{trigger}</DropdownMenuTrigger>
 
       <DropdownMenuContent {...contentProps}>
         <DropdownMenuRadioGroup
