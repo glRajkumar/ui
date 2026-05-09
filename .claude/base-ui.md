@@ -1,25 +1,19 @@
 # Base UI Reference
 
-Package: `@base-ui/react` (previously `@base-ui-components/react` — always use new name)
+Source: https://base-ui.com/llms.txt  
+Package: `@base-ui/react` (previously `@base-ui-components/react` — always use new name)  
+Docs per component: `https://base-ui.com/react/components/<name>`
 
 ## How to fetch docs
 
-Append `.md` to any Base UI URL to get raw markdown:
+Append `.md` to any Base UI URL to get raw markdown content:
 
 ```
-https://base-ui.com/react/handbook/composition      → page
-https://base-ui.com/react/handbook/composition.md   → raw markdown ✓
-
-https://base-ui.com/react/components/alert-dialog      → page
-https://base-ui.com/react/components/alert-dialog.md   → raw markdown ✓
-
-https://base-ui.com/llms.txt       → full index of all docs + URLs
-https://base-ui.com/llms-full.txt  → everything in one file
+https://base-ui.com/react/components/alert-dialog.md   → full component API
+https://base-ui.com/react/handbook/composition.md       → handbook page
+https://base-ui.com/llms.txt                            → index of all docs + URLs
+https://base-ui.com/llms-full.txt                       → everything in one file
 ```
-
-Use this when working on a component: fetch `https://base-ui.com/react/components/<name>.md` for full API reference.
-
----
 
 ## Handbook URLs
 
@@ -34,9 +28,11 @@ Use this when working on a component: fetch `https://base-ui.com/react/component
 
 ---
 
-## Setup — Stacking context (why z-index / z-50 not needed)
+## Setup
 
-Base UI portals popups (Dialog, Popover, Menu, Tooltip). Add `isolation: isolate` on app root so portals always render above content — no `z-index` needed on individual components:
+### Stacking context (why z-index / z-50 not needed)
+
+Base UI portals popups (Dialog, Popover, Menu, Tooltip). Add `isolation: isolate` on app root — portals always render above content, no `z-index` needed on individual components:
 
 ```tsx
 // layout.tsx
@@ -102,11 +98,9 @@ Tailwind: add `supports-[-webkit-touch-callout:none]:absolute` on backdrop eleme
 
 ### CSS Transitions (preferred — smoothly cancellable)
 
-Use `data-starting-style` (initial) and `data-ending-style` (final):
-
 ```css
 .popup {
-  transition: transform 150ms, opacity 150ms;
+  transition: opacity 150ms, transform 150ms;
 }
 .popup[data-starting-style],
 .popup[data-ending-style] {
@@ -124,8 +118,6 @@ data-[ending-style]:opacity-0 data-[ending-style]:scale-90
 
 ### CSS Animations (keyframes)
 
-Use `data-open` / `data-closed`:
-
 ```css
 .popup[data-open]   { animation: scaleIn 150ms ease-out; }
 .popup[data-closed] { animation: scaleOut 150ms ease-in; }
@@ -134,9 +126,6 @@ Use `data-open` / `data-closed`:
 ### JavaScript animations (Motion library)
 
 **Components unmounted when closed** (Dialog, Popover, Tooltip, Menu):
-- Control with `open` prop so `<AnimatePresence>` sees state
-- Set `keepMounted` on `<Portal>`
-- Use `render` prop with `motion.div`
 
 ```tsx
 <Popover.Root open={open} onOpenChange={setOpen}>
@@ -162,9 +151,7 @@ Use `data-open` / `data-closed`:
 </Popover.Root>
 ```
 
-**Components kept in DOM when closed** (`keepMounted`):
-- Use `render` prop with `motion.div`
-- Animate based on `open` state — no `<AnimatePresence>`
+**Components kept in DOM** (`keepMounted`) — animate via `open` state, no `<AnimatePresence>`:
 
 ```tsx
 <Popover.Popup
@@ -178,7 +165,7 @@ Use `data-open` / `data-closed`:
 />
 ```
 
-**Manual unmount** (full control via `actionsRef`):
+**Manual unmount** via `actionsRef`:
 
 ```tsx
 const actionsRef = React.useRef(null)
@@ -188,22 +175,20 @@ const actionsRef = React.useRef(null)
     render={
       <motion.div
         exit={{ scale: 0 }}
-        onAnimationComplete={() => {
-          if (!open) actionsRef.current.unmount()
-        }}
+        onAnimationComplete={() => { if (!open) actionsRef.current.unmount() }}
       />
     }
   />
 </Popover.Root>
 ```
 
-> Base UI detects animations via `element.getAnimations()`. If `opacity` isn't part of your animation, animate it to `0.9999` so Base UI can detect completion.
+> If `opacity` isn't part of your animation, animate it to `0.9999` — Base UI detects animation completion via `element.getAnimations()`.
 
 ---
 
 ## Composition — `render` prop
 
-**This is Base UI's equivalent of `asChild`. No `asChild` prop exists.**
+**Base UI uses `render` prop — no `asChild`.**
 
 ### Compose with your own component
 
@@ -226,20 +211,15 @@ const MyButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<'butto
 ### Replace rendered element
 
 ```tsx
-// Menu.Item renders <div> by default — render as <a> instead
-<Menu.Item render={<a href="/home" />}>
-  Home
-</Menu.Item>
+<Menu.Item render={<a href="/home" />}>Home</Menu.Item>
 ```
 
-### Render function (state-aware, performance-sensitive)
+### Render function (state-aware)
 
 ```tsx
 <Switch.Thumb
   render={(props, state) => (
-    <span {...props}>
-      {state.checked ? <CheckIcon /> : <XIcon />}
-    </span>
+    <span {...props}>{state.checked ? <CheckIcon /> : <XIcon />}</span>
   )}
 />
 ```
@@ -248,18 +228,14 @@ const MyButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<'butto
 
 ```tsx
 <Tooltip.Trigger
-  render={
-    <Dialog.Trigger
-      render={<Menu.Trigger render={<MyButton />}>Open</Menu.Trigger>}
-    />
-  }
+  render={<Dialog.Trigger render={<MyButton />}>Open</Dialog.Trigger>}
 />
 ```
 
 ### `nativeButton` prop
 
-Parts like `AlertDialog.Trigger`, `AlertDialog.Close`, `Menu.Trigger` have `nativeButton` prop.  
-Set `nativeButton={false}` when composing with a non-button element.
+Parts like `AlertDialog.Trigger`, `AlertDialog.Close` have `nativeButton` prop.
+Set `nativeButton={false}` when composing with a non-button element via `render`.
 
 ---
 
@@ -272,42 +248,32 @@ Set `nativeButton={false}` when composing with a non-button element.
 ```tsx
 <Dialog.Root
   onOpenChange={(open, eventDetails) => {
-    eventDetails.reason           // 'trigger-press' | 'escape-key' | 'outside-press' | 'close-press' | ...
-    eventDetails.event            // DOM event
-    eventDetails.cancel()         // prevent component state from updating
-    eventDetails.allowPropagation() // allow DOM event to propagate (Base UI stops it by default)
-    eventDetails.isCanceled       // boolean
-    eventDetails.isPropagationAllowed // boolean
+    eventDetails.reason             // 'trigger-press' | 'escape-key' | 'outside-press' | ...
+    eventDetails.event              // DOM event
+    eventDetails.cancel()           // prevent component state from updating
+    eventDetails.allowPropagation() // allow DOM event to propagate
+    eventDetails.isCanceled
+    eventDetails.isPropagationAllowed
   }}
 />
 ```
 
-### Cancel internal state update (keep uncontrolled but block specific interactions)
+### Cancel internal state update
 
 ```tsx
 onOpenChange={(open, eventDetails) => {
   if (!open && hasUnsavedChanges) {
-    eventDetails.cancel() // dialog stays open
+    eventDetails.cancel()
     showConfirmation()
   }
 }}
 ```
 
-### Override Base UI's native event handling
-
-```tsx
-// Escape hatch — use when no dedicated prop exists yet
-<button onKeyDown={(e) => e.preventBaseUIHandler()}>...</button>
-```
-
 ### Controlled vs uncontrolled
 
 ```tsx
-// Uncontrolled (default)
-<Dialog.Root defaultOpen={false}>
-
-// Controlled
-<Dialog.Root open={open} onOpenChange={setOpen}>
+<Dialog.Root defaultOpen={false}>         // uncontrolled
+<Dialog.Root open={open} onOpenChange={setOpen}> // controlled
 ```
 
 ---
@@ -319,43 +285,57 @@ All types via namespaces: `Component.Part.Props` / `Component.Part.State`
 ### Props — wrap and forward all props
 
 ```tsx
-import { Tooltip } from '@base-ui/react/tooltip'
-
 function MyTooltip(props: Tooltip.Root.Props) {
   return <Tooltip.Root {...props} />
 }
 ```
 
-### State — shape of internal state
+### State — use in render functions or className/style
 
 ```tsx
-// Use in render functions or className/style functions
 function renderPositioner(props: Popover.Positioner.Props, state: Popover.Positioner.State) {
-  return (
-    <div {...props}>
-      <span>Side: {state.side}</span>
-      <span>Open: {state.open}</span>
-    </div>
-  )
+  return <div {...props}><span>Side: {state.side}</span></div>
 }
 <Popover.Positioner render={renderPositioner} />
 ```
 
-### Event types
+### Key exported types
+
+| Type | Purpose |
+|------|---------|
+| `Component.Part.Props` | All props — use when wrapping |
+| `Component.Part.State` | Internal state — use in className/style/render functions |
+| `Component.Root.ChangeEventDetails` | Object passed to change handlers |
+| `Component.Root.ChangeEventReason` | Union of reason strings |
+| `Component.Root.Actions` | Imperative methods via `actionsRef` |
+
+---
+
+## Forms
 
 ```tsx
-function onValueChange(value: string, eventDetails: Combobox.Root.ChangeEventDetails) {}
-function onOpenChange(open: boolean, eventDetails: Combobox.Root.ChangeEventDetails) {}
-// Reason union: Combobox.Root.ChangeEventReason
+<Field.Root name="email">
+  <Field.Label>Email</Field.Label>
+  <Input />
+  <Field.Error />
+</Field.Root>
 ```
 
-### Other exported types
+### Validation
 
-| Type | Use |
-|------|-----|
-| `Component.Root.Actions` | Shape of `actionsRef` object |
-| `Toast.Root.ToastObject` | Toast properties interface |
-| `useRender.ComponentProps` | Extended `ComponentProps` with `render` prop |
+```tsx
+// Native HTML
+<Input required minLength={8} pattern="[a-z]+" />
+
+// Custom
+<Field.Root
+  validate={(value) => value.includes('@') ? null : 'Invalid email'}
+  validationMode="onBlur"
+/>
+
+// Server errors
+<Field.Root errors={{ email: 'Already taken' }} />
+```
 
 ---
 
@@ -364,10 +344,7 @@ function onOpenChange(open: boolean, eventDetails: Combobox.Root.ChangeEventDeta
 ```tsx
 const handle = AlertDialog.createHandle()
 
-// Trigger anywhere in the tree
 <AlertDialog.Trigger handle={handle}>Open</AlertDialog.Trigger>
-
-// Root elsewhere
 <AlertDialog.Root handle={handle}>...</AlertDialog.Root>
 ```
 
@@ -396,12 +373,10 @@ const handle = AlertDialog.createHandle<{ id: string }>()
 
 All from `@base-ui/react/<name>`:
 
-| Category | Components |
-|----------|-----------|
-| Overlays | `alert-dialog` `dialog` `popover` `tooltip` `preview-card` |
-| Menus | `menu` `menubar` `context-menu` `navigation-menu` |
-| Forms | `checkbox` `radio-group` `switch` `select` `slider` `number-field` `input` `textarea` `field` `form` |
-| Layout | `collapsible` `accordion` `tabs` `separator` `scroll-area` `fieldset` |
-| Feedback | `progress` `meter` `toast` `alert` |
-| Navigation | `pagination` `toolbar` |
-| Other | `button` `toggle` `toggle-group` `avatar` `badge` `autocomplete` `combobox` `direction-provider` `use-render` |
+**Overlays:** `alert-dialog` · `dialog` · `popover` · `tooltip` · `preview-card`  
+**Menus:** `menu` · `menubar` · `context-menu` · `navigation-menu`  
+**Forms:** `checkbox` · `radio-group` · `switch` · `select` · `slider` · `number-field` · `input` · `textarea` · `field` · `form`  
+**Layout:** `collapsible` · `accordion` · `tabs` · `separator` · `scroll-area` · `fieldset`  
+**Feedback:** `progress` · `meter` · `toast` · `alert`  
+**Navigation:** `pagination` · `toolbar`  
+**Other:** `button` · `toggle` · `toggle-group` · `avatar` · `badge` · `autocomplete` · `combobox` · `direction-provider` · `use-render`
