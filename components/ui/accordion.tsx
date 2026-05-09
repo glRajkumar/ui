@@ -25,24 +25,51 @@ function AccordionItem({ className, ...props }: AccordionPrimitive.Item.Props) {
   )
 }
 
-function AccordionTrigger({ className, children, ...props }: AccordionPrimitive.Trigger.Props) {
+function AccordionHeader({ className, ...props }: AccordionPrimitive.Header.Props) {
   return (
-    <AccordionPrimitive.Header className="flex">
+    <AccordionPrimitive.Header
+      data-slot="accordion-header"
+      className={cn('flex', className)}
+      {...props}
+    />
+  )
+}
+
+function AccordionTrigger({
+  className,
+  children,
+  indicatorAt = 'right',
+  headerProps,
+  ...props
+}: AccordionPrimitive.Trigger.Props & {
+  indicatorAt?: indicatorAtT
+  headerProps?: AccordionPrimitive.Header.Props
+}) {
+  const icon = (
+    <ChevronDownIcon
+      data-slot="accordion-trigger-icon"
+      className={cn(
+        'pointer-events-none shrink-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180',
+        indicatorAt === 'right' && 'ml-auto',
+      )}
+    />
+  )
+
+  return (
+    <AccordionHeader {...headerProps}>
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          'group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:after:border-ring aria-disabled:pointer-events-none aria-disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground cursor-pointer',
+          'group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:after:border-ring aria-disabled:pointer-events-none aria-disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground cursor-pointer',
           className,
         )}
         {...props}
       >
+        {indicatorAt === 'left' && icon}
         {children}
-        <ChevronDownIcon
-          data-slot="accordion-trigger-icon"
-          className="pointer-events-none shrink-0 transition-transform duration-300 group-aria-expanded/accordion-trigger:rotate-180"
-        />
+        {indicatorAt === 'right' && icon}
       </AccordionPrimitive.Trigger>
-    </AccordionPrimitive.Header>
+    </AccordionHeader>
   )
 }
 
@@ -65,49 +92,66 @@ function AccordionContent({ className, children, ...props }: AccordionPrimitive.
   )
 }
 
+type accordionSharedT = {
+  triggerCls?: string
+  contentCls?: string
+  indicatorAt?: indicatorAtT
+  itemProps?: Omit<AccordionPrimitive.Item.Props, 'value' | 'className'>
+  triggerProps?: Omit<AccordionPrimitive.Trigger.Props, 'className' | 'children'> & {
+    headerProps?: AccordionPrimitive.Header.Props
+  }
+  contentProps?: Omit<AccordionPrimitive.Panel.Props, 'className' | 'children'>
+}
+
 type accordionItemT = {
   value: string
   trigger: React.ReactNode
   content: React.ReactNode
   className?: string
-  triggerCls?: string
-  contentCls?: string
-  disabled?: boolean
-}
+} & accordionSharedT
 
 type accordionItemsT = accordionItemT[]
 
 type accordionWrapperProps = {
   items: accordionItemsT
   itemCls?: string
-  triggerCls?: string
-  contentCls?: string
-  collapsible?: boolean
-} & Omit<React.ComponentProps<typeof AccordionPrimitive.Root>, 'type' | 'collapsible'>
+} & accordionSharedT & React.ComponentProps<typeof AccordionPrimitive.Root>
 
 function AccordionWrapper({
   items,
   itemCls,
   triggerCls,
   contentCls,
+  indicatorAt = 'right',
+  itemProps: globalItemProps,
+  triggerProps: globalTriggerProps,
+  contentProps: globalContentProps,
   ...props
 }: accordionWrapperProps) {
   return (
     <Accordion {...props}>
-      {items.map(item => (
+      {items.map(({ triggerProps, contentProps, itemProps, ...item }) => (
         <AccordionItem
           key={item.value}
           value={item.value}
           className={cn(itemCls, item.className)}
-          disabled={item.disabled}
+          {...globalItemProps}
+          {...itemProps}
         >
           <AccordionTrigger
             className={cn('items-center justify-start gap-2', triggerCls, item.triggerCls)}
+            indicatorAt={item.indicatorAt ?? indicatorAt}
+            {...globalTriggerProps}
+            {...triggerProps}
           >
             {item.trigger}
           </AccordionTrigger>
 
-          <AccordionContent className={cn(contentCls, item.contentCls)}>
+          <AccordionContent
+            className={cn(contentCls, item.contentCls)}
+            {...globalContentProps}
+            {...contentProps}
+          >
             {item.content}
           </AccordionContent>
         </AccordionItem>
@@ -119,6 +163,7 @@ function AccordionWrapper({
 export {
   Accordion,
   AccordionItem,
+  AccordionHeader,
   AccordionTrigger,
   AccordionContent,
   AccordionWrapper,

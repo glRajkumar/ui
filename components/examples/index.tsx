@@ -52,7 +52,12 @@ export function DropdownEx() {
 
 export function AccordionEx() {
   return (
-    <Wrapper path="/components/examples/accordion.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/accordion.tsx',
+        '/components/examples/data/accordion.tsx',
+      ]}
+    >
       <AccordionExample />
     </Wrapper>
   )

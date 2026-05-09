@@ -1,6 +1,6 @@
 ---
 title: Accordion
-description: A simplified wrapper for Shadcn Accordion with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Accordion with multiple open panels, indicator placement, controlled state, per-item and global prop overrides.
 ---
 
 import { AccordionEx } from "@/components/examples";
@@ -18,7 +18,6 @@ npx shadcn@latest add @glrk-ui/accordion
 ```
 
 If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
-
 
 </Tab>
 
@@ -38,137 +37,247 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
-```tsx
-import { AccordionWrapper } from "@/components/ui/accordion";
 
-export function Basic() {
-  return (
-    <AccordionWrapper
-      items={[
-       { value: "item 1", trigger: "Item 1", content: "Item 1 content" },
-       { value: "item 2", trigger: "Item 2", content: "Item 2 content" },
-       { value: "item 3", trigger: <><Apple /> Item 2</>, content: <>Item 2 content</> },
-      ]}
-    />
-  )
-}
+```tsx
+import { AccordionWrapper } from "@/components/ui/accordion"
+
+<AccordionWrapper
+  items={[
+    { value: "q1", trigger: "Is it accessible?", content: "Yes. Adheres to WAI-ARIA." },
+    { value: "q2", trigger: "Is it styled?", content: "Yes. Matches other components." },
+  ]}
+/>
+```
+
+### Multiple open panels
+
+```tsx
+<AccordionWrapper items={items} multiple />
+```
+
+### Indicator placement
+
+```tsx
+<AccordionWrapper items={items} indicatorAt="left" />   // chevron left
+<AccordionWrapper items={items} indicatorAt="right" />  // default
+```
+
+Per-item override:
+
+```tsx
+<AccordionWrapper
+  items={[
+    { value: "a", trigger: "Right indicator", content: "..." },
+    { value: "b", trigger: "Left indicator", content: "...", indicatorAt: "left" },
+  ]}
+/>
+```
+
+### Default open
+
+```tsx
+<AccordionWrapper items={items} defaultValue={["q1"]} />
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = useState<string[]>(["q1"])
+
+<AccordionWrapper
+  items={items}
+  value={value}
+  onValueChange={setValue}
+  multiple
+/>
+```
+
+### Disabled
+
+```tsx
+// Disable entire accordion
+<AccordionWrapper items={items} disabled />
+
+// Disable specific item
+<AccordionWrapper
+  items={[
+    { value: "a", trigger: "Enabled", content: "..." },
+    { value: "b", trigger: "Disabled", content: "...", itemProps: { disabled: true } },
+  ]}
+/>
+```
+
+### Keep panels mounted
+
+Preserves DOM when closed — useful for forms or avoiding re-mount cost:
+
+```tsx
+<AccordionWrapper items={items} contentProps={{ keepMounted: true }} />
+```
+
+### Hidden until found
+
+Enables browser Ctrl+F search inside closed panels:
+
+```tsx
+<AccordionWrapper items={items} contentProps={{ hiddenUntilFound: true }} />
+```
+
+### Custom heading level
+
+Default heading is `<h3>`. Use `triggerProps.headerProps.render` to change:
+
+```tsx
+// All items use h2
+<AccordionWrapper items={items} triggerProps={{ headerProps: { render: <h2 /> } }} />
+
+// Per-item h1
+<AccordionWrapper
+  items={[
+    { value: "a", trigger: "Page title", content: "...", triggerProps: { headerProps: { render: <h1 /> } } },
+  ]}
+/>
+```
+
+### Global vs per-item overrides
+
+Global props apply to all items. Per-item props override globals:
+
+```tsx
+<AccordionWrapper
+  items={[
+    { value: "a", trigger: "Global style", content: "..." },
+    { value: "b", trigger: "Custom style", content: "...", triggerCls: "text-primary" },
+  ]}
+  triggerCls="font-semibold"
+  indicatorAt="left"
+  contentProps={{ keepMounted: true }}
+/>
+```
+
+### Using primitives
+
+```tsx
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent, AccordionHeader } from "@/components/ui/accordion"
+
+<Accordion>
+  <AccordionItem value="a">
+    <AccordionTrigger indicatorAt="left" headerProps={{ render: <h2 /> }}>
+      Title
+    </AccordionTrigger>
+    <AccordionContent keepMounted>Content</AccordionContent>
+  </AccordionItem>
+</Accordion>
 ```
 
 ## Reference
 
+#### accordionSharedT
+<AutoTypeTable
+name="accordionSharedT"
+type={`export type accordionSharedT = {
+  /**
+   * Additional CSS classes for trigger buttons.
+   */
+  triggerCls?: string;
+
+  /**
+   * Additional CSS classes for content panels.
+   */
+  contentCls?: string;
+
+  /**
+   * Placement of the chevron indicator.
+   * @default "right"
+   */
+  indicatorAt?: 'right' | 'left';
+
+  /**
+   * Props forwarded to AccordionItem — all Accordion.Item.Props except value and className.
+   * Use for: disabled, render, etc.
+   */
+  itemProps?: Omit<AccordionPrimitive.Item.Props, 'value' | 'className'>;
+
+  /**
+   * Props forwarded to AccordionTrigger — all Accordion.Trigger.Props except className and children.
+   * Also accepts headerProps to customise the heading element (render prop for heading level).
+   *
+   * \`\`\`tsx
+   * triggerProps={{ headerProps: { render: <h2 /> } }}
+   * \`\`\`
+   */
+  triggerProps?: Omit<AccordionPrimitive.Trigger.Props, 'className' | 'children'> & {
+    headerProps?: AccordionPrimitive.Header.Props;
+  };
+
+  /**
+   * Props forwarded to AccordionContent (Panel) — all Accordion.Panel.Props except className and children.
+   * Use for: keepMounted, hiddenUntilFound, render, etc.
+   *
+   * \`\`\`tsx
+   * contentProps={{ keepMounted: true }}
+   * contentProps={{ hiddenUntilFound: true }}
+   * \`\`\`
+   */
+  contentProps?: Omit<AccordionPrimitive.Panel.Props, 'className' | 'children'>;
+}`}
+/>
+
 #### accordionItemT
-<AutoTypeTable 
-name="accordionItemT" 
+<AutoTypeTable
+name="accordionItemT"
 type={`export type accordionItemT = {
   /**
-   * Unique identifier for the accordion item
-   * Used for controlling which items are open/closed
+   * Unique identifier — used for controlled value and defaultValue.
    */
   value: string;
 
   /**
-   * Content displayed in the clickable trigger button
-   * Can be a string or any React element
+   * Content inside the trigger button. String or any ReactNode.
    */
   trigger: React.ReactNode;
 
   /**
-   * Content displayed when the accordion item is expanded
-   * Can be a string or any React element
+   * Content shown when expanded. String or any ReactNode.
    */
   content: React.ReactNode;
 
   /**
-   * Optional CSS classes for this specific accordion item
+   * CSS class for this item's wrapper element.
    */
   className?: string;
-
-  /**
-   * Optional CSS classes for this specific accordion trigger
-   */
-  triggerCls?: string;
-
-  /**
-   * Optional CSS classes for this specific accordion content panel
-   */
-  contentCls?: string;
-
-  /**
-   * Whether this accordion item is disabled
-   * Disabled items cannot be opened or closed
-   */
-  disabled?: boolean;
-}`} 
+} & accordionSharedT;`}
 />
 
+All `accordionSharedT` fields (`triggerCls`, `contentCls`, `indicatorAt`, `itemProps`, `triggerProps`, `contentProps`) can be set per-item to override globals.
+
 #### AccordionWrapper
-<AutoTypeTable 
-name="AccordionWrapper" 
+<AutoTypeTable
+name="AccordionWrapper"
 type={`export interface AccordionWrapper {
   /**
-   * \`accordionItemsT\` = \`accordionItemT[]\`
-   * 
-   * Array of accordion items to render
-   * Each item contains the value, trigger, content, and optional styling
-   * 
-   * \`\`\`tsx
-   * const items = [
-   *   {
-   *     value: "item-1",
-   *     trigger: "What is React?",
-   *     content: "React is a JavaScript library...",
-   *   },
-   *   {
-   *     value: "item-2",
-   *     trigger: <><Icon />Custom Trigger</>,
-   *     content: <div>Rich content here</div>,
-   *     disabled: true,
-   *   }
-   * ]
-   * \`\`\`
+   * Array of accordion items. Type: accordionItemT[]
    */
-  items: accordionItemsT;
+  items: accordionItemT[];
 
   /**
-   * Additional CSS classes applied to all accordion items
-   * Individual items can override this with their own \`className\`
-   * 
-   * \`\`\`tsx
-   * itemCls="border-b"
-   * \`\`\`
+   * CSS class applied to every AccordionItem wrapper.
    */
   itemCls?: string;
 
   /**
-   * Additional CSS classes applied to all accordion triggers
-   * Individual items can override this with their own \`triggerCls\`
-   * 
-   * Note: Default classes include flex alignment and arrow positioning
-   * 
-   * \`\`\`tsx
-   * triggerCls="font-semibold text-lg"
-   * \`\`\`
+   * ...sharedProps: All accordionSharedT fields (triggerCls, contentCls, indicatorAt,
+   * itemProps, triggerProps, contentProps) apply globally to all items.
+   * Per-item values override these globals.
+   *
+   * ...rootProps: All Base UI Accordion.Root props (multiple, disabled, orientation,
+   * loopFocus, value, onValueChange, defaultValue, etc.) forwarded to the root.
    */
-  triggerCls?: string;
-
-  /**
-   * Additional CSS classes applied to all accordion content panels
-   * Individual items can override this with their own \`contentCls\`
-   * 
-   * \`\`\`tsx
-   * contentCls="text-gray-600 pt-4"
-   * \`\`\`
-   */
-  contentCls?: string;
-
-  /**
-   * ...otherProps: All properties from Base UI Accordion Root can be passed directly.
-   */
-  otherProps: AccordionPrimitive.Root
-}`} 
+  otherProps?: never;
+}`}
 />
 
 ## Related Components
 
-- [Shadcn Accordion](https://ui.shadcn.com/docs/components/accordion)
 - [Base UI Accordion](https://base-ui.com/react/components/accordion)
+- [Shadcn Accordion](https://ui.shadcn.com/docs/components/accordion)
