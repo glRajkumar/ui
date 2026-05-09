@@ -1,0 +1,200 @@
+---
+title: Collapsible
+description: A wrapper for Base UI Collapsible — a single trigger that expands and collapses a panel with smooth animation.
+---
+
+import { CollapsibleEx } from "@/components/examples";
+
+<CollapsibleEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/collapsible
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/collapsible.tsx"'>
+  ./components/ui/collapsible.tsx
+</include>
+
+</Tab>
+
+</Tabs>
+
+
+## Usage
+
+### Basic
+
+```tsx
+import { CollapsibleWrapper } from "@/components/ui/collapsible"
+import { ChevronDown } from "lucide-react"
+
+<CollapsibleWrapper
+  trigger={<><ChevronDown className="size-4" /> Details</>}
+  className="w-72 rounded-lg border p-3"
+>
+  <p className="mt-2 text-sm text-muted-foreground">Panel content here.</p>
+</CollapsibleWrapper>
+```
+
+### Default open
+
+```tsx
+<CollapsibleWrapper defaultOpen trigger="Details">
+  Content visible on mount.
+</CollapsibleWrapper>
+```
+
+### Disabled
+
+```tsx
+<CollapsibleWrapper disabled trigger="Details">
+  Unreachable content.
+</CollapsibleWrapper>
+```
+
+### Controlled
+
+```tsx
+const [open, setOpen] = useState(false)
+
+<CollapsibleWrapper
+  open={open}
+  onOpenChange={setOpen}
+  trigger="Details"
+>
+  Controlled from outside.
+</CollapsibleWrapper>
+```
+
+### Keep mounted
+
+Panel DOM stays in tree when closed — preserves state, avoids remount:
+
+```tsx
+<CollapsibleWrapper
+  trigger="Details"
+  contentProps={{ keepMounted: true }}
+>
+  State here persists when collapsed.
+</CollapsibleWrapper>
+```
+
+### Hidden until found
+
+Closed panel content findable by browser Ctrl+F:
+
+```tsx
+<CollapsibleWrapper
+  trigger="Details"
+  contentProps={{ hiddenUntilFound: true }}
+>
+  This text is findable even when collapsed.
+</CollapsibleWrapper>
+```
+
+### Custom element trigger
+
+```tsx
+<CollapsibleWrapper
+  trigger="Settings"
+  triggerProps={{
+    render: <div role="button" tabIndex={0} />,
+    nativeButton: false,
+  }}
+  triggerCls="flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-sm"
+>
+  Content here.
+</CollapsibleWrapper>
+```
+
+### Using primitives
+
+```tsx
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
+
+<Collapsible>
+  <CollapsibleTrigger className="w-full justify-between">
+    Title
+    <ChevronDown className="size-4" />
+  </CollapsibleTrigger>
+  <CollapsibleContent keepMounted>
+    Content
+  </CollapsibleContent>
+</Collapsible>
+```
+
+## Reference
+
+#### CollapsibleWrapper
+<AutoTypeTable
+name="CollapsibleWrapper"
+type={`export interface CollapsibleWrapper {
+  /**
+   * Content rendered inside the trigger button.
+   * Accepts strings, icons, or any ReactNode.
+   */
+  trigger: React.ReactNode;
+
+  /**
+   * Content shown inside the collapsible panel.
+   */
+  children: React.ReactNode;
+
+  /**
+   * CSS class applied to the trigger element.
+   */
+  triggerCls?: string;
+
+  /**
+   * CSS class applied to the panel element.
+   */
+  contentCls?: string;
+
+  /**
+   * Props forwarded to CollapsibleTrigger — all Collapsible.Trigger.Props
+   * except className and children. Use for render, nativeButton, etc.
+   *
+   * \`\`\`tsx
+   * triggerProps={{ render: <div role="button" tabIndex={0} />, nativeButton: false }}
+   * \`\`\`
+   */
+  triggerProps?: Omit<CollapsiblePrimitive.Trigger.Props, 'children' | 'className'>;
+
+  /**
+   * Props forwarded to CollapsibleContent (Panel) — all Collapsible.Panel.Props
+   * except className and children. Use for keepMounted, hiddenUntilFound, render, etc.
+   *
+   * \`\`\`tsx
+   * contentProps={{ keepMounted: true }}
+   * contentProps={{ hiddenUntilFound: true }}
+   * \`\`\`
+   */
+  contentProps?: Omit<CollapsiblePrimitive.Panel.Props, 'children' | 'className'>;
+
+  /**
+   * ...rootProps: All Base UI Collapsible.Root props (open, defaultOpen,
+   * onOpenChange, disabled, etc.) forwarded to the root.
+   */
+  otherProps?: never;
+}`}
+/>
+
+## Related Components
+
+- [Base UI Collapsible](https://base-ui.com/react/components/collapsible)
+- [Shadcn Collapsible](https://ui.shadcn.com/docs/components/collapsible)
+- [Accordion](/docs/shadcn-wrappers/accordion) — multiple collapsible panels grouped together

@@ -1,3 +1,4 @@
+import { CollapsibleExample } from './collapsible'
 import { NavigationMenuExample } from './navigation-menu'
 import { ToggleGroupExample } from './toggle-group'
 import { AlertDialogExample } from './alert-dialog'
@@ -46,6 +47,14 @@ export function DropdownEx() {
   return (
     <Wrapper path="/components/examples/dropdown-menu.tsx">
       <DropdownExample />
+    </Wrapper>
+  )
+}
+
+export function CollapsibleEx() {
+  return (
+    <Wrapper path="/components/examples/collapsible.tsx">
+      <CollapsibleExample />
     </Wrapper>
   )
 }
