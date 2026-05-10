@@ -1,6 +1,6 @@
 ---
 title: Tabs
-description: A simplified wrapper for Shadcn Tabs with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Tabs with sliding indicator animation, line variant, vertical orientation, controlled state, and activation mode control.
 ---
 
 import { TabsEx } from "@/components/examples";
@@ -36,224 +36,197 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
-```tsx
-import { TabsWrapper } from "@/components/ui/tabs";
 
-export function Basic() {
-  return (
-     <TabsWrapper
-      tabs={[
-        {
-          value: "overview",
-          trigger: "Overview",
-          content: "Over content",
-        },
-        {
-          value: "details",
-          trigger: <><User /> Details</>,
-          content: (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Details</h3>
-              <p>More detailed information here.</p>
-            </div>
-          ),
-        },
-      ]}
-    />
-  )
-}
+```tsx
+import { TabsWrapper } from "@/components/ui/tabs"
+
+<TabsWrapper
+  defaultValue="profile"
+  tabs={[
+    { value: "profile", trigger: "Profile", content: "Manage your profile." },
+    { value: "account", trigger: "Account", content: "Update account settings." },
+    { value: "security", trigger: "Security", content: "Change your password." },
+  ]}
+/>
+```
+
+### Variants
+
+`default` uses a sliding pill indicator. `line` uses a sliding underline:
+
+```tsx
+<TabsWrapper tabs={tabs} defaultValue="profile" variant="default" />
+<TabsWrapper tabs={tabs} defaultValue="profile" variant="line" />
+```
+
+### Icons in trigger
+
+```tsx
+<TabsWrapper
+  tabs={[
+    { value: "profile",  trigger: <><User /> Profile</>,   content: "..." },
+    { value: "settings", trigger: <><Settings /> Settings</>, content: "..." },
+  ]}
+  defaultValue="profile"
+/>
 ```
 
 ### Controlled
+
 ```tsx
-import { useState } from "react"
-import { TabsWrapper } from "@/components/tabs-wrapper"
+const [value, setValue] = useState("profile")
 
-function ControlledTabs() {
-  const [activeTab, setActiveTab] = useState("profile")
-
-  const tabs = [
-    {
-      value: "profile",
-      trigger: "Profile",
-      content: <ProfileForm />,
-    },
-    {
-      value: "account",
-      trigger: "Account",
-      content: <AccountSettings />,
-    },
-    {
-      value: "security",
-      trigger: "Security",
-      content: <SecuritySettings />,
-    },
-  ]
-
-  return (
-    <div>
-      <div className="mb-4 text-sm text-gray-600">
-        Current tab: {activeTab}
-      </div>
-      
-      <TabsWrapper
-        tabs={tabs}
-        value={activeTab}
-        onValueChange={setActiveTab}
-      />
-    </div>
-  )
-}
+<TabsWrapper
+  tabs={tabs}
+  value={value}
+  onValueChange={setValue}
+/>
 ```
 
-### Custom Styling
+### Orientation
+
 ```tsx
-import { TabsWrapper } from "@/components/tabs-wrapper"
+<TabsWrapper tabs={tabs} defaultValue="profile" orientation="vertical" />
+```
 
-function StyledTabs() {
-  const tabs = [
-    {
-      value: "code",
-      trigger: "Code",
-      content: (
-        <pre className="bg-gray-900 text-gray-100 p-4 rounded-md">
-          <code>function hello() {`{\n  console.log("Hello")\n}`}</code>
-        </pre>
-      ),
-      contentCls: "mt-0",
-    },
-    {
-      value: "preview",
-      trigger: "Preview",
-      content: (
-        <div className="border rounded-md p-4">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">
-            Hello Button
-          </button>
-        </div>
-      ),
-      contentCls: "mt-0",
-    },
-  ]
+Vertical layout places the tab list on the left and content to the right. Arrow key navigation adjusts automatically.
 
-  return (
-    <TabsWrapper
-      tabs={tabs}
-      defaultValue="code"
-      listCls="bg-gray-100 p-1 rounded-t-lg"
-      triggerCls="data-[state=active]:bg-white data-[state=active]:shadow-sm"
-      contentCls="border border-t-0 rounded-b-lg p-4"
-    />
-  )
-}
+### Activation mode
+
+By default, arrow keys move focus and Enter/Space activates the tab. `activateOnFocus` activates on arrow key press immediately — no Enter needed:
+
+```tsx
+<TabsWrapper tabs={tabs} defaultValue="profile" activateOnFocus />
+```
+
+### Disabled tab
+
+```tsx
+<TabsWrapper
+  tabs={[
+    { value: "profile",  trigger: "Profile",  content: "..." },
+    { value: "account",  trigger: "Account",  content: "...", disabled: true },
+    { value: "security", trigger: "Security", content: "..." },
+  ]}
+  defaultValue="profile"
+/>
+```
+
+### CSS classes
+
+```tsx
+<TabsWrapper
+  tabs={tabs}
+  defaultValue="profile"
+  listCls="w-full"
+  triggerCls="flex-1"
+  contentCls="mt-4"
+/>
+```
+
+Per-tab override with `triggerCls` / `contentCls` on each item:
+
+```tsx
+<TabsWrapper
+  tabs={[
+    { value: "a", trigger: "Normal",  content: "...", },
+    { value: "b", trigger: "Special", content: "...", triggerCls: "text-primary", contentCls: "bg-muted p-4 rounded" },
+  ]}
+  defaultValue="a"
+/>
 ```
 
 ## Reference
 
 #### tabItemT
-<AutoTypeTable 
-name="tabItemT" 
+<AutoTypeTable
+name="tabItemT"
 type={`export type tabItemT = {
   /**
-   * Unique identifier for the tab
-   * Used to control which tab is active
+   * Unique identifier — used for value matching and as React key.
    */
   value: string;
 
   /**
-   * trigger displayed in the tab trigger button
-   * Can be a string or any React element
+   * Content inside the tab button. String or any ReactNode.
    */
   trigger: React.ReactNode;
 
   /**
-   * Content displayed when this tab is active
-   * Can be any React element
+   * Content shown when this tab is active.
    */
   content: React.ReactNode;
 
   /**
-   * Whether this tab is disabled
-   * Disabled tabs cannot be selected
+   * Prevents the tab from being selected. Focus skips disabled tabs.
    */
   disabled?: boolean;
 
   /**
-   * Optional CSS classes for this specific tab trigger
+   * CSS class for this tab's trigger, overrides the global triggerCls.
    */
   triggerCls?: string;
 
   /**
-   * Optional CSS classes for this specific tab content panel
+   * CSS class for this tab's panel, overrides the global contentCls.
    */
   contentCls?: string;
-}`} 
+}`}
 />
 
 #### TabsWrapper
-<AutoTypeTable 
-name="TabsWrapper" 
+<AutoTypeTable
+name="TabsWrapper"
 type={`export interface TabsWrapper {
   /**
-   * Array of tab items to render
-   * Each item contains the value, trigger, content, and optional styling
-   * 
-   * \`\`\`tsx
-   * const tabs = [
-   *   {
-   *     value: "overview",
-   *     trigger: "Overview",
-   *     content: <div>Overview content</div>,
-   *   },
-   *   {
-   *     value: "settings",
-   *     trigger: <><SettingsIcon />Settings</>,
-   *     content: <SettingsPanel />,
-   *     disabled: true,
-   *   }
-   * ]
-   * \`\`\`
+   * Array of tab items. Each item defines the tab trigger and panel.
    */
-  tabs: tabItemsT
+  tabs: tabItemsT;
 
   /**
-   * Additional CSS classes for the tabs list container
-   * The list contains all the tab triggers
-   * 
-   * \`\`\`tsx
-   * listCls="bg-gray-100 p-1 rounded-lg"
-   * \`\`\`
+   * Visual style of the tab list.
+   * - default: muted background with sliding pill indicator
+   * - line: transparent with sliding underline indicator
+   * @default "default"
+   */
+  variant?: "default" | "line";
+
+  /**
+   * CSS class for the tab list container (wraps all triggers).
    */
   listCls?: string;
 
   /**
-   * Additional CSS classes applied to all tab triggers
-   * Individual tabs can override this with their own \`triggerCls\`
-   * 
-   * \`\`\`tsx
-   * triggerCls="font-semibold text-sm"
-   * \`\`\`
+   * CSS class applied to every trigger. Per-item triggerCls overrides this.
    */
   triggerCls?: string;
 
   /**
-   * Additional CSS classes applied to all tab content panels
-   * Individual tabs can override this with their own \`contentCls\`
-   * 
-   * \`\`\`tsx
-   * contentCls="mt-6 p-4 border rounded-md"
-   * \`\`\`
+   * CSS class applied to every panel. Per-item contentCls overrides this.
    */
   contentCls?: string;
 
- /**
-   * ...otherProps: All properties from Base UI Tabs Root can be passed directly.
+  /**
+   * Activate the focused tab on arrow key press without needing Enter/Space.
+   * @default false
    */
-  otherProps: TabsPrimitive.Root
-}`} 
+  activateOnFocus?: boolean;
+
+  /**
+   * Whether keyboard focus loops from the last tab back to the first.
+   * @default true
+   */
+  loopFocus?: boolean;
+
+  /**
+   * ...rootProps: All Base UI Tabs.Root props forwarded to the root.
+   * Includes: value, defaultValue, onValueChange, orientation.
+   */
+  otherProps?: never;
+}`}
 />
 
 ## Related Components
 
-- [Shadcn Tabs](https://ui.shadcn.com/docs/components/tabs)
 - [Base UI Tabs](https://base-ui.com/react/components/tabs)
+- [Shadcn Tabs](https://ui.shadcn.com/docs/components/tabs)
