@@ -1,6 +1,6 @@
 ---
 title: Toggle Group
-description: A simplified wrapper for Shadcn Toggle Group with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Toggle Group with single/multiple selection, controlled state, vertical orientation, spacing, and variant/size controls.
 ---
 
 import { ToggleGroupEx } from "@/components/examples";
@@ -40,76 +40,228 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
-```tsx
-import { ToggleGroupWrapper } from "@/components/ui/toggle-group";
 
-export function Basic() {
-  return (
-     <ToggleGroupWrapper
-      options={["Toogle 1", "Toggle 2"]}
-    />
-  )
-}
+```tsx
+import { ToggleGroupWrapper } from "@/components/ui/toggle-group"
+
+<ToggleGroupWrapper options={["Bold", "Italic", "Underline"]} />
+```
+
+### Multiple selection
+
+```tsx
+<ToggleGroupWrapper options={["Bold", "Italic", "Underline"]} multiple />
+```
+
+### Options format
+
+Options accept primitives (`string | number | boolean`) or objects with `label`, `value`, and optional `className` / `aria-label`:
+
+```tsx
+// Primitives
+<ToggleGroupWrapper options={["Bold", "Italic", 42, true]} />
+
+// Icon only — always provide aria-label
+<ToggleGroupWrapper
+  options={[
+    { label: <Bold />, value: "bold", "aria-label": "Toggle bold" },
+    { label: <Italic />, value: "italic", "aria-label": "Toggle italic" },
+  ]}
+/>
+
+// Icon + label
+<ToggleGroupWrapper
+  options={[
+    { label: <><AlignLeft /> Left</>, value: "left" },
+    { label: <><AlignCenter /> Center</>, value: "center" },
+  ]}
+/>
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = React.useState<string[]>(["italic"])
+
+<ToggleGroupWrapper
+  options={["Bold", "Italic", "Underline"]}
+  value={value}
+  onValueChange={(v) => setValue(v)}
+  multiple
+/>
+```
+
+### Orientation
+
+```tsx
+<ToggleGroupWrapper options={options} orientation="vertical" />
+```
+
+Arrow key navigation adjusts automatically — up/down for vertical, left/right for horizontal. Focus loops by default (`loopFocus` defaults to `true`).
+
+### Spacing
+
+`spacing={0}` (default) joins items into a single connected group. Larger values add gap:
+
+```tsx
+<ToggleGroupWrapper options={options} spacing={0} />  {/* joined */}
+<ToggleGroupWrapper options={options} spacing={1} />  {/* 4px gap */}
+<ToggleGroupWrapper options={options} spacing={2} />  {/* 8px gap */}
+```
+
+### Variants
+
+```tsx
+<ToggleGroupWrapper options={options} variant="default" />
+<ToggleGroupWrapper options={options} variant="outline" />
+```
+
+### Sizes
+
+```tsx
+<ToggleGroupWrapper options={options} size="sm" />
+<ToggleGroupWrapper options={options} size="default" />
+<ToggleGroupWrapper options={options} size="lg" />
+```
+
+### Disabled
+
+```tsx
+<ToggleGroupWrapper options={options} disabled />
+```
+
+### Item CSS class
+
+Apply shared CSS to all items via `itemCls`. Individual options override with their own `className`:
+
+```tsx
+<ToggleGroupWrapper
+  options={[
+    "Bold",
+    { label: "Custom", value: "custom", className: "text-primary" },
+  ]}
+  itemCls="font-semibold"
+/>
+```
+
+### Using primitives
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+
+<ToggleGroup multiple orientation="vertical">
+  <ToggleGroupItem value="bold" aria-label="Toggle bold">
+    <Bold />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="italic" aria-label="Toggle italic">
+    <Italic />
+  </ToggleGroupItem>
+</ToggleGroup>
 ```
 
 ## Reference
 
+#### toggleItemT
+<AutoTypeTable
+name="toggleItemT"
+type={`export type toggleItemT =
+  | string
+  | number
+  | boolean
+  | {
+      /**
+       * Content rendered inside the toggle button. String or any ReactNode.
+       */
+      label: React.ReactNode;
+
+      /**
+       * Value used for selection state (must be string-coercible).
+       */
+      value: string | number | boolean;
+
+      /**
+       * CSS class applied to this item only.
+       */
+      className?: string;
+
+      /**
+       * Accessible label for icon-only buttons.
+       */
+      "aria-label"?: string;
+    };`}
+/>
+
 #### ToggleGroupWrapper
-<AutoTypeTable 
-name="ToggleGroupWrapper" 
+<AutoTypeTable
+name="ToggleGroupWrapper"
 type={`export interface ToggleGroupWrapper {
   /**
-   * Array of toggle options to render
-   * 
-   * Supports:
-   * - Primitives: \`string | number | boolean\`
-   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string, "aria-label"?: string }\`
-   * 
+   * Array of toggle options. Supports primitives and option objects.
+   *
    * \`\`\`tsx
-   * const options = [
-   *   "Bold",
-   *   "Italic",
-   *   "Underline",
-   *   // or with objects
-   *   { label: <BoldIcon />, value: "bold", "aria-label": "Toggle bold" },
-   *   { label: <ItalicIcon />, value: "italic", className: "text-blue-500" }
-   * ]
+   * options={["Bold", "Italic"]}
+   * options={[{ label: <Bold />, value: "bold", "aria-label": "Toggle bold" }]}
    * \`\`\`
    */
-  options: toggleItemsT;
+  options: toggleItemT[];
 
   /**
-   * Additional CSS classes applied to all toggle items
-   * Individual options can override this with their own \`className\`
-   * 
-   * \`\`\`tsx
-   * itemCls="px-4 py-2"
-   * \`\`\`
+   * CSS class applied to every toggle item. Per-item className overrides this.
    */
   itemCls?: string;
 
   /**
-   * Controls toggle behavior
-   * 
-   * - \`"single"\`: Only one item can be selected at a time
-   * - \`"multiple"\`: Multiple items can be selected simultaneously
-   * 
-   * @default "single"
-   * 
-   * \`\`\`tsx
-   * type="multiple" // Allow multiple selections
-   * \`\`\`
+   * Visual style of each toggle item.
+   * @default "default"
    */
-  type?: "single" | "multiple";
+  variant?: "default" | "outline";
 
   /**
-   * ...otherProps: All properties from Base UI ToggleGroup Root can be passed directly.
+   * Size of each toggle item.
+   * @default "default"
    */
-  otherProps: ToggleGroupPrimitive.Root
-}`} 
+  size?: "sm" | "default" | "lg";
+
+  /**
+   * Gap between items. 0 = joined connected group, 1+ = separated with gap.
+   * @default 0
+   */
+  spacing?: number;
+
+  /**
+   * Allow multiple items to be active simultaneously.
+   * @default false
+   */
+  multiple?: boolean;
+
+  /**
+   * Stack items vertically. Arrow key navigation adjusts automatically.
+   * @default "horizontal"
+   */
+  orientation?: "horizontal" | "vertical";
+
+  /**
+   * Whether keyboard focus cycles from last item back to first.
+   * @default true
+   */
+  loopFocus?: boolean;
+
+  /**
+   * Disable all items in the group.
+   */
+  disabled?: boolean;
+
+  /**
+   * ...rootProps: All Base UI ToggleGroup.Root props forwarded to the root.
+   * Includes: value, defaultValue, onValueChange, multiple, orientation,
+   * disabled, loopFocus, etc.
+   */
+  otherProps?: never;
+}`}
 />
 
 ## Related Components
 
-- [Shadcn Toggle Group](https://ui.shadcn.com/docs/components/toggle-group)
 - [Base UI Toggle Group](https://base-ui.com/react/components/toggle-group)
+- [Base UI Toggle](https://base-ui.com/react/components/toggle)
+- [Shadcn Toggle Group](https://ui.shadcn.com/docs/components/toggle-group)
