@@ -1,6 +1,6 @@
 ---
 title: Popover
-description: A simplified wrapper for Shadcn Popover with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Popover with a convenience API for title, description, hover triggers, arrows, and controlled state.
 ---
 
 import { PopoverEx } from "@/components/examples";
@@ -36,59 +36,228 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
-```tsx
-import { PopoverWrapper } from "@/components/ui/popover";
 
-export function Basic() {
-  return (
-     <PopoverWrapper
-      trigger="Hover"
-      content="Some popover content"
-    />
-  )
-}
+```tsx
+import { PopoverWrapper } from "@/components/ui/popover"
+
+<PopoverWrapper
+  trigger="Open"
+  triggerCls="px-4 py-1.5 border rounded text-sm"
+  title="Popover title"
+  description="Supporting description text."
+/>
+```
+
+### Title and description
+
+Pass `title` and `description` directly — renders as `PopoverTitle` and `PopoverDescription` inside a `PopoverHeader`:
+
+```tsx
+<PopoverWrapper
+  trigger="Open"
+  title="Popover title"
+  description="Supporting description text."
+/>
+```
+
+For custom or mixed content, use `content` alongside:
+
+```tsx
+<PopoverWrapper
+  trigger="Open"
+  title="Popover title"
+  description="Some description."
+  content={<button className="mt-1 self-end text-xs border rounded px-2 py-1">Action</button>}
+/>
+```
+
+### Hover trigger
+
+```tsx
+<PopoverWrapper
+  trigger="Hover me"
+  triggerProps={{ openOnHover: true }}
+  title="Popover title"
+  description="Opens on pointer enter."
+/>
+```
+
+With delay:
+
+```tsx
+<PopoverWrapper
+  trigger="Hover (delayed)"
+  triggerProps={{ openOnHover: true, delay: 800, closeDelay: 500 }}
+  title="Popover title"
+  description="800 ms open delay, 500 ms close grace."
+/>
+```
+
+### Render prop trigger
+
+Use `triggerProps.render` for state-aware trigger styling — no extra `useState` needed. `trigger` can be omitted when render prop is provided:
+
+```tsx
+<PopoverWrapper
+  triggerProps={{
+    render: (props, state) => (
+      <button
+        {...props}
+        className={state.open ? "bg-foreground text-background rounded px-4 py-1.5 text-sm" : "border rounded px-4 py-1.5 text-sm"}
+      >
+        {state.open ? "Close ✕" : "Open"}
+      </button>
+    ),
+  }}
+  title="Render prop trigger"
+  description="Label and style react to open state."
+/>
+```
+
+### Controlled
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<PopoverWrapper
+  open={open}
+  onOpenChange={setOpen}
+  trigger="Anchor"
+  title="Controlled"
+  description="Driven by external state."
+/>
+```
+
+### Arrow
+
+```tsx
+<PopoverWrapper
+  trigger="Open"
+  contentProps={{ showArrow: true, sideOffset: 10 }}
+  title="With arrow"
+  description="Arrow points toward the trigger."
+/>
+```
+
+Control placement with `side`:
+
+```tsx
+<PopoverWrapper
+  trigger="Top"
+  contentProps={{ side: "top", showArrow: true, sideOffset: 10 }}
+  title="side: top"
+  description="Arrow points toward trigger."
+/>
+```
+
+### Modal
+
+When `modal`, scroll and pointer events outside are blocked and focus is trapped. Add a `PopoverClose` in `content` so users can dismiss:
+
+```tsx
+import { PopoverClose, PopoverWrapper } from "@/components/ui/popover"
+
+<PopoverWrapper
+  modal
+  trigger="Open modal"
+  triggerCls="px-4 py-1.5 border rounded text-sm"
+  title="Modal popover"
+  description="Scroll and pointer events outside are blocked. Focus is trapped inside."
+  content={
+    <PopoverClose className="mt-1 self-end rounded border px-3 py-1 text-xs">
+      Close
+    </PopoverClose>
+  }
+/>
+```
+
+### Positioning
+
+```tsx
+<PopoverWrapper trigger="Top"    contentProps={{ side: "top" }}    title="Top" />
+<PopoverWrapper trigger="Right"  contentProps={{ side: "right" }}  title="Right" />
+<PopoverWrapper trigger="Bottom" contentProps={{ side: "bottom" }} title="Bottom" />
+<PopoverWrapper trigger="Left"   contentProps={{ side: "left" }}   title="Left" />
 ```
 
 ## Reference
 
 #### PopoverWrapper
-<AutoTypeTable 
-name="PopoverWrapper" 
+<AutoTypeTable
+name="PopoverWrapper"
 type={`export interface PopoverWrapper {
-    /**
-   * Content displayed in the clickable trigger button
-   * Can be a string or any React element
+  /**
+   * Content for the trigger button. Optional when using triggerProps.render.
    */
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
 
   /**
-   * content of the popover. 
+   * Rendered as PopoverTitle inside a PopoverHeader above content.
+   * Omit to skip.
    */
-  content: React.ReactNode;
+  title?: React.ReactNode;
 
   /**
-   * Optional CSS classes for this specific accordion trigger
+   * Rendered as PopoverDescription inside a PopoverHeader above content.
+   * Omit to skip.
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Arbitrary content rendered below title/description.
+   */
+  content?: React.ReactNode;
+
+  /**
+   * CSS classes for the trigger element.
    */
   triggerCls?: string;
 
   /**
-   * Additional CSS classes for the content
+   * Props forwarded to PopoverTrigger — all Popover.Trigger.Props except className and children.
+   *
+   * Render prop — replaces trigger element entirely:
+   * \`\`\`tsx
+   * triggerProps={{
+   *   render: (props, state) => (
+   *     <button {...props}>{state.open ? "Close" : "Open"}</button>
+   *   ),
+   * }}
+   * \`\`\`
+   *
+   * Hover trigger:
+   * \`\`\`tsx
+   * triggerProps={{ openOnHover: true, delay: 600, closeDelay: 300 }}
+   * \`\`\`
+   */
+  triggerProps?: Omit<PopoverPrimitive.Trigger.Props, 'className' | 'children'>;
+
+  /**
+   * CSS classes for the popup element.
    */
   contentCls?: string;
 
   /**
-   * ...contentProps: All properties from Base UI Popover Content can be passed directly.
+   * Props forwarded to PopoverContent — positioning, alignment, and arrow options.
+   *
+   * \`\`\`tsx
+   * contentProps={{ side: "top", sideOffset: 8, showArrow: true }}
+   * \`\`\`
+   *
+   * Available: side, sideOffset, align, alignOffset, arrowPadding,
+   * showArrow, arrowClassName, collisionPadding, collisionBoundary, collisionAvoidance.
    */
-  contentProps: PopoverPrimitive.Content;
+  contentProps?: Omit<popoverContentType, 'className'>;
 
   /**
-   * ...otherProps: All properties from Base UI Popover Root can be passed directly.
+   * ...rootProps: All Base UI Popover.Root props forwarded to the root.
+   * Includes: open, onOpenChange, modal, defaultOpen, actionsRef, etc.
    */
-  otherProps: PopoverPrimitive.Root
-}`} 
+  otherProps?: never;
+}`}
 />
 
 ## Related Components
 
-- [Shadcn Popover](https://ui.shadcn.com/docs/components/popover)
 - [Base UI Popover](https://base-ui.com/react/components/popover)
+- [Shadcn Popover](https://ui.shadcn.com/docs/components/popover)

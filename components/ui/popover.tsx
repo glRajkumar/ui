@@ -13,23 +13,81 @@ function PopoverTrigger(props: PopoverPrimitive.Trigger.Props) {
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />
 }
 
+function PopoverClose({ className, ...props }: PopoverPrimitive.Close.Props) {
+  return (
+    <PopoverPrimitive.Close
+      data-slot="popover-close"
+      className={cn(className)}
+      {...props}
+    />
+  )
+}
+
+function PopoverArrow({ className, ...props }: PopoverPrimitive.Arrow.Props) {
+  return (
+    <PopoverPrimitive.Arrow
+      data-slot="popover-arrow"
+      className={cn(
+        'flex data-[side=bottom]:top-[-10px] data-[side=left]:right-[-14px] data-[side=left]:rotate-90 data-[side=right]:left-[-14px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-10px] data-[side=top]:rotate-180',
+        className,
+      )}
+      {...props}
+    >
+      <svg width="20" height="10" viewBox="0 0 20 10" className="block">
+        <path d="M 0 10 L 10 0 L 20 10 Z" className="fill-popover" />
+        <path
+          d="M 0 10 L 10 0 L 20 10"
+          className="fill-none stroke-foreground/10"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </PopoverPrimitive.Arrow>
+  )
+}
+
 type popoverContentType = PopoverPrimitive.Popup.Props &
-  Pick<PopoverPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>
+  Pick<
+    PopoverPrimitive.Positioner.Props,
+    | 'align'
+    | 'alignOffset'
+    | 'side'
+    | 'sideOffset'
+    | 'arrowPadding'
+    | 'collisionAvoidance'
+    | 'collisionBoundary'
+    | 'collisionPadding'
+  > & {
+    showArrow?: boolean
+    arrowClassName?: string
+  }
+
 function PopoverContent({
   className,
   align = 'center',
   alignOffset = 0,
   side = 'bottom',
   sideOffset = 4,
+  arrowPadding,
+  collisionAvoidance,
+  collisionBoundary,
+  collisionPadding,
+  showArrow,
+  arrowClassName,
+  children,
   ...props
 }: popoverContentType) {
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Positioner
-        align={align}
-        alignOffset={alignOffset}
         side={side}
+        align={align}
         sideOffset={sideOffset}
+        alignOffset={alignOffset}
+        arrowPadding={arrowPadding}
+        collisionPadding={collisionPadding}
+        collisionBoundary={collisionBoundary}
+        collisionAvoidance={collisionAvoidance}
       >
         <PopoverPrimitive.Popup
           data-slot="popover-content"
@@ -38,7 +96,10 @@ function PopoverContent({
             className,
           )}
           {...props}
-        />
+        >
+          {children}
+          {showArrow && <PopoverArrow className={arrowClassName} />}
+        </PopoverPrimitive.Popup>
       </PopoverPrimitive.Positioner>
     </PopoverPrimitive.Portal>
   )
@@ -75,9 +136,12 @@ function PopoverDescription({ className, ...props }: PopoverPrimitive.Descriptio
 }
 
 type PopoverWrapperProps = {
-  trigger: React.ReactNode
-  content: React.ReactNode
+  trigger?: React.ReactNode
+  content?: React.ReactNode
+  title?: React.ReactNode
+  description?: React.ReactNode
   triggerCls?: string
+  triggerProps?: Omit<PopoverPrimitive.Trigger.Props, 'className' | 'children'>
   contentCls?: string
   contentProps?: Omit<popoverContentType, 'className'>
 } & Omit<React.ComponentProps<typeof PopoverPrimitive.Root>, 'children'>
@@ -85,16 +149,27 @@ type PopoverWrapperProps = {
 function PopoverWrapper({
   trigger,
   content,
+  title,
+  description,
   triggerCls,
+  triggerProps,
   contentCls,
   contentProps,
   ...props
 }: PopoverWrapperProps) {
   return (
     <Popover {...props}>
-      <PopoverTrigger className={cn(triggerCls)}>{trigger}</PopoverTrigger>
+      <PopoverTrigger className={cn(triggerCls)} {...triggerProps}>
+        {trigger}
+      </PopoverTrigger>
 
       <PopoverContent {...contentProps} className={cn(contentCls)}>
+        {(title || description) && (
+          <PopoverHeader>
+            {title && <PopoverTitle>{title}</PopoverTitle>}
+            {description && <PopoverDescription>{description}</PopoverDescription>}
+          </PopoverHeader>
+        )}
         {content}
       </PopoverContent>
     </Popover>
@@ -103,6 +178,8 @@ function PopoverWrapper({
 
 export {
   Popover,
+  PopoverArrow,
+  PopoverClose,
   PopoverContent,
   PopoverDescription,
   PopoverHeader,
