@@ -1,3 +1,5 @@
+import { CheckboxGroupExample } from './checkbox-group'
+import { MenuExample } from './menu'
 import { CollapsibleExample } from './collapsible'
 import { NavigationMenuExample } from './navigation-menu'
 import { ToggleGroupExample } from './toggle-group'
@@ -8,7 +10,7 @@ import { Field_RHF_Example } from './field-rhf'
 import { Field_TF_Example } from './field-tf'
 import { DataTableExample } from './data-table'
 import { AccordionExample } from './accordion'
-import { DropdownExample } from './dropdown-menu'
+import { RadioGroupExample } from './radio-group'
 import { CarouselExample } from './carousel'
 import { ComboboxExample } from './combobox'
 import { ContextExample } from './context-menu'
@@ -43,10 +45,10 @@ export function ComboboxEx() {
   )
 }
 
-export function DropdownEx() {
+export function MenuEx() {
   return (
-    <Wrapper path="/components/examples/dropdown-menu.tsx">
-      <DropdownExample />
+    <Wrapper path="/components/examples/menu.tsx">
+      <MenuExample />
     </Wrapper>
   )
 }
@@ -274,6 +276,22 @@ export function ToastEx() {
   return (
     <Wrapper path="/components/examples/toast.tsx">
       <ToastExample />
+    </Wrapper>
+  )
+}
+
+export function CheckboxGroupEx() {
+  return (
+    <Wrapper path="/components/examples/checkbox-group.tsx">
+      <CheckboxGroupExample />
+    </Wrapper>
+  )
+}
+
+export function RadioGroupEx() {
+  return (
+    <Wrapper path="/components/examples/radio-group.tsx">
+      <RadioGroupExample />
     </Wrapper>
   )
 }

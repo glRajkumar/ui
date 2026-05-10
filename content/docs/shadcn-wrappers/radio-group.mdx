@@ -1,0 +1,182 @@
+---
+title: Radio Group
+description: A wrapper for Base UI Radio and RadioGroup with label/description support, controlled state, and orientation control.
+---
+
+import { RadioGroupEx } from "@/components/examples";
+
+<RadioGroupEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/radio-group
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/radio-group.tsx"'>
+  ./components/ui/radio-group.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+
+```tsx
+import { RadioGroupWrapper } from "@/components/ui/radio-group"
+
+<RadioGroupWrapper
+  defaultValue="email"
+  items={[
+    { value: "email", label: "Email", description: "Receive updates via email." },
+    { value: "sms", label: "SMS", description: "Receive updates via text." },
+    { value: "push", label: "Push notifications" },
+    { value: "disabled", label: "Unavailable", disabled: true },
+  ]}
+/>
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = useState("email")
+
+<RadioGroupWrapper
+  value={value}
+  onValueChange={(v) => setValue(v as string)}
+  items={[
+    { value: "email", label: "Email" },
+    { value: "sms", label: "SMS" },
+    { value: "push", label: "Push" },
+  ]}
+/>
+```
+
+### Horizontal orientation
+
+```tsx
+<RadioGroupWrapper
+  defaultValue="light"
+  orientation="horizontal"
+  items={[
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
+    { value: "system", label: "System" },
+  ]}
+/>
+```
+
+### Using primitives
+
+```tsx
+import { RadioGroup, RadioWrapper } from "@/components/ui/radio-group"
+
+<RadioGroup defaultValue="b">
+  <RadioWrapper value="a" label="Option A" description="First choice." />
+  <RadioWrapper value="b" label="Option B" description="Second choice." />
+  <RadioWrapper value="c" label="Disabled" disabled />
+</RadioGroup>
+```
+
+## Reference
+
+#### radioItemT
+<AutoTypeTable
+name="radioItemT"
+type={`export type radioItemT = {
+  /**
+   * Unique value identifying this radio in the group.
+   */
+  value: string;
+
+  /**
+   * Label displayed next to the radio button.
+   */
+  label: React.ReactNode;
+
+  /**
+   * Optional description shown below the label.
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Prevents this item from being selected.
+   */
+  disabled?: boolean;
+}`}
+/>
+
+#### RadioGroupWrapper
+<AutoTypeTable
+name="RadioGroupWrapper"
+type={`export interface RadioGroupWrapper {
+  /**
+   * Array of radio items to render.
+   */
+  items: radioItemT[];
+
+  /**
+   * Stack direction for items.
+   * @default "vertical"
+   */
+  orientation?: "horizontal" | "vertical";
+
+  /**
+   * CSS class applied to each item label wrapper.
+   */
+  itemCls?: string;
+
+  /**
+   * ...groupProps: All Base UI RadioGroup props.
+   * Includes: value, defaultValue, onValueChange, disabled, readOnly, required, name.
+   */
+  otherProps?: never;
+}`}
+/>
+
+#### RadioWrapper
+<AutoTypeTable
+name="RadioWrapper"
+type={`export interface RadioWrapper {
+  /**
+   * Label displayed next to the radio button.
+   */
+  label: React.ReactNode;
+
+  /**
+   * Optional description shown below the label.
+   */
+  description?: React.ReactNode;
+
+  /**
+   * CSS class for the outer label wrapper.
+   */
+  wrapperCls?: string;
+
+  /**
+   * ...rootProps: All Base UI Radio.Root props.
+   * Includes: value (required), disabled, readOnly, required, inputRef.
+   */
+  otherProps?: never;
+}`}
+/>
+
+## Related Components
+
+- [Base UI Radio](https://base-ui.com/react/components/radio)
+- [Shadcn Radio Group](https://ui.shadcn.com/docs/components/radio-group)

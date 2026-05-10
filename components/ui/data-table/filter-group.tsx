@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CirclePlus } from 'lucide-react'
 import { Table } from '@tanstack/react-table'
 
-import { DropdownCheckboxWrapper } from '../dropdown-menu-wrapper'
+import { MenuCheckboxWrapper } from '../menu-wrapper'
 import { buttonVariants } from '../button'
 import { ColumnFilter } from './column-filter'
 
@@ -32,7 +32,7 @@ export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupP
           />
         ))}
 
-      <DropdownCheckboxWrapper
+      <MenuCheckboxWrapper
         checked={selected}
         onCheckedChange={(val, checked) =>
           setSelected(prev => (!checked ? prev.filter(p => !p) : [...prev, val]))

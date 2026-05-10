@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group'
 import { Radio as RadioPrimitive } from '@base-ui/react/radio'
 
@@ -9,7 +10,7 @@ function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
   return (
     <RadioGroupPrimitive
       data-slot="radio-group"
-      className={cn('grid w-full gap-2', className)}
+      className={cn('flex flex-col gap-2', className)}
       {...props}
     />
   )
@@ -35,4 +36,67 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
   )
 }
 
-export { RadioGroup, RadioGroupItem }
+type RadioWrapperProps = {
+  label: React.ReactNode
+  description?: React.ReactNode
+  wrapperCls?: string
+} & RadioPrimitive.Root.Props
+
+function RadioWrapper({ label, description, wrapperCls, className, ...props }: RadioWrapperProps) {
+  return (
+    <label className={cn('flex cursor-pointer select-none items-start gap-2 has-[:disabled]:cursor-not-allowed', wrapperCls)}>
+      <RadioGroupItem className={cn('mt-0.5', className)} {...props} />
+      <div className="grid gap-0.5">
+        <span className="text-sm font-medium leading-none">{label}</span>
+        {description && <span className="text-xs text-muted-foreground">{description}</span>}
+      </div>
+    </label>
+  )
+}
+
+type radioItemT = {
+  value: string
+  label: React.ReactNode
+  description?: React.ReactNode
+  disabled?: boolean
+}
+
+type RadioGroupWrapperProps = {
+  items: radioItemT[]
+  orientation?: 'horizontal' | 'vertical'
+  itemCls?: string
+} & Omit<RadioGroupPrimitive.Props, 'children'>
+
+function RadioGroupWrapper({
+  items,
+  orientation = 'vertical',
+  itemCls,
+  className,
+  ...props
+}: RadioGroupWrapperProps) {
+  return (
+    <RadioGroup
+      className={cn(orientation === 'horizontal' && 'flex-row flex-wrap', className)}
+      {...props}
+    >
+      {items.map((item) => (
+        <RadioWrapper
+          key={item.value}
+          value={item.value}
+          label={item.label}
+          description={item.description}
+          disabled={item.disabled}
+          wrapperCls={itemCls}
+        />
+      ))}
+    </RadioGroup>
+  )
+}
+
+export {
+  RadioGroup,
+  RadioGroupItem,
+  RadioWrapper,
+  RadioGroupWrapper,
+  type radioItemT,
+}

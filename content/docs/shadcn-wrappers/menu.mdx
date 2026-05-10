@@ -1,11 +1,11 @@
 ---
-title: Dropdown
-description: A wrapper for Shadcn Dropdown Menu — supports plain items, checkbox, radio, groups, submenus, and separators with a unified options API.
+title: Menu
+description: A wrapper for Base UI Menu — supports plain items, checkbox, radio, groups, submenus, and separators with a unified options API.
 ---
 
-import { DropdownEx } from "@/components/examples";
+import { MenuEx } from "@/components/examples";
 
-<DropdownEx />
+<MenuEx />
 
 ## Installation
 
@@ -14,7 +14,7 @@ import { DropdownEx } from "@/components/examples";
 <Tab value="CLI">
 
 ```npm
-npx shadcn@latest add @glrk-ui/dropdown
+npx shadcn@latest add @glrk-ui/menu
 ```
 
 If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
@@ -37,12 +37,12 @@ Copy and paste the following code into your project.
   ./lib/utils.ts
 </include>
 
-<include cwd meta='title="ui/dropdown-menu.tsx"'>
-  ./components/ui/dropdown-menu.tsx
+<include cwd meta='title="ui/menu.tsx"'>
+  ./components/ui/menu.tsx
 </include>
 
-<include cwd meta='title="ui/dropdown-menu-wrapper.tsx"'>
-  ./components/ui/dropdown-menu-wrapper.tsx
+<include cwd meta='title="ui/menu-wrapper.tsx"'>
+  ./components/ui/menu-wrapper.tsx
 </include>
 
 </Tab>
@@ -54,10 +54,10 @@ Copy and paste the following code into your project.
 ### Basic
 
 ```tsx
-import { DropdownWrapper } from "@/components/ui/dropdown-menu-wrapper"
+import { MenuWrapper } from "@/components/ui/menu-wrapper"
 import { buttonVariants } from "@/components/ui/button"
 
-<DropdownWrapper
+<MenuWrapper
   options={["Edit", "Duplicate", "---", "Delete"]}
   trigger="Actions"
   triggerCls={buttonVariants({ variant: "outline" })}
@@ -67,7 +67,7 @@ import { buttonVariants } from "@/components/ui/button"
 ### Shortcuts and destructive variant
 
 ```tsx
-<DropdownWrapper
+<MenuWrapper
   options={[
     { label: "Edit", value: "edit", shortcut: "⌘E" },
     { label: "Delete", value: "delete", variant: "destructive", shortcut: "⌘⌫" },
@@ -83,7 +83,7 @@ import { buttonVariants } from "@/components/ui/button"
 ```tsx
 const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 
-<DropdownCheckboxWrapper
+<MenuCheckboxWrapper
   options={["Auto-save", "Spellcheck", "Dark mode"]}
   checked={checked}
   onCheckedChange={(v, c) =>
@@ -99,7 +99,7 @@ const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 ```tsx
 const [val, setVal] = useState<allowedPrimitiveT>("Light")
 
-<DropdownRadioWrapper
+<MenuRadioWrapper
   options={["Light", "Dark", "System"]}
   value={val}
   onValueChange={setVal}
@@ -111,8 +111,8 @@ const [val, setVal] = useState<allowedPrimitiveT>("Light")
 ### Indicator position
 
 ```tsx
-<DropdownCheckboxWrapper options={options} indicatorAt="right" trigger="..." />
-<DropdownRadioWrapper options={options} indicatorAt="right" trigger="..." />
+<MenuCheckboxWrapper options={options} indicatorAt="right" trigger="..." />
+<MenuRadioWrapper options={options} indicatorAt="right" trigger="..." />
 ```
 
 ### Groups, submenus, separators
@@ -135,10 +135,10 @@ const options: menuOptionsT = [
 
 ## Reference
 
-#### DropdownWrapper
+#### MenuWrapper
 <AutoTypeTable
-name="DropdownWrapper"
-type={`export interface DropdownWrapper {
+name="MenuWrapper"
+type={`export interface MenuWrapper {
   /**
    * Trigger element content — rendered inside a button.
    */
@@ -150,13 +150,9 @@ type={`export interface DropdownWrapper {
   triggerCls?: string;
 
   /**
-   * Props forwarded to DropdownMenuTrigger — use for render prop (custom element), disabled, etc.
-   *
-   * \`\`\`tsx
-   * triggerProps={{ render: <div role="button" tabIndex={0} /> }}
-   * \`\`\`
+   * Props forwarded to MenuTrigger — use for render prop (custom element), disabled, etc.
    */
-  triggerProps?: Omit<React.ComponentProps<typeof DropdownMenuTrigger>, "children" | "className">;
+  triggerProps?: Omit<React.ComponentProps<typeof MenuTrigger>, "children" | "className">;
 
   /**
    * Array of menu options. Supports primitives, separator "---", objects, groups, and submenus.
@@ -190,13 +186,9 @@ type={`export interface DropdownWrapper {
   groupLabelCls?: string;
 
   /**
-   * Props forwarded to DropdownMenuContent.
-   *
-   * \`\`\`tsx
-   * contentProps={{ align: "end", className: "w-56" }}
-   * \`\`\`
+   * Props forwarded to MenuContent.
    */
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>;
+  contentProps?: React.ComponentProps<typeof MenuContent>;
 
   /**
    * Callback fired when an item is selected.
@@ -204,29 +196,18 @@ type={`export interface DropdownWrapper {
   onSelect?: (value: allowedPrimitiveT) => void;
 
   /**
-   * ...rootProps: All DropdownMenu Root props forwarded to the root.
+   * ...rootProps: All Menu Root props forwarded to the root.
    */
   otherProps?: never;
 }`}
 />
 
-#### DropdownCheckboxWrapper
+#### MenuCheckboxWrapper
 <AutoTypeTable
-name="DropdownCheckboxWrapper"
-type={`export interface DropdownCheckboxWrapper {
-  /**
-   * Trigger element content.
-   */
+name="MenuCheckboxWrapper"
+type={`export interface MenuCheckboxWrapper {
   trigger: React.ReactNode;
-
-  /**
-   * CSS class applied to the trigger button.
-   */
   triggerCls?: string;
-
-  /**
-   * Array of checkbox options. Supports primitives, separator "---", objects with disabled, groups, and submenus.
-   */
   options: menuInputOptionsT;
 
   /**
@@ -235,8 +216,6 @@ type={`export interface DropdownCheckboxWrapper {
   checked?: allowedPrimitiveT[];
 
   /**
-   * Callback fired when a checkbox changes.
-   *
    * \`\`\`tsx
    * onCheckedChange={(value, checked) => {
    *   setChecked(prev => checked ? [...prev, value] : prev.filter(x => x !== value))
@@ -246,55 +225,24 @@ type={`export interface DropdownCheckboxWrapper {
   onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void;
 
   /**
-   * Position of the checkbox indicator.
    * @default "left"
    */
   indicatorAt?: "left" | "right";
 
-  /**
-   * CSS class applied to all items.
-   */
   itemCls?: string;
-
-  /**
-   * CSS class applied to all groups.
-   */
   groupCls?: string;
-
-  /**
-   * CSS class applied to all group labels.
-   */
   groupLabelCls?: string;
-
-  /**
-   * Props forwarded to DropdownMenuContent.
-   */
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>;
-
-  /**
-   * ...rootProps: All DropdownMenu Root props forwarded to the root.
-   */
+  contentProps?: React.ComponentProps<typeof MenuContent>;
   otherProps?: never;
 }`}
 />
 
-#### DropdownRadioWrapper
+#### MenuRadioWrapper
 <AutoTypeTable
-name="DropdownRadioWrapper"
-type={`export interface DropdownRadioWrapper {
-  /**
-   * Trigger element content.
-   */
+name="MenuRadioWrapper"
+type={`export interface MenuRadioWrapper {
   trigger: React.ReactNode;
-
-  /**
-   * CSS class applied to the trigger button.
-   */
   triggerCls?: string;
-
-  /**
-   * Array of radio options. Supports primitives, separator "---", objects with disabled, groups, and submenus.
-   */
   options: menuInputOptionsT;
 
   /**
@@ -302,47 +250,24 @@ type={`export interface DropdownRadioWrapper {
    */
   value?: allowedPrimitiveT;
 
-  /**
-   * Callback fired when the selection changes.
-   */
   onValueChange?: (value: allowedPrimitiveT) => void;
 
   /**
-   * Position of the radio indicator.
    * @default "left"
    */
   indicatorAt?: "left" | "right";
 
-  /**
-   * CSS class applied to all items.
-   */
   itemCls?: string;
-
-  /**
-   * CSS class applied to all groups.
-   */
   groupCls?: string;
-
-  /**
-   * CSS class applied to all group labels.
-   */
   groupLabelCls?: string;
-
-  /**
-   * Props forwarded to DropdownMenuContent.
-   */
-  contentProps?: React.ComponentProps<typeof DropdownMenuContent>;
-
-  /**
-   * ...rootProps: All DropdownMenu Root props forwarded to the root.
-   */
+  contentProps?: React.ComponentProps<typeof MenuContent>;
   otherProps?: never;
 }`}
 />
 
 ## Related Components
 
-- [Base UI Dropdown Menu](https://base-ui.com/react/components/dropdown-menu)
+- [Base UI Menu](https://base-ui.com/react/components/menu)
 - [Shadcn Dropdown Menu](https://ui.shadcn.com/docs/components/dropdown-menu)
-- [Menubar](/docs/shadcn-wrappers/menubar) — multiple dropdown menus in a horizontal bar
+- [Menubar](/docs/shadcn-wrappers/menubar) — multiple menus in a horizontal bar
 - [Context Menu](/docs/shadcn-wrappers/context-menu) — same options API, triggered by right-click

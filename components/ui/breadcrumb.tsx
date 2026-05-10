@@ -5,12 +5,7 @@ import { useRender } from '@base-ui/react/use-render'
 
 import { cn } from '@/lib/utils'
 
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
+import { Menu, MenuContent, MenuItem, MenuTrigger } from '@/components/ui/menu'
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<'nav'>) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" className={cn(className)} {...props} />
@@ -165,16 +160,16 @@ type dropdownProps = listBase & {
 }
 function BreadcrumbDropdown({ hiddenItems, dropdownCls }: dropdownProps) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
+    <Menu>
+      <MenuTrigger>
         <BreadcrumbEllipsis />
-      </DropdownMenuTrigger>
+      </MenuTrigger>
 
-      <DropdownMenuContent className={cn(dropdownCls)}>
+      <MenuContent className={cn(dropdownCls)}>
         {hiddenItems.map((itemObj, index) => {
           const item = typeof itemObj === 'string' ? { label: itemObj } : itemObj
           return (
-            <DropdownMenuItem
+            <MenuItem
               key={`hidden-${index}`}
               render={
                 item?.href ? (
@@ -192,8 +187,8 @@ function BreadcrumbDropdown({ hiddenItems, dropdownCls }: dropdownProps) {
             />
           )
         })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </MenuContent>
+    </Menu>
   )
 }
 

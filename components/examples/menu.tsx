@@ -5,10 +5,10 @@ import { useState } from 'react'
 import { ExRow, ExItem } from '@/components/examples/common'
 import { dropdownOptions } from './data'
 import {
-  DropdownCheckboxWrapper,
-  DropdownRadioWrapper,
-  DropdownWrapper,
-} from '@/components/ui/dropdown-menu-wrapper'
+  MenuCheckboxWrapper,
+  MenuRadioWrapper,
+  MenuWrapper,
+} from '@/components/ui/menu-wrapper'
 import { buttonVariants } from '@/components/ui/button'
 
 const actionOptions: menuOptionsT = [
@@ -52,7 +52,7 @@ const groupedRadioOptions: menuInputOptionsT = [
 
 function BasicExample() {
   return (
-    <DropdownWrapper
+    <MenuWrapper
       options={actionOptions}
       trigger="Actions"
       triggerCls={buttonVariants({ variant: 'outline' })}
@@ -62,7 +62,7 @@ function BasicExample() {
 
 function ComplexExample() {
   return (
-    <DropdownWrapper
+    <MenuWrapper
       options={dropdownOptions}
       trigger="Open"
       triggerCls={buttonVariants({ variant: 'outline' })}
@@ -73,7 +73,7 @@ function ComplexExample() {
 function ControlledOpenExample() {
   const [open, setOpen] = useState(false)
   return (
-    <DropdownWrapper
+    <MenuWrapper
       open={open}
       onOpenChange={setOpen}
       options={actionOptions}
@@ -86,11 +86,11 @@ function ControlledOpenExample() {
 function CheckboxDefaultExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   return (
-    <DropdownCheckboxWrapper
+    <MenuCheckboxWrapper
       options={featureOptions}
       checked={checked}
       onCheckedChange={(v, c) =>
-        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
+        setChecked((prev) => (c ? [...prev, v] : prev.filter((x) => x !== v)))
       }
       trigger="Features"
       triggerCls={buttonVariants({ variant: 'outline' })}
@@ -100,7 +100,7 @@ function CheckboxDefaultExample() {
 
 function CheckboxLeftExample() {
   return (
-    <DropdownCheckboxWrapper
+    <MenuCheckboxWrapper
       options={featureOptions}
       indicatorAt="left"
       trigger="Features"
@@ -112,11 +112,11 @@ function CheckboxLeftExample() {
 function CheckboxGroupedExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   return (
-    <DropdownCheckboxWrapper
+    <MenuCheckboxWrapper
       options={groupedCheckboxOptions}
       checked={checked}
       onCheckedChange={(v, c) =>
-        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
+        setChecked((prev) => (c ? [...prev, v] : prev.filter((x) => x !== v)))
       }
       trigger="Settings"
       triggerCls={buttonVariants({ variant: 'outline' })}
@@ -127,7 +127,7 @@ function CheckboxGroupedExample() {
 function RadioControlledExample() {
   const [val, setVal] = useState<allowedPrimitiveT>('Light')
   return (
-    <DropdownRadioWrapper
+    <MenuRadioWrapper
       options={themeOptions}
       value={val}
       onValueChange={setVal}
@@ -139,7 +139,7 @@ function RadioControlledExample() {
 
 function RadioLeftExample() {
   return (
-    <DropdownRadioWrapper
+    <MenuRadioWrapper
       options={themeOptions}
       indicatorAt="left"
       trigger="Theme"
@@ -151,7 +151,7 @@ function RadioLeftExample() {
 function RadioGroupedExample() {
   const [val, setVal] = useState<allowedPrimitiveT>('Default')
   return (
-    <DropdownRadioWrapper
+    <MenuRadioWrapper
       options={groupedRadioOptions}
       value={val}
       onValueChange={setVal}
@@ -161,7 +161,7 @@ function RadioGroupedExample() {
   )
 }
 
-export function DropdownExample() {
+export function MenuExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
       <ExRow label="Default">

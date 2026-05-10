@@ -4,13 +4,7 @@ import { Column } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 
 import { buttonVariants } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@/components/ui/menu'
 
 interface ColumnHeaderProps<TData, TValue> {
   className?: string
@@ -26,8 +20,8 @@ export function ColumnHeader<TData, TValue>({
   if (!column.getCanSort()) return <div className={cn(className)}>{title}</div>
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className={cn(buttonVariants({ variant: 'ghost', className }), '-ml-2')}>
+    <Menu>
+      <MenuTrigger className={cn(buttonVariants({ variant: 'ghost', className }), '-ml-2')}>
         {title}
         {column.getIsSorted() === 'desc' ? (
           <ArrowDown />
@@ -36,34 +30,34 @@ export function ColumnHeader<TData, TValue>({
         ) : (
           <ChevronsUpDown />
         )}
-      </DropdownMenuTrigger>
+      </MenuTrigger>
 
-      <DropdownMenuContent align="start">
-        <DropdownMenuItem
+      <MenuContent align="start">
+        <MenuItem
           onClick={() =>
             column.getIsSorted() !== 'asc' ? column.toggleSorting(false) : column.clearSorting()
           }
         >
           <ArrowUp className="h-3.5 w-3.5 text-muted-foreground/70" />
           Asc
-        </DropdownMenuItem>
+        </MenuItem>
 
-        <DropdownMenuItem
+        <MenuItem
           onClick={() =>
             column.getIsSorted() !== 'desc' ? column.toggleSorting(true) : column.clearSorting()
           }
         >
           <ArrowDown className="h-3.5 w-3.5 text-muted-foreground/70" />
           Desc
-        </DropdownMenuItem>
+        </MenuItem>
 
-        <DropdownMenuSeparator />
+        <MenuSeparator />
 
-        <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+        <MenuItem onClick={() => column.toggleVisibility(false)}>
           <EyeOff className="h-3.5 w-3.5 text-muted-foreground/70" />
           Hide Column
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </MenuItem>
+      </MenuContent>
+    </Menu>
   )
 }
