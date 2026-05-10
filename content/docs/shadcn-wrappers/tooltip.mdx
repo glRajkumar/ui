@@ -1,6 +1,6 @@
 ---
 title: Tooltip
-description: A simplified wrapper for Shadcn Tooltip with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Tooltip with delay control, arrow toggle, render prop trigger, controlled state, and Provider for shared timing.
 ---
 
 import { TooltipEx } from "@/components/examples";
@@ -36,59 +36,199 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
-```tsx
-import { TooltipWrapper } from "@/components/ui/tooltip";
 
-export function Basic() {
-  return (
-     <TooltipWrapper
-      trigger="Hover"
-      content="Some tooltip content"
-    />
-  )
-}
+```tsx
+import { TooltipWrapper } from "@/components/ui/tooltip"
+
+<TooltipWrapper
+  trigger="Hover me"
+  triggerCls="px-4 py-1.5 border rounded text-sm"
+  content="Tooltip text"
+/>
+```
+
+### Delay
+
+`delay` and `closeDelay` are Trigger-level props — pass them via `triggerProps`:
+
+```tsx
+<TooltipWrapper trigger="Instant"     content="No delay"           triggerProps={{ delay: 0 }} />
+<TooltipWrapper trigger="600 ms"      content="Opens after 600 ms" triggerProps={{ delay: 600 }} />
+<TooltipWrapper trigger="Close delay" content="500 ms close grace" triggerProps={{ closeDelay: 500 }} />
+```
+
+### Provider
+
+Wrap multiple tooltips in `TooltipProvider` to share delay and enable the instant-reopen window (`timeout`). If the user moves between tooltips within the timeout window, the next one opens instantly regardless of `delay`:
+
+```tsx
+import { TooltipProvider, TooltipWrapper } from "@/components/ui/tooltip"
+
+<TooltipProvider delay={600} closeDelay={200}>
+  <TooltipWrapper trigger="First"  content="First tooltip" />
+  <TooltipWrapper trigger="Second" content="Second tooltip" />
+  <TooltipWrapper trigger="Third"  content="Third tooltip" />
+</TooltipProvider>
+```
+
+### Arrow
+
+Arrow is shown by default. Hide it via `contentProps`:
+
+```tsx
+<TooltipWrapper trigger="No arrow" content="Arrow hidden" contentProps={{ showArrow: false }} />
+```
+
+### Render prop trigger
+
+Use `triggerProps.render` for state-aware trigger styling. `trigger` can be omitted when the render prop is provided:
+
+```tsx
+<TooltipWrapper
+  triggerProps={{
+    render: (props, state) => (
+      <button
+        {...props}
+        className={state.open ? "bg-foreground text-background rounded px-4 py-1.5 text-sm" : "border rounded px-4 py-1.5 text-sm"}
+      >
+        {state.open ? "Showing ✓" : "Hover"}
+      </button>
+    ),
+  }}
+  content="Trigger style reacts to open state."
+/>
+```
+
+### Controlled
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<TooltipWrapper
+  open={open}
+  onOpenChange={setOpen}
+  trigger="Target"
+  content="Controlled tooltip"
+/>
+```
+
+### Positioning
+
+```tsx
+<TooltipWrapper trigger="Top"    content="Top"    contentProps={{ side: "top" }} />
+<TooltipWrapper trigger="Right"  content="Right"  contentProps={{ side: "right" }} />
+<TooltipWrapper trigger="Bottom" content="Bottom" contentProps={{ side: "bottom" }} />
+<TooltipWrapper trigger="Left"   content="Left"   contentProps={{ side: "left" }} />
+```
+
+### Using primitives
+
+For render prop triggers or custom layouts, use primitives directly:
+
+```tsx
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+
+<Tooltip>
+  <TooltipTrigger
+    render={(props, state) => (
+      <button {...props} className={state.open ? "bg-foreground text-background" : "border"}>
+        Hover
+      </button>
+    )}
+  />
+  <TooltipContent side="right" sideOffset={8}>
+    Built with primitives
+  </TooltipContent>
+</Tooltip>
 ```
 
 ## Reference
 
 #### TooltipWrapper
-<AutoTypeTable 
-name="TooltipWrapper" 
+<AutoTypeTable
+name="TooltipWrapper"
 type={`export interface TooltipWrapper {
-    /**
-   * Content displayed in the clickable trigger button
-   * Can be a string or any React element
+  /**
+   * Content for the trigger button. Optional when using triggerProps.render.
    */
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
 
   /**
-   * content of the tooltip. 
+   * Content shown inside the tooltip popup.
    */
   content: React.ReactNode;
 
   /**
-   * Optional CSS classes for this specific accordion trigger
+   * CSS classes for the trigger element.
    */
   triggerCls?: string;
 
   /**
-   * Additional CSS classes for the content
+   * Props forwarded to TooltipTrigger — all Tooltip.Trigger.Props except className and children.
+   *
+   * Render prop — replaces trigger element entirely:
+   * \`\`\`tsx
+   * triggerProps={{
+   *   render: (props, state) => (
+   *     <button {...props}>{state.open ? "Open" : "Hover"}</button>
+   *   ),
+   * }}
+   * \`\`\`
+   *
+   * Also accepts: delay, closeDelay, closeOnClick, disabled.
+   */
+  triggerProps?: Omit<TooltipPrimitive.Trigger.Props, 'className' | 'children'>;
+
+  /**
+   * CSS classes for the popup element.
    */
   contentCls?: string;
 
   /**
-   * ...contentProps: All properties from Base UI Tooltip Content can be passed directly.
+   * Props forwarded to TooltipContent — positioning and arrow options.
+   *
+   * \`\`\`tsx
+   * contentProps={{ side: "bottom", sideOffset: 8, showArrow: false }}
+   * \`\`\`
+   *
+   * Available: side, sideOffset, align, alignOffset, showArrow, arrowClassName.
    */
-  contentProps: TooltipPrimitive.Content;
+  contentProps?: Omit<tooltipContentT, 'className'>;
 
   /**
-   * ...otherProps: All properties from Base UI Tooltip Root can be passed directly.
+   * ...rootProps: All Base UI Tooltip.Root props forwarded to the root.
+   * Includes: open, onOpenChange, defaultOpen, delay, closeDelay,
+   * trackCursorAxis, disableHoverablePopup, etc.
    */
-  otherProps: TooltipPrimitive.Root
-}`} 
+  otherProps?: never;
+}`}
+/>
+
+#### TooltipProvider
+<AutoTypeTable
+name="TooltipProvider"
+type={`export interface TooltipProvider {
+  /**
+   * Opening delay in milliseconds shared across all child tooltips.
+   * @default 0
+   */
+  delay?: number;
+
+  /**
+   * Closing delay in milliseconds shared across all child tooltips.
+   */
+  closeDelay?: number;
+
+  /**
+   * Window in milliseconds where the next tooltip opens instantly
+   * if the user moves between triggers. Prevents flickering on fast movement.
+   * @default 400
+   */
+  timeout?: number;
+}`}
 />
 
 ## Related Components
 
-- [Shadcn Tooltip](https://ui.shadcn.com/docs/components/tooltip)
 - [Base UI Tooltip](https://base-ui.com/react/components/tooltip)
+- [Shadcn Tooltip](https://ui.shadcn.com/docs/components/tooltip)
