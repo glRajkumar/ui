@@ -1,6 +1,6 @@
 ---
 title: Toast
-description: A wrapper for Base UI Toast with type variants, icons, promise support, action buttons, and a useToast hook.
+description: A wrapper for Base UI Toast with type variants, icons, promise support, action buttons, position routing, and a useToast hook.
 ---
 
 import { ToastEx } from "@/components/examples";
@@ -37,16 +37,16 @@ Copy and paste the following code into your project.
 
 ### Basic
 
-Wrap your app (or subtree) with `<Toaster>`. Use `useToast()` from any child component.
+Wrap your app (or subtree) with `<Toaster>`. Call `useToast()` from any child component:
 
 ```tsx
-import { Toaster, useToast } from "@/components/ui/toast";
+import { Toaster, useToast } from "@/components/ui/toast"
 
 function SaveButton() {
-  const toast = useToast();
+  const toast = useToast()
   return (
     <button onClick={() => toast.success("Changes saved.")}>Save</button>
-  );
+  )
 }
 
 export function App() {
@@ -54,74 +54,130 @@ export function App() {
     <Toaster>
       <SaveButton />
     </Toaster>
-  );
+  )
 }
 ```
 
 ### Variants
 
 ```tsx
-const toast = useToast();
+const toast = useToast()
 
-toast.add({ description: "Notification sent." });          // default
-toast.success("Changes saved.");
-toast.error("Something went wrong.", { title: "Error" });
-toast.warning("Session expires soon.");
-toast.info("Update available.", { title: "v2.0" });
+toast.add({ description: "Notification sent." })                   // default
+toast.success("Changes saved.")
+toast.error("Something went wrong.", { title: "Error" })
+toast.warning("Session expires in 5 minutes.")
+toast.info("Update available.", { title: "v2.0" })
+```
+
+Each variant renders a colored border/background and a matching icon.
+
+### Title and description
+
+```tsx
+toast.add({
+  title: "Sync complete",
+  description: "All 42 files have been uploaded.",
+  type: "success",
+})
 ```
 
 ### Promise
 
-Automatically transitions loading → success or error when the promise resolves.
+Transitions automatically: loading → success or error when the promise settles:
 
 ```tsx
-toast.promise(uploadFile(file), {
-  loading: "Uploading...",
-  success: (data) => `${data.name} uploaded.`,
-  error: "Upload failed.",
-});
+toast.promise(
+  uploadFile(file),
+  {
+    loading: "Uploading...",
+    success: (data) => `${data.name} uploaded.`,
+    error: "Upload failed.",
+  },
+)
+```
+
+Route to a specific position:
+
+```tsx
+toast.promise(fetch("/api"), messages, { position: "top-center" })
 ```
 
 ### Action button
 
-Pass `actionProps` to render a button inside the toast.
-
 ```tsx
-toast.add({
+const id = toast.add({
   title: "File deleted",
   description: "document.pdf removed.",
   actionProps: {
     children: "Undo",
-    onClick: () => restoreFile(),
+    onClick: () => {
+      toast.close(id)
+      toast.success("document.pdf restored.")
+    },
   },
-});
+})
 ```
 
-### Global manager
+### Persistent toast
 
-Create a manager outside React to trigger toasts from anywhere (axios interceptors, utils, etc.).
+Set `timeout: 0` to disable auto-dismiss:
 
 ```tsx
-import { createToastManager, Toaster } from "@/components/ui/toast";
-
-export const toast = createToastManager();
-
-// Root layout
-<Toaster toastManager={toast} />
-
-// Anywhere — no hook needed
-toast.add({ description: "Done.", type: "success" });
-toast.promise(fetch("/api/data"), {
-  loading: { description: "Loading...", type: "loading" },
-  success: { description: "Loaded.", type: "success" },
-  error: { description: "Failed.", type: "error" },
-});
+toast.add({
+  title: "Pinned",
+  description: "This won't auto-dismiss.",
+  timeout: 0,
+})
 ```
 
-### Composing primitives
+### Update
+
+Update an existing toast by id — useful for loading → result transitions:
+
+```tsx
+const id = toast.add({ description: "Uploading...", type: "loading", timeout: 0 })
+
+// later...
+toast.update(id, { description: "Upload complete.", type: "success", timeout: 3000 })
+```
+
+### Position
+
+Each toast method accepts `position` to override the `Toaster` default:
+
+```tsx
+toast.info("Done.", { position: "top-center" })
+toast.success("Saved.", { position: "bottom-left" })
+```
+
+Available positions: `top-left` · `top-center` · `top-right` · `bottom-left` · `bottom-center` · `bottom-right`
+
+### Priority
+
+Controls the aria-live politeness for screen readers:
+
+```tsx
+toast.add({ description: "Critical update.", priority: "high" })
+toast.info("Background task complete.", { priority: "low" })
+```
+
+### Custom icon
+
+```tsx
+toast.success("Report ready.", { icon: <FileTextIcon className="text-blue-500" /> })
+
+// suppress icon entirely
+toast.error("Silent error.", { icon: null })
+```
+
+### External manager
+
+For triggering toasts outside React (axios interceptors, utils, etc.), use `createToastManager` with primitives directly:
 
 ```tsx
 import {
+  createToastManager,
   ToastProvider,
   ToastPortal,
   ToastViewport,
@@ -129,24 +185,36 @@ import {
   ToastContent,
   ToastTitle,
   ToastDescription,
-  ToastAction,
   ToastClose,
   useToastManager,
-} from "@/components/ui/toast";
+} from "@/components/ui/toast"
+
+export const toast = createToastManager()
 
 function ToastList() {
-  const { toasts } = useToastManager();
-  return toasts.map((toast) => (
-    <ToastRoot key={toast.id} toast={toast}>
+  const { toasts } = useToastManager()
+  return toasts.map((t) => (
+    <ToastRoot key={t.id} toast={t}>
       <ToastContent>
         <ToastTitle />
         <ToastDescription />
-        {toast.actionProps && <ToastAction {...toast.actionProps} />}
         <ToastClose />
       </ToastContent>
     </ToastRoot>
-  ));
+  ))
 }
+
+// In root layout
+<ToastProvider toastManager={toast}>
+  <ToastPortal>
+    <ToastViewport>
+      <ToastList />
+    </ToastViewport>
+  </ToastPortal>
+</ToastProvider>
+
+// From anywhere — no hook needed
+toast.add({ description: "Done.", type: "success" })
 ```
 
 ## Reference
@@ -154,17 +222,32 @@ function ToastList() {
 ### useToast
 
 ```ts
-const toast = useToast();
+const toast = useToast()
 
-toast.add(options)                          // → string (toast id)
-toast.success(description, options?)        // → string
-toast.error(description, options?)          // → string
-toast.warning(description, options?)        // → string
-toast.info(description, options?)           // → string
-toast.promise(promise, messages)            // → Promise<Value>
+toast.add(options)                           // → string (toast id)
+toast.success(description, options?)         // → string
+toast.error(description, options?)           // → string
+toast.warning(description, options?)         // → string
+toast.info(description, options?)            // → string
+toast.promise(promise, messages, opts?)      // → Promise<Value>
 toast.update(id, partialOptions)
-toast.close(id?)
+toast.close(id?, position?)                 // omit id to close all
 ```
+
+**`toast.add` options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `title` | `ReactNode` | — | Toast heading |
+| `description` | `ReactNode` | — | Toast body |
+| `type` | `toastTypeT` | `"default"` | Variant — drives icon and color |
+| `timeout` | `number` | `5000` | Auto-dismiss ms. `0` = no auto-dismiss |
+| `priority` | `'low' \| 'high'` | `'low'` | aria-live politeness |
+| `position` | `toastPositionT` | Toaster default | Override placement |
+| `actionProps` | `ButtonProps` | — | Renders an action button inside the toast |
+| `onClose` | `() => void` | — | Called when toast is dismissed |
+| `onRemove` | `() => void` | — | Called after exit animation completes |
+| `icon` | `ReactNode \| null` | type default | Custom icon. `null` suppresses the icon |
 
 ### Toaster
 
@@ -172,52 +255,69 @@ toast.close(id?)
 name="Toaster"
 type={`export interface Toaster {
   /**
-   * Additional CSS classes for the Viewport container.
-   * Defaults to fixed bottom-right position.
+   * Default position for toasts. Individual toasts can override via toast.add({ position }).
+   * @default "bottom-right"
    */
-  viewportCls?: string;
+  position?: toastPositionT;
 
   /**
-   * Additional CSS classes applied to each ToastRoot.
+   * Default auto-dismiss delay in ms for all toasts. Override per-toast with timeout option.
+   * @default 5000
    */
-  toastCls?: string;
+  timeout?: number;
 
   /**
-   * Additional CSS classes applied to each ToastContent.
+   * Maximum number of visible toasts per position.
+   * @default 3
    */
-  contentCls?: string;
+  limit?: number;
 
   /**
-   * Additional CSS classes applied to each ToastTitle.
+   * Direction(s) a toast can be swiped to dismiss.
+   * @default ['down', 'right']
    */
-  titleCls?: string;
+  swipeDirection?: 'up' | 'down' | 'left' | 'right' | ('up' | 'down' | 'left' | 'right')[];
 
   /**
-   * Additional CSS classes applied to each ToastDescription.
-   */
-  descriptionCls?: string;
-
-  /**
-   * Additional CSS classes applied to each action button.
-   */
-  actionCls?: string;
-
-  /**
-   * Additional CSS classes applied to the close button.
-   */
-  closeCls?: string;
-
-  /**
-   * Whether to render the close button on each toast.
+   * Whether to show the close button on each toast.
    * @default true
    */
   showClose?: boolean;
 
   /**
-   * ...otherProps: All properties from Base UI Toast.Provider can be passed directly.
-   * Includes toastManager, timeout, limit, etc.
+   * CSS class for the viewport container.
    */
-  otherProps: Toast.Provider
+  viewportCls?: string;
+
+  /**
+   * CSS class applied to each ToastRoot.
+   */
+  toastCls?: string;
+
+  /**
+   * CSS class applied to each ToastContent wrapper.
+   */
+  contentCls?: string;
+
+  /**
+   * CSS class applied to each ToastTitle.
+   */
+  titleCls?: string;
+
+  /**
+   * CSS class applied to each ToastDescription.
+   */
+  descriptionCls?: string;
+
+  /**
+   * CSS class applied to each action button.
+   */
+  actionCls?: string;
+
+  /**
+   * CSS class applied to the close button.
+   */
+  closeCls?: string;
 }`}
 />
 
@@ -227,9 +327,7 @@ type={`export interface Toaster {
 type toastTypeT = "default" | "success" | "error" | "warning" | "info" | "loading"
 ```
 
-Each type renders a colored border/background and a corresponding icon.
-
 ## Related Components
 
-- [Shadcn Sonner](https://ui.shadcn.com/docs/components/sonner)
 - [Base UI Toast](https://base-ui.com/react/components/toast)
+- [Shadcn Sonner](https://ui.shadcn.com/docs/components/sonner)

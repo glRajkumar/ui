@@ -45,6 +45,11 @@ function ToastTriggers() {
     })
   }
 
+  function handleUpdate() {
+    const id = toast.add({ description: 'Uploading...', type: 'loading', timeout: 0 })
+    setTimeout(() => toast.update(id, { description: 'Upload complete.', type: 'success', timeout: 3000 }), 2000)
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap gap-2">
@@ -83,6 +88,17 @@ function ToastTriggers() {
 
         <Button variant="outline" onClick={handleAction}>
           With action
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() => toast.add({ title: 'Pinned', description: 'Close manually — no auto-dismiss.', timeout: 0 })}
+        >
+          Persistent
+        </Button>
+
+        <Button variant="outline" onClick={handleUpdate}>
+          Update
         </Button>
 
         <Button

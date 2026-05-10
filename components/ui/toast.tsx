@@ -240,6 +240,7 @@ type toastListProps = {
   actionCls?: string
   closeCls?: string
   showClose?: boolean
+  swipeDirection?: ToastPrimitive.Root.Props['swipeDirection']
 }
 
 function ToastList({
@@ -251,6 +252,7 @@ function ToastList({
   actionCls,
   closeCls,
   showClose = true,
+  swipeDirection,
 }: toastListProps) {
   const { toasts } = ToastPrimitive.useToastManager<toastCustomDataT>()
 
@@ -272,6 +274,7 @@ function ToastList({
       <ToastRoot
         key={toast.id}
         toast={toast}
+        swipeDirection={swipeDirection}
         className={cn(type !== 'default' && typeStyles[type], isTop && topPlacementCls, toastCls)}
       >
         <ToastContent className={contentCls}>
@@ -321,6 +324,7 @@ type toasterProps = {
   actionCls?: string
   closeCls?: string
   showClose?: boolean
+  swipeDirection?: ToastPrimitive.Root.Props['swipeDirection']
   children?: React.ReactNode
 }
 
@@ -336,6 +340,7 @@ function Toaster({
   actionCls,
   closeCls,
   showClose = true,
+  swipeDirection,
   children,
 }: toasterProps) {
   const [managers] = React.useState<Map<toastPositionT, toastManagerT>>(() =>
@@ -351,6 +356,7 @@ function Toaster({
     actionCls,
     closeCls,
     showClose,
+    swipeDirection,
     isTop: false,
   }
 
@@ -408,8 +414,8 @@ function useToast() {
     return getManager(position)?.add(extractCustomData({ description, type: 'info', ...rest })) ?? ''
   }
 
-  function promise<V>(p: Promise<V>, messages: toastPromiseMessages<V>, position?: toastPositionT) {
-    const manager = getManager(position)
+  function promise<V>(p: Promise<V>, messages: toastPromiseMessages<V>, opts?: { position?: toastPositionT }) {
+    const manager = getManager(opts?.position)
     return manager?.promise<V>(p, {
       loading: { description: messages.loading, type: 'loading', timeout: 0 },
       success: typeof messages.success === 'function'
