@@ -54,6 +54,16 @@ function SelectTrigger({
   )
 }
 
+function SelectBackdrop({ className, ...props }: SelectPrimitive.Backdrop.Props) {
+  return (
+    <SelectPrimitive.Backdrop
+      data-slot="select-backdrop"
+      className={cn('fixed inset-0', className)}
+      {...props}
+    />
+  )
+}
+
 function SelectContent({
   className,
   children,
@@ -62,14 +72,16 @@ function SelectContent({
   align = 'center',
   alignOffset = 0,
   alignItemWithTrigger = true,
+  backdrop = false,
   ...props
 }: SelectPrimitive.Popup.Props &
   Pick<
     SelectPrimitive.Positioner.Props,
     'align' | 'alignOffset' | 'side' | 'sideOffset' | 'alignItemWithTrigger'
-  >) {
+  > & { backdrop?: boolean }) {
   return (
     <SelectPrimitive.Portal>
+      {backdrop && <SelectBackdrop />}
       <SelectPrimitive.Positioner
         side={side}
         sideOffset={sideOffset}
@@ -193,11 +205,12 @@ function Item({ option, className, indicatorAt }: itemProps) {
   const value = getValue(option)
   const label = getLabel(option)
   const optCls = isOption(option) ? option.className : undefined
+  const disabled = isOption(option) ? option.disabled : undefined
 
   if (isSeparator(value)) return <SelectSeparator className={className} />
 
   return (
-    <SelectItem value={`${value}`} className={cn(className, optCls)} indicatorAt={indicatorAt}>
+    <SelectItem value={`${value}`} className={cn(className, optCls)} indicatorAt={indicatorAt} disabled={disabled}>
       {label}
     </SelectItem>
   )
@@ -208,6 +221,8 @@ type selectProps = {
   options: optionsT
   placeholder?: string
   indicatorAt?: indicatorAtT
+  size?: 'sm' | 'default'
+  backdrop?: boolean
   triggerCls?: string
   contentCls?: string
   groupCls?: string
@@ -219,6 +234,8 @@ function SelectWrapper({
   options,
   placeholder,
   indicatorAt,
+  size,
+  backdrop,
   triggerCls,
   contentCls,
   groupCls,
@@ -228,11 +245,11 @@ function SelectWrapper({
 }: selectProps) {
   return (
     <Select {...props}>
-      <SelectTrigger id={id} className={cn('w-full', triggerCls)}>
+      <SelectTrigger id={id} size={size} className={cn('w-full', triggerCls)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
-      <SelectContent className={cn(contentCls)}>
+      <SelectContent backdrop={backdrop} className={cn(contentCls)}>
         {options.map((option, i) => {
           if (isGroup(option)) {
             return (
@@ -267,6 +284,7 @@ function SelectWrapper({
 
 export {
   Select,
+  SelectBackdrop,
   SelectContent,
   SelectGroup,
   SelectItem,

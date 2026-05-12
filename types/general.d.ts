@@ -4,6 +4,7 @@ type optionT = {
   label: React.ReactNode
   value: allowedPrimitiveT
   className?: string
+  disabled?: boolean
 }
 
 type groupT = {

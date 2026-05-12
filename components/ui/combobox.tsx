@@ -312,9 +312,10 @@ function OptionItem({ option, className, indicatorAt }: OptionItemProps) {
   const value = getValue(option)
   const label = getLabel(option)
   const optCls = isOption(option) ? option.className : undefined
+  const disabled = isOption(option) ? option.disabled : undefined
 
   return (
-    <ComboboxItem value={value} className={cn(className, optCls)} indicatorAt={indicatorAt}>
+    <ComboboxItem value={value} className={cn(className, optCls)} indicatorAt={indicatorAt} disabled={disabled}>
       {label}
     </ComboboxItem>
   )
