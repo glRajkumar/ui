@@ -1,16 +1,15 @@
-import { CheckboxGroupExample } from './checkbox-group'
-import { MenuExample } from './menu'
-import { CollapsibleExample } from './collapsible'
 import { NavigationMenuExample } from './navigation-menu'
+import { CheckboxGroupExample } from './checkbox-group'
 import { ToggleGroupExample } from './toggle-group'
 import { AlertDialogExample } from './alert-dialog'
+import { CollapsibleExample } from './collapsible'
+import { RadioGroupExample } from './radio-group'
 import { BreadcrumbExample } from './breadcrumb'
 import { PaginationExample } from './pagination'
 import { Field_RHF_Example } from './field-rhf'
 import { Field_TF_Example } from './field-tf'
 import { DataTableExample } from './data-table'
 import { AccordionExample } from './accordion'
-import { RadioGroupExample } from './radio-group'
 import { CarouselExample } from './carousel'
 import { ComboboxExample } from './combobox'
 import { ContextExample } from './context-menu'
@@ -24,6 +23,7 @@ import { SheetExample } from './sheet'
 import { ToastExample } from './toast'
 import { EmptyExample } from './empty'
 import { FieldExample } from './field'
+import { MenuExample } from './menu'
 import { CardExample } from './card'
 import { TabsExample } from './tabs'
 import { ItemExample } from './item'
@@ -31,7 +31,15 @@ import Wrapper from '../wrapper'
 
 export function SelectEx() {
   return (
-    <Wrapper path="/components/examples/select.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/select/index.tsx',
+        '/components/examples/select/basic.tsx',
+        '/components/examples/select/state.tsx',
+        '/components/examples/select/advanced.tsx',
+        '/components/examples/data/options.tsx',
+      ]}
+    >
       <SelectExample />
     </Wrapper>
   )
@@ -39,7 +47,15 @@ export function SelectEx() {
 
 export function ComboboxEx() {
   return (
-    <Wrapper path="/components/examples/combobox.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/combobox/index.tsx',
+        '/components/examples/combobox/basic.tsx',
+        '/components/examples/combobox/state.tsx',
+        '/components/examples/combobox/advanced.tsx',
+        '/components/examples/data/options.tsx',
+      ]}
+    >
       <ComboboxExample />
     </Wrapper>
   )
