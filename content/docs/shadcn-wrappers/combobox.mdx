@@ -1,6 +1,6 @@
 ---
 title: Combobox
-description: A simplified wrapper for Shadcn Combobox with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Combobox with single and multi-select, chips, grouped options, async loading, custom label rendering, and create-new support.
 ---
 
 import { ComboboxEx } from "@/components/examples";
@@ -44,243 +44,403 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
+
 ```tsx
 import { ComboboxWrapper } from "@/components/ui/combobox"
 
-export function Basic() {
-  return (
-    <>
-      <ComboboxWrapper
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="Select an option"
-      />
-      
-      <ComboboxWrapper
-        multiple
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="Select an option"
-      />
-    </>
-  )
-}
+<ComboboxWrapper
+  items={["Apple", "Banana", "Orange"]}
+  placeholder="Search fruits..."
+/>
 ```
 
-### Controlled
+### Multiple selection (chips)
+
+Pass `multiple` to enable chip-based multi-select:
+
 ```tsx
-import { useState } from "react"
-import { ComboboxWrapper } from "@/components/ui/combobox"
-
-export function Controlled() {
-  const [values, setValues] = useState<allowedPrimitiveT[]>([])
-  const [value, setValue] = useState<allowedPrimitiveT>("")
-
-  return (
-    <>
-      <ComboboxWrapper
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="Select an option"
-        value={value}
-        onValueChange={setValue}
-      />
-      
-      <ComboboxWrapper
-        multiple
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="Select an option"
-        value={values}
-        onValueChange={setValues}
-      />
-    </>
-  )
-}
-
-export function Async() {
-  const { data: options, isLoading } = useAsyncOptions()
-  
-  return (
-    <ComboboxWrapper
-      options={options || []}
-      isLoading={isLoading}
-    />
-  )
-}
+<ComboboxWrapper
+  multiple
+  items={["Apple", "Banana", "Orange"]}
+  placeholder="Search fruits..."
+/>
 ```
 
-### Custom Styling
+### Options format
+
+`items` accepts primitives, option objects, groups, and separators — mixed freely:
+
 ```tsx
-export function Styled() {
-  return (
-    <ComboboxWrapper
-      options={["Small", "Medium", "Large"]}
-      placeholder="Select size"
-      triggerCls="w-[200px] bg-slate-50"
-      contentCls="min-w-[200px]"
-      itemCls="cursor-pointer hover:bg-slate-100"
-      groupCls="py-2"
-    />
-  )
-}
+const items = [
+  "Simple string",
+  42,
+  "---",                                             // separator
+  { label: "Custom label", value: "custom" },
+  { label: <><SunIcon /> Light</>, value: "light" }, // ReactNode label
+  { label: "Disabled", value: "off", disabled: true },
+  {
+    group: "Category",
+    options: ["Option A", "Option B"],
+  },
+]
+
+<ComboboxWrapper items={items} placeholder="Pick one" />
+```
+
+### Grouped options
+
+```tsx
+<ComboboxWrapper
+  items={[
+    { group: "Fruits", options: ["Apple", "Banana"] },
+    { group: "Veggies", options: ["Carrot", "Broccoli"] },
+  ]}
+  placeholder="Select food"
+/>
+```
+
+### Trigger and clear buttons
+
+```tsx
+<ComboboxWrapper items={items} showTrigger showClear placeholder="Search" />
+<ComboboxWrapper items={items} showTrigger={false} placeholder="No chevron" />
+```
+
+### Indicator placement
+
+```tsx
+<ComboboxWrapper items={items} indicatorAt="left" placeholder="Left check" />
+<ComboboxWrapper items={items} indicatorAt="right" placeholder="Right check" /> {/* default */}
+```
+
+### Disabled item
+
+```tsx
+<ComboboxWrapper
+  items={[
+    { label: "Available", value: "a" },
+    { label: "Unavailable", value: "b", disabled: true },
+  ]}
+  placeholder="Select"
+/>
+```
+
+### Loading state
+
+```tsx
+<ComboboxWrapper items={[]} isLoading placeholder="Search..." />
+```
+
+Shows "Loading..." in the empty slot while `isLoading` is true.
+
+### Empty message
+
+```tsx
+<ComboboxWrapper items={items} emptyMessage="Nothing matched" placeholder="Search" />
+```
+
+### Controlled value
+
+Single:
+
+```tsx
+const [value, setValue] = useState<allowedPrimitiveT>("")
+
+<ComboboxWrapper
+  items={items}
+  value={value}
+  onValueChange={setValue}
+/>
+```
+
+Multiple:
+
+```tsx
+const [values, setValues] = useState<allowedPrimitiveT[]>([])
+
+<ComboboxWrapper
+  multiple
+  items={items}
+  value={values}
+  onValueChange={setValues}
+/>
+```
+
+### Controlled query and open state
+
+```tsx
+const [query, setQuery] = useState("")
+const [open, setOpen] = useState(false)
+
+<ComboboxWrapper
+  items={items}
+  query={query}
+  onQueryChange={setQuery}
+  open={open}
+  onOpenChange={setOpen}
+/>
+```
+
+### Async options
+
+Combine controlled query with async fetch:
+
+```tsx
+const [query, setQuery] = useState("")
+const { data: items = [], isLoading } = useQuery({
+  queryKey: ["users", query],
+  queryFn: () => fetchUsers(query),
+})
+
+<ComboboxWrapper
+  items={items}
+  isLoading={isLoading}
+  query={query}
+  onQueryChange={setQuery}
+  placeholder="Search users..."
+/>
+```
+
+### Custom chip label (renderValue)
+
+Used in `multiple` mode — controls what renders inside each chip. Receives the raw value string and the matched option:
+
+```tsx
+<ComboboxWrapper
+  multiple
+  items={[
+    { label: <><SunIcon /> Light</>, value: "light" },
+    { label: <><MoonIcon /> Dark</>, value: "dark" },
+  ]}
+  renderValue={(value, option) => (
+    <span className="flex items-center gap-1">
+      {value === "light" ? <SunIcon className="size-3" /> : <MoonIcon className="size-3" />}
+      {value}
+    </span>
+  )}
+/>
+```
+
+### Custom input label (getItemLabel)
+
+Controls the string shown in the input after selection (single mode). Useful when option labels are ReactNodes:
+
+```tsx
+<ComboboxWrapper
+  items={[
+    { label: <><SunIcon /> Light</>, value: "light" },
+    { label: <><MoonIcon /> Dark</>, value: "dark" },
+  ]}
+  getItemLabel={(value) => value === "light" ? "Light mode" : "Dark mode"}
+/>
+```
+
+> Without `getItemLabel`, the wrapper uses `extractText` to derive a string from ReactNode labels automatically.
+
+### Create new option
+
+Use `hideList` to hide the dropdown list (render your own "Create" item), and wire up `onValueChange` to extend items:
+
+```tsx
+const [items, setItems] = useState(["Apple", "Banana"])
+const [query, setQuery] = useState("")
+
+const hasMatch = items.some(
+  (i) => String(i).toLowerCase() === query.toLowerCase()
+)
+
+<ComboboxWrapper
+  items={items}
+  query={query}
+  onQueryChange={setQuery}
+  onValueChange={(v) => {
+    if (!items.includes(v as string)) setItems((prev) => [...prev, v as string])
+  }}
+  hideList={hasMatch || !query}
+  placeholder="Type to create..."
+/>
+```
+
+### Additional input props
+
+Pass native input attributes via `inputProps`:
+
+```tsx
+<ComboboxWrapper
+  items={items}
+  inputProps={{ autoComplete: "off", maxLength: 50 }}
+/>
+```
+
+### Custom styling
+
+```tsx
+<ComboboxWrapper
+  items={items}
+  placeholder="Styled"
+  triggerCls="w-72"
+  contentCls="max-h-48"
+  groupCls="pb-0"
+  itemCls="text-xs"
+/>
+```
+
+### Using primitives
+
+```tsx
+import {
+  ComboboxRoot,
+  ComboboxInput,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxGroup,
+  ComboboxLabel,
+  ComboboxCollection,
+  ComboboxEmpty,
+  ComboboxSeparator,
+  ComboboxChips,
+  ComboboxChip,
+  ComboboxChipsInput,
+  ComboboxTrigger,
+  ComboboxClear,
+  ComboboxValue,
+} from "@/components/ui/combobox"
+
+<ComboboxRoot items={items} itemToStringLabel={(item) => String(item)}>
+  <ComboboxInput placeholder="Search..." showTrigger showClear />
+  <ComboboxContent>
+    <ComboboxEmpty>Nothing found</ComboboxEmpty>
+    <ComboboxList>
+      {(item) => (
+        <ComboboxItem key={String(item)} value={item}>
+          {String(item)}
+        </ComboboxItem>
+      )}
+    </ComboboxList>
+  </ComboboxContent>
+</ComboboxRoot>
 ```
 
 ## Reference
 
-#### Common Properties
-<AutoTypeTable 
-name="Common" 
-type={`export interface Common {
+<AutoTypeTable
+name="ComboboxWrapper"
+type={`export interface ComboboxWrapper {
   /**
-   * Optional ID for the combobox trigger element
+   * Array of options. Supports primitives, option objects, groups, and separators.
+   *
+   * - Primitives: string | number | boolean
+   * - Option object: { label: ReactNode, value: string | number | boolean, className?: string, disabled?: boolean }
+   * - Group: { group: string, options: Array<...>, className?: string }
+   * - Separator: use the string "---"
    */
-  id?: string;
+  items?: optionsT;
 
   /**
-   * Array of options - can be primitives, objects, or groups
-   * 
-   * Supports:
-   * - Primitives: \`string | number | boolean\`
-   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
-   * - Groups: \`{ group: string, options: Array, className?: string }\`
-   * - Separators: Use \`"---"\` as a value
-   * 
-   * \`\`\`tsx
-   * const options = [
-   *   "Simple string",
-   *   42,
-   *   true,
-   *   "---",
-   *   { label: "Custom", value: "custom" },
-   *   { label: <><Icon />With Icon</>, value: "icon" },
-   *   { 
-   *     group: "Category", 
-   *     options: ["Option 1", "Option 2"] 
-   *   },
-   * ]
-   * \`\`\`
+   * Enable multi-select with chip-based input.
+   * @default false
    */
-  options: (string | number | boolean | { label: React.ReactNode; value: string | number | boolean; className?: string } | { group: string; options: Array<any>; className?: string })[];
+  multiple?: boolean;
 
   /**
-   * Loading state - shows spinner and disables search
-   * 
+   * Placeholder text for the search input.
+   */
+  placeholder?: string;
+
+  /**
+   * Message shown when no items match the search query.
+   * @default "No options found"
+   */
+  emptyMessage?: string;
+
+  /**
+   * Show a loading indicator in the empty slot while data is being fetched.
    * @default false
    */
   isLoading?: boolean;
 
   /**
-   * Placeholder text displayed when no value is selected
-   * 
-   * @default ""
-   */
-  placeholder?: string;
-
-  /**
-   * Message displayed when search returns no results
-   * 
-   * @default "No options found"
-   */
-  emptyMessage?: string;
-
-    /**
-   * Position of the checkmark indicator in select items
-   * 
+   * Position of the checkmark indicator inside each item.
    * @default "right"
    */
   indicatorAt?: "left" | "right";
 
   /**
-   * Additional CSS classes for the combobox trigger button
-   * 
+   * Show the chevron trigger button.
+   * @default true
+   */
+  showTrigger?: boolean;
+
+  /**
+   * Show the clear button.
+   * @default false
+   */
+  showClear?: boolean;
+
+  /**
+   * Hide the dropdown list — useful for "create new" patterns where
+   * you render your own item outside the standard list.
+   * @default false
+   */
+  hideList?: boolean;
+
+  /**
+   * Custom render function for chip labels in multiple mode.
+   * Receives the raw value string and the matched option (if any).
+   *
+   * If omitted, the option label (ReactNode) is used directly.
+   *
    * \`\`\`tsx
-   * triggerCls="w-[300px] justify-start"
+   * renderValue={(value, option) => <Badge>{value}</Badge>}
    * \`\`\`
+   */
+  renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode;
+
+  /**
+   * Override the string shown in the input after selection (single mode).
+   * Receives the selected value string; must return a plain string.
+   *
+   * If omitted, the wrapper derives a string from ReactNode labels via extractText.
+   *
+   * \`\`\`tsx
+   * getItemLabel={(value) => myLookup[value] ?? value}
+   * \`\`\`
+   */
+  getItemLabel?: (value: string) => string;
+
+  /**
+   * Additional props forwarded to the underlying <input> element.
+   */
+  inputProps?: React.ComponentProps<"input">;
+
+  /**
+   * CSS classes applied to the trigger input (or chips container in multiple mode).
    */
   triggerCls?: string;
 
   /**
-   * Additional CSS classes for the dropdown content container
+   * CSS classes applied to the popup content.
    */
   contentCls?: string;
 
   /**
-   * Additional CSS classes applied to option groups
+   * CSS classes applied to each group wrapper.
    */
   groupCls?: string;
 
   /**
-   * Additional CSS classes applied to individual items
-   * 
-   * Note: Individual options can override this with their own \`className\`
+   * CSS classes applied to each option item.
    */
   itemCls?: string;
 
   /**
-   * Controlled search query state
-   * 
-   * \`\`\`tsx
-   * const [query, setQuery] = useState("");
-   * <Combobox query={query} onQueryChange={setQuery} />
-   * \`\`\`
+   * ...rootProps: All Base UI Combobox.Root props (value, onValueChange, defaultValue,
+   * query, onQueryChange, open, onOpenChange, disabled, name, etc.) are forwarded.
    */
-  query?: string;
-
-  /**
-   * Callback fired when the search query changes
-   * 
-   * @param query - The updated search query string
-   */
-  onQueryChange?: (query: string) => void;
-
-  /**
-   * Controlled open/closed state of the dropdown
-   * 
-   * \`\`\`tsx
-   * const [open, setOpen] = useState(false);
-   * <Combobox open={open} onOpenChange={setOpen} />
-   * \`\`\`
-   */
-  open?: boolean;
-
-  /**
-   * Callback fired when the dropdown open state changes
-   * 
-   * @param open - Whether the dropdown is open
-   */
-  onOpenChange?: (open: boolean) => void;
+  otherProps?: never;
 }`}
 />
-
-#### Combobox
-<AutoTypeTable 
-name="Combobox" 
-type={`export interface Combobox {
-  /**
-   * Enables creating new option to Combobox. Update options if added new item.
-   * 
-   * Shows "Create: {query}" option when search query doesn't match existing options
-   * 
-   * @default false
-   */
-  canCreateNew?: boolean;
-
-  /**
-   * Controlled value - the currently selected option value
-   * 
-   * \`\`\`tsx
-   * const [value, setValue] = useState<string>("");
-   * <Combobox value={value} onValueChange={setValue} />
-   * \`\`\`
-   */
-  value?: string | number | boolean;
-
-  /**
-   * Callback fired when the selected value changes
-   * 
-   * @param value - The newly selected value
-   */
-  onValueChange?: (value: string | number | boolean) => void;
-}`}
-/>
-
 
 ## Related Components
 

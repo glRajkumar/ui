@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from 'lucide-react'
 import { Select as SelectPrimitive } from '@base-ui/react/select'
 
-import { cn, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from '@/lib/utils'
+import { cn, extractText, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from '@/lib/utils'
 
 const Select = SelectPrimitive.Root
 
@@ -228,6 +228,7 @@ type selectProps = {
   groupCls?: string
   groupLabelCls?: string
   itemCls?: string
+  renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode
 } & React.ComponentProps<typeof SelectPrimitive.Root>
 function SelectWrapper({
   id,
@@ -241,12 +242,41 @@ function SelectWrapper({
   groupCls,
   itemCls,
   groupLabelCls,
+  renderValue,
   ...props
 }: selectProps) {
+  const { labelMap, optionMap } = React.useMemo(() => {
+    const labelMap: Record<string, React.ReactNode> = {}
+    const optionMap: Record<string, allowedPrimitiveT | optionT> = {}
+    const process = (opts: optionsT) => {
+      for (const opt of opts) {
+        if (isGroup(opt)) {
+          process(opt.options as optionsT)
+        } else {
+          const o = opt as allowedPrimitiveT | optionT
+          const val = getValue(o)
+          if (!isSeparator(val)) {
+            const key = String(val)
+            labelMap[key] = getLabel(o)
+            optionMap[key] = o
+          }
+        }
+      }
+    }
+    process(options)
+    return { labelMap, optionMap }
+  }, [options])
+
   return (
     <Select {...props}>
       <SelectTrigger id={id} size={size} className={cn('w-full', triggerCls)}>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder}>
+          {(value: string | null) => {
+            if (!value) return placeholder
+            if (renderValue) return renderValue(value, optionMap[value])
+            return labelMap[value] ?? value
+          }}
+        </SelectValue>
       </SelectTrigger>
 
       <SelectContent backdrop={backdrop} className={cn(contentCls)}>

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ChevronDownIcon, XIcon, CheckIcon, PlusIcon, Loader2 } from 'lucide-react'
 import { Combobox as ComboboxPrimitive } from '@base-ui/react'
 
-import { cn, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from '@/lib/utils'
+import { cn, extractText, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from '@/lib/utils'
 
 const ComboboxRoot = ComboboxPrimitive.Root
 
@@ -382,6 +382,8 @@ type ComboboxWrapperProps<
   showClear?: boolean
   inputProps?: React.ComponentProps<'input'>
   hideList?: boolean
+  renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode
+  getItemLabel?: (value: string) => string
 }
 
 function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
@@ -399,12 +401,56 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
   disabled,
   inputProps,
   hideList,
+  renderValue,
+  getItemLabel,
+  items,
   ...props
 }: ComboboxWrapperProps<Value, Multiple>) {
   const multiAnchor = React.useRef<HTMLDivElement | null>(null)
 
+  const { labelMap, labelStringMap, optionMap } = React.useMemo(() => {
+    const labelMap: Record<string, React.ReactNode> = {}
+    const labelStringMap: Record<string, string> = {}
+    const optionMap: Record<string, allowedPrimitiveT | optionT> = {}
+    if (!items) return { labelMap, labelStringMap, optionMap }
+    const process = (opts: optionsT) => {
+      for (const opt of opts) {
+        if (isGroup(opt)) {
+          process(opt.options as optionsT)
+        } else {
+          const o = opt as allowedPrimitiveT | optionT
+          const val = getValue(o)
+          if (!isSeparator(val)) {
+            const key = String(val)
+            const label = getLabel(o)
+            labelMap[key] = label
+            labelStringMap[key] = typeof label === 'string' ? label : (extractText(label).trim() || key)
+            optionMap[key] = o
+          }
+        }
+      }
+    }
+    process(items)
+    return { labelMap, labelStringMap, optionMap }
+  }, [items])
+
+  const itemsForBase = React.useMemo(() => {
+    if (!items) return []
+    return items.map(item => isGroup(item) ? { ...item, items: item.options } : item)
+  }, [items])
+
   return (
-    <ComboboxRoot multiple={multiple} disabled={disabled} {...props}>
+    <ComboboxRoot
+      multiple={multiple}
+      disabled={disabled}
+      items={itemsForBase as unknown[]}
+      itemToStringLabel={(item) => {
+        const key = String(getValue(item as allowedPrimitiveT | optionT))
+        if (getItemLabel) return getItemLabel(key)
+        return labelStringMap[key] ?? key
+      }}
+      {...props}
+    >
       {multiple ? (
         <ComboboxChips ref={multiAnchor} className={cn('w-full', triggerCls)}>
           <ComboboxValue>
@@ -412,7 +458,10 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
               <>
                 {values?.map(v => (
                   <ComboboxChip key={String(v)}>
-                    {String(v)}
+                    {renderValue
+                      ? renderValue(String(v), optionMap[String(v)])
+                      : (labelMap[String(v)] ?? String(v))
+                    }
                   </ComboboxChip>
                 ))}
 

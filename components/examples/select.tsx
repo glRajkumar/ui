@@ -1,32 +1,21 @@
 'use client'
 
 import * as React from 'react'
-import { Globe, Laptop, Moon, Sun } from 'lucide-react'
 
+import { cn } from '@/lib/utils'
 import { ExRow, ExItem } from '@/components/examples/common'
+import {
+  fruits,
+  grouped,
+  memberMeta,
+  memberOptions,
+  regions,
+  statusOptions,
+  statusStyle,
+  themed,
+  withSeparator,
+} from '@/components/examples/data/options'
 import { SelectWrapper } from '@/components/ui/select'
-
-const fruits = ['Apple', 'Banana', 'Cherry', 'Mango', 'Orange', 'Strawberry']
-
-const grouped: optionsT = [
-  { group: 'Citrus', options: ['Orange', 'Lemon', 'Lime', 'Grapefruit'] },
-  { group: 'Tropical', options: ['Mango', 'Papaya', 'Pineapple'] },
-  { group: 'Berries', options: ['Strawberry', 'Blueberry', 'Raspberry'] },
-]
-
-const withSeparator: optionsT = ['Design', 'Engineering', 'Marketing', '---', 'Finance', 'Legal']
-
-const themed: optionsT = [
-  { label: <><Sun className="size-3.5" /> Light</>, value: 'light' },
-  { label: <><Moon className="size-3.5" /> Dark</>, value: 'dark' },
-  { label: <><Laptop className="size-3.5" /> System</>, value: 'system' },
-]
-
-const regions: optionsT = [
-  { label: <><Globe className="size-3.5" /> US East</>, value: 'us-east', className: 'text-blue-600 dark:text-blue-400' },
-  { label: <><Globe className="size-3.5" /> EU West</>, value: 'eu-west', className: 'text-green-600 dark:text-green-400' },
-  { label: <><Globe className="size-3.5" /> AP Southeast</>, value: 'ap-se', className: 'text-orange-600 dark:text-orange-400' },
-]
 
 function FlatExample() {
   return <SelectWrapper options={fruits} placeholder="Select fruit" triggerCls="w-44" />
@@ -140,6 +129,49 @@ function FormExample() {
   )
 }
 
+function StatusPickerExample() {
+  return (
+    <SelectWrapper
+      options={statusOptions}
+      placeholder="Set status"
+      triggerCls="w-48"
+      renderValue={(value) => {
+        const s = statusStyle[value]
+        if (!s) return value
+        return (
+          <span className={cn('flex items-center gap-1.5 font-medium', s.text)}>
+            <span className={cn('size-2 shrink-0 rounded-full', s.dot)} />
+            {s.label}
+          </span>
+        )
+      }}
+    />
+  )
+}
+
+function AssigneePickerExample() {
+  return (
+    <SelectWrapper
+      options={memberOptions}
+      placeholder="Assign to..."
+      triggerCls="w-60"
+      renderValue={(value) => {
+        const m = memberMeta[value]
+        if (!m) return value
+        return (
+          <span className="flex min-w-0 items-center gap-2">
+            <span className={cn('flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white', m.bg)}>
+              {m.initials}
+            </span>
+            <span className="truncate font-medium">{m.name}</span>
+            <span className="shrink-0 text-xs text-muted-foreground">{m.dept}</span>
+          </span>
+        )
+      }}
+    />
+  )
+}
+
 export function SelectExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -209,6 +241,15 @@ export function SelectExample() {
         </ExItem>
         <ExItem label="Form — native submission with name/required">
           <FormExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Render Value">
+        <ExItem label="Status badge — dot + coloured label in trigger">
+          <StatusPickerExample />
+        </ExItem>
+        <ExItem label="Assignee — avatar + name + dept in trigger, rich list">
+          <AssigneePickerExample />
         </ExItem>
       </ExRow>
     </div>

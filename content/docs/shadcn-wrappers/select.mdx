@@ -1,6 +1,6 @@
 ---
 title: Select
-description: A simplified wrapper for Shadcn Select with flexible option handling and automatic type conversion
+description: A wrapper for Base UI Select with flexible option types, grouped options, size variants, backdrop, and custom value rendering.
 ---
 
 import { SelectEx } from "@/components/examples";
@@ -44,153 +44,271 @@ Copy and paste the following code into your project.
 ## Usage
 
 ### Basic
+
 ```tsx
 import { SelectWrapper } from "@/components/ui/select"
 
-export function Basic() {
-  return (
-    <SelectWrapper
-      options={["Option 1", "Option 2", "Option 3"]}
-      placeholder="Select an option"
-    />
-  )
-}
+<SelectWrapper
+  options={["Apple", "Banana", "Orange"]}
+  placeholder="Select a fruit"
+/>
+```
+
+### Options format
+
+`options` accepts primitives, option objects, groups, and separators — mixed freely:
+
+```tsx
+const options = [
+  "Simple string",
+  42,
+  true,
+  "---",                                          // separator
+  { label: "Custom label", value: "custom" },
+  { label: <><SunIcon /> Light</>, value: "light" }, // ReactNode label
+  { label: "Disabled", value: "off", disabled: true },
+  {
+    group: "Category",
+    options: ["Option A", "Option B"],
+  },
+]
+
+<SelectWrapper options={options} placeholder="Pick one" />
+```
+
+### Grouped options
+
+```tsx
+<SelectWrapper
+  options={[
+    { group: "Fruits", options: ["Apple", "Banana"] },
+    { group: "Veggies", options: ["Carrot", "Broccoli"] },
+  ]}
+  placeholder="Select food"
+/>
+```
+
+### Size
+
+```tsx
+<SelectWrapper options={options} size="sm" placeholder="Small" />
+<SelectWrapper options={options} size="default" placeholder="Default" />
+```
+
+### Indicator placement
+
+```tsx
+<SelectWrapper options={options} indicatorAt="left" placeholder="Left check" />
+<SelectWrapper options={options} indicatorAt="right" placeholder="Right check" /> {/* default */}
+```
+
+### Disabled item
+
+Pass `disabled: true` on any option object:
+
+```tsx
+<SelectWrapper
+  options={[
+    { label: "Available", value: "a" },
+    { label: "Unavailable", value: "b", disabled: true },
+  ]}
+  placeholder="Select"
+/>
+```
+
+### Backdrop
+
+Renders a fixed backdrop behind the dropdown — useful for modal-style behaviour:
+
+```tsx
+<SelectWrapper options={options} backdrop placeholder="Select with backdrop" />
 ```
 
 ### Controlled
+
 ```tsx
-import { useState } from "react"
-import { SelectWrapper } from "@/components/ui/select"
-import { parseAllowedPrimitive } from "@/lib/utils"
+const [value, setValue] = useState("apple")
 
-export function Controlled() {
-  const [value, setValue] = useState("apple")
-
-  return (
-    <SelectWrapper
-      value={value}
-      onValueChange={setValue}
-      options={["apple", "banana", "orange"]}
-    />
-  )
-}
-
-export function Controlled2() {
-  const [value, setValue] = useState<allowedPrimitiveT>("apple")
-
-  return (
-    <SelectWrapper
-      value={`${value}`}
-      onValueChange={(v) => setValue(parseAllowedPrimitive(v))}
-      options={["apple", 10, false]}
-    />
-  )
-}
+<SelectWrapper
+  options={["apple", "banana", "orange"]}
+  value={value}
+  onValueChange={setValue}
+/>
 ```
 
-### Custom Styling
+With `defaultValue` (uncontrolled):
+
 ```tsx
-export function Styled() {
-  return (
-    <SelectWrapper
-      options={["Small", "Medium", "Large"]}
-      placeholder="Select size"
-      triggerCls="w-[200px] bg-slate-50"
-      contentCls="min-w-[200px]"
-      itemCls="cursor-pointer hover:bg-slate-100"
-      groupCls="py-2"
-    />
-  )
-}
+<SelectWrapper options={options} defaultValue="banana" />
+```
+
+### Custom value rendering
+
+Use `renderValue` to customise what appears in the trigger after selection. Receives the raw value string and the matched option object:
+
+```tsx
+<SelectWrapper
+  options={[
+    { label: <><SunIcon /> Light</>, value: "light" },
+    { label: <><MoonIcon /> Dark</>, value: "dark" },
+  ]}
+  placeholder="Theme"
+  renderValue={(value, option) => (
+    <span className="flex items-center gap-1.5">
+      {value === "light" ? <SunIcon className="size-4" /> : <MoonIcon className="size-4" />}
+      {value}
+    </span>
+  )}
+/>
+```
+
+> `SelectWrapper` automatically mirrors item labels (including ReactNode) into the trigger via `SelectValue`. `renderValue` is only needed when you want a different representation in the trigger than in the list.
+
+### Custom styling
+
+```tsx
+<SelectWrapper
+  options={options}
+  placeholder="Styled"
+  triggerCls="w-64 bg-muted"
+  contentCls="min-w-64"
+  groupLabelCls="text-primary font-semibold"
+  groupCls="py-1"
+  itemCls="rounded-none"
+/>
+```
+
+### Using primitives
+
+```tsx
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+} from "@/components/ui/select"
+
+<Select>
+  <SelectTrigger size="sm">
+    <SelectValue placeholder="Pick one" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Fruits</SelectLabel>
+      <SelectItem value="apple">Apple</SelectItem>
+      <SelectItem value="banana">Banana</SelectItem>
+    </SelectGroup>
+    <SelectSeparator />
+    <SelectItem value="other" indicatorAt="left">Other</SelectItem>
+  </SelectContent>
+</Select>
 ```
 
 ## Reference
 
-<AutoTypeTable 
-name="SelectWrapper" 
+<AutoTypeTable
+name="SelectWrapper"
 type={`export interface SelectWrapper {
   /**
-   * Optional ID for the select trigger element
+   * Optional id forwarded to the trigger element — wire to a <label htmlFor>.
    */
   id?: string;
 
   /**
-   * Array of options - can be primitives, objects, or groups
-   * 
-   * Supports:
-   * - Primitives: \`string | number | boolean\`
-   * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
-   * - Groups: \`{ group: string, options: Array, className?: string }\`
-   * - Separators: Use \`"---"\` as a value
-   * 
+   * Array of options. Supports primitives, option objects, groups, and separators.
+   *
+   * - Primitives: string | number | boolean — label and value are the same
+   * - Option object: { label: ReactNode, value: string | number | boolean, className?: string, disabled?: boolean }
+   * - Group: { group: string, options: Array<...>, className?: string }
+   * - Separator: use the string "---"
+   *
    * \`\`\`tsx
-   * const options = [
-   *   "Simple string",
-      *   42,
-   *   true,
+   * options={[
+   *   "Apple",
+   *   { label: <><SunIcon /> Light</>, value: "light" },
+   *   { label: "Disabled", value: "x", disabled: true },
    *   "---",
-   *   { label: "Custom", value: "custom" },
-   *   { label: <><Icon />Banana</>, value: "banana" },
-   *   { 
-   *      group: "Fruits", 
-   *      options: ["Apple", "Banana"] 
-   *   },
-   * ]
+   *   { group: "Veggies", options: ["Carrot", "Broccoli"] },
+   * ]}
    * \`\`\`
    */
-  options: (string | number | boolean | { label: React.ReactNode; value: string | number | boolean; className?: string } | { group: string; options: Array<any>; className?: string })[];
+  options: optionsT;
 
   /**
-   * Placeholder text displayed when no value is selected
+   * Placeholder shown in the trigger when no value is selected.
    */
   placeholder?: string;
 
   /**
-   * Position of the checkmark indicator in select items
-   * 
+   * Position of the checkmark indicator inside each item.
    * @default "right"
    */
   indicatorAt?: "left" | "right";
 
   /**
-   * Additional CSS classes for the select trigger button
-   * 
+   * Trigger height variant.
+   * @default "default"
+   */
+  size?: "sm" | "default";
+
+  /**
+   * Render a fixed backdrop behind the dropdown popup.
+   * @default false
+   */
+  backdrop?: boolean;
+
+  /**
+   * Custom render function for the selected value shown in the trigger.
+   * Receives the raw value string and the matched option (if found).
+   *
+   * Use this when the trigger display should differ from the list item.
+   * If omitted, the item label (ReactNode) is mirrored automatically.
+   *
    * \`\`\`tsx
-   * triggerCls="w-64 bg-white"
+   * renderValue={(value, option) => <span>{value.toUpperCase()}</span>}
    * \`\`\`
+   */
+  renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode;
+
+  /**
+   * CSS classes applied to the trigger button.
    */
   triggerCls?: string;
 
   /**
-   * Additional CSS classes for the dropdown content container
+   * CSS classes applied to the popup content.
    */
   contentCls?: string;
 
   /**
-   * Additional CSS classes applied to option groups
+   * CSS classes applied to each group wrapper.
    */
   groupCls?: string;
 
   /**
-   * Additional CSS classes applied to individual select items
-   * 
-   * Note: Individual options can override this with their own \`className\`
+   * CSS classes applied to each group label.
    */
-  itemCls?: string;
-  
-  /**
-  * Additional CSS classes applied to option group's label
-  */
-  groupLabelCls?: string
+  groupLabelCls?: string;
 
   /**
-   * ...otherProps: All properties from Base UI Select Root can be passed directly.
+   * CSS classes applied to each option item.
+   * Individual options can override with their own className.
    */
-  otherProps: SelectPrimitive.Root
-}`} 
+  itemCls?: string;
+
+  /**
+   * ...rootProps: All Base UI Select.Root props (value, onValueChange, defaultValue,
+   * disabled, open, onOpenChange, name, required, etc.) are forwarded to the root.
+   */
+  otherProps?: never;
+}`}
 />
 
 ## Related Components
 
-- [Shadcn Select](https://ui.shadcn.com/docs/components/select)
 - [Base UI Select](https://base-ui.com/react/components/select)
+- [Shadcn Select](https://ui.shadcn.com/docs/components/select)

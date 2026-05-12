@@ -2,29 +2,20 @@
 
 import * as React from 'react'
 
+import { cn } from '@/lib/utils'
 import { useAsyncOptions } from '@/hooks/use-options'
 import { ExRow, ExItem } from '@/components/examples/common'
+import {
+  fruits,
+  grouped,
+  priorityMeta,
+  priorityOptions,
+  teamMeta,
+  teamOptions,
+  withDisabled,
+  withSeparator,
+} from '@/components/examples/data/options'
 import { ComboboxWrapper } from '@/components/ui/combobox'
-
-const fruits: optionsT = [
-  'Apple', 'Banana', 'Cherry', 'Grape', 'Mango',
-  'Orange', 'Peach', 'Plum', 'Strawberry', 'Watermelon',
-]
-
-const grouped: optionsT = [
-  { group: 'Citrus', options: ['Orange', 'Lemon', 'Lime', 'Grapefruit'] },
-  { group: 'Tropical', options: ['Mango', 'Papaya', 'Pineapple'] },
-  { group: 'Berries', options: ['Strawberry', 'Blueberry', 'Raspberry'] },
-]
-
-const withSeparator: optionsT = ['Design', 'Engineering', 'Marketing', '---', 'Finance', 'Legal']
-
-const withDisabled: optionsT = [
-  { label: 'Admin', value: 'admin' },
-  { label: 'Editor', value: 'editor' },
-  { label: 'Viewer (disabled)', value: 'viewer', disabled: true },
-  { label: 'Guest', value: 'guest' },
-]
 
 function hasMatch(items: optionsT, query: string): boolean {
   const lower = query.toLowerCase()
@@ -36,7 +27,6 @@ function hasMatch(items: optionsT, query: string): boolean {
   })
 }
 
-// ─── basic ──────────────────────────────────────────────
 function FlatExample() {
   return <ComboboxWrapper items={fruits} placeholder="Select fruit" triggerCls="w-52" />
 }
@@ -49,7 +39,6 @@ function SeparatorExample() {
   return <ComboboxWrapper items={withSeparator} placeholder="Select team" triggerCls="w-52" />
 }
 
-// ─── controls ───────────────────────────────────────────
 function WithTriggerExample() {
   return <ComboboxWrapper items={fruits} placeholder="Select fruit" triggerCls="w-52" />
 }
@@ -62,7 +51,6 @@ function SearchOnlyExample() {
   return <ComboboxWrapper items={fruits} placeholder="Search…" triggerCls="w-52" showTrigger={false} />
 }
 
-// ─── indicator ──────────────────────────────────────────
 function IndicatorRightExample() {
   return <ComboboxWrapper items={fruits} placeholder="Select fruit" triggerCls="w-52" />
 }
@@ -71,7 +59,6 @@ function IndicatorLeftExample() {
   return <ComboboxWrapper items={fruits} placeholder="Select fruit" triggerCls="w-52" indicatorAt="left" />
 }
 
-// ─── state ──────────────────────────────────────────────
 function DefaultValueExample() {
   return <ComboboxWrapper items={fruits} defaultValue="Mango" triggerCls="w-52" />
 }
@@ -95,7 +82,6 @@ function CustomEmptyExample() {
   )
 }
 
-// ─── multiple ───────────────────────────────────────────
 function MultipleExample() {
   return (
     <ComboboxWrapper
@@ -119,7 +105,6 @@ function MultipleClearExample() {
   )
 }
 
-// ─── controlled ─────────────────────────────────────────
 function ControlledExample() {
   const [value, setValue] = React.useState<string | null>(null)
   return (
@@ -139,7 +124,6 @@ function ControlledExample() {
   )
 }
 
-// ─── async ──────────────────────────────────────────────
 function AsyncExample() {
   const { data: list, isLoading } = useAsyncOptions({ queryKey: 'combobox-async', delayBy: 1500 })
   return (
@@ -152,7 +136,6 @@ function AsyncExample() {
   )
 }
 
-// ─── create ─────────────────────────────────────────────
 function ClickCreateExample() {
   const [inputValue, setInputValue] = React.useState('')
   const [value, setValue] = React.useState<string | null>(null)
@@ -214,7 +197,56 @@ function EnterCreateExample() {
   )
 }
 
-// ─── main export ────────────────────────────────────────
+function PriorityChipsExample() {
+  return (
+    <ComboboxWrapper
+      multiple
+      items={priorityOptions}
+      placeholder="Select priorities…"
+      triggerCls="w-72"
+      showClear
+      renderValue={(value) => {
+        const p = priorityMeta[value]
+        if (!p) return <span className="capitalize">{value}</span>
+        return (
+          <span className={cn('flex items-center gap-1 font-medium', p.cls)}>
+            {p.icon}
+            <span className="capitalize">{value}</span>
+          </span>
+        )
+      }}
+    />
+  )
+}
+
+function TeamChipsExample() {
+  return (
+    <ComboboxWrapper
+      multiple
+      items={teamOptions}
+      placeholder="Add team members…"
+      triggerCls="w-72"
+      showClear
+      renderValue={(value) => {
+        const m = teamMeta[value]
+        return (
+          <span className="flex items-center gap-1">
+            <span
+              className={cn(
+                'flex size-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white',
+                m?.bg ?? 'bg-slate-400',
+              )}
+            >
+              {m?.initials ?? value.slice(0, 2).toUpperCase()}
+            </span>
+            {m?.name ?? value}
+          </span>
+        )
+      }}
+    />
+  )
+}
+
 export function ComboboxExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -293,6 +325,15 @@ export function ComboboxExample() {
         </ExItem>
         <ExItem label="canCreate — Enter appends chip (multiple)">
           <EnterCreateExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Render Value">
+        <ExItem label="Priority chips — icon + coloured label per priority">
+          <PriorityChipsExample />
+        </ExItem>
+        <ExItem label="Team chips — avatar initials + first name">
+          <TeamChipsExample />
         </ExItem>
       </ExRow>
     </div>
