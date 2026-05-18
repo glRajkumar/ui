@@ -34,6 +34,28 @@
       ]
     },
     {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "title": "Autocomplete",
+      "description": "Autocomplete with type-to-filter suggestions, grouped options, async search, inline mode, and clear/trigger controls.",
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils-no-drop.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        },
+        {
+          "path": "components/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "breadcrumb",
       "type": "registry:ui",
       "title": "Breadcrumb",
@@ -150,21 +172,6 @@
         },
         {
           "path": "components/ui/context-menu-wrapper.tsx",
-          "type": "registry:ui"
-        }
-      ]
-    },
-    {
-      "name": "empty",
-      "type": "registry:ui",
-      "title": "Empty",
-      "description": "Empty componet with wrapper",
-      "registryDependencies": [
-        "empty"
-      ],
-      "files": [
-        {
-          "path": "components/ui/empty.tsx",
           "type": "registry:ui"
         }
       ]
@@ -325,12 +332,38 @@
       ]
     },
     {
-      "name": "field-wrapper",
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "Empty componet with wrapper",
+      "registryDependencies": [
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "components/ui/empty.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
       "type": "registry:ui",
       "title": "Field",
-      "description": "Field componet with wrapper",
+      "description": "Field layout primitives — Field, FieldGroup, FieldSet, FieldLegend, FieldLabel, FieldDescription, FieldError, FieldNativeError backed by Base UI Field and Fieldset.",
+      "files": [
+        {
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field-wrapper",
+      "type": "registry:ui",
+      "title": "Field Wrapper",
+      "description": "Opinionated field wrappers combining Field layout, label, and error display for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, and Slider.",
       "registryDependencies": [
-        "field",
         "select",
         "popover",
         "radio-group",
@@ -339,7 +372,8 @@
         "button",
         "input",
         "checkbox",
-        "switch"
+        "switch",
+        "slider"
       ],
       "files": [
         {
@@ -353,7 +387,11 @@
           "target": "lib/utils.ts"
         },
         {
-          "path": "components/ui/combobox.tsx",
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/form.tsx",
           "type": "registry:ui"
         },
         {
@@ -361,7 +399,19 @@
           "type": "registry:ui"
         },
         {
-          "path": "components/ui/field.tsx",
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/number-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/slider.tsx",
           "type": "registry:ui"
         },
         {
@@ -373,13 +423,12 @@
     {
       "name": "field-wrapper-rhf",
       "type": "registry:ui",
-      "title": "Field with RHF",
-      "description": "Field componet with wrapper with RHF",
+      "title": "Field Wrapper — React Hook Form",
+      "description": "Field wrappers with React Hook Form Controller integration for all field types.",
       "dependencies": [
         "react-hook-form"
       ],
       "registryDependencies": [
-        "field",
         "select",
         "popover",
         "radio-group",
@@ -388,7 +437,8 @@
         "button",
         "input",
         "checkbox",
-        "switch"
+        "switch",
+        "slider"
       ],
       "files": [
         {
@@ -402,7 +452,11 @@
           "target": "lib/utils.ts"
         },
         {
-          "path": "components/ui/combobox.tsx",
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/form.tsx",
           "type": "registry:ui"
         },
         {
@@ -410,7 +464,19 @@
           "type": "registry:ui"
         },
         {
-          "path": "components/ui/field.tsx",
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/number-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/slider.tsx",
           "type": "registry:ui"
         },
         {
@@ -426,13 +492,12 @@
     {
       "name": "field-wrapper-tf",
       "type": "registry:ui",
-      "title": "Field with TF",
-      "description": "Field componet with wrapper with TF",
+      "title": "Field Wrapper — TanStack Form",
+      "description": "Field wrappers with TanStack Form createFormHook integration for all field types.",
       "dependencies": [
         "@tanstack/react-form"
       ],
       "registryDependencies": [
-        "field",
         "select",
         "popover",
         "radio-group",
@@ -441,7 +506,8 @@
         "button",
         "input",
         "checkbox",
-        "switch"
+        "switch",
+        "slider"
       ],
       "files": [
         {
@@ -455,7 +521,11 @@
           "target": "lib/utils.ts"
         },
         {
-          "path": "components/ui/combobox.tsx",
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/form.tsx",
           "type": "registry:ui"
         },
         {
@@ -463,7 +533,19 @@
           "type": "registry:ui"
         },
         {
-          "path": "components/ui/field.tsx",
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/number-field.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/slider.tsx",
           "type": "registry:ui"
         },
         {
@@ -472,6 +554,30 @@
         },
         {
           "path": "components/ui/field-wrapper-tf.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "form",
+      "type": "registry:ui",
+      "title": "Form",
+      "description": "Base UI Form wrapper with server error propagation, JS object submission via onFormSubmit, and imperative validation via actionsRef.",
+      "files": [
+        {
+          "path": "components/ui/form.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:ui",
+      "title": "Input OTP",
+      "description": "OTP input backed by Base UI OTPFieldPreview with grouped slots, separator, and numeric/alpha validation modes.",
+      "files": [
+        {
+          "path": "components/ui/input-otp.tsx",
           "type": "registry:ui"
         }
       ]
@@ -544,6 +650,18 @@
       ]
     },
     {
+      "name": "number-field",
+      "type": "registry:ui",
+      "title": "Number Field",
+      "description": "Numeric input with increment/decrement buttons, min/max constraints, step, Intl number formatting, and wheel/keyboard scrubbing.",
+      "files": [
+        {
+          "path": "components/ui/number-field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
@@ -579,6 +697,18 @@
       "files": [
         {
           "path": "components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "Scroll Area",
+      "description": "Scroll area with vertical, horizontal, and dual-axis scrollbars, gradient fade via viewportCls, keepMounted, and overflow threshold control.",
+      "files": [
+        {
+          "path": "components/ui/scroll-area.tsx",
           "type": "registry:ui"
         }
       ]
