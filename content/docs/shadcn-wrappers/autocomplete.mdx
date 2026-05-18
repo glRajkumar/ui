@@ -1,0 +1,265 @@
+---
+title: Autocomplete
+description: A wrapper for Base UI Autocomplete with type-to-filter suggestions, grouped options, async search, inline completion mode, and clear/trigger controls.
+---
+
+import { AutocompleteEx } from "@/components/examples";
+
+<AutocompleteEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/autocomplete
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="types/general.d.ts"'>
+  ./types/general.d.ts
+</include>
+
+<include cwd meta='title="lib/utils.ts"'>
+  ./lib/utils-no-drop.ts
+</include>
+
+<include cwd meta='title="ui/autocomplete.tsx"'>
+  ./components/ui/autocomplete.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+
+```tsx
+import { AutocompleteWrapper } from "@/components/ui/autocomplete"
+
+<AutocompleteWrapper
+  items={["Apple", "Banana", "Orange"]}
+  placeholder="Search fruits..."
+  className="w-64"
+/>
+```
+
+### With clear and trigger buttons
+
+```tsx
+<AutocompleteWrapper
+  items={items}
+  placeholder="Search..."
+  showClear
+  showTrigger
+  className="w-64"
+/>
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = useState("")
+
+<AutocompleteWrapper
+  items={items}
+  value={value}
+  onValueChange={setValue}
+  placeholder="Search..."
+  showClear
+/>
+```
+
+### Option objects
+
+```tsx
+const frameworks = [
+  { value: "next", label: "Next.js" },
+  { value: "remix", label: "Remix" },
+  { value: "astro", label: "Astro" },
+]
+
+<AutocompleteWrapper items={frameworks} placeholder="Select framework..." />
+```
+
+### Grouped options
+
+```tsx
+const grouped = [
+  {
+    group: "Frontend",
+    options: [
+      { value: "react", label: "React" },
+      { value: "vue", label: "Vue" },
+    ],
+  },
+  {
+    group: "Backend",
+    options: [
+      { value: "node", label: "Node.js" },
+      { value: "go", label: "Go" },
+    ],
+  },
+]
+
+<AutocompleteWrapper items={grouped} placeholder="Search tech..." showClear />
+```
+
+### Limit results
+
+```tsx
+<AutocompleteWrapper items={items} placeholder="Search..." limit={5} />
+```
+
+### Inline mode
+
+Completes input text inline as the user types:
+
+```tsx
+<AutocompleteWrapper items={items} mode="inline" placeholder="Start typing..." />
+```
+
+### Async search
+
+Disable client-side filter with `filter={null}` and supply results externally:
+
+```tsx
+const [inputValue, setInputValue] = useState("")
+const [results, setResults] = useState<string[]>([])
+const [loading, setLoading] = useState(false)
+
+async function handleValueChange(val: string) {
+  setInputValue(val)
+  setLoading(true)
+  const data = await fetchSuggestions(val)
+  setResults(data)
+  setLoading(false)
+}
+
+<AutocompleteWrapper
+  items={results}
+  value={inputValue}
+  onValueChange={handleValueChange}
+  filter={null}
+  isLoading={loading}
+  placeholder="Search..."
+  showClear
+/>
+```
+
+### Using primitives
+
+```tsx
+import {
+  AutocompleteRoot,
+  AutocompleteInput,
+  AutocompleteContent,
+  AutocompleteList,
+  AutocompleteItem,
+  AutocompleteEmpty,
+} from "@/components/ui/autocomplete"
+
+<AutocompleteRoot items={["Apple", "Banana", "Orange"]}>
+  <AutocompleteInput placeholder="Search..." showClear />
+  <AutocompleteContent>
+    <AutocompleteEmpty>No results</AutocompleteEmpty>
+    <AutocompleteList>
+      {(item: unknown) => (
+        <AutocompleteItem key={item as string} value={item as string}>
+          {item as string}
+        </AutocompleteItem>
+      )}
+    </AutocompleteList>
+  </AutocompleteContent>
+</AutocompleteRoot>
+```
+
+## Reference
+
+#### AutocompleteWrapperProps
+
+<AutoTypeTable
+name="AutocompleteWrapperProps"
+type={`export type AutocompleteWrapperProps = {
+  /**
+   * Suggestion items. Accepts strings, optionT objects ({ value, label }),
+   * or groupT objects ({ group, options[] }).
+   */
+  items?: optionsT;
+
+  /**
+   * CSS class applied to the input group (the visible input container).
+   */
+  className?: string;
+
+  /**
+   * Input placeholder text.
+   */
+  placeholder?: string;
+
+  /**
+   * Show loading state in the empty slot.
+   * @default false
+   */
+  isLoading?: boolean;
+
+  /**
+   * Text shown when no items match. Ignored when isLoading is true.
+   * @default "No results found"
+   */
+  emptyMessage?: string;
+
+  /**
+   * Show a clear (×) button inside the input.
+   * @default false
+   */
+  showClear?: boolean;
+
+  /**
+   * Show a chevron trigger button to toggle the popup.
+   * @default false
+   */
+  showTrigger?: boolean;
+
+  /**
+   * CSS class applied to the popup content.
+   */
+  contentCls?: string;
+
+  /**
+   * CSS class applied to each suggestion item.
+   */
+  itemCls?: string;
+
+  /**
+   * CSS class applied to each group container.
+   */
+  groupCls?: string;
+
+  /**
+   * Props forwarded to the native input element.
+   */
+  inputProps?: Omit<React.ComponentProps<'input'>, 'value' | 'onChange'>;
+
+  // All Autocomplete.Root props are forwarded:
+  // value, onValueChange, open, onOpenChange, mode, inline,
+  // autoHighlight, limit, filter, itemToStringValue,
+  // disabled, readOnly, etc.
+}`}
+/>
+
+## Related Components
+
+- [Base UI Autocomplete](https://base-ui.com/react/components/autocomplete)
+- [Combobox](/docs/shadcn-wrappers/combobox)

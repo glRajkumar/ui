@@ -1,0 +1,193 @@
+---
+title: Form
+description: A wrapper for Base UI Form with server-side error propagation, JS object submission via onFormSubmit, global validationMode, and imperative validate() via actionsRef.
+---
+
+import { FormEx } from "@/components/examples";
+
+<FormEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/form
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/form.tsx"'>
+  ./components/ui/form.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+
+`Form` renders a native `<form>`. Use it with `Field` and `FieldNativeError` for native validation, or with field-wrapper components for controlled validation.
+
+```tsx
+import { Form } from "@/components/ui/form"
+import { InputWrapper } from "@/components/ui/field-wrapper"
+
+<Form onSubmit={handleSubmit} className="flex flex-col gap-4">
+  <InputWrapper name="email" label="Email" type="email" />
+  <button type="submit">Submit</button>
+</Form>
+```
+
+### Server-side errors
+
+Pass a `Record<fieldName, message>` to `errors`. Errors propagate via context to `Field.Root` components with matching `name` and are displayed by `FieldNativeError`:
+
+```tsx
+import { Form } from "@/components/ui/form"
+import { Field, FieldLabel, FieldNativeError } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+
+const [errors, setErrors] = useState<Record<string, string>>({})
+
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault()
+  const res = await submitForm()
+  if (res.errors) setErrors(res.errors)
+}
+
+<Form errors={errors} onSubmit={handleSubmit}>
+  <Field name="email">
+    <FieldLabel>Email</FieldLabel>
+    <Input name="email" type="email" onChange={() => setErrors({})} />
+    <FieldNativeError />     {/* shows errors.email from Form context */}
+  </Field>
+</Form>
+```
+
+### JS object submission (onFormSubmit)
+
+`onFormSubmit` receives parsed form values as a plain object. `preventDefault` is called automatically:
+
+```tsx
+<Form
+  onFormSubmit={(values) => {
+    console.log(values) // { email: "...", name: "..." }
+  }}
+>
+  <Field name="email">
+    <FieldLabel>Email</FieldLabel>
+    <Input name="email" required />
+    <FieldNativeError match="valueMissing">Required</FieldNativeError>
+  </Field>
+</Form>
+```
+
+### Native validation
+
+Use `Field` `validate` prop with `FieldNativeError` for custom validation. Set `validationMode` globally on `Form`:
+
+```tsx
+<Form validationMode="onChange" onFormSubmit={handleSubmit}>
+  <Field
+    name="username"
+    validate={(val) => {
+      if (!val) return "Required"
+      if ((val as string).length < 3) return "Min 3 characters"
+      return null
+    }}
+  >
+    <FieldLabel>Username</FieldLabel>
+    <Input name="username" />
+    <FieldNativeError />
+  </Field>
+</Form>
+```
+
+### HTML constraint validation
+
+```tsx
+<Form onFormSubmit={handleSubmit}>
+  <Field name="email">
+    <FieldLabel>Email</FieldLabel>
+    <Input name="email" type="email" required />
+    <FieldNativeError match="valueMissing">Email is required</FieldNativeError>
+    <FieldNativeError match="typeMismatch">Enter a valid email</FieldNativeError>
+  </Field>
+  <Field name="password">
+    <FieldLabel>Password</FieldLabel>
+    <Input name="password" type="password" required minLength={8} />
+    <FieldNativeError match="valueMissing">Required</FieldNativeError>
+    <FieldNativeError match="tooShort">At least 8 characters</FieldNativeError>
+  </Field>
+</Form>
+```
+
+### Imperative validation
+
+Trigger `validate()` programmatically without submitting:
+
+```tsx
+const actionsRef = useRef<{ validate: () => void } | null>(null)
+
+<Form actionsRef={actionsRef} onFormSubmit={handleSubmit}>
+  {/* fields */}
+  <button type="button" onClick={() => actionsRef.current?.validate()}>
+    Check
+  </button>
+  <button type="submit">Submit</button>
+</Form>
+```
+
+## Reference
+
+#### Form
+
+<AutoTypeTable
+name="Form"
+type={`export type FormProps = {
+  /**
+   * Server-side errors keyed by field name. Propagated via context to
+   * Field.Root with matching name. Displayed by FieldNativeError.
+   * Errors clear automatically when field values change.
+   */
+  errors?: Record<string, string | string[]>;
+
+  /**
+   * Submission handler receiving parsed form values as a plain JS object.
+   * preventDefault is called automatically — do not call it yourself.
+   */
+  onFormSubmit?: (values: Record<string, unknown>, event: Event) => void;
+
+  /**
+   * Global validation timing for all fields (overridden per-field by Field.Root validationMode).
+   * @default "onSubmit"
+   */
+  validationMode?: 'onSubmit' | 'onBlur' | 'onChange';
+
+  /**
+   * Ref to imperative actions. Call actionsRef.current.validate() to trigger
+   * validation for all fields without submitting.
+   */
+  actionsRef?: React.RefObject<{ validate: (fieldName?: string) => void } | null>;
+
+  className?: string;
+  children?: React.ReactNode;
+}`}
+/>
+
+## Related Components
+
+- [Base UI Form](https://base-ui.com/react/components/form)
+- [Field](/docs/shadcn-wrappers/field)
+- [Field Wrapper](/docs/shadcn-wrappers/field-wrapper)

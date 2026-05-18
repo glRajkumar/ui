@@ -1,0 +1,192 @@
+---
+title: Scroll Area
+description: A wrapper for Base UI ScrollArea with vertical, horizontal, and dual-axis scrollbars, gradient fade via viewportCls, keepMounted, and overflow threshold control.
+---
+
+import { ScrollAreaEx } from "@/components/examples";
+
+<ScrollAreaEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/scroll-area
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/scroll-area.tsx"'>
+  ./components/ui/scroll-area.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic (vertical)
+
+```tsx
+import { ScrollAreaWrapper } from "@/components/ui/scroll-area"
+
+<ScrollAreaWrapper className="h-64 w-full rounded-md border">
+  <div className="p-4">{/* tall content */}</div>
+</ScrollAreaWrapper>
+```
+
+### Horizontal
+
+```tsx
+<ScrollAreaWrapper orientation="horizontal" className="w-full rounded-md border">
+  <div className="flex gap-4 p-4">
+    {items.map(item => <Card key={item.id} className="w-48 shrink-0" />)}
+  </div>
+</ScrollAreaWrapper>
+```
+
+### Both axes
+
+Renders vertical + horizontal scrollbars and a Corner at their intersection:
+
+```tsx
+<ScrollAreaWrapper orientation="both" className="h-64 w-96 rounded-md border">
+  <div style={{ width: "800px" }}>
+    {/* wide + tall content */}
+  </div>
+</ScrollAreaWrapper>
+```
+
+### Keep scrollbar mounted
+
+Prevents layout shift by keeping the scrollbar in the DOM even when content fits:
+
+```tsx
+<ScrollAreaWrapper keepMounted className="h-64 rounded-md border">
+  {/* content */}
+</ScrollAreaWrapper>
+```
+
+### Gradient fade
+
+Use the `viewportCls` prop to apply a `mask-image` gradient via the viewport element:
+
+```tsx
+<ScrollAreaWrapper
+  className="h-64 rounded-md border"
+  viewportCls="[mask-image:linear-gradient(to_bottom,transparent_0,black_2rem,black_calc(100%-2rem),transparent_100%)]"
+>
+  {/* content */}
+</ScrollAreaWrapper>
+```
+
+### Overflow edge threshold
+
+Fire overflow data attributes before reaching the exact scroll edge:
+
+```tsx
+<ScrollAreaWrapper overflowEdgeThreshold={20} className="h-64 rounded-md border">
+  {/* content */}
+</ScrollAreaWrapper>
+```
+
+### Using primitives
+
+```tsx
+import {
+  ScrollAreaRoot,
+  ScrollAreaViewport,
+  ScrollAreaCorner,
+  ScrollBar,
+} from "@/components/ui/scroll-area"
+
+<ScrollAreaRoot className="relative h-64">
+  <ScrollAreaViewport className="size-full rounded-[inherit]">
+    {/* content */}
+  </ScrollAreaViewport>
+  <ScrollBar orientation="vertical" />
+  <ScrollBar orientation="horizontal" />
+  <ScrollAreaCorner />
+</ScrollAreaRoot>
+```
+
+## Reference
+
+#### ScrollAreaWrapper
+
+<AutoTypeTable
+name="ScrollAreaWrapper"
+type={`export type ScrollAreaWrapperProps = {
+  /**
+   * Which scrollbar(s) to render.
+   * 'both' also renders a Corner at the scrollbar intersection.
+   * @default "vertical"
+   */
+  orientation?: 'vertical' | 'horizontal' | 'both';
+
+  /**
+   * CSS class applied to the Viewport element.
+   * Use to add mask-image for gradient fade effects.
+   */
+  viewportCls?: string;
+
+  /**
+   * CSS class applied to the Scrollbar element(s).
+   */
+  scrollbarCls?: string;
+
+  /**
+   * Keep scrollbar in DOM even when content does not overflow.
+   * Prevents layout shift on content changes.
+   * @default false
+   */
+  keepMounted?: boolean;
+
+  /**
+   * Pixels from the scroll edge before overflow data attributes fire.
+   * @default 0
+   */
+  overflowEdgeThreshold?: number;
+
+  /**
+   * CSS class applied to the Root container.
+   */
+  className?: string;
+
+  children?: React.ReactNode;
+}`}
+/>
+
+#### ScrollBar
+
+<AutoTypeTable
+name="ScrollBar"
+type={`export type ScrollBarProps = {
+  /**
+   * @default "vertical"
+   */
+  orientation?: 'vertical' | 'horizontal';
+
+  /**
+   * Keep scrollbar in DOM when not scrollable.
+   * @default false
+   */
+  keepMounted?: boolean;
+
+  className?: string;
+}`}
+/>
+
+## Related Components
+
+- [Base UI ScrollArea](https://base-ui.com/react/components/scroll-area)

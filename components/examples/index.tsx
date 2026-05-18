@@ -27,6 +27,12 @@ import { MenuExample } from './menu'
 import { CardExample } from './card'
 import { TabsExample } from './tabs'
 import { ItemExample } from './item'
+import { AutocompleteExample } from './autocomplete'
+import { NumberFieldExample } from './number-field'
+import { ScrollAreaExample } from './scroll-area'
+import { FormExample } from './form'
+import { FieldPrimitivesExample } from './field-primitives'
+import { FieldSetExample } from './fieldset'
 import Wrapper from '../wrapper'
 
 export function SelectEx() {
@@ -308,6 +314,54 @@ export function RadioGroupEx() {
   return (
     <Wrapper path="/components/examples/radio-group.tsx">
       <RadioGroupExample />
+    </Wrapper>
+  )
+}
+
+export function AutocompleteEx() {
+  return (
+    <Wrapper path="/components/examples/autocomplete.tsx">
+      <AutocompleteExample />
+    </Wrapper>
+  )
+}
+
+export function NumberFieldEx() {
+  return (
+    <Wrapper path="/components/examples/number-field.tsx">
+      <NumberFieldExample />
+    </Wrapper>
+  )
+}
+
+export function ScrollAreaEx() {
+  return (
+    <Wrapper path="/components/examples/scroll-area.tsx">
+      <ScrollAreaExample />
+    </Wrapper>
+  )
+}
+
+export function FormEx() {
+  return (
+    <Wrapper path="/components/examples/form.tsx">
+      <FormExample />
+    </Wrapper>
+  )
+}
+
+export function FieldPrimitivesEx() {
+  return (
+    <Wrapper path="/components/examples/field-primitives.tsx">
+      <FieldPrimitivesExample />
+    </Wrapper>
+  )
+}
+
+export function FieldSetEx() {
+  return (
+    <Wrapper path="/components/examples/fieldset.tsx">
+      <FieldSetExample />
     </Wrapper>
   )
 }

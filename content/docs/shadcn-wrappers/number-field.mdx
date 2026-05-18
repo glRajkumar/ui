@@ -1,0 +1,278 @@
+---
+title: Number Field
+description: A wrapper for Base UI NumberField with increment/decrement buttons, min/max constraints, step control, Intl number formatting, and wheel/keyboard scrubbing.
+---
+
+import { NumberFieldEx } from "@/components/examples";
+
+<NumberFieldEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/number-field
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/number-field.tsx"'>
+  ./components/ui/number-field.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Standalone (NumberFieldWrapper)
+
+```tsx
+import { NumberFieldWrapper } from "@/components/ui/number-field"
+
+const [value, setValue] = useState<number | null>(0)
+
+<NumberFieldWrapper
+  value={value}
+  onValueChange={setValue}
+  min={0}
+  max={100}
+  step={1}
+/>
+```
+
+### With field label and error (NumberWrapper)
+
+`NumberWrapper` wraps `NumberFieldWrapper` inside a `Field` with label and error display. Import from `field-wrapper`:
+
+```tsx
+import { NumberWrapper } from "@/components/ui/field-wrapper"
+
+<NumberWrapper
+  name="quantity"
+  label="Quantity"
+  value={value}
+  onValueChange={setValue}
+  min={0}
+  step={1}
+/>
+```
+
+### Constraints
+
+```tsx
+<NumberWrapper name="rating" label="Rating" min={1} max={10} step={1} />
+```
+
+### Step increments
+
+```tsx
+// Step 0.5
+<NumberWrapper name="amount" label="Amount" step={0.5} />
+
+// Shift+Arrow uses largeStep (10), Meta+Arrow uses smallStep (0.1)
+<NumberWrapper name="year" label="Year" step={1} largeStep={10} smallStep={1} />
+```
+
+### Intl number formatting
+
+```tsx
+// Currency
+<NumberWrapper
+  name="price"
+  label="Price"
+  format={{ style: "currency", currency: "USD" }}
+  min={0}
+/>
+
+// Percent
+<NumberWrapper
+  name="discount"
+  label="Discount"
+  format={{ style: "percent" }}
+  min={0}
+  max={1}
+  step={0.01}
+/>
+```
+
+### Wheel scrubbing
+
+```tsx
+<NumberWrapper
+  name="volume"
+  label="Volume"
+  min={0}
+  max={100}
+  allowWheelScrub
+/>
+```
+
+### With validation error
+
+```tsx
+<NumberWrapper
+  name="qty"
+  label="Quantity"
+  value={null}
+  invalid
+  error={{ message: "Quantity is required" }}
+/>
+```
+
+### React Hook Form
+
+```tsx
+import { NumberWrapper } from "@/components/ui/field-wrapper-rhf"
+
+<NumberWrapper name="quantity" label="Quantity" control={form.control} min={0} step={1} />
+```
+
+### TanStack Form
+
+```tsx
+<form.AppField
+  name="quantity"
+  validators={{
+    onChange: ({ value }) =>
+      value !== null && value < 0 ? "Must be 0 or more" : undefined,
+  }}
+>
+  {field => <field.NumberField label="Quantity" min={0} step={1} />}
+</form.AppField>
+```
+
+### Using primitives
+
+```tsx
+import {
+  NumberFieldRoot,
+  NumberFieldGroup,
+  NumberFieldInput,
+  NumberFieldDecrement,
+  NumberFieldIncrement,
+  NumberFieldScrubArea,
+  NumberFieldScrubAreaCursor,
+} from "@/components/ui/number-field"
+
+<NumberFieldRoot min={0} max={100} step={1}>
+  <NumberFieldScrubArea>
+    <NumberFieldScrubAreaCursor />
+  </NumberFieldScrubArea>
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberFieldRoot>
+```
+
+## Reference
+
+#### NumberFieldWrapper
+
+<AutoTypeTable
+name="NumberFieldWrapper"
+type={`export type NumberFieldWrapperProps = {
+  /**
+   * Controlled numeric value. Use null for empty state.
+   */
+  value?: number | null;
+
+  /**
+   * Fires on every value change with the new number (or null when cleared).
+   */
+  onValueChange?: (value: number | null) => void;
+
+  /**
+   * Fires when value is committed (blur, Enter, button release).
+   */
+  onValueCommitted?: (value: number | null) => void;
+
+  /**
+   * Minimum allowed value.
+   */
+  min?: number;
+
+  /**
+   * Maximum allowed value.
+   */
+  max?: number;
+
+  /**
+   * Increment/decrement amount. Arrow keys use this step.
+   * @default 1
+   */
+  step?: number;
+
+  /**
+   * Step used with Shift+Arrow keys.
+   * @default 10
+   */
+  largeStep?: number;
+
+  /**
+   * Step used with Meta/Cmd+Arrow keys.
+   * @default 0.1
+   */
+  smallStep?: number;
+
+  /**
+   * Intl.NumberFormatOptions for formatting the displayed value.
+   * e.g. { style: 'currency', currency: 'USD' } or { style: 'percent' }
+   */
+  format?: Intl.NumberFormatOptions;
+
+  /**
+   * Allow mouse wheel to scrub the value when the input is focused.
+   * @default false
+   */
+  allowWheelScrub?: boolean;
+
+  /**
+   * Round to nearest step on increment/decrement.
+   * @default false
+   */
+  snapOnStep?: boolean;
+
+  /**
+   * Allow values outside min/max via direct text entry.
+   * @default false
+   */
+  allowOutOfRange?: boolean;
+
+  /**
+   * HTML name attribute for form submission.
+   */
+  name?: string;
+
+  /**
+   * CSS class applied to the Group container.
+   */
+  className?: string;
+
+  /**
+   * Input placeholder text.
+   */
+  placeholder?: string;
+
+  disabled?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+}`}
+/>
+
+## Related Components
+
+- [Base UI NumberField](https://base-ui.com/react/components/number-field)
+- [Field Wrapper](/docs/shadcn-wrappers/field-wrapper)

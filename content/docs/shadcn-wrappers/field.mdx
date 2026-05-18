@@ -1,0 +1,314 @@
+---
+title: Field
+description: Layout primitives for form fields — Field, FieldGroup, FieldSet, FieldLegend, FieldLabel, FieldDescription, FieldError, FieldNativeError, FieldContent, FieldSeparator. All backed by Base UI Field and Fieldset.
+---
+
+import { FieldPrimitivesEx, FieldSetEx } from "@/components/examples";
+
+## Field layout
+
+<FieldPrimitivesEx />
+
+## Fieldset grouping
+
+<FieldSetEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/field
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/field.tsx"'>
+  ./components/ui/field.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic field
+
+```tsx
+import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+
+<Field>
+  <FieldLabel htmlFor="email">Email</FieldLabel>
+  <Input id="email" type="email" placeholder="user@example.com" />
+  <FieldDescription>We will never share your email.</FieldDescription>
+</Field>
+```
+
+### Invalid state
+
+```tsx
+<Field invalid>
+  <FieldLabel htmlFor="password">Password</FieldLabel>
+  <Input id="password" type="password" aria-invalid />
+  <FieldError errors={[{ message: "At least 8 characters required" }]} />
+</Field>
+```
+
+### Horizontal orientation
+
+Place label and control on the same row:
+
+```tsx
+<Field orientation="horizontal">
+  <FieldLabel htmlFor="notify" className="font-normal">Email notifications</FieldLabel>
+  <Switch id="notify" />
+</Field>
+```
+
+### Horizontal with FieldContent
+
+Use `FieldContent` + `FieldTitle` + `FieldDescription` to stack title and description beside a control:
+
+```tsx
+<Field orientation="horizontal">
+  <FieldContent>
+    <FieldTitle>Marketing emails</FieldTitle>
+    <FieldDescription>Receive news and product updates.</FieldDescription>
+  </FieldContent>
+  <Switch />
+</Field>
+```
+
+### Responsive orientation
+
+Vertical on mobile, horizontal at `md` breakpoint (requires `FieldGroup` with `@container`):
+
+```tsx
+<FieldGroup>
+  <Field orientation="responsive">
+    <FieldLabel htmlFor="name">Full name</FieldLabel>
+    <Input id="name" />
+  </Field>
+</FieldGroup>
+```
+
+### FieldGroup
+
+Groups multiple fields with consistent spacing:
+
+```tsx
+<FieldGroup>
+  <Field>
+    <FieldLabel htmlFor="first">First name</FieldLabel>
+    <Input id="first" />
+  </Field>
+  <Field>
+    <FieldLabel htmlFor="last">Last name</FieldLabel>
+    <Input id="last" />
+  </Field>
+</FieldGroup>
+```
+
+### FieldSeparator
+
+Divider between fields with optional label text:
+
+```tsx
+<FieldGroup>
+  <Field>
+    <FieldLabel htmlFor="email">Email</FieldLabel>
+    <Input id="email" type="email" />
+  </Field>
+  <FieldSeparator>or</FieldSeparator>
+  <Field>
+    <FieldLabel htmlFor="phone">Phone</FieldLabel>
+    <Input id="phone" type="tel" />
+  </Field>
+</FieldGroup>
+```
+
+### FieldSet and FieldLegend
+
+Group related fields under a semantic fieldset:
+
+```tsx
+<FieldSet>
+  <FieldLegend>Shipping address</FieldLegend>
+  <FieldGroup>
+    <Field>
+      <FieldLabel htmlFor="addr-name">Full name</FieldLabel>
+      <Input id="addr-name" />
+    </Field>
+    <Field>
+      <FieldLabel htmlFor="addr-street">Street</FieldLabel>
+      <Input id="addr-street" />
+    </Field>
+  </FieldGroup>
+</FieldSet>
+```
+
+### Disabled FieldSet
+
+```tsx
+<FieldSet disabled>
+  <FieldLegend>Account details</FieldLegend>
+  <Field>
+    <FieldLabel htmlFor="name">Name</FieldLabel>
+    <Input id="name" defaultValue="John Smith" />
+  </Field>
+</FieldSet>
+```
+
+### Native validation errors (FieldNativeError)
+
+`FieldNativeError` wraps Base UI `Field.Error` and connects to `Field.Root` validation context. Use it alongside `validate` prop or HTML constraints — unlike `FieldError`, it reads error state from the field context automatically:
+
+```tsx
+import { Field, FieldLabel, FieldNativeError } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+
+<Field
+  name="username"
+  validate={(val) => (val as string).length < 3 ? "Min 3 characters" : null}
+  validationMode="onChange"
+>
+  <FieldLabel>Username</FieldLabel>
+  <Input name="username" />
+  <FieldNativeError />
+</Field>
+```
+
+With `match` for HTML constraint types:
+
+```tsx
+<Field name="email">
+  <FieldLabel>Email</FieldLabel>
+  <Input name="email" type="email" required />
+  <FieldNativeError match="valueMissing">Required</FieldNativeError>
+  <FieldNativeError match="typeMismatch">Invalid email</FieldNativeError>
+</Field>
+```
+
+### FieldError (library errors)
+
+`FieldError` accepts external error objects from RHF, TanStack Form, or server responses. It does not connect to Base UI field context:
+
+```tsx
+<Field invalid={!!error}>
+  <FieldLabel htmlFor="name">Name</FieldLabel>
+  <Input id="name" aria-invalid={!!error} />
+  <FieldError errors={[error]} />
+</Field>
+```
+
+Multiple errors render as a list; duplicates are deduplicated automatically.
+
+## Reference
+
+#### Field
+
+<AutoTypeTable
+name="Field"
+type={`export type FieldProps = {
+  /**
+   * Layout orientation of label + control.
+   * @default "vertical"
+   */
+  orientation?: 'vertical' | 'horizontal' | 'responsive';
+
+  /**
+   * Mark field as invalid — sets data-invalid on Root, triggers destructive styling.
+   */
+  invalid?: boolean;
+
+  /**
+   * Field name — used by Base UI Form context to match server errors.
+   */
+  name?: string;
+
+  /**
+   * Custom validation function. Return error string or null.
+   */
+  validate?: (value: unknown) => string | null | Promise<string | null>;
+
+  /**
+   * When validation runs.
+   * @default "onSubmit"
+   */
+  validationMode?: 'onSubmit' | 'onBlur' | 'onChange';
+
+  className?: string;
+  children?: React.ReactNode;
+}`}
+/>
+
+#### FieldError
+
+<AutoTypeTable
+name="FieldError"
+type={`export type FieldErrorProps = {
+  /**
+   * Array of error objects from form libraries or server responses.
+   * Duplicates (same message) are deduplicated automatically.
+   * Multiple errors render as a bulleted list; single error renders inline.
+   */
+  errors?: Array<{ message?: string } | undefined>;
+
+  /**
+   * Render custom error content instead of errors array.
+   */
+  children?: React.ReactNode;
+
+  className?: string;
+}`}
+/>
+
+#### FieldNativeError
+
+<AutoTypeTable
+name="FieldNativeError"
+type={`export type FieldNativeErrorProps = {
+  /**
+   * ValidityState key to match. Shows only for that specific constraint violation.
+   * Omit to show for any invalid state.
+   * e.g. 'valueMissing' | 'typeMismatch' | 'tooShort' | 'patternMismatch'
+   */
+  match?: keyof ValidityState | boolean;
+
+  className?: string;
+  children?: React.ReactNode;
+}`}
+/>
+
+#### FieldLegend
+
+<AutoTypeTable
+name="FieldLegend"
+type={`export type FieldLegendProps = {
+  /**
+   * Controls heading size.
+   * legend = base size, label = sm size (matches FieldLabel).
+   * @default "legend"
+   */
+  variant?: 'legend' | 'label';
+  className?: string;
+  children?: React.ReactNode;
+}`}
+/>
+
+## Related Components
+
+- [Base UI Field](https://base-ui.com/react/components/field)
+- [Base UI Fieldset](https://base-ui.com/react/components/fieldset)
+- [Field Wrapper](/docs/shadcn-wrappers/field-wrapper)
+- [Form](/docs/shadcn-wrappers/form)
