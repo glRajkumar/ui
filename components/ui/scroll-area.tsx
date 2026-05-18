@@ -1,8 +1,14 @@
-"use client"
+'use client'
 
-import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area"
+import { ScrollArea as ScrollAreaPrimitive } from '@base-ui/react/scroll-area'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
+
+const ScrollAreaRoot = ScrollAreaPrimitive.Root
+const ScrollAreaViewport = ScrollAreaPrimitive.Viewport
+const ScrollAreaContent = ScrollAreaPrimitive.Content
+const ScrollAreaThumb = ScrollAreaPrimitive.Thumb
+const ScrollAreaCorner = ScrollAreaPrimitive.Corner
 
 function ScrollArea({
   className,
@@ -12,12 +18,12 @@ function ScrollArea({
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
-      className={cn("relative", className)}
+      className={cn('relative', className)}
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
         data-slot="scroll-area-viewport"
-        className="size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1"
+        className="size-full rounded-[inherit] outline-none transition-[color,box-shadow] focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1"
       >
         {children}
       </ScrollAreaPrimitive.Viewport>
@@ -29,17 +35,18 @@ function ScrollArea({
 
 function ScrollBar({
   className,
-  orientation = "vertical",
+  orientation = 'vertical',
   ...props
 }: ScrollAreaPrimitive.Scrollbar.Props) {
   return (
     <ScrollAreaPrimitive.Scrollbar
       data-slot="scroll-area-scrollbar"
-      data-orientation={orientation}
       orientation={orientation}
       className={cn(
-        "flex touch-none p-px transition-colors select-none data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent",
-        className
+        'flex touch-none p-px transition-colors select-none',
+        'data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent',
+        'data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent',
+        className,
       )}
       {...props}
     >
@@ -51,4 +58,55 @@ function ScrollBar({
   )
 }
 
-export { ScrollArea, ScrollBar }
+type ScrollAreaWrapperProps = ScrollAreaPrimitive.Root.Props & {
+  orientation?: 'vertical' | 'horizontal' | 'both'
+  viewportCls?: string
+  scrollbarCls?: string
+  keepMounted?: boolean
+}
+
+function ScrollAreaWrapper({
+  orientation = 'vertical',
+  viewportCls,
+  scrollbarCls,
+  keepMounted,
+  className,
+  children,
+  ...props
+}: ScrollAreaWrapperProps) {
+  return (
+    <ScrollAreaPrimitive.Root
+      data-slot="scroll-area"
+      className={cn('relative', className)}
+      {...props}
+    >
+      <ScrollAreaPrimitive.Viewport
+        data-slot="scroll-area-viewport"
+        className={cn(
+          'size-full rounded-[inherit] outline-none transition-[color,box-shadow] focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1',
+          viewportCls,
+        )}
+      >
+        {children}
+      </ScrollAreaPrimitive.Viewport>
+      {(orientation === 'vertical' || orientation === 'both') && (
+        <ScrollBar orientation="vertical" keepMounted={keepMounted} className={scrollbarCls} />
+      )}
+      {(orientation === 'horizontal' || orientation === 'both') && (
+        <ScrollBar orientation="horizontal" keepMounted={keepMounted} className={scrollbarCls} />
+      )}
+      {orientation === 'both' && <ScrollAreaPrimitive.Corner />}
+    </ScrollAreaPrimitive.Root>
+  )
+}
+
+export {
+  ScrollAreaRoot,
+  ScrollAreaViewport,
+  ScrollAreaContent,
+  ScrollAreaThumb,
+  ScrollAreaCorner,
+  ScrollArea,
+  ScrollBar,
+  ScrollAreaWrapper,
+}
