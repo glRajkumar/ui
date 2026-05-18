@@ -40,7 +40,7 @@ export function InputWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <Input
         id={name}
@@ -50,7 +50,7 @@ export function InputWrapper({
         aria-invalid={isInvalid}
         {...props}
       />
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
@@ -68,7 +68,7 @@ export function TextareaWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <Textarea
         id={name}
@@ -77,7 +77,7 @@ export function TextareaWrapper({
         aria-invalid={isInvalid}
         {...rest}
       />
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
@@ -100,7 +100,7 @@ export function RadioWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={`${name}-0`}>{label}</FieldLabel>}
       <RadioGroup
         value={value ? String(value) : undefined}
@@ -117,7 +117,7 @@ export function RadioWrapper({
           </div>
         ))}
       </RadioGroup>
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
@@ -148,7 +148,7 @@ export function CheckboxWrapper({
   }
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={`${name}-0`}>{label}</FieldLabel>}
       <div className="flex items-center flex-wrap gap-4" aria-invalid={isInvalid}>
         {options.map((option, i) => {
@@ -170,7 +170,7 @@ export function CheckboxWrapper({
           )
         })}
       </div>
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
@@ -191,7 +191,7 @@ export function SwitchWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       <div className="flex items-center justify-between gap-4">
         {label && (
           <FieldLabel htmlFor={name} className="font-normal">
@@ -206,7 +206,7 @@ export function SwitchWrapper({
           aria-invalid={isInvalid}
         />
       </div>
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
@@ -231,7 +231,7 @@ export function SelectWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <SelectPrimitiveWrapper
         {...props}
@@ -242,7 +242,7 @@ export function SelectWrapper({
         onValueChange={val => onValueChange?.(parseAllowedPrimitive(val as any))}
         aria-invalid={isInvalid}
       />
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
@@ -266,7 +266,7 @@ export function DatePickerWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
@@ -298,7 +298,7 @@ export function DatePickerWrapper({
           />
         </PopoverContent>
       </Popover>
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
@@ -318,7 +318,7 @@ export function ComboboxWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} data-invalid={isInvalid}>
+    <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <Combobox
         {...rest}
@@ -328,7 +328,7 @@ export function ComboboxWrapper({
         onValueChange={onValueChange}
         aria-invalid={isInvalid}
       />
-      {isInvalid && <FieldError errors={[error]} />}
+      <FieldError errors={[error]} />
     </Field>
   )
 }
