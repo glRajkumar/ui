@@ -14,6 +14,7 @@ import {
   SelectWrapper as Select,
   DatePickerWrapper as DatePicker,
   ComboboxWrapper as Combobox,
+  NumberWrapper as Number,
 } from './field-wrapper'
 
 type BaseProps<T extends FieldValues> = {
@@ -200,6 +201,27 @@ export function ComboboxWrapper<T extends FieldValues>({
           {...props}
           name={name}
           value={field.value}
+          onValueChange={field.onChange}
+          error={fieldState.error}
+          invalid={fieldState.invalid}
+        />
+      )}
+    />
+  )
+}
+
+type NumberProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof Number>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+export function NumberWrapper<T extends FieldValues>({ name, control, ...props }: NumberProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <Number
+          {...props}
+          name={name}
+          value={field.value ?? null}
           onValueChange={field.onChange}
           error={fieldState.error}
           invalid={fieldState.invalid}

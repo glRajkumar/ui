@@ -14,6 +14,7 @@ type FormData = {
   newsletter: boolean
   role: string
   birthDate: Date
+  quantity: number | null
 }
 
 const defaultValues: FormData = {
@@ -27,6 +28,7 @@ const defaultValues: FormData = {
   newsletter: false,
   role: '',
   birthDate: new Date(),
+  quantity: null,
 }
 
 export function Field_TF_Example() {
@@ -108,6 +110,16 @@ export function Field_TF_Example() {
 
       <form.AppField name="birthDate">
         {field => <field.DatePickerField label="Birth Date" />}
+      </form.AppField>
+
+      <form.AppField
+        name="quantity"
+        validators={{
+          onChange: ({ value }) =>
+            value !== null && value < 0 ? 'Quantity must be 0 or more' : undefined,
+        }}
+      >
+        {field => <field.NumberField label="Quantity" min={0} step={1} />}
       </form.AppField>
 
       <form.Subscribe

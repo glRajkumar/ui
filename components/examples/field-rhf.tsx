@@ -11,6 +11,7 @@ import {
   ComboboxWrapper,
   CheckboxWrapper,
   DatePickerWrapper,
+  NumberWrapper,
 } from '@/components/ui/field-wrapper-rhf'
 import { Button } from '@/components/ui/button'
 
@@ -26,6 +27,7 @@ export function Field_RHF_Example() {
       hobbies: [],
       dob: undefined,
       isCompleted: false,
+      quantity: null as number | null,
     },
   })
 
@@ -96,6 +98,8 @@ export function Field_RHF_Example() {
         />
 
         <DatePickerWrapper name="dob" label="Date of Birth" control={form.control} />
+
+        <NumberWrapper name="quantity" label="Quantity" control={form.control} min={0} step={1} />
 
         <Button type="submit">Submit</Button>
       </form>

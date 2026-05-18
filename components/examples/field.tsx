@@ -11,6 +11,7 @@ import {
   ComboboxWrapper,
   CheckboxWrapper,
   DatePickerWrapper,
+  NumberWrapper,
 } from '@/components/ui/field-wrapper'
 import { Button } from '@/components/ui/button'
 
@@ -25,6 +26,7 @@ export function FieldExample() {
     hobbies: [],
     dob: undefined,
     isCompleted: false,
+    quantity: null as number | null,
   })
 
   const genderOptions = ['male', 'female', 'other']
@@ -134,6 +136,15 @@ export function FieldExample() {
         value={value.hobbies}
         items={hobbiesOptions}
         onValueChange={val => onChange('hobbies', val as any)}
+      />
+
+      <NumberWrapper
+        name="quantity"
+        label="Quantity"
+        value={value.quantity}
+        onValueChange={val => setValue(prev => ({ ...prev, quantity: val }))}
+        min={0}
+        step={1}
       />
 
       <Button type="submit">Submit</Button>

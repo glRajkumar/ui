@@ -8,6 +8,7 @@ import { cn, getKey, getLabel, getValue, parseAllowedPrimitive } from '@/lib/uti
 
 import { type ComboboxWrapperProps, ComboboxWrapper as Combobox } from './combobox'
 import { type selectProps, SelectWrapper as SelectPrimitiveWrapper } from './select'
+import { NumberFieldWrapper } from './number-field'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 import { Field, FieldLabel, FieldError } from './field'
 import { RadioGroup, RadioGroupItem } from './radio-group'
@@ -332,6 +333,27 @@ export function ComboboxWrapper({
         onValueChange={onValueChange}
         aria-invalid={isInvalid}
       />
+      <FieldError errors={[error]} />
+    </Field>
+  )
+}
+
+type NumberProps = BaseProps &
+  Omit<React.ComponentProps<typeof NumberFieldWrapper>, 'name' | 'id' | 'className'>
+export function NumberWrapper({
+  name,
+  label,
+  error,
+  invalid,
+  className,
+  ...props
+}: NumberProps) {
+  const isInvalid = invalid || !!error
+
+  return (
+    <Field className={className} invalid={isInvalid}>
+      {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+      <NumberFieldWrapper id={name} name={name} aria-invalid={isInvalid} {...props} />
       <FieldError errors={[error]} />
     </Field>
   )

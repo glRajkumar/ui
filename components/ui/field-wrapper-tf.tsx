@@ -14,6 +14,7 @@ import {
   SelectWrapper as Select,
   DatePickerWrapper as DatePicker,
   ComboboxWrapper as Combobox,
+  NumberWrapper as NumberWrapperBase,
 } from './field-wrapper'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
@@ -190,6 +191,27 @@ function ComboboxField(props: comboboxFieldProps) {
   )
 }
 
+type numberFieldProps = Omit<
+  React.ComponentProps<typeof NumberWrapperBase>,
+  'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
+> & { label?: React.ReactNode }
+function NumberField(props: numberFieldProps) {
+  const field = useFieldContext<number | null>()
+
+  return (
+    <NumberWrapperBase
+      {...props}
+      name={field.name}
+      value={field.state.value}
+      onValueChange={val => field.handleChange(val)}
+      error={
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
+  )
+}
+
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
   formContext,
@@ -202,6 +224,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     SelectField,
     DatePickerField,
     ComboboxField,
+    NumberField,
   },
   formComponents: {},
 })
