@@ -154,14 +154,14 @@ type datePickerFieldProps = Omit<
   label?: React.ReactNode
 }
 function DatePickerField(props: datePickerFieldProps) {
-  const field = useFieldContext<Date>()
+  const field = useFieldContext<Date | undefined>()
 
   return (
     <DatePicker
       {...props}
       name={field.name}
       value={field.state.value}
-      onSelect={date => field.handleChange(date as Date)}
+      onSelect={date => field.handleChange(date)}
       error={
         field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }
@@ -174,14 +174,14 @@ type comboboxFieldProps = ComboboxWrapperProps & {
   label?: React.ReactNode
 }
 function ComboboxField(props: comboboxFieldProps) {
-  const field = useFieldContext<allowedPrimitiveT>()
+  const field = useFieldContext<allowedPrimitiveT | allowedPrimitiveT[]>()
 
   return (
     <Combobox
       {...props}
       name={field.name}
       value={field.state.value}
-      onValueChange={value => field.handleChange(value as any)}
+      onValueChange={value => field.handleChange(value as allowedPrimitiveT | allowedPrimitiveT[])}
       error={
         field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }

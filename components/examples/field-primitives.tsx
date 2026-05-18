@@ -4,159 +4,225 @@ import { useState } from 'react'
 
 import { ExRow, ExItem } from '@/components/examples/common'
 import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-  FieldTitle,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
-import { Textarea } from '@/components/ui/textarea'
+  InputWrapper,
+  TextareaWrapper,
+  RadioWrapper,
+  CheckboxWrapper,
+  SwitchWrapper,
+  SelectWrapper,
+  DatePickerWrapper,
+  ComboboxWrapper,
+} from '@/components/ui/field-wrapper'
 
-function BasicExample() {
+const countryOptions = [
+  { value: 'in', label: 'India' },
+  { value: 'us', label: 'USA' },
+  { value: 'uk', label: 'United Kingdom' },
+  { value: 'ca', label: 'Canada' },
+]
+
+const fruitOptions = ['Apple', 'Banana', 'Mango', { value: 'berry', label: 'Blueberry' }]
+
+const roleOptions = ['Admin', 'Editor', 'Viewer']
+
+const tagOptions = ['Design', 'Engineering', 'Marketing', 'Sales']
+
+function InputExamples() {
   return (
-    <Field className="w-64">
-      <FieldLabel htmlFor="fp-username">Username</FieldLabel>
-      <Input id="fp-username" placeholder="Enter username" />
-    </Field>
+    <div className="flex flex-wrap gap-6">
+      <InputWrapper name="text" label="Username" placeholder="Enter username" />
+      <InputWrapper name="email" label="Email" type="email" placeholder="user@example.com" />
+      <InputWrapper name="password" label="Password" type="password" placeholder="••••••••" />
+    </div>
   )
 }
 
-function WithDescriptionExample() {
+function TextareaExample() {
+  return <TextareaWrapper name="bio" label="Bio" placeholder="Tell us about yourself" className="w-64" />
+}
+
+function RadioExample() {
+  const [value, setValue] = useState<allowedPrimitiveT>('Editor')
+
   return (
-    <Field className="w-64">
-      <FieldLabel htmlFor="fp-email">Email</FieldLabel>
-      <Input id="fp-email" type="email" placeholder="user@example.com" />
-      <FieldDescription>Used for account recovery only.</FieldDescription>
-    </Field>
+    <RadioWrapper
+      name="role"
+      label="Role"
+      options={roleOptions}
+      value={value}
+      onValueChange={setValue}
+      className="w-64"
+    />
   )
 }
 
-function WithErrorExample() {
+function CheckboxExample() {
+  const [values, setValues] = useState<allowedPrimitiveT[]>(['Design'])
+
   return (
-    <Field className="w-64" invalid>
-      <FieldLabel htmlFor="fp-pw">Password</FieldLabel>
-      <Input id="fp-pw" type="password" aria-invalid />
-      <FieldError errors={[{ message: 'At least 8 characters required' }]} />
-    </Field>
+    <CheckboxWrapper
+      name="tags"
+      label="Tags"
+      options={tagOptions}
+      value={values}
+      onValueChange={setValues}
+      className="w-72"
+    />
   )
 }
 
-function HorizontalExample() {
+function SwitchExample() {
   const [checked, setChecked] = useState(false)
 
   return (
-    <Field orientation="horizontal" className="w-64">
-      <FieldLabel htmlFor="fp-notify" className="font-normal">
-        Email notifications
-      </FieldLabel>
-      <Switch id="fp-notify" checked={checked} onCheckedChange={setChecked} />
-    </Field>
+    <SwitchWrapper
+      name="notifications"
+      label="Email notifications"
+      checked={checked}
+      onCheckedChange={setChecked}
+      className="w-64"
+    />
   )
 }
 
-function HorizontalWithContentExample() {
-  const [checked, setChecked] = useState(true)
+function SelectExample() {
+  const [value, setValue] = useState<allowedPrimitiveT>('')
 
   return (
-    <Field orientation="horizontal" className="w-72">
-      <FieldContent>
-        <FieldTitle>Marketing emails</FieldTitle>
-        <FieldDescription>Receive news and product updates.</FieldDescription>
-      </FieldContent>
-      <Switch checked={checked} onCheckedChange={setChecked} />
-    </Field>
+    <SelectWrapper
+      name="country"
+      label="Country"
+      options={countryOptions}
+      value={value}
+      onValueChange={setValue}
+      className="w-64"
+    />
   )
 }
 
-function ResponsiveExample() {
+function ComboboxSingleExample() {
+  const [value, setValue] = useState<allowedPrimitiveT>('')
+
   return (
-    <FieldGroup className="w-72">
-      <Field orientation="responsive">
-        <FieldLabel htmlFor="fp-resp-name">Full name</FieldLabel>
-        <Input id="fp-resp-name" placeholder="John Smith" />
-      </Field>
-      <Field orientation="responsive">
-        <FieldLabel htmlFor="fp-resp-email">Email</FieldLabel>
-        <Input id="fp-resp-email" type="email" placeholder="user@example.com" />
-      </Field>
-    </FieldGroup>
+    <ComboboxWrapper
+      name="fruit"
+      label="Favorite fruit"
+      items={fruitOptions}
+      value={value}
+      onValueChange={val => setValue(val as allowedPrimitiveT)}
+      className="w-64"
+    />
   )
 }
 
-function FieldGroupExample() {
+function ComboboxMultiExample() {
+  const [values, setValues] = useState<allowedPrimitiveT[]>([])
+
   return (
-    <FieldGroup className="w-64">
-      <Field>
-        <FieldLabel htmlFor="fp-g-first">First name</FieldLabel>
-        <Input id="fp-g-first" placeholder="First" />
-      </Field>
-      <Field>
-        <FieldLabel htmlFor="fp-g-last">Last name</FieldLabel>
-        <Input id="fp-g-last" placeholder="Last" />
-      </Field>
-      <Field>
-        <FieldLabel htmlFor="fp-g-bio">Bio</FieldLabel>
-        <Textarea id="fp-g-bio" placeholder="Tell us about yourself" rows={3} />
-        <FieldDescription>Max 160 characters.</FieldDescription>
-      </Field>
-    </FieldGroup>
+    <ComboboxWrapper
+      multiple
+      name="hobbies"
+      label="Hobbies"
+      items={['Music', 'Sports', 'Travel', 'Gaming', 'Reading']}
+      value={values}
+      onValueChange={val => setValues(val as allowedPrimitiveT[])}
+      className="w-64"
+    />
   )
 }
 
-function WithSeparatorExample() {
+function DatePickerExample() {
+  const [date, setDate] = useState<Date | undefined>()
+
   return (
-    <FieldGroup className="w-64">
-      <Field>
-        <FieldLabel htmlFor="fp-s-email">Email</FieldLabel>
-        <Input id="fp-s-email" type="email" placeholder="user@example.com" />
-      </Field>
-      <FieldSeparator>or</FieldSeparator>
-      <Field>
-        <FieldLabel htmlFor="fp-s-phone">Phone</FieldLabel>
-        <Input id="fp-s-phone" type="tel" placeholder="+1 000 000 0000" />
-      </Field>
-    </FieldGroup>
+    <DatePickerWrapper
+      name="dob"
+      label="Date of birth"
+      value={date}
+      onSelect={setDate}
+      className="w-64"
+    />
+  )
+}
+
+function ErrorStateExamples() {
+  return (
+    <div className="flex flex-wrap gap-6">
+      <InputWrapper
+        name="err-email"
+        label="Email"
+        type="email"
+        value="notanemail"
+        invalid
+        error={{ message: 'Enter a valid email address' }}
+        className="w-64"
+        readOnly
+      />
+      <SelectWrapper
+        name="err-country"
+        label="Country"
+        options={countryOptions}
+        invalid
+        error={{ message: 'Please select a country' }}
+        className="w-64"
+      />
+      <RadioWrapper
+        name="err-role"
+        label="Role"
+        options={roleOptions}
+        invalid
+        error={{ message: 'Please select a role' }}
+        className="w-64"
+      />
+    </div>
   )
 }
 
 export function FieldPrimitivesExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
-      <ExRow label="Basic">
-        <ExItem label="Label + input — minimal composition">
-          <BasicExample />
+      <ExRow label="Text">
+        <ExItem label="Input — text, email, password variants">
+          <InputExamples />
         </ExItem>
-        <ExItem label="With description — supplementary hint below control">
-          <WithDescriptionExample />
-        </ExItem>
-        <ExItem label="With error — invalid state, destructive label + message">
-          <WithErrorExample />
+        <ExItem label="Textarea — multiline text input">
+          <TextareaExample />
         </ExItem>
       </ExRow>
 
-      <ExRow label="Orientation">
-        <ExItem label="Horizontal — label and control on the same row">
-          <HorizontalExample />
+      <ExRow label="Choice">
+        <ExItem label="Radio — single selection from options">
+          <RadioExample />
         </ExItem>
-        <ExItem label="Horizontal with FieldContent — title + description stacked beside control">
-          <HorizontalWithContentExample />
+        <ExItem label="Checkbox — multiple selection from options">
+          <CheckboxExample />
         </ExItem>
-        <ExItem label="Responsive — vertical on mobile, horizontal at md breakpoint">
-          <ResponsiveExample />
+        <ExItem label="Switch — boolean toggle">
+          <SwitchExample />
         </ExItem>
       </ExRow>
 
-      <ExRow label="Group">
-        <ExItem label="FieldGroup — consistent gap between stacked fields">
-          <FieldGroupExample />
+      <ExRow label="Select">
+        <ExItem label="Select — dropdown single selection">
+          <SelectExample />
         </ExItem>
-        <ExItem label="FieldSeparator — divider with optional label between fields">
-          <WithSeparatorExample />
+        <ExItem label="Combobox — searchable single selection">
+          <ComboboxSingleExample />
+        </ExItem>
+        <ExItem label="Combobox multiple — searchable multi-selection">
+          <ComboboxMultiExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Date">
+        <ExItem label="DatePicker — calendar date selection">
+          <DatePickerExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Error state">
+        <ExItem label="invalid + error prop — destructive label, border, message">
+          <ErrorStateExamples />
         </ExItem>
       </ExRow>
     </div>

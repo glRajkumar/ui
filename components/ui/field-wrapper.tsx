@@ -26,6 +26,10 @@ type BaseProps = {
   className?: string
 }
 
+function labelString(label: React.ReactNode): string | undefined {
+  return typeof label === 'string' ? label : undefined
+}
+
 type InputProps = BaseProps & React.InputHTMLAttributes<HTMLInputElement>
 export function InputWrapper({
   name,
@@ -46,7 +50,7 @@ export function InputWrapper({
         id={name}
         name={name}
         type={type}
-        placeholder={placeholder || `Enter ${label}`}
+        placeholder={placeholder || (labelString(label) && `Enter ${labelString(label)}`)}
         aria-invalid={isInvalid}
         {...props}
       />
@@ -73,7 +77,7 @@ export function TextareaWrapper({
       <Textarea
         id={name}
         name={name}
-        placeholder={placeholder || `Enter ${label}`}
+        placeholder={placeholder || (labelString(label) && `Enter ${labelString(label)}`)}
         aria-invalid={isInvalid}
         {...rest}
       />
@@ -238,7 +242,7 @@ export function SelectWrapper({
         id={name}
         options={options}
         value={value ? String(value) : undefined}
-        placeholder={placeholder ?? `Select ${label}`}
+        placeholder={placeholder ?? (labelString(label) && `Select ${labelString(label)}`)}
         onValueChange={val => onValueChange?.(parseAllowedPrimitive(val as any))}
         aria-invalid={isInvalid}
       />
@@ -324,7 +328,7 @@ export function ComboboxWrapper({
         {...rest}
         id={name}
         value={value}
-        placeholder={placeholder || `Select ${label}`}
+        placeholder={placeholder || (labelString(label) && `Select ${labelString(label)}`)}
         onValueChange={onValueChange}
         aria-invalid={isInvalid}
       />
