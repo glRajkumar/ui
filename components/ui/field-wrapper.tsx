@@ -7,8 +7,10 @@ import { format } from 'date-fns'
 import { cn, getKey, getLabel, getValue, parseAllowedPrimitive } from '@/lib/utils'
 
 import { type ComboboxWrapperProps, ComboboxWrapper as Combobox } from './combobox'
+import { type AutocompleteWrapperProps, AutocompleteWrapper as AutocompletePrimitive } from './autocomplete'
 import { type selectProps, SelectWrapper as SelectPrimitiveWrapper } from './select'
 import { NumberFieldWrapper } from './number-field'
+import { Slider } from './slider'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 import { Field, FieldLabel, FieldError } from './field'
 import { RadioGroup, RadioGroupItem } from './radio-group'
@@ -354,6 +356,48 @@ export function NumberWrapper({
     <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <NumberFieldWrapper id={name} name={name} aria-invalid={isInvalid} {...props} />
+      <FieldError errors={[error]} />
+    </Field>
+  )
+}
+
+type SliderProps = BaseProps &
+  Omit<React.ComponentProps<typeof Slider>, 'name'>
+export function SliderWrapper({
+  name,
+  label,
+  error,
+  invalid,
+  className,
+  ...props
+}: SliderProps) {
+  const isInvalid = invalid || !!error
+
+  return (
+    <Field className={className} invalid={isInvalid}>
+      {label && <FieldLabel>{label}</FieldLabel>}
+      <Slider name={name} aria-invalid={isInvalid} {...props} />
+      <FieldError errors={[error]} />
+    </Field>
+  )
+}
+
+type AutocompleteProps = BaseProps &
+  Omit<AutocompleteWrapperProps, 'className'>
+export function AutocompleteWrapper({
+  name,
+  label,
+  error,
+  invalid,
+  className,
+  ...props
+}: AutocompleteProps) {
+  const isInvalid = invalid || !!error
+
+  return (
+    <Field className={className} invalid={isInvalid}>
+      {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+      <AutocompletePrimitive aria-invalid={isInvalid} {...props} />
       <FieldError errors={[error]} />
     </Field>
   )

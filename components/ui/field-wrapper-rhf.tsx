@@ -15,6 +15,8 @@ import {
   DatePickerWrapper as DatePicker,
   ComboboxWrapper as Combobox,
   NumberWrapper as Number,
+  SliderWrapper as SliderBase,
+  AutocompleteWrapper as AutocompleteBase,
 } from './field-wrapper'
 
 type BaseProps<T extends FieldValues> = {
@@ -222,6 +224,48 @@ export function NumberWrapper<T extends FieldValues>({ name, control, ...props }
           {...props}
           name={name}
           value={field.value ?? null}
+          onValueChange={field.onChange}
+          error={fieldState.error}
+          invalid={fieldState.invalid}
+        />
+      )}
+    />
+  )
+}
+
+type SliderProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof SliderBase>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+export function SliderWrapper<T extends FieldValues>({ name, control, ...props }: SliderProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <SliderBase
+          {...props}
+          name={name}
+          value={field.value}
+          onValueChange={field.onChange}
+          error={fieldState.error}
+          invalid={fieldState.invalid}
+        />
+      )}
+    />
+  )
+}
+
+type AutocompleteProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof AutocompleteBase>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+export function AutocompleteWrapper<T extends FieldValues>({ name, control, ...props }: AutocompleteProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <AutocompleteBase
+          {...props}
+          name={name}
+          value={field.value ?? ''}
           onValueChange={field.onChange}
           error={fieldState.error}
           invalid={fieldState.invalid}

@@ -15,6 +15,8 @@ import {
   DatePickerWrapper as DatePicker,
   ComboboxWrapper as Combobox,
   NumberWrapper as NumberWrapperBase,
+  SliderWrapper as SliderBase,
+  AutocompleteWrapper as AutocompleteBase,
 } from './field-wrapper'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
@@ -212,6 +214,48 @@ function NumberField(props: numberFieldProps) {
   )
 }
 
+type sliderFieldProps = Omit<
+  React.ComponentProps<typeof SliderBase>,
+  'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
+> & { label?: React.ReactNode }
+function SliderField(props: sliderFieldProps) {
+  const field = useFieldContext<number | number[]>()
+
+  return (
+    <SliderBase
+      {...props}
+      name={field.name}
+      value={field.state.value}
+      onValueChange={val => field.handleChange(val as number | number[])}
+      error={
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
+  )
+}
+
+type autocompleteFieldProps = Omit<
+  React.ComponentProps<typeof AutocompleteBase>,
+  'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
+> & { label?: React.ReactNode }
+function AutocompleteField(props: autocompleteFieldProps) {
+  const field = useFieldContext<string>()
+
+  return (
+    <AutocompleteBase
+      {...props}
+      name={field.name}
+      value={field.state.value ?? ''}
+      onValueChange={val => field.handleChange(val)}
+      error={
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
+  )
+}
+
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
   formContext,
@@ -225,6 +269,8 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     DatePickerField,
     ComboboxField,
     NumberField,
+    SliderField,
+    AutocompleteField,
   },
   formComponents: {},
 })
