@@ -219,7 +219,7 @@ Multiple errors render as a list; duplicates are deduplicated automatically.
 
 <AutoTypeTable
 name="Field"
-type={`export type FieldProps = {
+type={`export type Field = {
   /**
    * Layout orientation of label + control.
    * @default "vertical"
@@ -256,7 +256,7 @@ type={`export type FieldProps = {
 
 <AutoTypeTable
 name="FieldError"
-type={`export type FieldErrorProps = {
+type={`export type FieldError = {
   /**
    * Array of error objects from form libraries or server responses.
    * Duplicates (same message) are deduplicated automatically.
@@ -277,7 +277,7 @@ type={`export type FieldErrorProps = {
 
 <AutoTypeTable
 name="FieldNativeError"
-type={`export type FieldNativeErrorProps = {
+type={`export type FieldNativeError = {
   /**
    * ValidityState key to match. Shows only for that specific constraint violation.
    * Omit to show for any invalid state.
@@ -294,7 +294,7 @@ type={`export type FieldNativeErrorProps = {
 
 <AutoTypeTable
 name="FieldLegend"
-type={`export type FieldLegendProps = {
+type={`export type FieldLegend = {
   /**
    * Controls heading size.
    * legend = base size, label = sm size (matches FieldLabel).

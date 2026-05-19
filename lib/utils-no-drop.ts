@@ -1,3 +1,4 @@
+import { isValidElement, type ReactNode } from 'react'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -39,4 +40,12 @@ export function getKey(item: allowedPrimitiveT | optionT, i: number): string {
   if (typeof val === 'boolean') return `key-${val}`
   if (val === '---') return `${i}`
   return `${val}`
+}
+
+export function extractText(node: ReactNode): string {
+  if (node == null || typeof node === 'boolean') return ''
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (isValidElement(node)) return extractText((node.props as { children?: ReactNode }).children)
+  if (Array.isArray(node)) return node.map(extractText).join('')
+  return ''
 }

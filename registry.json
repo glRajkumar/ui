@@ -61,8 +61,7 @@
       "title": "Breadcrumb",
       "description": "Breadcrumb componet with wrapper",
       "registryDependencies": [
-        "breadcrumb",
-        "dropdown-menu"
+        "breadcrumb"
       ],
       "files": [
         {
@@ -70,8 +69,16 @@
           "type": "registry:ui"
         },
         {
+          "path": "components/ui/menu-wrapper.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/breadcrumb.tsx",
           "type": "registry:ui"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         }
       ]
     },
@@ -185,7 +192,6 @@
         "@tanstack/react-table"
       ],
       "registryDependencies": [
-        "dropdown-menu",
         "select",
         "popover",
         "button",
@@ -199,9 +205,16 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/menu-wrapper.tsx",
+          "type": "registry:ui"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -294,39 +307,6 @@
       "files": [
         {
           "path": "components/ui/drawer.tsx",
-          "type": "registry:ui"
-        }
-      ]
-    },
-    {
-      "name": "dropdown",
-      "type": "registry:ui",
-      "title": "Dropdown",
-      "description": "Dropdown componet with wrapper",
-      "registryDependencies": [
-        "dropdown-menu"
-      ],
-      "files": [
-        {
-          "path": "types/general.d.ts",
-          "type": "registry:file",
-          "target": "types/general.d.ts"
-        },
-        {
-          "path": "types/menu.d.ts",
-          "type": "registry:file",
-          "target": "types/menu.d.ts"
-        },
-        {
-          "path": "components/ui/menu.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "lib/utils.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "components/ui/menu-wrapper.tsx",
           "type": "registry:ui"
         }
       ]
@@ -593,6 +573,37 @@
       "files": [
         {
           "path": "components/ui/item.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "menu",
+      "type": "registry:ui",
+      "title": "Menu",
+      "description": "Menu componet with wrapper",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "types/menu.d.ts",
+          "type": "registry:file",
+          "target": "types/menu.d.ts"
+        },
+        {
+          "path": "components/ui/menu.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/menu-wrapper.tsx",
           "type": "registry:ui"
         }
       ]
