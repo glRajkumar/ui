@@ -45,9 +45,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/autocomplete.tsx",
@@ -78,6 +77,10 @@
         },
         {
           "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/menu.ts",
           "type": "registry:lib"
         }
       ]
@@ -140,9 +143,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/combobox.tsx",
@@ -171,6 +173,10 @@
         },
         {
           "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/menu.ts",
           "type": "registry:lib"
         },
         {
@@ -206,6 +212,10 @@
         },
         {
           "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/menu.ts",
           "type": "registry:lib"
         },
         {
@@ -362,9 +372,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/field.tsx",
@@ -427,9 +436,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/field.tsx",
@@ -496,9 +504,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/field.tsx",
@@ -603,6 +610,10 @@
           "type": "registry:lib"
         },
         {
+          "path": "lib/menu.ts",
+          "type": "registry:lib"
+        },
+        {
           "path": "components/ui/menu-wrapper.tsx",
           "type": "registry:ui"
         }
@@ -637,6 +648,10 @@
         },
         {
           "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/menu.ts",
           "type": "registry:lib"
         }
       ]
@@ -687,9 +702,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/pagination.tsx",
@@ -739,9 +753,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/select.tsx",
@@ -806,9 +819,8 @@
           "target": "types/general.d.ts"
         },
         {
-          "path": "lib/utils-no-drop.ts",
-          "type": "registry:lib",
-          "target": "lib/utils.ts"
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
         },
         {
           "path": "components/ui/toggle-group.tsx",

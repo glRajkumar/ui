@@ -49,8 +49,3 @@ export function extractText(node: ReactNode): string {
   if (Array.isArray(node)) return node.map(extractText).join('')
   return ''
 }
-
-export const isSubMenu = optionTypeChecker<subMenuT>('submenu')
-export const isGroupMenu = optionTypeChecker<menuGroupT>('group')
-export const isInputSubMenu = optionTypeChecker<inputSubMenuT>('submenu')
-export const isInputGroupMenu = optionTypeChecker<menuInputGroupT>('group')

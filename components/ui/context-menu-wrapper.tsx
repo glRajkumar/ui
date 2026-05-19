@@ -7,12 +7,9 @@ import {
   getLabel,
   getValue,
   isSeparator,
-  isSubMenu,
-  isGroupMenu,
-  isInputSubMenu,
-  isInputGroupMenu,
   parseAllowedPrimitive,
 } from '@/lib/utils'
+import { isSubMenu, isGroupMenu, isInputSubMenu, isInputGroupMenu } from '@/lib/menu'
 
 import {
   ContextMenu,
