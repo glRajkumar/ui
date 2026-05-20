@@ -7,7 +7,7 @@ async function Install() {
   const folderPath = path.join(process.cwd(), 'content/docs/shadcn-wrappers')
   const files = await fs.promises.readdir(folderPath)
   const filtered = files
-    .filter(f => f !== 'index.mdx' && f !== 'meta.json')
+    .filter(f => f.endsWith('.mdx') && f !== 'index.mdx' && f !== 'meta.json')
     .map(f => f.replace('.mdx', ''))
 
   return (
