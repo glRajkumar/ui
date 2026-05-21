@@ -101,12 +101,52 @@ function SingleCheckboxExample() {
   )
 }
 
+const FRUITS = ['apple', 'banana', 'cherry'] as const
+type Fruit = (typeof FRUITS)[number]
+
+function IndeterminateExample() {
+  const [selected, setSelected] = useState<Fruit[]>(['apple'])
+
+  const allChecked = selected.length === FRUITS.length
+  const someChecked = selected.length > 0 && !allChecked
+
+  function toggleParent() {
+    setSelected(allChecked ? [] : [...FRUITS])
+  }
+
+  function toggleChild(fruit: Fruit) {
+    setSelected((prev) =>
+      prev.includes(fruit) ? prev.filter((f) => f !== fruit) : [...prev, fruit],
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="flex cursor-pointer select-none items-center gap-2">
+        <Checkbox checked={allChecked} indeterminate={someChecked} onCheckedChange={toggleParent} />
+        <span className="text-sm font-medium">All fruits</span>
+      </label>
+      <div className="ml-6 flex flex-col gap-2">
+        {FRUITS.map((fruit) => (
+          <label key={fruit} className="flex cursor-pointer select-none items-center gap-2">
+            <Checkbox checked={selected.includes(fruit)} onCheckedChange={() => toggleChild(fruit)} />
+            <span className="text-sm capitalize">{fruit}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function CheckboxGroupExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
       <ExRow label="CheckboxWrapper">
         <ExItem label="Single checkbox — label + description + disabled">
           <SingleCheckboxExample />
+        </ExItem>
+        <ExItem label="indeterminate — controlled tri-state">
+          <IndeterminateExample />
         </ExItem>
       </ExRow>
 
