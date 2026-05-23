@@ -212,7 +212,7 @@ function OptionItem({ option, className }: OptionItemProps) {
   const disabled = isOption(option) ? option.disabled : undefined
 
   return (
-    <AutocompleteItem value={option} className={cn(className, optCls)} disabled={disabled}>
+    <AutocompleteItem value={value} className={cn(className, optCls)} disabled={disabled}>
       {label}
     </AutocompleteItem>
   )
