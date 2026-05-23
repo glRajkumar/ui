@@ -127,8 +127,8 @@ function ToggleGroupItem({
 type toggleItemT =
   | allowedPrimitiveT
   | (optionT & {
-      'aria-label'?: string
-    })
+    'aria-label'?: string
+  })
 
 type toggleItemsT = toggleItemT[]
 
@@ -159,4 +159,12 @@ function ToggleWrapper({ options, itemCls, ...props }: toggleWrapperProps) {
   )
 }
 
-export { Toggle, toggleVariants, ToggleGroup, ToggleGroupItem, ToggleWrapper, type toggleItemT, type toggleItemsT }
+export {
+  Toggle,
+  toggleVariants,
+  ToggleGroup,
+  ToggleGroupItem,
+  ToggleWrapper,
+  type toggleItemT,
+  type toggleItemsT
+}

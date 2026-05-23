@@ -131,6 +131,27 @@
       ]
     },
     {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Checkbox and CheckboxGroup backed by Base UI with label/description support, select-all parent checkbox, orientation control, and controlled state.",
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "combobox",
       "type": "registry:ui",
       "title": "Combobox",
@@ -356,12 +377,10 @@
       "registryDependencies": [
         "select",
         "popover",
-        "radio-group",
         "calendar",
         "textarea",
         "button",
         "input",
-        "checkbox",
         "switch",
         "slider"
       ],
@@ -381,6 +400,14 @@
         },
         {
           "path": "components/ui/form.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/checkbox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/radio.tsx",
           "type": "registry:ui"
         },
         {
@@ -420,12 +447,10 @@
       "registryDependencies": [
         "select",
         "popover",
-        "radio-group",
         "calendar",
         "textarea",
         "button",
         "input",
-        "checkbox",
         "switch",
         "slider"
       ],
@@ -445,6 +470,14 @@
         },
         {
           "path": "components/ui/form.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/checkbox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/radio.tsx",
           "type": "registry:ui"
         },
         {
@@ -488,12 +521,10 @@
       "registryDependencies": [
         "select",
         "popover",
-        "radio-group",
         "calendar",
         "textarea",
         "button",
         "input",
-        "checkbox",
         "switch",
         "slider"
       ],
@@ -513,6 +544,14 @@
         },
         {
           "path": "components/ui/form.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/checkbox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/radio.tsx",
           "type": "registry:ui"
         },
         {
@@ -727,6 +766,27 @@
       ]
     },
     {
+      "name": "radio",
+      "type": "registry:ui",
+      "title": "Radio",
+      "description": "Radio and RadioGroup backed by Base UI with label/description support, orientation control, and controlled state.",
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/radio.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "scroll-area",
       "type": "registry:ui",
       "title": "Scroll Area",
@@ -805,13 +865,11 @@
       ]
     },
     {
-      "name": "toggle-group",
+      "name": "toggle",
       "type": "registry:ui",
-      "title": "Toggle Group",
-      "description": "Toggle Group componet with wrapper",
-      "registryDependencies": [
-        "toggle-group"
-      ],
+      "title": "Toggle",
+      "description": "Toggle and ToggleGroup backed by Base UI with single/multiple selection, controlled state, vertical orientation, spacing, and variant/size controls.",
+      "registryDependencies": [],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -823,7 +881,7 @@
           "type": "registry:lib"
         },
         {
-          "path": "components/ui/toggle-group.tsx",
+          "path": "components/ui/toggle.tsx",
           "type": "registry:ui"
         }
       ]

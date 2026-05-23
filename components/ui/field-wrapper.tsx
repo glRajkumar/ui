@@ -9,10 +9,10 @@ import { cn, parseAllowedPrimitive } from '@/lib/utils'
 import { type AutocompleteWrapperProps, AutocompleteWrapper as AutocompletePrimitive } from './autocomplete'
 import { type selectProps, SelectWrapper as SelectPrimitiveWrapper } from './select'
 import { type ComboboxWrapperProps, ComboboxWrapper as Combobox } from './combobox'
-import { CheckboxWrapper as Checkbox, type CheckboxWrapperProps } from './checkbox'
-import { RadioWrapper as Radio, type RadioWrapperProps } from './radio'
+import { type CheckboxWrapperProps, CheckboxWrapper as Checkbox } from './checkbox'
+import { Field, FieldLabel, FieldSet, FieldLegend, FieldError } from './field'
+import { type RadioWrapperProps, RadioWrapper as Radio } from './radio'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
-import { Field, FieldLabel, FieldError } from './field'
 import { NumberFieldWrapper } from './number-field'
 import { Calendar } from './calendar'
 import { Textarea } from './textarea'
@@ -107,8 +107,8 @@ export function RadioWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} invalid={isInvalid}>
-      {label && <FieldLabel>{label}</FieldLabel>}
+    <FieldSet className={cn(className)}>
+      {label && <FieldLegend variant="label">{label}</FieldLegend>}
       <Radio
         {...props}
         as={FieldLabel}
@@ -117,7 +117,7 @@ export function RadioWrapper({
         aria-invalid={isInvalid}
       />
       <FieldError errors={[error]} />
-    </Field>
+    </FieldSet>
   )
 }
 
@@ -139,8 +139,8 @@ export function CheckboxWrapper({
   const isInvalid = invalid || !!error
 
   return (
-    <Field className={className} invalid={isInvalid}>
-      {label && <FieldLabel>{label}</FieldLabel>}
+    <FieldSet className={cn(className)}>
+      {label && <FieldLegend variant="label">{label}</FieldLegend>}
       <Checkbox
         orientation="horizontal"
         {...props}
@@ -150,7 +150,7 @@ export function CheckboxWrapper({
         aria-invalid={isInvalid}
       />
       <FieldError errors={[error]} />
-    </Field>
+    </FieldSet>
   )
 }
 
