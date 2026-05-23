@@ -25,8 +25,8 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 Copy and paste the following code into your project.
 
-<include cwd meta='title="ui/radio-group.tsx"'>
-  ./components/ui/radio-group.tsx
+<include cwd meta='title="ui/radio.tsx"'>
+  ./components/ui/radio.tsx
 </include>
 
 </Tab>
@@ -38,7 +38,7 @@ Copy and paste the following code into your project.
 ### Group — RadioWrapper
 
 ```tsx
-import { RadioWrapper } from "@/components/ui/radio-group"
+import { RadioWrapper } from "@/components/ui/radio"
 
 <RadioWrapper
   defaultValue="email"
@@ -84,7 +84,7 @@ const [value, setValue] = useState("email")
 ### Single radio — Radio
 
 ```tsx
-import { RadioGroup, Radio } from "@/components/ui/radio-group"
+import { RadioGroup, Radio } from "@/components/ui/radio"
 
 <RadioGroup defaultValue="b">
   <Radio value="a" label="Option A" description="First choice." />

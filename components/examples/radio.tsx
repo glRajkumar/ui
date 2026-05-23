@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { ExItem, ExRow } from '@/components/examples/common'
-import { RadioGroup, RadioWrapper, Radio } from '@/components/ui/radio-group'
+import { RadioGroup, RadioWrapper, Radio } from '@/components/ui/radio'
 
 function BasicExample() {
   return (
@@ -62,7 +62,7 @@ function PrimitiveExample() {
   )
 }
 
-export function RadioGroupExample() {
+export function RadioExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
       <ExRow label="RadioWrapper">

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { ExItem, ExRow } from '@/components/examples/common'
-import { CheckboxIndicator, Checkbox, CheckboxGroup, CheckboxWrapper } from '@/components/ui/checkbox-group'
+import { CheckboxIndicator, Checkbox, CheckboxGroup, CheckboxWrapper } from '@/components/ui/checkbox'
 
 function BasicExample() {
   return (
@@ -137,7 +137,7 @@ function IndeterminateExample() {
   )
 }
 
-export function CheckboxGroupExample() {
+export function CheckboxExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
       <ExRow label="Checkbox">

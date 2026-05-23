@@ -1,10 +1,12 @@
+import { FieldPrimitivesExample } from './field-primitives'
 import { NavigationMenuExample } from './navigation-menu'
-import { CheckboxGroupExample } from './checkbox-group'
+import { AutocompleteExample } from './autocomplete'
 import { ToggleGroupExample } from './toggle-group'
 import { AlertDialogExample } from './alert-dialog'
 import { CollapsibleExample } from './collapsible'
-import { RadioGroupExample } from './radio-group'
+import { NumberFieldExample } from './number-field'
 import { BreadcrumbExample } from './breadcrumb'
+import { ScrollAreaExample } from './scroll-area'
 import { PaginationExample } from './pagination'
 import { Field_RHF_Example } from './field-rhf'
 import { Field_TF_Example } from './field-tf'
@@ -12,6 +14,8 @@ import { DataTableExample } from './data-table'
 import { AccordionExample } from './accordion'
 import { CarouselExample } from './carousel'
 import { ComboboxExample } from './combobox'
+import { FieldSetExample } from './fieldset'
+import { CheckboxExample } from './checkbox'
 import { ContextExample } from './context-menu'
 import { TooltipExample } from './tooltip'
 import { MenubarExample } from './menubar'
@@ -19,6 +23,7 @@ import { PopoverExample } from './popover'
 import { SelectExample } from './select'
 import { DialogExample } from './dialog'
 import { DrawerExample } from './drawer'
+import { RadioExample } from './radio'
 import { SheetExample } from './sheet'
 import { ToastExample } from './toast'
 import { EmptyExample } from './empty'
@@ -27,12 +32,7 @@ import { MenuExample } from './menu'
 import { CardExample } from './card'
 import { TabsExample } from './tabs'
 import { ItemExample } from './item'
-import { AutocompleteExample } from './autocomplete'
-import { NumberFieldExample } from './number-field'
-import { ScrollAreaExample } from './scroll-area'
 import { FormExample } from './form'
-import { FieldPrimitivesExample } from './field-primitives'
-import { FieldSetExample } from './fieldset'
 import Wrapper from '../wrapper'
 
 export function SelectEx() {
@@ -304,16 +304,16 @@ export function ToastEx() {
 
 export function CheckboxGroupEx() {
   return (
-    <Wrapper path="/components/examples/checkbox-group.tsx">
-      <CheckboxGroupExample />
+    <Wrapper path="/components/examples/checkbox.tsx">
+      <CheckboxExample />
     </Wrapper>
   )
 }
 
 export function RadioGroupEx() {
   return (
-    <Wrapper path="/components/examples/radio-group.tsx">
-      <RadioGroupExample />
+    <Wrapper path="/components/examples/radio.tsx">
+      <RadioExample />
     </Wrapper>
   )
 }
