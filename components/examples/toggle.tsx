@@ -11,20 +11,20 @@ import {
   Underline,
 } from 'lucide-react'
 
-import { ToggleGroupWrapper } from '@/components/ui/toggle-group'
+import { ToggleWrapper } from '@/components/ui/toggle'
 import { ExItem, ExRow } from '@/components/examples/common'
 
 function BasicExample() {
-  return <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} />
+  return <ToggleWrapper options={['Bold', 'Italic', 'Underline']} />
 }
 
 function MultipleExample() {
-  return <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} multiple />
+  return <ToggleWrapper options={['Bold', 'Italic', 'Underline']} multiple />
 }
 
 function IconOnlyExample() {
   return (
-    <ToggleGroupWrapper
+    <ToggleWrapper
       options={[
         { label: <Bold />, value: 'bold', 'aria-label': 'Toggle bold' },
         { label: <Italic />, value: 'italic', 'aria-label': 'Toggle italic' },
@@ -36,7 +36,7 @@ function IconOnlyExample() {
 
 function IconTextExample() {
   return (
-    <ToggleGroupWrapper
+    <ToggleWrapper
       options={[
         { label: <><AlignLeft /> Left</>, value: 'left' },
         { label: <><AlignCenter /> Center</>, value: 'center' },
@@ -51,7 +51,7 @@ function ControlledExample() {
 
   return (
     <div className="flex items-center gap-4">
-      <ToggleGroupWrapper
+      <ToggleWrapper
         options={['Bold', 'Italic', 'Underline']}
         value={value}
         onValueChange={(v) => setValue(v)}
@@ -64,7 +64,7 @@ function ControlledExample() {
 
 function VerticalExample() {
   return (
-    <ToggleGroupWrapper
+    <ToggleWrapper
       options={[
         { label: <><AlignLeft /> Left</>, value: 'left' },
         { label: <><AlignCenter /> Center</>, value: 'center' },
@@ -79,9 +79,9 @@ function VerticalExample() {
 function SpacingExample() {
   return (
     <div className="flex flex-col gap-3">
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} spacing={0} />
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} spacing={1} />
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} spacing={2} />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} spacing={0} />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} spacing={1} />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} spacing={2} />
     </div>
   )
 }
@@ -89,8 +89,8 @@ function SpacingExample() {
 function VariantsExample() {
   return (
     <div className="flex flex-col gap-3">
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} variant="default" />
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} variant="outline" />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} variant="default" />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} variant="outline" />
     </div>
   )
 }
@@ -98,18 +98,18 @@ function VariantsExample() {
 function SizesExample() {
   return (
     <div className="flex flex-col gap-3">
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} size="sm" />
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} size="default" />
-      <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} size="lg" />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} size="sm" />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} size="default" />
+      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} size="lg" />
     </div>
   )
 }
 
 function DisabledExample() {
-  return <ToggleGroupWrapper options={['Bold', 'Italic', 'Underline']} disabled />
+  return <ToggleWrapper options={['Bold', 'Italic', 'Underline']} disabled />
 }
 
-export function ToggleGroupExample() {
+export function ToggleExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
       <ExRow label="Basic">

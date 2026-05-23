@@ -1,7 +1,6 @@
 import { FieldPrimitivesExample } from './field-primitives'
 import { NavigationMenuExample } from './navigation-menu'
 import { AutocompleteExample } from './autocomplete'
-import { ToggleGroupExample } from './toggle-group'
 import { AlertDialogExample } from './alert-dialog'
 import { CollapsibleExample } from './collapsible'
 import { NumberFieldExample } from './number-field'
@@ -20,6 +19,7 @@ import { ContextExample } from './context-menu'
 import { TooltipExample } from './tooltip'
 import { MenubarExample } from './menubar'
 import { PopoverExample } from './popover'
+import { ToggleExample } from './toggle'
 import { SelectExample } from './select'
 import { DialogExample } from './dialog'
 import { DrawerExample } from './drawer'
@@ -184,8 +184,8 @@ export function TabsEx() {
 
 export function ToggleGroupEx() {
   return (
-    <Wrapper path="/components/examples/toggle-group.tsx">
-      <ToggleGroupExample />
+    <Wrapper path="/components/examples/toggle.tsx">
+      <ToggleExample />
     </Wrapper>
   )
 }

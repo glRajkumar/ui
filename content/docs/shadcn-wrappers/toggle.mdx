@@ -14,7 +14,7 @@ import { ToggleGroupEx } from "@/components/examples";
 <Tab value="CLI">
 
 ```npm
-npx shadcn@latest add @glrk-ui/toggle-group
+npx shadcn@latest add @glrk-ui/toggle
 ```
 
 If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
@@ -29,9 +29,6 @@ Copy and paste the following code into your project.
   ./components/ui/toggle.tsx
 </include>
 
-<include cwd meta='title="ui/toggle-group.tsx"'>
-  ./components/ui/toggle-group.tsx
-</include>
 
 </Tab>
 </Tabs>
@@ -42,15 +39,15 @@ Copy and paste the following code into your project.
 ### Basic
 
 ```tsx
-import { ToggleGroupWrapper } from "@/components/ui/toggle-group"
+import { ToggleWrapper } from "@/components/ui/toggle"
 
-<ToggleGroupWrapper options={["Bold", "Italic", "Underline"]} />
+<ToggleWrapper options={["Bold", "Italic", "Underline"]} />
 ```
 
 ### Multiple selection
 
 ```tsx
-<ToggleGroupWrapper options={["Bold", "Italic", "Underline"]} multiple />
+<ToggleWrapper options={["Bold", "Italic", "Underline"]} multiple />
 ```
 
 ### Options format
@@ -59,10 +56,10 @@ Options accept primitives (`string | number | boolean`) or objects with `label`,
 
 ```tsx
 // Primitives
-<ToggleGroupWrapper options={["Bold", "Italic", 42, true]} />
+<ToggleWrapper options={["Bold", "Italic", 42, true]} />
 
 // Icon only — always provide aria-label
-<ToggleGroupWrapper
+<ToggleWrapper
   options={[
     { label: <Bold />, value: "bold", "aria-label": "Toggle bold" },
     { label: <Italic />, value: "italic", "aria-label": "Toggle italic" },
@@ -70,7 +67,7 @@ Options accept primitives (`string | number | boolean`) or objects with `label`,
 />
 
 // Icon + label
-<ToggleGroupWrapper
+<ToggleWrapper
   options={[
     { label: <><AlignLeft /> Left</>, value: "left" },
     { label: <><AlignCenter /> Center</>, value: "center" },
@@ -83,7 +80,7 @@ Options accept primitives (`string | number | boolean`) or objects with `label`,
 ```tsx
 const [value, setValue] = React.useState<string[]>(["italic"])
 
-<ToggleGroupWrapper
+<ToggleWrapper
   options={["Bold", "Italic", "Underline"]}
   value={value}
   onValueChange={(v) => setValue(v)}
@@ -94,7 +91,7 @@ const [value, setValue] = React.useState<string[]>(["italic"])
 ### Orientation
 
 ```tsx
-<ToggleGroupWrapper options={options} orientation="vertical" />
+<ToggleWrapper options={options} orientation="vertical" />
 ```
 
 Arrow key navigation adjusts automatically — up/down for vertical, left/right for horizontal. Focus loops by default (`loopFocus` defaults to `true`).
@@ -104,30 +101,30 @@ Arrow key navigation adjusts automatically — up/down for vertical, left/right 
 `spacing={0}` (default) joins items into a single connected group. Larger values add gap:
 
 ```tsx
-<ToggleGroupWrapper options={options} spacing={0} />  {/* joined */}
-<ToggleGroupWrapper options={options} spacing={1} />  {/* 4px gap */}
-<ToggleGroupWrapper options={options} spacing={2} />  {/* 8px gap */}
+<ToggleWrapper options={options} spacing={0} />  {/* joined */}
+<ToggleWrapper options={options} spacing={1} />  {/* 4px gap */}
+<ToggleWrapper options={options} spacing={2} />  {/* 8px gap */}
 ```
 
 ### Variants
 
 ```tsx
-<ToggleGroupWrapper options={options} variant="default" />
-<ToggleGroupWrapper options={options} variant="outline" />
+<ToggleWrapper options={options} variant="default" />
+<ToggleWrapper options={options} variant="outline" />
 ```
 
 ### Sizes
 
 ```tsx
-<ToggleGroupWrapper options={options} size="sm" />
-<ToggleGroupWrapper options={options} size="default" />
-<ToggleGroupWrapper options={options} size="lg" />
+<ToggleWrapper options={options} size="sm" />
+<ToggleWrapper options={options} size="default" />
+<ToggleWrapper options={options} size="lg" />
 ```
 
 ### Disabled
 
 ```tsx
-<ToggleGroupWrapper options={options} disabled />
+<ToggleWrapper options={options} disabled />
 ```
 
 ### Item CSS class
@@ -135,7 +132,7 @@ Arrow key navigation adjusts automatically — up/down for vertical, left/right 
 Apply shared CSS to all items via `itemCls`. Individual options override with their own `className`:
 
 ```tsx
-<ToggleGroupWrapper
+<ToggleWrapper
   options={[
     "Bold",
     { label: "Custom", value: "custom", className: "text-primary" },
@@ -147,7 +144,7 @@ Apply shared CSS to all items via `itemCls`. Individual options override with th
 ### Using primitives
 
 ```tsx
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle"
 
 <ToggleGroup multiple orientation="vertical">
   <ToggleGroupItem value="bold" aria-label="Toggle bold">
@@ -191,10 +188,10 @@ type={`export type toggleItemT =
     };`}
 />
 
-#### ToggleGroupWrapper
+#### ToggleWrapper
 <AutoTypeTable
-name="ToggleGroupWrapper"
-type={`export interface ToggleGroupWrapper {
+name="ToggleWrapper"
+type={`export interface ToggleWrapper {
   /**
    * Array of toggle options. Supports primitives and option objects.
    *

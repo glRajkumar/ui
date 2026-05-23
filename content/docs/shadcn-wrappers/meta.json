@@ -32,7 +32,7 @@
     "form",
     "checkbox",
     "radio",
-    "toggle-group",
+    "toggle",
     "select",
     "combobox",
     "autocomplete",
