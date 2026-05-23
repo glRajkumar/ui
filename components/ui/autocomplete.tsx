@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronDownIcon, XIcon } from 'lucide-react'
+import { ChevronDownIcon, XIcon, Loader2 } from 'lucide-react'
 import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomplete'
 
 import { cn, extractText, getKey, getLabel, getValue, isGroup, isOption, isSeparator } from '@/lib/utils'
@@ -57,7 +57,7 @@ function AutocompleteInput({
     <AutocompletePrimitive.InputGroup
       data-slot="autocomplete-input-group"
       className={cn(
-        'flex h-9 w-full items-center gap-0.5 rounded-md border border-input bg-transparent pl-3 pr-1 text-sm shadow-xs',
+        'relative flex h-9 w-full items-center gap-0.5 rounded-md border border-input bg-transparent pl-3 pr-1 text-sm shadow-xs',
         'transition-colors',
         'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50',
         'has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20',
@@ -67,7 +67,9 @@ function AutocompleteInput({
     >
       <AutocompletePrimitive.Input
         disabled={disabled}
-        className="h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+        className={cn(
+          'h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+        )}
         {...props}
       />
       {(showClear || showTrigger) && (
@@ -100,7 +102,7 @@ function AutocompleteContent({
         <AutocompletePrimitive.Popup
           data-slot="autocomplete-content"
           className={cn(
-            'relative overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md',
+            'group/autocomplete-content relative overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md',
             'max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin)',
             'min-w-[max(var(--anchor-width),10rem)]',
             'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
@@ -122,7 +124,6 @@ function AutocompleteList({ className, ...props }: AutocompletePrimitive.List.Pr
       data-slot="autocomplete-list"
       className={cn(
         'max-h-[min(18rem,calc(var(--available-height)-2.5rem))] overflow-y-auto overscroll-contain scroll-py-1 p-1',
-        '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
         className,
       )}
       {...props}
@@ -130,19 +131,25 @@ function AutocompleteList({ className, ...props }: AutocompletePrimitive.List.Pr
   )
 }
 
-function AutocompleteItem({ className, ...props }: AutocompletePrimitive.Item.Props) {
+function AutocompleteItem({
+  className,
+  children,
+  ...props
+}: AutocompletePrimitive.Item.Props) {
   return (
     <AutocompletePrimitive.Item
       data-slot="autocomplete-item"
       className={cn(
-        'relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
+        'relative flex w-full cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none',
         'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </AutocompletePrimitive.Item>
   )
 }
 
@@ -174,7 +181,7 @@ function AutocompleteEmpty({ className, ...props }: AutocompletePrimitive.Empty.
   return (
     <AutocompletePrimitive.Empty
       data-slot="autocomplete-empty"
-      className={cn('py-6 text-center text-sm text-muted-foreground', className)}
+      className={cn('text-center text-sm text-muted-foreground', className)}
       {...props}
     />
   )
@@ -194,7 +201,7 @@ function AutocompleteStatus({ className, ...props }: AutocompletePrimitive.Statu
   return (
     <AutocompletePrimitive.Status
       data-slot="autocomplete-status"
-      className={cn('flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground empty:hidden', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   )
@@ -235,7 +242,11 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
         <AutocompleteLabel>{item.group}</AutocompleteLabel>
         <AutocompleteCollection>
           {(opt: allowedPrimitiveT | optionT) => (
-            <OptionItem key={getKey(opt, 0)} option={opt} className={itemCls} />
+            <OptionItem
+              key={getKey(opt, 0)}
+              option={opt}
+              className={itemCls}
+            />
           )}
         </AutocompleteCollection>
       </AutocompleteGroup>
@@ -279,12 +290,13 @@ function AutocompleteWrapper({
   isLoading,
   emptyMessage,
   showClear = false,
-  showTrigger = false,
+  showTrigger = true,
   contentCls,
   itemCls,
   groupCls,
   inputProps,
   disabled,
+  value,
   ...props
 }: AutocompleteWrapperProps) {
   const itemsForBase = React.useMemo(() => {
@@ -296,6 +308,7 @@ function AutocompleteWrapper({
     <AutocompleteRoot
       items={itemsForBase as unknown[]}
       disabled={disabled}
+      value={value}
       itemToStringValue={(item: unknown) => {
         const opt = item as allowedPrimitiveT | optionT
         const label = getLabel(opt)
@@ -313,9 +326,14 @@ function AutocompleteWrapper({
         {...(inputProps as AutocompletePrimitive.Input.Props)}
       />
       <AutocompleteContent className={contentCls}>
+        <AutocompleteStatus>
+          {isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='animate-spin' /> Loading...</p>}
+        </AutocompleteStatus>
+
         <AutocompleteEmpty>
-          {isLoading ? 'Loading...' : (emptyMessage ?? 'No results found')}
+          {!isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
         </AutocompleteEmpty>
+
         <AutocompleteList>
           {(item: unknown, i: number) => (
             <OptionsBody

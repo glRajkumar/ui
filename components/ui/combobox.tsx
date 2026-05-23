@@ -12,10 +12,9 @@ function ComboboxValue(props: ComboboxPrimitive.Value.Props) {
   return <ComboboxPrimitive.Value data-slot="combobox-value" {...props} />
 }
 
-function ComboboxTrigger({ className, children, ...props }: ComboboxPrimitive.Trigger.Props) {
+function ComboboxIcon({ className, ...props }: ComboboxPrimitive.Icon.Props) {
   return (
-    <ComboboxPrimitive.Trigger
-      data-slot="combobox-trigger"
+    <ComboboxPrimitive.Icon
       className={cn(
         'flex size-7 shrink-0 items-center justify-center rounded-sm text-muted-foreground',
         'transition-colors hover:bg-accent hover:text-foreground',
@@ -24,8 +23,19 @@ function ComboboxTrigger({ className, children, ...props }: ComboboxPrimitive.Tr
       )}
       {...props}
     >
-      {children}
       <ChevronDownIcon className="size-4" />
+    </ComboboxPrimitive.Icon>
+  )
+}
+
+function ComboboxTrigger({ className, children, ...props }: ComboboxPrimitive.Trigger.Props) {
+  return (
+    <ComboboxPrimitive.Trigger
+      data-slot="combobox-trigger"
+      className={cn(className)}
+      {...props}
+    >
+      {children}
     </ComboboxPrimitive.Trigger>
   )
 }
@@ -62,7 +72,7 @@ function ComboboxInput({
     <ComboboxPrimitive.InputGroup
       data-slot="combobox-input-group"
       className={cn(
-        'flex h-9 w-full items-center gap-0.5 rounded-md border border-input bg-transparent pl-3 pr-1 text-sm shadow-xs',
+        'relative flex h-9 w-full items-center gap-0.5 rounded-md border border-input bg-transparent pl-3 pr-1 text-sm shadow-xs',
         'transition-colors',
         'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50',
         'has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20',
@@ -72,12 +82,14 @@ function ComboboxInput({
     >
       <ComboboxPrimitive.Input
         disabled={disabled}
-        className="h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+        className={cn(
+          'h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+        )}
         {...props}
       />
       <div className="flex shrink-0 items-center ml-auto">
         {showClear && <ComboboxClear disabled={disabled} />}
-        {showTrigger && <ComboboxTrigger disabled={disabled} />}
+        {showTrigger && <ComboboxTrigger disabled={disabled}><ComboboxIcon /></ComboboxTrigger>}
       </div>
       {children}
     </ComboboxPrimitive.InputGroup>
@@ -87,7 +99,7 @@ function ComboboxInput({
 function ComboboxContent({
   className,
   side = 'bottom',
-  sideOffset = 6,
+  sideOffset = 4,
   align = 'start',
   alignOffset = 0,
   anchor,
@@ -132,7 +144,6 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
       data-slot="combobox-list"
       className={cn(
         'max-h-[min(18rem,calc(var(--available-height)-2.5rem))] overflow-y-auto overscroll-contain scroll-py-1 p-1',
-        '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
         'data-empty:hidden',
         className,
       )}
@@ -147,11 +158,11 @@ function ComboboxItem({ className, children, indicatorAt, ...props }: ComboboxPr
       data-slot="combobox-item"
       className={cn(
         'relative flex w-full cursor-default select-none items-center gap-2 rounded-sm py-1.5 text-sm outline-none',
-        indicatorAt === 'right' ? 'pl-2 pr-8' : 'pl-8 pr-2',
         'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
+        indicatorAt === 'right' ? 'pl-2 pr-8' : 'pl-8 pr-2',
       )}
       {...props}
     >
@@ -196,11 +207,7 @@ function ComboboxEmpty({ className, ...props }: ComboboxPrimitive.Empty.Props) {
   return (
     <ComboboxPrimitive.Empty
       data-slot="combobox-empty"
-      className={cn(
-        'hidden py-6 text-center text-sm text-muted-foreground',
-        'group-data-empty/combobox-content:flex group-data-empty/combobox-content:w-full group-data-empty/combobox-content:justify-center',
-        className,
-      )}
+      className={cn('text-center text-sm text-muted-foreground', className)}
       {...props}
     />
   )
@@ -216,10 +223,7 @@ function ComboboxSeparator({ className, ...props }: ComboboxPrimitive.Separator.
   )
 }
 
-function ComboboxChips({
-  className,
-  ...props
-}: React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> & ComboboxPrimitive.Chips.Props) {
+function ComboboxChips({ className, ...props }: React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> & ComboboxPrimitive.Chips.Props) {
   return (
     <ComboboxPrimitive.Chips
       data-slot="combobox-chips"
@@ -289,10 +293,7 @@ function ComboboxStatus({ className, ...props }: ComboboxPrimitive.Status.Props)
   return (
     <ComboboxPrimitive.Status
       data-slot="combobox-status"
-      className={cn(
-        'flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground empty:hidden',
-        className,
-      )}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   )
@@ -439,6 +440,8 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
     return items.map(item => isGroup(item) ? { ...item, items: item.options } : item)
   }, [items])
 
+  const hasPopupInput = !multiple && !!renderValue
+
   return (
     <ComboboxRoot
       multiple={multiple}
@@ -474,27 +477,72 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
                 {(showClear || showTrigger) && (
                   <div className="flex shrink-0 items-center ml-auto">
                     {showClear && <ComboboxClear disabled={disabled} />}
-                    {showTrigger && <ComboboxTrigger disabled={disabled} />}
+                    {showTrigger && <ComboboxTrigger disabled={disabled}><ComboboxIcon /></ComboboxTrigger>}
                   </div>
                 )}
               </>
             )}
           </ComboboxValue>
         </ComboboxChips>
+      ) : hasPopupInput ? (
+        <ComboboxTrigger
+          className={cn(
+            'flex h-9 w-full items-center gap-1.5 rounded-md border border-input bg-transparent pl-3 pr-1 text-sm shadow-xs',
+            'transition-colors outline-none select-none',
+            'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            'dark:bg-input/30',
+          )}
+          render={<div />}
+          nativeButton={false}
+        >
+          <ComboboxValue>
+            {(v => (
+              <>
+                {!v ? <span className=' text-muted-foreground'>{placeholder}</span> : renderValue
+                  ? renderValue(String(v), optionMap[String(v)])
+                  : (labelMap[String(v)] ?? String(v))
+                }
+              </>
+            ))}
+          </ComboboxValue>
+
+          <div className="flex shrink-0 items-center ml-auto">
+            {showClear && <ComboboxClear disabled={disabled} />}
+            {showTrigger && <ComboboxIcon />}
+          </div>
+        </ComboboxTrigger>
       ) : (
         <ComboboxInput
-          placeholder={placeholder}
           disabled={disabled}
-          showTrigger={showTrigger}
           showClear={showClear}
+          showTrigger={showTrigger}
+          placeholder={placeholder}
           className={cn('w-full', triggerCls)}
           {...inputProps}
         />
       )}
 
       <ComboboxContent anchor={multiple ? multiAnchor : undefined} className={cn(contentCls, hideList && "hidden")}>
+        {
+          hasPopupInput &&
+          <div className="px-2 pt-2">
+            <ComboboxInput
+              disabled={disabled}
+              showTrigger={false}
+              placeholder={placeholder}
+              className={cn('w-full focus-within:ring-1', triggerCls)}
+              {...inputProps}
+            />
+          </div>
+        }
+
+        <ComboboxStatus>
+          {isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='animate-spin' /> Loading...</p>}
+        </ComboboxStatus>
+
         <ComboboxEmpty>
-          {isLoading ? 'Loading...' : (emptyMessage ?? 'No options found')}
+          {!isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
         </ComboboxEmpty>
 
         <ComboboxList>
@@ -535,6 +583,7 @@ export {
   ComboboxChip,
   ComboboxChipsInput,
   ComboboxTrigger,
+  ComboboxIcon,
   ComboboxClear,
   ComboboxValue,
   ComboboxStatus,
