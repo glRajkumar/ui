@@ -3,13 +3,13 @@
 import { useState } from 'react'
 
 import { ExItem, ExRow } from '@/components/examples/common'
-import { RadioGroup, RadioGroupWrapper, RadioWrapper } from '@/components/ui/radio-group'
+import { RadioGroup, RadioWrapper, Radio } from '@/components/ui/radio-group'
 
 function BasicExample() {
   return (
-    <RadioGroupWrapper
+    <RadioWrapper
       defaultValue="email"
-      items={[
+      options={[
         { value: 'email', label: 'Email', description: 'Receive updates via email.' },
         { value: 'sms', label: 'SMS', description: 'Receive updates via text.' },
         { value: 'push', label: 'Push notifications' },
@@ -24,10 +24,10 @@ function ControlledExample() {
 
   return (
     <div className="flex flex-col gap-3">
-      <RadioGroupWrapper
+      <RadioWrapper
         value={value}
         onValueChange={(v) => setValue(v as string)}
-        items={[
+        options={[
           { value: 'email', label: 'Email' },
           { value: 'sms', label: 'SMS' },
           { value: 'push', label: 'Push' },
@@ -40,10 +40,10 @@ function ControlledExample() {
 
 function HorizontalExample() {
   return (
-    <RadioGroupWrapper
+    <RadioWrapper
       defaultValue="light"
       orientation="horizontal"
-      items={[
+      options={[
         { value: 'light', label: 'Light' },
         { value: 'dark', label: 'Dark' },
         { value: 'system', label: 'System' },
@@ -55,9 +55,9 @@ function HorizontalExample() {
 function PrimitiveExample() {
   return (
     <RadioGroup defaultValue="b">
-      <RadioWrapper value="a" label="Option A" description="First choice." />
-      <RadioWrapper value="b" label="Option B" description="Second choice." />
-      <RadioWrapper value="c" label="Option C" disabled />
+      <Radio value="a" label="Option A" description="First choice." />
+      <Radio value="b" label="Option B" description="Second choice." />
+      <Radio value="c" label="Option C" disabled />
     </RadioGroup>
   )
 }
@@ -65,8 +65,8 @@ function PrimitiveExample() {
 export function RadioGroupExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
-      <ExRow label="RadioGroupWrapper">
-        <ExItem label="items — with descriptions and disabled">
+      <ExRow label="RadioWrapper">
+        <ExItem label="options — with descriptions and disabled">
           <BasicExample />
         </ExItem>
         <ExItem label="value + onValueChange — controlled">
@@ -78,7 +78,7 @@ export function RadioGroupExample() {
       </ExRow>
 
       <ExRow label="Primitives">
-        <ExItem label="RadioGroup + RadioWrapper — manual composition">
+        <ExItem label="RadioGroup + Radio — manual composition">
           <PrimitiveExample />
         </ExItem>
       </ExRow>

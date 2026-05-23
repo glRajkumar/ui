@@ -4,19 +4,9 @@ import * as React from 'react'
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group'
 import { Radio as RadioPrimitive } from '@base-ui/react/radio'
 
-import { cn } from '@/lib/utils'
+import { cn, getKey, getLabel, getValue } from '@/lib/utils'
 
-function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
-  return (
-    <RadioGroupPrimitive
-      data-slot="radio-group"
-      className={cn('flex flex-col gap-2', className)}
-      {...props}
-    />
-  )
-}
-
-function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
+function RadioIndicator({ className, ...props }: RadioPrimitive.Root.Props) {
   return (
     <RadioPrimitive.Root
       data-slot="radio-group-item"
@@ -36,57 +26,66 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
   )
 }
 
-type RadioWrapperProps = {
+type RadioProps = {
   label: React.ReactNode
   description?: React.ReactNode
   wrapperCls?: string
+  as?: React.ElementType
 } & RadioPrimitive.Root.Props
 
-function RadioWrapper({ label, description, wrapperCls, className, ...props }: RadioWrapperProps) {
+function Radio({ label, description, wrapperCls, className, as: Comp = 'label', ...props }: RadioProps) {
   return (
-    <label className={cn('flex cursor-pointer select-none items-start gap-2 has-[:disabled]:cursor-not-allowed', wrapperCls)}>
-      <RadioGroupItem className={cn('mt-0.5', className)} {...props} />
+    <Comp className={cn('flex cursor-pointer select-none items-start gap-2 has-[:disabled]:cursor-not-allowed', wrapperCls)}>
+      <RadioIndicator className={cn('mt-0.5', className)} {...props} />
       <div className="grid gap-0.5">
         <span className="text-sm font-medium leading-none">{label}</span>
         {description && <span className="text-xs text-muted-foreground">{description}</span>}
       </div>
-    </label>
+    </Comp>
   )
 }
 
-type radioItemT = {
-  value: string
-  label: React.ReactNode
-  description?: React.ReactNode
-  disabled?: boolean
+function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
+  return (
+    <RadioGroupPrimitive
+      data-slot="radio-group"
+      className={cn('flex flex-col gap-2', className)}
+      {...props}
+    />
+  )
 }
 
-type RadioGroupWrapperProps = {
-  items: radioItemT[]
+type radioOptionT = allowedPrimitiveT | (optionT & { description?: React.ReactNode })
+
+type RadioWrapperProps = {
+  options: radioOptionT[]
   orientation?: 'horizontal' | 'vertical'
   itemCls?: string
+  as?: React.ElementType
 } & Omit<RadioGroupPrimitive.Props, 'children'>
 
-function RadioGroupWrapper({
-  items,
+function RadioWrapper({
+  options,
   orientation = 'vertical',
   itemCls,
   className,
+  as,
   ...props
-}: RadioGroupWrapperProps) {
+}: RadioWrapperProps) {
   return (
     <RadioGroup
       className={cn(orientation === 'horizontal' && 'flex-row flex-wrap', className)}
       {...props}
     >
-      {items.map((item) => (
-        <RadioWrapper
-          key={item.value}
-          value={item.value}
-          label={item.label}
-          description={item.description}
-          disabled={item.disabled}
+      {options.map((opt, i) => (
+        <Radio
+          key={getKey(opt, i)}
+          value={String(getValue(opt))}
+          label={getLabel(opt)}
+          description={typeof opt === 'object' ? opt.description : undefined}
+          disabled={typeof opt === 'object' ? opt.disabled : undefined}
           wrapperCls={itemCls}
+          as={as}
         />
       ))}
     </RadioGroup>
@@ -95,8 +94,10 @@ function RadioGroupWrapper({
 
 export {
   RadioGroup,
-  RadioGroupItem,
+  RadioIndicator,
+  Radio,
   RadioWrapper,
-  RadioGroupWrapper,
-  type radioItemT,
+  type RadioProps,
+  type radioOptionT,
+  type RadioWrapperProps,
 }

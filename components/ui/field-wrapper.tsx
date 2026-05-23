@@ -4,18 +4,18 @@ import { useState } from 'react'
 import { CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 
-import { cn, getKey, getLabel, getValue, parseAllowedPrimitive } from '@/lib/utils'
+import { cn, parseAllowedPrimitive } from '@/lib/utils'
 
 import { type AutocompleteWrapperProps, AutocompleteWrapper as AutocompletePrimitive } from './autocomplete'
 import { type selectProps, SelectWrapper as SelectPrimitiveWrapper } from './select'
 import { type ComboboxWrapperProps, ComboboxWrapper as Combobox } from './combobox'
+import { CheckboxWrapper as Checkbox, type CheckboxWrapperProps } from './checkbox-group'
+import { RadioWrapper as Radio, type RadioWrapperProps } from './radio-group'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 import { Field, FieldLabel, FieldError } from './field'
-import { RadioGroup, RadioGroupItem } from './radio-group'
 import { NumberFieldWrapper } from './number-field'
 import { Calendar } from './calendar'
 import { Textarea } from './textarea'
-import { Checkbox } from './checkbox'
 import { Slider } from './slider'
 import { Button } from './button'
 import { Switch } from './switch'
@@ -89,94 +89,66 @@ export function TextareaWrapper({
   )
 }
 
-type RadioProps = BaseProps & {
-  options: (allowedPrimitiveT | optionT)[]
-  value?: allowedPrimitiveT
-  onValueChange?: (value: allowedPrimitiveT) => void
-}
+type RadioProps = BaseProps &
+  Omit<RadioWrapperProps, 'value' | 'onValueChange' | 'as'> & {
+    value?: allowedPrimitiveT
+    onValueChange?: (value: allowedPrimitiveT) => void
+  }
 export function RadioWrapper({
   name,
   label,
   error,
   invalid,
   className,
-  options,
   value,
   onValueChange,
+  ...props
 }: RadioProps) {
   const isInvalid = invalid || !!error
 
   return (
     <Field className={className} invalid={isInvalid}>
-      {label && <FieldLabel htmlFor={`${name}-0`}>{label}</FieldLabel>}
-      <RadioGroup
+      {label && <FieldLabel>{label}</FieldLabel>}
+      <Radio
+        {...props}
+        as={FieldLabel}
         value={value ? String(value) : undefined}
         onValueChange={val => onValueChange?.(parseAllowedPrimitive(val))}
-        className="flex items-center flex-wrap gap-4"
         aria-invalid={isInvalid}
-      >
-        {options.map((option, i) => (
-          <div key={getKey(option, i)} className="flex items-center gap-2">
-            <RadioGroupItem value={`${getValue(option)}`} id={`${name}-${i}`} />
-            <FieldLabel htmlFor={`${name}-${i}`} className="font-normal">
-              {getLabel(option)}
-            </FieldLabel>
-          </div>
-        ))}
-      </RadioGroup>
+      />
       <FieldError errors={[error]} />
     </Field>
   )
 }
 
-type CheckboxProps = BaseProps & {
-  options: (allowedPrimitiveT | optionT)[]
-  value?: allowedPrimitiveT[]
-  onValueChange?: (value: allowedPrimitiveT[]) => void
-}
+type CheckboxProps = BaseProps &
+  Omit<CheckboxWrapperProps, 'value' | 'onValueChange' | 'as'> & {
+    value?: allowedPrimitiveT[]
+    onValueChange?: (value: allowedPrimitiveT[]) => void
+  }
 export function CheckboxWrapper({
   name,
   label,
   error,
   invalid,
   className,
-  options,
   value = [],
   onValueChange,
+  ...props
 }: CheckboxProps) {
   const isInvalid = invalid || !!error
 
-  const toggleValue = (v: allowedPrimitiveT) => {
-    if (value.includes(v)) {
-      onValueChange?.(value.filter(x => x !== v))
-    } else {
-      onValueChange?.([...value, v])
-    }
-  }
-
   return (
     <Field className={className} invalid={isInvalid}>
-      {label && <FieldLabel htmlFor={`${name}-0`}>{label}</FieldLabel>}
-      <div className="flex items-center flex-wrap gap-4" aria-invalid={isInvalid}>
-        {options.map((option, i) => {
-          const val = getValue(option)
-          const parsedVal = parseAllowedPrimitive(val)
-          const isChecked = value.includes(parsedVal)
-
-          return (
-            <div key={getKey(option, i)} className="flex items-center gap-2 space-y-0">
-              <Checkbox
-                id={`${name}-${i}`}
-                checked={isChecked}
-                onCheckedChange={() => toggleValue(parsedVal)}
-              />
-              <FieldLabel htmlFor={`${name}-${i}`} className="font-normal">
-                {getLabel(option)}
-              </FieldLabel>
-            </div>
-          )
-        })}
-      </div>
+      {label && <FieldLabel>{label}</FieldLabel>}
+      <Checkbox
+        orientation="horizontal"
+        {...props}
+        as={FieldLabel}
+        value={value.map(String)}
+        onValueChange={vals => onValueChange?.(vals.map(parseAllowedPrimitive))}
+        aria-invalid={isInvalid}
+      />
       <FieldError errors={[error]} />
     </Field>
   )

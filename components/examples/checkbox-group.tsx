@@ -3,14 +3,13 @@
 import { useState } from 'react'
 
 import { ExItem, ExRow } from '@/components/examples/common'
-import { Checkbox, CheckboxWrapper } from '@/components/ui/checkbox'
-import { CheckboxGroup, CheckboxGroupWrapper } from '@/components/ui/checkbox-group'
+import { CheckboxIndicator, Checkbox, CheckboxGroup, CheckboxWrapper } from '@/components/ui/checkbox-group'
 
 function BasicExample() {
   return (
-    <CheckboxGroupWrapper
+    <CheckboxWrapper
       defaultValue={['email']}
-      items={[
+      options={[
         { value: 'email', label: 'Email', description: 'Notify via email.' },
         { value: 'sms', label: 'SMS', description: 'Notify via text message.' },
         { value: 'push', label: 'Push notifications' },
@@ -22,10 +21,10 @@ function BasicExample() {
 
 function ParentExample() {
   return (
-    <CheckboxGroupWrapper
+    <CheckboxWrapper
       defaultValue={['email']}
       parentLabel="All notifications"
-      items={[
+      options={[
         { value: 'email', label: 'Email' },
         { value: 'sms', label: 'SMS' },
         { value: 'push', label: 'Push' },
@@ -39,11 +38,11 @@ function ControlledExample() {
 
   return (
     <div className="flex flex-col gap-3">
-      <CheckboxGroupWrapper
+      <CheckboxWrapper
         value={value}
         onValueChange={(v) => setValue(v)}
         parentLabel="Select all"
-        items={[
+        options={[
           { value: 'email', label: 'Email' },
           { value: 'sms', label: 'SMS' },
           { value: 'push', label: 'Push' },
@@ -56,10 +55,10 @@ function ControlledExample() {
 
 function HorizontalExample() {
   return (
-    <CheckboxGroupWrapper
+    <CheckboxWrapper
       orientation="horizontal"
       defaultValue={['react']}
-      items={[
+      options={[
         { value: 'react', label: 'React' },
         { value: 'vue', label: 'Vue' },
         { value: 'svelte', label: 'Svelte' },
@@ -73,15 +72,15 @@ function PrimitiveExample() {
   return (
     <CheckboxGroup defaultValue={['b']}>
       <label className="flex cursor-pointer items-center gap-2">
-        <Checkbox value="a" />
+        <CheckboxIndicator value="a" />
         <span className="text-sm">Option A</span>
       </label>
       <label className="flex cursor-pointer items-center gap-2">
-        <Checkbox value="b" />
+        <CheckboxIndicator value="b" />
         <span className="text-sm">Option B</span>
       </label>
       <label className="flex cursor-pointer items-center gap-2">
-        <Checkbox value="c" />
+        <CheckboxIndicator value="c" />
         <span className="text-sm">Option C</span>
       </label>
     </CheckboxGroup>
@@ -91,12 +90,12 @@ function PrimitiveExample() {
 function SingleCheckboxExample() {
   return (
     <div className="flex flex-col gap-3">
-      <CheckboxWrapper label="Accept terms and conditions" defaultChecked />
-      <CheckboxWrapper
+      <Checkbox label="Accept terms and conditions" defaultChecked />
+      <Checkbox
         label="Email notifications"
         description="Receive updates about your account activity."
       />
-      <CheckboxWrapper label="Disabled option" disabled />
+      <Checkbox label="Disabled option" disabled />
     </div>
   )
 }
@@ -123,13 +122,13 @@ function IndeterminateExample() {
   return (
     <div className="flex flex-col gap-2">
       <label className="flex cursor-pointer select-none items-center gap-2">
-        <Checkbox checked={allChecked} indeterminate={someChecked} onCheckedChange={toggleParent} />
+        <CheckboxIndicator checked={allChecked} indeterminate={someChecked} onCheckedChange={toggleParent} />
         <span className="text-sm font-medium">All fruits</span>
       </label>
       <div className="ml-6 flex flex-col gap-2">
         {FRUITS.map((fruit) => (
           <label key={fruit} className="flex cursor-pointer select-none items-center gap-2">
-            <Checkbox checked={selected.includes(fruit)} onCheckedChange={() => toggleChild(fruit)} />
+            <CheckboxIndicator checked={selected.includes(fruit)} onCheckedChange={() => toggleChild(fruit)} />
             <span className="text-sm capitalize">{fruit}</span>
           </label>
         ))}
@@ -141,7 +140,7 @@ function IndeterminateExample() {
 export function CheckboxGroupExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
-      <ExRow label="CheckboxWrapper">
+      <ExRow label="Checkbox">
         <ExItem label="Single checkbox — label + description + disabled">
           <SingleCheckboxExample />
         </ExItem>
@@ -150,8 +149,8 @@ export function CheckboxGroupExample() {
         </ExItem>
       </ExRow>
 
-      <ExRow label="CheckboxGroupWrapper">
-        <ExItem label="items — list with descriptions and disabled">
+      <ExRow label="CheckboxWrapper">
+        <ExItem label="options — list with descriptions and disabled">
           <BasicExample />
         </ExItem>
         <ExItem label="parentLabel — select-all with indeterminate state">

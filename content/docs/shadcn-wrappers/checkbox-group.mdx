@@ -25,10 +25,6 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 Copy and paste the following code into your project.
 
-<include cwd meta='title="ui/checkbox.tsx"'>
-  ./components/ui/checkbox.tsx
-</include>
-
 <include cwd meta='title="ui/checkbox-group.tsx"'>
   ./components/ui/checkbox-group.tsx
 </include>
@@ -39,27 +35,27 @@ Copy and paste the following code into your project.
 
 ## Usage
 
-### Single checkbox — CheckboxWrapper
+### Single checkbox — Checkbox
 
 ```tsx
-import { CheckboxWrapper } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox-group"
 
-<CheckboxWrapper label="Accept terms and conditions" />
-<CheckboxWrapper
+<Checkbox label="Accept terms and conditions" />
+<Checkbox
   label="Email notifications"
   description="Receive updates about your account."
 />
-<CheckboxWrapper label="Disabled" disabled />
+<Checkbox label="Disabled" disabled />
 ```
 
-### Group — CheckboxGroupWrapper
+### Group — CheckboxWrapper
 
 ```tsx
-import { CheckboxGroupWrapper } from "@/components/ui/checkbox-group"
+import { CheckboxWrapper } from "@/components/ui/checkbox-group"
 
-<CheckboxGroupWrapper
+<CheckboxWrapper
   defaultValue={["email"]}
-  items={[
+  options={[
     { value: "email", label: "Email", description: "Notify via email." },
     { value: "sms", label: "SMS" },
     { value: "push", label: "Push notifications" },
@@ -73,10 +69,10 @@ import { CheckboxGroupWrapper } from "@/components/ui/checkbox-group"
 Set `parentLabel` to add a parent checkbox that shows indeterminate when partially selected:
 
 ```tsx
-<CheckboxGroupWrapper
+<CheckboxWrapper
   defaultValue={["email"]}
   parentLabel="All notifications"
-  items={[
+  options={[
     { value: "email", label: "Email" },
     { value: "sms", label: "SMS" },
     { value: "push", label: "Push" },
@@ -89,11 +85,11 @@ Set `parentLabel` to add a parent checkbox that shows indeterminate when partial
 ```tsx
 const [value, setValue] = useState<string[]>(["email"])
 
-<CheckboxGroupWrapper
+<CheckboxWrapper
   value={value}
   onValueChange={(v) => setValue(v)}
   parentLabel="Select all"
-  items={[
+  options={[
     { value: "email", label: "Email" },
     { value: "sms", label: "SMS" },
   ]}
@@ -103,10 +99,10 @@ const [value, setValue] = useState<string[]>(["email"])
 ### Horizontal orientation
 
 ```tsx
-<CheckboxGroupWrapper
+<CheckboxWrapper
   orientation="horizontal"
   defaultValue={["react"]}
-  items={[
+  options={[
     { value: "react", label: "React" },
     { value: "vue", label: "Vue" },
     { value: "svelte", label: "Svelte" },
@@ -116,28 +112,38 @@ const [value, setValue] = useState<string[]>(["email"])
 
 ## Reference
 
-#### checkboxItemT
+#### checkboxOptionT
 <AutoTypeTable
-name="checkboxItemT"
-type={`export type checkboxItemT = {
-  value: string;
-  label: React.ReactNode;
-  description?: React.ReactNode;
-  disabled?: boolean;
-}`}
+name="checkboxOptionT"
+type={`export type checkboxOptionT =
+  | string
+  | number
+  | boolean
+  | {
+      value: string | number | boolean;
+      label: React.ReactNode;
+      description?: React.ReactNode;
+      className?: string;
+      disabled?: boolean;
+    }`}
 />
 
-#### CheckboxWrapper
+#### Checkbox
 <AutoTypeTable
-name="CheckboxWrapper"
-type={`export interface CheckboxWrapper {
+name="Checkbox"
+type={`export interface Checkbox {
   label: React.ReactNode;
   description?: React.ReactNode;
 
   /**
-   * CSS class for the outer label wrapper.
+   * CSS class for the outer wrapper element.
    */
   wrapperCls?: string;
+
+  /**
+   * Override the wrapper element. Defaults to 'label'.
+   */
+  as?: React.ElementType;
 
   /**
    * ...rootProps: All Base UI Checkbox.Root props.
@@ -148,11 +154,11 @@ type={`export interface CheckboxWrapper {
 }`}
 />
 
-#### CheckboxGroupWrapper
+#### CheckboxWrapper
 <AutoTypeTable
-name="CheckboxGroupWrapper"
-type={`export interface CheckboxGroupWrapper {
-  items: checkboxItemT[];
+name="CheckboxWrapper"
+type={`export interface CheckboxWrapper {
+  options: checkboxOptionT[];
 
   /**
    * Adds a parent select-all checkbox. Shows indeterminate when partially selected.
@@ -165,9 +171,14 @@ type={`export interface CheckboxGroupWrapper {
   orientation?: "horizontal" | "vertical";
 
   /**
-   * CSS class applied to each item label wrapper.
+   * CSS class applied to each item wrapper.
    */
   itemCls?: string;
+
+  /**
+   * Override the wrapper element for each item. Defaults to 'label'.
+   */
+  as?: React.ElementType;
 
   /**
    * ...groupProps: All Base UI CheckboxGroup props.
