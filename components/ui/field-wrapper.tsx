@@ -111,7 +111,6 @@ export function RadioWrapper({
       {label && <FieldLegend variant="label">{label}</FieldLegend>}
       <Radio
         {...props}
-        as={FieldLabel}
         value={value ? String(value) : undefined}
         onValueChange={val => onValueChange?.(parseAllowedPrimitive(val))}
         aria-invalid={isInvalid}
@@ -144,7 +143,6 @@ export function CheckboxWrapper({
       <Checkbox
         orientation="horizontal"
         {...props}
-        as={FieldLabel}
         value={value.map(String)}
         onValueChange={vals => onValueChange?.(vals.map(parseAllowedPrimitive))}
         aria-invalid={isInvalid}

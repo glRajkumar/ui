@@ -6,8 +6,6 @@ import {
   FlatExample,
   GroupedExample,
   SeparatorExample,
-  DefaultSizeExample,
-  SmSizeExample,
   IndicatorRightExample,
   IndicatorLeftExample,
 } from './basic'
@@ -39,15 +37,6 @@ export function SelectExample() {
         </ExItem>
         <ExItem label="With separator">
           <SeparatorExample />
-        </ExItem>
-      </ExRow>
-
-      <ExRow label="Size">
-        <ExItem label="Default (h-8)">
-          <DefaultSizeExample />
-        </ExItem>
-        <ExItem label="Small (h-7)">
-          <SmSizeExample />
         </ExItem>
       </ExRow>
 

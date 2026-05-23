@@ -36,8 +36,8 @@ function InputOTPSlot({
     <OTPFieldPrimitive.Input
       data-slot="input-otp-slot"
       className={cn(
-        'size-8 border-y border-r border-input bg-transparent text-center text-sm transition-all outline-none',
-        'first:rounded-l-lg first:border-l last:rounded-r-lg',
+        'size-9 border-y border-r border-input bg-transparent text-center text-sm transition-all outline-none',
+        'first:rounded-l-md first:border-l last:rounded-r-md',
         'data-[focused]:z-10 data-[focused]:border-ring data-[focused]:ring-3 data-[focused]:ring-ring/50',
         'data-[invalid]:border-destructive data-[focused]:data-[invalid]:ring-destructive/20',
         'dark:bg-input/30 dark:data-[focused]:data-[invalid]:ring-destructive/40',

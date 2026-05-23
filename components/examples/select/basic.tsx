@@ -19,14 +19,6 @@ export function SeparatorExample() {
   return <SelectWrapper options={withSeparator} placeholder="Select team" triggerCls="w-44" />
 }
 
-export function DefaultSizeExample() {
-  return <SelectWrapper options={fruits} placeholder="Default (h-8)" triggerCls="w-44" />
-}
-
-export function SmSizeExample() {
-  return <SelectWrapper options={fruits} placeholder="Small (h-7)" triggerCls="w-44" size="sm" />
-}
-
 export function IndicatorRightExample() {
   return <SelectWrapper options={fruits} placeholder="Select fruit" triggerCls="w-44" />
 }
