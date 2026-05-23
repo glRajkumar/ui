@@ -1,11 +1,21 @@
 ---
 title: Field Wrapper
-description: Reusable Field field wrappers built on top of shadcn/ui
+description: Opinionated form field wrappers combining Field layout, label, error display, and form controls. Available as library-agnostic, React Hook Form, and TanStack Form variants.
 ---
 
-import { FieldEx } from "@/components/examples";
+import { FieldEx, Field_RHF_Ex, Field_TF_Ex } from "@/components/examples";
+
+## Generic (uncontrolled / controlled)
 
 <FieldEx />
+
+## React Hook Form
+
+<Field_RHF_Ex />
+
+## TanStack Form
+
+<Field_TF_Ex />
 
 ## Installation
 
@@ -33,102 +43,246 @@ Copy and paste the following code into your project.
   ./components/ui/field-wrapper.tsx
 </include>
 
-</Tab>
+For React Hook Form integration:
 
+<include cwd meta='title="ui/field-wrapper-rhf.tsx"'>
+  ./components/ui/field-wrapper-rhf.tsx
+</include>
+
+For TanStack Form integration:
+
+<include cwd meta='title="ui/field-wrapper-tf.tsx"'>
+  ./components/ui/field-wrapper-tf.tsx
+</include>
+
+</Tab>
 </Tabs>
 
 These wrappers automatically handle:
 
 - Label
-- Form control wiring  
-- Error messages  
-- Placeholder generation  
-- Value parsing (e.g., converting `"1"` → number)  
+- Form control wiring
+- Error messages
+- Placeholder generation
+- Value parsing (e.g., converting `"1"` → number)
+
+## Available wrappers
+
+All wrappers are available in three flavours:
+
+| Wrapper | Generic import | RHF import | TanStack Form |
+|---|---|---|---|
+| `InputWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.InputField` |
+| `TextareaWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.TextareaField` |
+| `RadioWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.RadioField` |
+| `CheckboxWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.CheckboxField` |
+| `SwitchWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.SwitchField` |
+| `SelectWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.SelectField` |
+| `DatePickerWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.DatePickerField` |
+| `ComboboxWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.ComboboxField` |
+| `AutocompleteWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.AutocompleteField` |
+| `NumberWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.NumberField` |
+| `SliderWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.SliderField` |
 
 ## Usage
 
-### Basic
+### Generic (library-agnostic)
+
 ```tsx
-export function Basic() {
-  const [value, setValue] = useState({
-    /* ... */
-  })
+import {
+  InputWrapper,
+  SelectWrapper,
+  ComboboxWrapper,
+  NumberWrapper,
+  SliderWrapper,
+} from "@/components/ui/field-wrapper"
 
-  function onChange(key: string, value: allowedPrimitiveT | allowedPrimitiveT[]) {
-    setValue(prev => ({
-      ...prev,
-      [key]: value
-    }))
-  }
+<InputWrapper
+  name="email"
+  label="Email"
+  type="email"
+  value={value}
+  onChange={e => setValue(e.target.value)}
+/>
 
-  function onSubit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    console.log(value)
-  }
+<SelectWrapper
+  name="country"
+  label="Country"
+  options={[
+    { value: "us", label: "United States" },
+    { value: "uk", label: "United Kingdom" },
+  ]}
+  value={country}
+  onValueChange={setCountry}
+/>
 
-  return (
-    <form
-      onSubmit={onSubit}
-    >
-    // Wrapper component
-    <Comp 
-      value={value.field}
-      onValueChange={val => onChange("field", val)}
-    />
-    </form>
-  )
-}
+<NumberWrapper
+  name="qty"
+  label="Quantity"
+  value={qty}
+  onValueChange={setQty}
+  min={0}
+  step={1}
+/>
+
+<SliderWrapper
+  name="volume"
+  label="Volume"
+  value={[volume]}
+  onValueChange={([v]) => setVolume(v)}
+  min={0}
+  max={100}
+/>
 ```
 
-### With Errors
+### Validation state
+
+All wrappers accept `invalid` and `error` props:
+
 ```tsx
-export function Controlled() {
-  const [value, setValue] = useState({
-    /* ... */
-  })
-  const [errors, setErrors] = useState({
-    /* ... */
-  })
+<InputWrapper
+  name="email"
+  label="Email"
+  invalid={!!errors.email}
+  error={errors.email}
+/>
+```
 
-  function onChange(key: string, value: allowedPrimitiveT | allowedPrimitiveT[]) {
-    setValue(prev => ({
-      ...prev,
-      [key]: value
-    }))
-  }
+### React Hook Form
 
-  function onSubit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    console.log(value)
-  }
+```tsx
+import {
+  InputWrapper,
+  SelectWrapper,
+  NumberWrapper,
+  SliderWrapper,
+  AutocompleteWrapper,
+} from "@/components/ui/field-wrapper-rhf"
+import { FormProvider, useForm } from "react-hook-form"
 
-  return (
-    <form
-      onSubmit={onSubit}
-    >
-    // Wrapper component
-    <Comp 
-      value={value.field}
-      onValueChange={val => onChange("field", val)}
-      error={errors.field ? { message: errors.field }: undefined}
-      invalid={!!errors.field}
-    />
-    </form>
-  )
-}
+const form = useForm({ defaultValues: { email: "", country: "" } })
+
+<FormProvider {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <InputWrapper name="email" label="Email" type="email" control={form.control} />
+    <SelectWrapper name="country" label="Country" options={countryOptions} control={form.control} />
+    <NumberWrapper name="qty" label="Quantity" control={form.control} min={0} />
+    <SliderWrapper name="volume" label="Volume" control={form.control} min={0} max={100} />
+    <AutocompleteWrapper name="city" label="City" items={cities} control={form.control} />
+    <button type="submit">Submit</button>
+  </form>
+</FormProvider>
+```
+
+### TanStack Form
+
+```tsx
+import { useAppForm } from "@/components/ui/field-wrapper-tf"
+
+const form = useAppForm({
+  defaultValues: { email: "", qty: null, volume: [50] },
+  onSubmit: async ({ value }) => console.log(value),
+})
+
+<form onSubmit={e => { e.preventDefault(); form.handleSubmit() }}>
+  <form.AppField
+    name="email"
+    validators={{
+      onChange: ({ value }) =>
+        !value.includes("@") ? "Invalid email" : undefined,
+    }}
+  >
+    {field => <field.InputField label="Email" type="email" />}
+  </form.AppField>
+
+  <form.AppField name="qty">
+    {field => <field.NumberField label="Quantity" min={0} />}
+  </form.AppField>
+
+  <form.AppField name="volume">
+    {field => <field.SliderField label="Volume" min={0} max={100} />}
+  </form.AppField>
+
+  <button type="submit">Submit</button>
+</form>
+```
+
+### Combobox multi-select
+
+```tsx
+// Generic
+<ComboboxWrapper
+  multiple
+  name="hobbies"
+  label="Hobbies"
+  items={["Music", "Sports", "Travel", "Gaming"]}
+  value={hobbies}
+  onValueChange={setHobbies}
+/>
+
+// RHF
+<ComboboxWrapper multiple name="hobbies" label="Hobbies" items={items} control={form.control} />
+
+// TanStack Form
+<form.AppField name="hobbies">
+  {field => <field.ComboboxField multiple label="Hobbies" items={items} />}
+</form.AppField>
+```
+
+### DatePicker
+
+```tsx
+// Generic
+<DatePickerWrapper
+  name="dob"
+  label="Date of Birth"
+  value={date}
+  onSelect={setDate}
+/>
+
+// RHF
+<DatePickerWrapper name="dob" label="Date of Birth" control={form.control} />
+
+// TanStack Form
+<form.AppField name="dob">
+  {field => <field.DatePickerField label="Date of Birth" />}
+</form.AppField>
 ```
 
 ## Reference
 
-```ts
-type BaseProps = {
-  name: string
-  label?: React.ReactNode
-  error?: { message?: string }
-  invalid?: boolean
-  className?: string
-}
-```
+#### BaseProps (shared by all wrappers)
+
+<AutoTypeTable
+name="BaseProps"
+type={`export type BaseProps = {
+  /**
+   * HTML name attribute. Used as the field id and label association.
+   */
+  name: string;
+
+  /**
+   * Field label. Accepts string or ReactNode.
+   * Note: template placeholder (e.g. "Enter {label}") only works for string labels.
+   */
+  label?: React.ReactNode;
+
+  /**
+   * Error object from a form library. Drives isInvalid and displays the message.
+   */
+  error?: { message?: string };
+
+  /**
+   * Manually mark the field as invalid regardless of error prop.
+   */
+  invalid?: boolean;
+
+  /**
+   * CSS class applied to the Field (outer) container.
+   */
+  className?: string;
+}`}
+/>
 
 #### InputWrapper
 
@@ -181,7 +335,6 @@ type RadioProps = BaseProps & {
   onValueChange={val => onChange(val)}
 />
 ```
-
 
 #### CheckboxWrapper
 
@@ -279,4 +432,9 @@ type ComboboxProps = BaseProps & comboboxProps
 
 ## Related Components
 
+- [Form](/docs/shadcn-wrappers/form)
+- [Select](/docs/shadcn-wrappers/select)
+- [Combobox](/docs/shadcn-wrappers/combobox)
+- [Autocomplete](/docs/shadcn-wrappers/autocomplete)
+- [Number Field](/docs/shadcn-wrappers/number-field)
 - [Shadcn Field](https://ui.shadcn.com/docs/components/field)
