@@ -137,6 +137,28 @@ function InputGroupTextarea({ className, ...props }: React.ComponentProps<'texta
   )
 }
 
+type InputGroupWrapperProps = React.ComponentProps<'input'> & {
+  addonStart?: React.ReactNode
+  addonEnd?: React.ReactNode
+  wrapperClassName?: string
+}
+
+function InputGroupWrapper({
+  addonStart,
+  addonEnd,
+  wrapperClassName,
+  className,
+  ...props
+}: InputGroupWrapperProps) {
+  return (
+    <InputGroup className={wrapperClassName}>
+      {addonStart && <InputGroupAddon align="inline-start">{addonStart}</InputGroupAddon>}
+      <InputGroupInput className={className} {...props} />
+      {addonEnd && <InputGroupAddon align="inline-end">{addonEnd}</InputGroupAddon>}
+    </InputGroup>
+  )
+}
+
 export {
   InputGroup,
   InputGroupAddon,
@@ -144,4 +166,6 @@ export {
   InputGroupText,
   InputGroupInput,
   InputGroupTextarea,
+  InputGroupWrapper,
+  type InputGroupWrapperProps,
 }

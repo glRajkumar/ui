@@ -1,0 +1,232 @@
+---
+title: Input OTP
+description: OTP input backed by Base UI OTPFieldPreview with grouped slots, separator, and numeric/alphanumeric validation modes.
+---
+
+import { InputOTPEx } from "@/components/examples";
+
+<InputOTPEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/input-otp
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/input-otp.tsx"'>
+  ./components/ui/input-otp.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Standalone (InputOTPWrapper)
+
+```tsx
+import { InputOTPWrapper } from "@/components/ui/input-otp"
+
+const [value, setValue] = useState('')
+
+<InputOTPWrapper
+  length={6}
+  value={value}
+  onValueChange={(v) => setValue(v)}
+/>
+```
+
+### With separator
+
+```tsx
+// Split in half automatically (3+3 for length=6)
+<InputOTPWrapper length={6} separator />
+
+// Split after specific slot (4+4)
+<InputOTPWrapper length={8} separator={4} />
+```
+
+### Mask (password mode)
+
+```tsx
+<InputOTPWrapper length={6} mask />
+```
+
+### Alphanumeric validation
+
+```tsx
+<InputOTPWrapper length={6} validationType="alphanumeric" />
+```
+
+### With field label and error (OTPWrapper)
+
+`OTPWrapper` wraps `InputOTPWrapper` inside a `Field` with label and error display. Import from `field-wrapper`:
+
+```tsx
+import { OTPWrapper } from "@/components/ui/field-wrapper"
+
+<OTPWrapper
+  name="otp"
+  label="Verification code"
+  length={6}
+  separator
+  value={value}
+  onValueChange={(v) => setValue(v)}
+/>
+```
+
+### With validation error
+
+```tsx
+<OTPWrapper
+  name="otp"
+  label="Verification code"
+  length={6}
+  invalid
+  error={{ message: "Invalid code. Please try again." }}
+/>
+```
+
+### React Hook Form
+
+```tsx
+import { OTPWrapper } from "@/components/ui/field-wrapper-rhf"
+
+<OTPWrapper name="otp" label="Verification code" control={form.control} length={6} />
+```
+
+### TanStack Form
+
+```tsx
+<form.AppField
+  name="otp"
+  validators={{
+    onChange: ({ value }) =>
+      value.length < 6 ? "Enter all 6 digits" : undefined,
+  }}
+>
+  {field => <field.OTPField label="Verification code" length={6} separator />}
+</form.AppField>
+```
+
+### Using primitives
+
+```tsx
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from "@/components/ui/input-otp"
+
+<InputOTP length={6} value={value} onValueChange={setValue}>
+  <InputOTPGroup>
+    <InputOTPSlot />
+    <InputOTPSlot />
+    <InputOTPSlot />
+  </InputOTPGroup>
+  <InputOTPSeparator />
+  <InputOTPGroup>
+    <InputOTPSlot />
+    <InputOTPSlot />
+    <InputOTPSlot />
+  </InputOTPGroup>
+</InputOTP>
+```
+
+## Reference
+
+#### InputOTPWrapper
+
+<AutoTypeTable
+name="InputOTPWrapperProps"
+type={`export type InputOTPWrapperProps = {
+  /**
+   * Number of OTP slots.
+   * @default 6
+   */
+  length?: number;
+
+  /**
+   * Insert a separator between slot groups.
+   * true = split in half, number = split after Nth slot.
+   * @default false
+   */
+  separator?: boolean | number;
+
+  /**
+   * CSS class applied to each individual slot.
+   */
+  slotClassName?: string;
+
+  /**
+   * The OTP value (controlled).
+   */
+  value?: string;
+
+  /**
+   * Default value (uncontrolled).
+   */
+  defaultValue?: string;
+
+  /**
+   * Fires on every value change.
+   */
+  onValueChange?: (value: string, eventDetails: object) => void;
+
+  /**
+   * Fires when all slots are filled.
+   */
+  onValueComplete?: (value: string, eventDetails: object) => void;
+
+  /**
+   * Whether to submit the form when OTP is complete.
+   * @default false
+   */
+  autoSubmit?: boolean;
+
+  /**
+   * Mask entered characters (password mode).
+   * @default false
+   */
+  mask?: boolean;
+
+  /**
+   * Input validation mode.
+   * @default 'numeric'
+   */
+  validationType?: 'numeric' | 'alphanumeric' | 'none';
+
+  /**
+   * HTML name attribute for form submission.
+   */
+  name?: string;
+
+  /**
+   * CSS class applied to the root container.
+   */
+  className?: string;
+
+  disabled?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+}`}
+/>
+
+## Related Components
+
+- [Base UI OTP Field](https://base-ui.com/react/components/otp-field)
+- [Field Wrapper](/docs/shadcn-wrappers/field-wrapper)

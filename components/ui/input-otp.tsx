@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import { OTPFieldPreview as OTPFieldPrimitive } from '@base-ui/react/otp-field'
 import { MinusIcon } from 'lucide-react'
 
@@ -65,4 +66,56 @@ function InputOTPSeparator({
   )
 }
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }
+type InputOTPWrapperProps = Omit<React.ComponentProps<typeof OTPFieldPrimitive.Root>, 'length'> & {
+  length?: number
+  separator?: boolean | number
+  slotClassName?: string
+}
+
+function InputOTPWrapper({
+  length = 6,
+  separator = false,
+  slotClassName,
+  className,
+  ...props
+}: InputOTPWrapperProps) {
+  const splitAt =
+    separator === false ? null : separator === true ? Math.floor(length / 2) : separator
+
+  if (splitAt === null) {
+    return (
+      <InputOTP length={length} className={className} {...props}>
+        <InputOTPGroup>
+          {Array.from({ length }, (_, i) => (
+            <InputOTPSlot key={i} className={slotClassName} />
+          ))}
+        </InputOTPGroup>
+      </InputOTP>
+    )
+  }
+
+  return (
+    <InputOTP length={length} className={className} {...props}>
+      <InputOTPGroup>
+        {Array.from({ length: splitAt }, (_, i) => (
+          <InputOTPSlot key={i} className={slotClassName} />
+        ))}
+      </InputOTPGroup>
+      <InputOTPSeparator />
+      <InputOTPGroup>
+        {Array.from({ length: length - splitAt }, (_, i) => (
+          <InputOTPSlot key={i} className={slotClassName} />
+        ))}
+      </InputOTPGroup>
+    </InputOTP>
+  )
+}
+
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+  InputOTPWrapper,
+  type InputOTPWrapperProps
+}

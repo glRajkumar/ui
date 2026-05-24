@@ -17,6 +17,8 @@ import {
   NumberWrapper as Number,
   SliderWrapper as SliderBase,
   AutocompleteWrapper as AutocompleteBase,
+  OTPWrapper as OTPBase,
+  InputGroupWrapper as InputGroupBase,
 } from './field-wrapper'
 
 type BaseProps<T extends FieldValues> = {
@@ -267,6 +269,49 @@ export function AutocompleteWrapper<T extends FieldValues>({ name, control, ...p
           name={name}
           value={field.value ?? ''}
           onValueChange={field.onChange}
+          error={fieldState.error}
+          invalid={fieldState.invalid}
+        />
+      )}
+    />
+  )
+}
+
+type OTPProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof OTPBase>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+export function OTPWrapper<T extends FieldValues>({ name, control, ...props }: OTPProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <OTPBase
+          {...props}
+          name={name}
+          value={field.value ?? ''}
+          onValueChange={(value) => field.onChange(value)}
+          error={fieldState.error}
+          invalid={fieldState.invalid}
+        />
+      )}
+    />
+  )
+}
+
+type InputGroupProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof InputGroupBase>, 'name' | 'value' | 'onChange' | 'onBlur' | 'error' | 'invalid'>
+export function InputGroupWrapper<T extends FieldValues>({ name, control, ...props }: InputGroupProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <InputGroupBase
+          {...props}
+          name={name}
+          value={field.value ?? ''}
+          onChange={field.onChange}
+          onBlur={field.onBlur}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />

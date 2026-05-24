@@ -83,6 +83,8 @@ All wrappers are available in three flavours:
 | `AutocompleteWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.AutocompleteField` |
 | `NumberWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.NumberField` |
 | `SliderWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.SliderField` |
+| `OTPWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.OTPField` |
+| `InputGroupWrapper` | `field-wrapper` | `field-wrapper-rhf` | `field.InputGroupField` |
 
 ## Usage
 
@@ -246,6 +248,68 @@ const form = useAppForm({
 // TanStack Form
 <form.AppField name="dob">
   {field => <field.DatePickerField label="Date of Birth" />}
+</form.AppField>
+```
+
+### OTP
+
+```tsx
+import { OTPWrapper } from "@/components/ui/field-wrapper"
+
+// Generic
+<OTPWrapper
+  name="otp"
+  label="Verification Code"
+  length={6}
+  separator
+  value={value}
+  onValueChange={setValue}
+/>
+
+// RHF
+<OTPWrapper name="otp" label="Verification Code" control={form.control} length={6} separator />
+
+// TanStack Form
+<form.AppField name="otp">
+  {field => <field.OTPField label="Verification Code" length={6} separator />}
+</form.AppField>
+```
+
+### Input Group
+
+```tsx
+import { InputGroupWrapper } from "@/components/ui/field-wrapper"
+import { InputGroupText } from "@/components/ui/input-group"
+import { AtSignIcon } from "lucide-react"
+
+// Generic
+<InputGroupWrapper
+  name="username"
+  label="Username"
+  placeholder="username"
+  addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+  value={value}
+  onChange={e => setValue(e.target.value)}
+/>
+
+// RHF
+<InputGroupWrapper
+  name="username"
+  label="Username"
+  control={form.control}
+  placeholder="username"
+  addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+/>
+
+// TanStack Form
+<form.AppField name="username">
+  {field => (
+    <field.InputGroupField
+      label="Username"
+      placeholder="username"
+      addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+    />
+  )}
 </form.AppField>
 ```
 
@@ -430,6 +494,61 @@ type ComboboxProps = BaseProps & comboboxProps
 />
 ```
 
+#### OTPWrapper
+
+```ts
+type OTPProps = BaseProps & {
+  length?: number               // default 6
+  separator?: boolean | number  // true = split in half, number = split after Nth slot
+  slotClassName?: string
+  value?: string
+  onValueChange?: (value: string, eventDetails: object) => void
+  mask?: boolean
+  validationType?: 'numeric' | 'alphanumeric' | 'none'
+  disabled?: boolean
+  readOnly?: boolean
+  required?: boolean
+}
+```
+
+```tsx
+<OTPWrapper
+  name="otp"
+  label="Verification Code"
+  length={6}
+  separator
+  value={value}
+  onValueChange={setValue}
+/>
+```
+
+#### InputGroupWrapper
+
+```ts
+type InputGroupFieldProps = BaseProps & {
+  addonStart?: React.ReactNode   // inline-start addon (text, icon, button)
+  addonEnd?: React.ReactNode     // inline-end addon (text, icon, button)
+  placeholder?: string
+  value?: string
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
+  disabled?: boolean
+  readOnly?: boolean
+  type?: string
+}
+```
+
+```tsx
+<InputGroupWrapper
+  name="amount"
+  label="Amount"
+  placeholder="0.00"
+  addonStart={<InputGroupText><DollarSignIcon /></InputGroupText>}
+  addonEnd={<InputGroupText>USD</InputGroupText>}
+  value={value}
+  onChange={e => setValue(e.target.value)}
+/>
+```
+
 ## Related Components
 
 - [Form](/docs/shadcn-wrappers/form)
@@ -437,4 +556,6 @@ type ComboboxProps = BaseProps & comboboxProps
 - [Combobox](/docs/shadcn-wrappers/combobox)
 - [Autocomplete](/docs/shadcn-wrappers/autocomplete)
 - [Number Field](/docs/shadcn-wrappers/number-field)
+- [Input OTP](/docs/shadcn-wrappers/input-otp)
+- [Input Group](/docs/shadcn-wrappers/input-group)
 - [Shadcn Field](https://ui.shadcn.com/docs/components/field)

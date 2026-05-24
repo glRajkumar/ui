@@ -1,5 +1,8 @@
 'use client'
 
+import { AtSignIcon } from 'lucide-react'
+
+import { InputGroupText } from '@/components/ui/input-group'
 import { useAppForm } from '@/components/ui/field-wrapper-tf'
 import { Button } from '@/components/ui/button'
 
@@ -15,6 +18,9 @@ type FormData = {
   role: string
   birthDate: Date
   quantity: number | null
+  volume: number[]
+  otp: string
+  username: string
 }
 
 const defaultValues: FormData = {
@@ -29,6 +35,9 @@ const defaultValues: FormData = {
   role: '',
   birthDate: new Date(),
   quantity: null,
+  volume: [50],
+  otp: '',
+  username: '',
 }
 
 export function Field_TF_Example() {
@@ -120,6 +129,30 @@ export function Field_TF_Example() {
         }}
       >
         {field => <field.NumberField label="Quantity" min={0} step={1} />}
+      </form.AppField>
+
+      <form.AppField name="volume">
+        {field => <field.SliderField label="Volume" min={0} max={100} />}
+      </form.AppField>
+
+      <form.AppField
+        name="otp"
+        validators={{
+          onChange: ({ value }) =>
+            value.length > 0 && value.length < 6 ? 'Enter all 6 digits' : undefined,
+        }}
+      >
+        {field => <field.OTPField label="Verification Code" length={6} separator />}
+      </form.AppField>
+
+      <form.AppField name="username">
+        {field => (
+          <field.InputGroupField
+            label="Username"
+            placeholder="username"
+            addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+          />
+        )}
       </form.AppField>
 
       <form.Subscribe

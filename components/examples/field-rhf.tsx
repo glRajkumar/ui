@@ -1,18 +1,23 @@
 'use client'
 
 import { FormProvider, useForm } from 'react-hook-form'
+import { AtSignIcon } from 'lucide-react'
 
 import {
+  OTPWrapper,
   InputWrapper,
   RadioWrapper,
   SelectWrapper,
   SwitchWrapper,
+  NumberWrapper,
+  SliderWrapper,
   TextareaWrapper,
   ComboboxWrapper,
   CheckboxWrapper,
   DatePickerWrapper,
-  NumberWrapper,
+  InputGroupWrapper,
 } from '@/components/ui/field-wrapper-rhf'
+import { InputGroupText } from '@/components/ui/input-group'
 import { Button } from '@/components/ui/button'
 
 export function Field_RHF_Example() {
@@ -28,6 +33,9 @@ export function Field_RHF_Example() {
       dob: undefined,
       isCompleted: false,
       quantity: null as number | null,
+      volume: [50] as number[],
+      otp: '',
+      username: '',
     },
   })
 
@@ -100,6 +108,18 @@ export function Field_RHF_Example() {
         <DatePickerWrapper name="dob" label="Date of Birth" control={form.control} />
 
         <NumberWrapper name="quantity" label="Quantity" control={form.control} min={0} step={1} />
+
+        <SliderWrapper name="volume" label="Volume" control={form.control} min={0} max={100} />
+
+        <OTPWrapper name="otp" label="Verification Code" control={form.control} length={6} separator />
+
+        <InputGroupWrapper
+          name="username"
+          label="Username"
+          control={form.control}
+          placeholder="username"
+          addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+        />
 
         <Button type="submit">Submit</Button>
       </form>

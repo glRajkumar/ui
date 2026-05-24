@@ -14,6 +14,8 @@ import { Field, FieldLabel, FieldSet, FieldLegend, FieldError } from './field'
 import { type RadioWrapperProps, RadioWrapper as Radio } from './radio'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 import { NumberFieldWrapper } from './number-field'
+import { InputOTPWrapper, type InputOTPWrapperProps } from './input-otp'
+import { InputGroupWrapper as InputGroupWrapperPrimitive, type InputGroupWrapperProps as InputGroupWrapperBaseProps } from './input-group'
 import { Calendar } from './calendar'
 import { Textarea } from './textarea'
 import { Slider } from './slider'
@@ -368,6 +370,51 @@ export function AutocompleteWrapper({
     <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
       <AutocompletePrimitive aria-invalid={isInvalid} {...props} />
+      <FieldError errors={[error]} />
+    </Field>
+  )
+}
+
+type OTPProps = BaseProps & Omit<InputOTPWrapperProps, 'className'>
+export function OTPWrapper({
+  name,
+  label,
+  error,
+  invalid,
+  className,
+  ...props
+}: OTPProps) {
+  const isInvalid = invalid || !!error
+
+  return (
+    <Field className={className} invalid={isInvalid}>
+      {label && <FieldLabel>{label}</FieldLabel>}
+      <InputOTPWrapper name={name} aria-invalid={isInvalid} {...props} />
+      <FieldError errors={[error]} />
+    </Field>
+  )
+}
+
+type InputGroupFieldProps = BaseProps & Omit<InputGroupWrapperBaseProps, 'wrapperClassName'>
+export function InputGroupWrapper({
+  name,
+  label,
+  error,
+  invalid,
+  className,
+  ...props
+}: InputGroupFieldProps) {
+  const isInvalid = invalid || !!error
+
+  return (
+    <Field className={className} invalid={isInvalid}>
+      {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+      <InputGroupWrapperPrimitive
+        id={name}
+        name={name}
+        aria-invalid={isInvalid}
+        {...props}
+      />
       <FieldError errors={[error]} />
     </Field>
   )

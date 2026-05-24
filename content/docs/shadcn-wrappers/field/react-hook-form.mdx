@@ -242,7 +242,72 @@ type ComboboxProps<T extends FieldValues> = BaseProps<T> &
 ```
 
 
+#### SliderWrapper
+
+```ts
+type SliderProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof Slider>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+```
+
+```tsx
+<SliderWrapper name="volume" label="Volume" control={form.control} min={0} max={100} />
+
+// Range
+<SliderWrapper name="price-range" label="Price range" control={form.control} min={0} max={500} step={10} />
+```
+
+Note: value type is `number | number[]`. Use `number[]` for range sliders.
+
+#### OTPWrapper
+
+```ts
+type OTPProps<T extends FieldValues> = BaseProps<T> & {
+  length?: number               // default 6
+  separator?: boolean | number
+  slotClassName?: string
+  mask?: boolean
+  validationType?: 'numeric' | 'alphanumeric' | 'none'
+  disabled?: boolean
+  readOnly?: boolean
+}
+```
+
+```tsx
+<OTPWrapper
+  name="otp"
+  label="Verification Code"
+  control={form.control}
+  length={6}
+  separator
+/>
+```
+
+#### InputGroupWrapper
+
+```ts
+type InputGroupProps<T extends FieldValues> = BaseProps<T> & {
+  addonStart?: React.ReactNode
+  addonEnd?: React.ReactNode
+  placeholder?: string
+  disabled?: boolean
+  readOnly?: boolean
+  type?: string
+}
+```
+
+```tsx
+<InputGroupWrapper
+  name="username"
+  label="Username"
+  control={form.control}
+  placeholder="username"
+  addonStart={<InputGroupText>@</InputGroupText>}
+/>
+```
+
 ## Related Components
 
 - [Shadcn Field](https://ui.shadcn.com/docs/components/field)
 - [React Hook Form](https://react-hook-form.com)
+- [Input OTP](/docs/shadcn-wrappers/input-otp)
+- [Input Group](/docs/shadcn-wrappers/input-group)

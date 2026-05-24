@@ -273,8 +273,78 @@ type comboboxFieldProps = Omit<comboboxProps, 'value' | 'onValueChange' | 'name'
 ```
 
 
+#### SliderField
+
+```ts
+type sliderFieldProps = Omit<
+  React.ComponentProps<typeof Slider>,
+  'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
+> & { label?: React.ReactNode }
+```
+
+```tsx
+<form.AppField name="volume">
+  {field => <field.SliderField label="Volume" min={0} max={100} />}
+</form.AppField>
+
+// With validation
+<form.AppField
+  name="budget"
+  validators={{
+    onChange: ({ value }) =>
+      (value as number[])[0] === 0 ? 'Must be greater than 0' : undefined,
+  }}
+>
+  {field => <field.SliderField label="Budget" min={0} max={1000} step={10} />}
+</form.AppField>
+```
+
+Note: field value type is `number | number[]`. Use `number[]` (e.g. `[50]`) for single thumb, `[20, 80]` for range.
+
+#### OTPField
+
+```ts
+type otpFieldProps = Omit<OTPWrapper, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField
+  name="otp"
+  validators={{
+    onChange: ({ value }) =>
+      value.length > 0 && value.length < 6 ? 'Enter all 6 digits' : undefined,
+  }}
+>
+  {field => <field.OTPField label="Verification Code" length={6} separator />}
+</form.AppField>
+```
+
+#### InputGroupField
+
+```ts
+type inputGroupFieldProps = Omit<InputGroupWrapper, 'name' | 'value' | 'onChange' | 'onBlur' | 'error' | 'invalid'> & {
+  label?: React.ReactNode
+}
+```
+
+```tsx
+<form.AppField name="username">
+  {field => (
+    <field.InputGroupField
+      label="Username"
+      placeholder="username"
+      addonStart={<InputGroupText>@</InputGroupText>}
+    />
+  )}
+</form.AppField>
+```
+
 ## Related Components
 
 - [Shadcn Field](https://ui.shadcn.com/docs/components/field)
 - [Tanstack Form](https://tanstack.com/form/latest/docs/overview)
+- [Input OTP](/docs/shadcn-wrappers/input-otp)
+- [Input Group](/docs/shadcn-wrappers/input-group)
 

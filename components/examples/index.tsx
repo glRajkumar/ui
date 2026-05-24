@@ -33,6 +33,8 @@ import { CardExample } from './card'
 import { TabsExample } from './tabs'
 import { ItemExample } from './item'
 import { FormExample } from './form'
+import { InputOTPExample } from './input-otp'
+import { InputGroupExample } from './input-group'
 import Wrapper from '../wrapper'
 
 export function SelectEx() {
@@ -370,6 +372,22 @@ export function FieldSetEx() {
   return (
     <Wrapper path="/components/examples/fieldset.tsx">
       <FieldSetExample />
+    </Wrapper>
+  )
+}
+
+export function InputOTPEx() {
+  return (
+    <Wrapper path="/components/examples/input-otp.tsx">
+      <InputOTPExample />
+    </Wrapper>
+  )
+}
+
+export function InputGroupEx() {
+  return (
+    <Wrapper path="/components/examples/input-group.tsx">
+      <InputGroupExample />
     </Wrapper>
   )
 }

@@ -17,6 +17,8 @@ import {
   NumberWrapper as NumberWrapperBase,
   SliderWrapper as SliderBase,
   AutocompleteWrapper as AutocompleteBase,
+  OTPWrapper as OTPBase,
+  InputGroupWrapper as InputGroupBase,
 } from './field-wrapper'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
@@ -256,6 +258,49 @@ function AutocompleteField(props: autocompleteFieldProps) {
   )
 }
 
+type otpFieldProps = Omit<
+  React.ComponentProps<typeof OTPBase>,
+  'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
+> & { label?: React.ReactNode }
+function OTPField(props: otpFieldProps) {
+  const field = useFieldContext<string>()
+
+  return (
+    <OTPBase
+      {...props}
+      name={field.name}
+      value={field.state.value ?? ''}
+      onValueChange={(value) => field.handleChange(value)}
+      error={
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
+  )
+}
+
+type inputGroupFieldProps = Omit<
+  React.ComponentProps<typeof InputGroupBase>,
+  'name' | 'value' | 'onChange' | 'onBlur' | 'error' | 'invalid'
+> & { label?: React.ReactNode }
+function InputGroupField(props: inputGroupFieldProps) {
+  const field = useFieldContext<string>()
+
+  return (
+    <InputGroupBase
+      {...props}
+      name={field.name}
+      value={field.state.value ?? ''}
+      onChange={e => field.handleChange(e.target.value)}
+      onBlur={field.handleBlur}
+      error={
+        field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
+      }
+      invalid={field.state.meta.errors.length > 0}
+    />
+  )
+}
+
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
   formContext,
@@ -271,6 +316,8 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     NumberField,
     SliderField,
     AutocompleteField,
+    OTPField,
+    InputGroupField,
   },
   formComponents: {},
 })

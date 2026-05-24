@@ -1,0 +1,229 @@
+---
+title: Input Group
+description: Composable input with inline and block addons — text labels, icons, and buttons — built on a flex container wrapper.
+---
+
+import { InputGroupEx } from "@/components/examples";
+
+<InputGroupEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/input-group
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/input-group.tsx"'>
+  ./components/ui/input-group.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Standalone (InputGroupWrapper)
+
+```tsx
+import { InputGroupWrapper, InputGroupText } from "@/components/ui/input-group"
+
+<InputGroupWrapper
+  placeholder="username"
+  addonStart={<InputGroupText>@</InputGroupText>}
+/>
+```
+
+### With icon prefix
+
+```tsx
+import { SearchIcon } from "lucide-react"
+
+<InputGroupWrapper
+  placeholder="Search..."
+  addonStart={<InputGroupText><SearchIcon /></InputGroupText>}
+/>
+```
+
+### With text suffix
+
+```tsx
+<InputGroupWrapper
+  placeholder="yoursite"
+  addonEnd={<InputGroupText>.com</InputGroupText>}
+/>
+```
+
+### With button addon
+
+```tsx
+import { CopyIcon } from "lucide-react"
+import { InputGroupWrapper, InputGroupButton, InputGroupText } from "@/components/ui/input-group"
+
+<InputGroupWrapper
+  defaultValue="https://example.com"
+  readOnly
+  addonEnd={
+    <InputGroupButton>
+      <CopyIcon />
+    </InputGroupButton>
+  }
+/>
+```
+
+### With field label and error (InputGroupWrapper)
+
+`InputGroupWrapper` from `field-wrapper` wraps the input group inside a `Field` with label and error display:
+
+```tsx
+import { InputGroupWrapper } from "@/components/ui/field-wrapper"
+import { InputGroupText } from "@/components/ui/input-group"
+import { DollarSignIcon } from "lucide-react"
+
+<InputGroupWrapper
+  name="amount"
+  label="Amount"
+  placeholder="0.00"
+  addonStart={<InputGroupText><DollarSignIcon /></InputGroupText>}
+  addonEnd={<InputGroupText>USD</InputGroupText>}
+/>
+```
+
+### With validation error
+
+```tsx
+<InputGroupWrapper
+  name="username"
+  label="Username"
+  placeholder="username"
+  addonStart={<InputGroupText>@</InputGroupText>}
+  invalid
+  error={{ message: "Username is already taken." }}
+/>
+```
+
+### React Hook Form
+
+```tsx
+import { InputGroupWrapper } from "@/components/ui/field-wrapper-rhf"
+import { InputGroupText } from "@/components/ui/input-group"
+
+<InputGroupWrapper
+  name="username"
+  label="Username"
+  control={form.control}
+  addonStart={<InputGroupText>@</InputGroupText>}
+  placeholder="username"
+/>
+```
+
+### TanStack Form
+
+```tsx
+import { InputGroupText } from "@/components/ui/input-group"
+
+<form.AppField name="username">
+  {field => (
+    <field.InputGroupField
+      label="Username"
+      placeholder="username"
+      addonStart={<InputGroupText>@</InputGroupText>}
+    />
+  )}
+</form.AppField>
+```
+
+### Using primitives
+
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupText,
+  InputGroupInput,
+  InputGroupTextarea,
+} from "@/components/ui/input-group"
+
+<InputGroup>
+  <InputGroupAddon align="inline-start">
+    <InputGroupText>@</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput placeholder="username" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton><CopyIcon /></InputGroupButton>
+  </InputGroupAddon>
+</InputGroup>
+```
+
+### Addon alignment options
+
+```tsx
+// inline addons (default) — left/right of input on same line
+<InputGroupAddon align="inline-start">...</InputGroupAddon>
+<InputGroupAddon align="inline-end">...</InputGroupAddon>
+
+// block addons — above/below the input (stacked layout)
+<InputGroupAddon align="block-start">Character limit: 280</InputGroupAddon>
+<InputGroupInput />
+<InputGroupAddon align="block-end">0 / 280</InputGroupAddon>
+```
+
+## Reference
+
+#### InputGroupWrapper (standalone)
+
+<AutoTypeTable
+name="InputGroupWrapperProps"
+type={`export type InputGroupWrapperProps = {
+  /**
+   * Content rendered in the inline-start (left) addon slot.
+   * Use InputGroupText, InputGroupButton, or any ReactNode.
+   */
+  addonStart?: React.ReactNode;
+
+  /**
+   * Content rendered in the inline-end (right) addon slot.
+   * Use InputGroupText, InputGroupButton, or any ReactNode.
+   */
+  addonEnd?: React.ReactNode;
+
+  /**
+   * CSS class applied to the outer InputGroup container.
+   */
+  wrapperClassName?: string;
+
+  /**
+   * CSS class applied to the inner InputGroupInput.
+   */
+  className?: string;
+
+  placeholder?: string;
+  value?: string;
+  defaultValue?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  disabled?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+  name?: string;
+  id?: string;
+  type?: string;
+}`}
+/>
+
+## Related Components
+
+- [Field Wrapper](/docs/shadcn-wrappers/field-wrapper)
+- [Input](/docs/shadcn-wrappers/field)
