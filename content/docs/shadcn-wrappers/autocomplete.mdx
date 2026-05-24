@@ -40,6 +40,29 @@ Copy and paste the following code into your project.
 </Tab>
 </Tabs>
 
+## Virtualised Installation
+
+`AutocompleteVirtualisedWrapper` renders large flat lists efficiently using `@tanstack/react-virtual`. Install separately — grouping is not supported.
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/autocomplete-virtual
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+<include cwd meta='title="ui/autocomplete-virtualised.tsx"'>
+  ./components/ui/autocomplete-virtualised.tsx
+</include>
+
+</Tab>
+</Tabs>
+
 
 ## Usage
 
@@ -130,6 +153,21 @@ Completes input text inline as the user types:
 <AutocompleteWrapper items={items} mode="inline" placeholder="Start typing..." />
 ```
 
+### Custom status and empty slots
+
+Override the default loading/empty UI with `renderStatus` and `renderEmpty`:
+
+```tsx
+<AutocompleteWrapper
+  items={items}
+  renderStatus={isFetching
+    ? <p className="flex items-center gap-2 p-2 text-sm"><Loader2 className="size-4 animate-spin" /> Fetching...</p>
+    : null
+  }
+  renderEmpty={<p className="py-6 text-center text-sm">Nothing here yet</p>}
+/>
+```
+
 ### Async search
 
 Disable client-side filter with `filter={null}` and supply results externally:
@@ -137,14 +175,18 @@ Disable client-side filter with `filter={null}` and supply results externally:
 ```tsx
 const [inputValue, setInputValue] = useState("")
 const [results, setResults] = useState<string[]>([])
-const [loading, setLoading] = useState(false)
+const [isFetching, setIsFetching] = useState(false)
+const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-async function handleValueChange(val: string) {
+function handleValueChange(val: string) {
   setInputValue(val)
-  setLoading(true)
-  const data = await fetchSuggestions(val)
-  setResults(data)
-  setLoading(false)
+  if (timerRef.current) clearTimeout(timerRef.current)
+  if (!val.trim()) { setResults([]); return }
+  setIsFetching(true)
+  timerRef.current = setTimeout(async () => {
+    setResults(await fetchSuggestions(val))
+    setIsFetching(false)
+  }, 400)
 }
 
 <AutocompleteWrapper
@@ -152,42 +194,44 @@ async function handleValueChange(val: string) {
   value={inputValue}
   onValueChange={handleValueChange}
   filter={null}
-  isLoading={loading}
   placeholder="Search..."
+  showClear
+  renderStatus={isFetching
+    ? <p className="flex items-center gap-2 p-2 text-sm"><Loader2 className="size-4 animate-spin" /> Fetching...</p>
+    : null
+  }
+  renderEmpty={<p className="py-6 text-center text-sm">No results found</p>}
+/>
+```
+
+### Virtualised — large lists
+
+Use `AutocompleteVirtualisedWrapper` for lists with hundreds or thousands of items:
+
+```tsx
+import { AutocompleteVirtualisedWrapper } from "@/components/ui/autocomplete-virtualised"
+
+<AutocompleteVirtualisedWrapper
+  items={largeList}
+  placeholder="Search 1000 options…"
+  className="w-64"
   showClear
 />
 ```
 
-### Using primitives
+Custom row height and overscan:
 
 ```tsx
-import {
-  AutocompleteRoot,
-  AutocompleteInput,
-  AutocompleteContent,
-  AutocompleteList,
-  AutocompleteItem,
-  AutocompleteEmpty,
-} from "@/components/ui/autocomplete"
-
-<AutocompleteRoot items={["Apple", "Banana", "Orange"]}>
-  <AutocompleteInput placeholder="Search..." showClear />
-  <AutocompleteContent>
-    <AutocompleteEmpty>No results</AutocompleteEmpty>
-    <AutocompleteList>
-      {(item: unknown) => (
-        <AutocompleteItem key={item as string} value={item as string}>
-          {item as string}
-        </AutocompleteItem>
-      )}
-    </AutocompleteList>
-  </AutocompleteContent>
-</AutocompleteRoot>
+<AutocompleteVirtualisedWrapper
+  items={largeList}
+  placeholder="Search…"
+  maxHeight={200}
+  estimateSize={36}
+  virtualizerOptions={{ overscan: 10 }}
+/>
 ```
 
 ## Reference
-
-#### AutocompleteWrapperProps
 
 <AutoTypeTable
 name="AutocompleteWrapperProps"
@@ -252,6 +296,18 @@ type={`export type AutocompleteWrapperProps = {
    */
   inputProps?: Omit<React.ComponentProps<'input'>, 'value' | 'onChange'>;
 
+  /**
+   * Custom React node rendered inside the Status slot.
+   * When provided, replaces the default isLoading spinner entirely.
+   */
+  renderStatus?: React.ReactNode;
+
+  /**
+   * Custom React node rendered inside the Empty slot.
+   * When provided, replaces the default emptyMessage entirely.
+   */
+  renderEmpty?: React.ReactNode;
+
   // All Autocomplete.Root props are forwarded:
   // value, onValueChange, open, onOpenChange, mode, inline,
   // autoHighlight, limit, filter, itemToStringValue,
@@ -259,7 +315,33 @@ type={`export type AutocompleteWrapperProps = {
 }`}
 />
 
+## Virtualised Reference
+
+`AutocompleteVirtualisedWrapper` accepts all the same props as `AutocompleteWrapper` except `groupCls`. The following props are unique to the virtualised variant:
+
+<AutoTypeTable
+name="AutocompleteVirtualisedWrapperProps"
+type={`export type AutocompleteVirtualisedWrapperProps = {
+  /**
+   * Estimated row height in pixels used by the virtualizer.
+   * @default 32
+   */
+  estimateSize?: number;
+
+  /**
+   * Maximum height of the scrollable list in pixels.
+   * @default 300
+   */
+  maxHeight?: number;
+
+  /**
+   * Extra options forwarded to useVirtualizer (except count and getScrollElement).
+   * Useful for tuning overscan, measureElement, etc.
+   */
+  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, "count" | "getScrollElement">>;
+}`}
+/>
+
 ## Related Components
 
 - [Base UI Autocomplete](https://base-ui.com/react/components/autocomplete)
-- [Combobox](/docs/shadcn-wrappers/combobox)

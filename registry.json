@@ -55,6 +55,34 @@
       ]
     },
     {
+      "name": "autocomplete-virtual",
+      "type": "registry:ui",
+      "title": "Autocomplete Virtualised",
+      "description": "Virtualised autocomplete wrapper using @tanstack/react-virtual — renders large flat lists efficiently without grouping.",
+      "dependencies": [
+        "@tanstack/react-virtual"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/autocomplete-virtualised.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "breadcrumb",
       "type": "registry:ui",
       "title": "Breadcrumb",
@@ -169,6 +197,34 @@
         },
         {
           "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox-virtual",
+      "type": "registry:ui",
+      "title": "Combobox Virtualised",
+      "description": "Virtualised combobox wrapper using @tanstack/react-virtual — renders large flat lists efficiently without grouping.",
+      "dependencies": [
+        "@tanstack/react-virtual"
+      ],
+      "files": [
+        {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/combobox.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/combobox-virtualised.tsx",
           "type": "registry:ui"
         }
       ]

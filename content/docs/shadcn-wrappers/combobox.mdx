@@ -40,6 +40,29 @@ Copy and paste the following code into your project.
 </Tab>
 </Tabs>
 
+## Virtualised Installation
+
+`ComboboxVirtualisedWrapper` renders large flat lists efficiently using `@tanstack/react-virtual`. Install separately — grouping is not supported.
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/combobox-virtual
+```
+
+</Tab>
+
+<Tab value="Manual">
+
+<include cwd meta='title="ui/combobox-virtualised.tsx"'>
+  ./components/ui/combobox-virtualised.tsx
+</include>
+
+</Tab>
+</Tabs>
+
 
 ## Usage
 
@@ -201,6 +224,52 @@ const { data: items = [], isLoading } = useQuery({
 />
 ```
 
+### Async search
+
+Disable client filtering with `filter={() => true}` and update items externally on input change:
+
+```tsx
+const [results, setResults] = useState<string[]>([])
+const [isFetching, setIsFetching] = useState(false)
+const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+function handleInputChange(query: string) {
+  if (timerRef.current) clearTimeout(timerRef.current)
+  if (!query.trim()) { setResults([]); return }
+  setIsFetching(true)
+  timerRef.current = setTimeout(async () => {
+    setResults(await fetchOptions(query))
+    setIsFetching(false)
+  }, 400)
+}
+
+<ComboboxWrapper
+  items={results}
+  filter={() => true}
+  onInputValueChange={handleInputChange}
+  placeholder="Type to search…"
+  showClear
+  renderStatus={isFetching
+    ? <p className="flex items-center gap-2 p-2 text-sm"><Loader2 className="size-4 animate-spin" /> Fetching...</p>
+    : null
+  }
+  renderEmpty={<p className="py-6 text-center text-sm">No results found</p>}
+/>
+```
+
+### Custom status and empty slots
+
+Override the default loading/empty UI with `renderStatus` and `renderEmpty`:
+
+```tsx
+<ComboboxWrapper
+  items={items}
+  isLoading={isLoading}
+  renderStatus={isLoading ? <MySpinner /> : null}
+  renderEmpty={<p className="py-6 text-center">Nothing here yet</p>}
+/>
+```
+
 ### Custom chip label (renderValue)
 
 Used in `multiple` mode — controls what renders inside each chip. Receives the raw value string and the matched option:
@@ -285,41 +354,31 @@ Pass native input attributes via `inputProps`:
 />
 ```
 
-### Using primitives
+### Virtualised — large lists
+
+Use `ComboboxVirtualisedWrapper` for lists with hundreds or thousands of items:
 
 ```tsx
-import {
-  ComboboxRoot,
-  ComboboxInput,
-  ComboboxContent,
-  ComboboxList,
-  ComboboxItem,
-  ComboboxGroup,
-  ComboboxLabel,
-  ComboboxCollection,
-  ComboboxEmpty,
-  ComboboxSeparator,
-  ComboboxChips,
-  ComboboxChip,
-  ComboboxChipsInput,
-  ComboboxTrigger,
-  ComboboxClear,
-  ComboboxValue,
-} from "@/components/ui/combobox"
+import { ComboboxVirtualisedWrapper } from "@/components/ui/combobox-virtualised"
 
-<ComboboxRoot items={items} itemToStringLabel={(item) => String(item)}>
-  <ComboboxInput placeholder="Search..." showTrigger showClear />
-  <ComboboxContent>
-    <ComboboxEmpty>Nothing found</ComboboxEmpty>
-    <ComboboxList>
-      {(item) => (
-        <ComboboxItem key={String(item)} value={item}>
-          {String(item)}
-        </ComboboxItem>
-      )}
-    </ComboboxList>
-  </ComboboxContent>
-</ComboboxRoot>
+<ComboboxVirtualisedWrapper
+  items={largeList}
+  placeholder="Search 1000 options…"
+  triggerCls="w-64"
+  showClear
+/>
+```
+
+Custom row height and overscan:
+
+```tsx
+<ComboboxVirtualisedWrapper
+  items={largeList}
+  placeholder="Search…"
+  maxHeight={200}
+  estimateSize={36}
+  virtualizerOptions={{ overscan: 10 }}
+/>
 ```
 
 ## Reference
@@ -435,10 +494,49 @@ type={`export interface ComboboxWrapper {
   itemCls?: string;
 
   /**
+   * Custom React node rendered inside the Status slot.
+   * When provided, replaces the default isLoading spinner entirely.
+   */
+  renderStatus?: React.ReactNode;
+
+  /**
+   * Custom React node rendered inside the Empty slot.
+   * When provided, replaces the default emptyMessage entirely.
+   */
+  renderEmpty?: React.ReactNode;
+
+  /**
    * ...rootProps: All Base UI Combobox.Root props (value, onValueChange, defaultValue,
    * query, onQueryChange, open, onOpenChange, disabled, name, etc.) are forwarded.
    */
   otherProps?: never;
+}`}
+/>
+
+## Virtualised Reference
+
+`ComboboxVirtualisedWrapper` accepts all the same props as `ComboboxWrapper` except `multiple`, `hideList`, `groupCls`, and `renderValue`. The following props are unique to the virtualised variant:
+
+<AutoTypeTable
+name="ComboboxVirtualisedWrapperProps"
+type={`export type ComboboxVirtualisedWrapperProps = {
+  /**
+   * Estimated row height in pixels used by the virtualizer.
+   * @default 32
+   */
+  estimateSize?: number;
+
+  /**
+   * Maximum height of the scrollable list in pixels.
+   * @default 300
+   */
+  maxHeight?: number;
+
+  /**
+   * Extra options forwarded to useVirtualizer (except count and getScrollElement).
+   * Useful for tuning overscan, measureElement, etc.
+   */
+  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, "count" | "getScrollElement">>;
 }`}
 />
 
