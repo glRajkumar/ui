@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { generateLargeList } from '@/components/examples/data'
-import { AutocompleteVirtualisedWrapper } from '@/components/ui/autocomplete'
+import { AutocompleteVirtualisedWrapper } from '@/components/ui/autocomplete-virtualised'
 
 const largeList = generateLargeList(1000)
 

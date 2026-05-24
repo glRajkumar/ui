@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { generateLargeList } from '@/components/examples/data'
-import { ComboboxVirtualisedWrapper } from '@/components/ui/combobox'
+import { ComboboxVirtualisedWrapper } from '@/components/ui/combobox-virtualised'
 
 const largeList = generateLargeList(1000)
 
