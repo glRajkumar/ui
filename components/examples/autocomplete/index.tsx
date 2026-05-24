@@ -17,6 +17,7 @@ import {
 import {
   AsyncSearchExample,
 } from './advanced'
+import { VirtualisedExample, VirtualisedCustomSizeExample } from './virtual'
 
 export function AutocompleteExample() {
   return (
@@ -57,6 +58,15 @@ export function AutocompleteExample() {
       <ExRow label="Async">
         <ExItem label="Async search — filter=null, results fetched on typing, 400ms debounce">
           <AsyncSearchExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Virtualised">
+        <ExItem label="1000 items — virtualised list">
+          <VirtualisedExample />
+        </ExItem>
+        <ExItem label="1000 items — custom height + overscan">
+          <VirtualisedCustomSizeExample />
         </ExItem>
       </ExRow>
     </div>

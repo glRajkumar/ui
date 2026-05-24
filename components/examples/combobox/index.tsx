@@ -29,6 +29,7 @@ import {
   PriorityChipsExample,
   TeamChipsExample,
 } from './advanced'
+import { VirtualisedExample, VirtualisedCustomSizeExample } from './virtual'
 
 export function ComboboxExample() {
   return (
@@ -120,6 +121,15 @@ export function ComboboxExample() {
         </ExItem>
         <ExItem label="Team chips — avatar initials + first name">
           <TeamChipsExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Virtualised">
+        <ExItem label="1000 items — virtualised list">
+          <VirtualisedExample />
+        </ExItem>
+        <ExItem label="1000 items — custom height + overscan">
+          <VirtualisedCustomSizeExample />
         </ExItem>
       </ExRow>
     </div>
