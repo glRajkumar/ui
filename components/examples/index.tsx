@@ -320,7 +320,15 @@ export function RadioGroupEx() {
 
 export function AutocompleteEx() {
   return (
-    <Wrapper path="/components/examples/autocomplete.tsx">
+    <Wrapper
+      path={[
+        '/components/examples/autocomplete/index.tsx',
+        '/components/examples/autocomplete/basic.tsx',
+        '/components/examples/autocomplete/state.tsx',
+        '/components/examples/autocomplete/advanced.tsx',
+        '/components/examples/data/options.tsx',
+      ]}
+    >
       <AutocompleteExample />
     </Wrapper>
   )

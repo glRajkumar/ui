@@ -36,6 +36,12 @@ export async function asyncOptions({ n, delayBy = 5000 }: { n?: number; delayBy?
 export const fruits: optionsT = [
   'Apple', 'Banana', 'Cherry', 'Grape', 'Mango',
   'Orange', 'Peach', 'Plum', 'Strawberry', 'Watermelon',
+  'Apricot', 'Blueberry', 'Coconut', 'Date', 'Fig',
+  'Guava', 'Kiwi', 'Lemon', 'Lime', 'Papaya',
+  'Pomegranate', 'Persimmon', 'Nectarine', 'Mulberry', 'Passionfruit',
+  'Dragonfruit', 'Jackfruit', 'Lychee', 'Rambutan', 'Starfruit',
+  'Soursop', 'Quince', 'Cranberry', 'Currant', 'Elderberry',
+  'Boysenberry', 'Honeydew', 'Cantaloupe', 'Kumquat', 'Longan',
 ]
 
 export const grouped: optionsT = [
@@ -73,17 +79,17 @@ export const statusOptions: optionsT = [
 ]
 
 export const statusStyle: Record<string, { dot: string; text: string; label: string }> = {
-  active:   { dot: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-400', label: 'Active' },
-  pending:  { dot: 'bg-yellow-400',  text: 'text-yellow-700 dark:text-yellow-400',   label: 'Pending review' },
-  inactive: { dot: 'bg-slate-400',   text: 'text-slate-500 dark:text-slate-400',     label: 'Inactive' },
-  archived: { dot: 'bg-red-500',     text: 'text-red-700 dark:text-red-400',         label: 'Archived' },
+  active: { dot: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-400', label: 'Active' },
+  pending: { dot: 'bg-yellow-400', text: 'text-yellow-700 dark:text-yellow-400', label: 'Pending review' },
+  inactive: { dot: 'bg-slate-400', text: 'text-slate-500 dark:text-slate-400', label: 'Inactive' },
+  archived: { dot: 'bg-red-500', text: 'text-red-700 dark:text-red-400', label: 'Archived' },
 }
 
 export const memberMeta: Record<string, { initials: string; name: string; dept: string; bg: string }> = {
-  alice: { initials: 'AC', name: 'Alice Chen',  dept: 'Engineering', bg: 'bg-violet-500' },
-  bob:   { initials: 'BK', name: 'Bob Kim',     dept: 'Design',      bg: 'bg-sky-500' },
-  carol: { initials: 'CW', name: 'Carol Wang',  dept: 'Marketing',   bg: 'bg-pink-500' },
-  dan:   { initials: 'DP', name: 'Dan Park',    dept: 'Finance',     bg: 'bg-amber-500' },
+  alice: { initials: 'AC', name: 'Alice Chen', dept: 'Engineering', bg: 'bg-violet-500' },
+  bob: { initials: 'BK', name: 'Bob Kim', dept: 'Design', bg: 'bg-sky-500' },
+  carol: { initials: 'CW', name: 'Carol Wang', dept: 'Marketing', bg: 'bg-pink-500' },
+  dan: { initials: 'DP', name: 'Dan Park', dept: 'Finance', bg: 'bg-amber-500' },
 }
 
 export const memberOptions: optionsT = [
@@ -145,10 +151,10 @@ export const priorityOptions: optionsT = [
 ]
 
 export const priorityMeta: Record<string, { icon: ReactNode; cls: string }> = {
-  critical: { icon: <Flame className="size-3 text-red-500" />,     cls: 'text-red-600 dark:text-red-400' },
-  high:     { icon: <ArrowUp className="size-3 text-orange-500" />, cls: 'text-orange-600 dark:text-orange-400' },
-  medium:   { icon: <Minus className="size-3 text-yellow-500" />,   cls: 'text-yellow-600 dark:text-yellow-400' },
-  low:      { icon: <ArrowDown className="size-3 text-blue-500" />, cls: 'text-blue-600 dark:text-blue-400' },
+  critical: { icon: <Flame className="size-3 text-red-500" />, cls: 'text-red-600 dark:text-red-400' },
+  high: { icon: <ArrowUp className="size-3 text-orange-500" />, cls: 'text-orange-600 dark:text-orange-400' },
+  medium: { icon: <Minus className="size-3 text-yellow-500" />, cls: 'text-yellow-600 dark:text-yellow-400' },
+  low: { icon: <ArrowDown className="size-3 text-blue-500" />, cls: 'text-blue-600 dark:text-blue-400' },
 }
 
 export const teamOptions: optionsT = [
@@ -161,8 +167,46 @@ export const teamOptions: optionsT = [
 
 export const teamMeta: Record<string, { initials: string; bg: string; name: string }> = {
   alice: { initials: 'AC', bg: 'bg-violet-500', name: 'Alice' },
-  bob:   { initials: 'BK', bg: 'bg-sky-500',    name: 'Bob' },
-  carol: { initials: 'CW', bg: 'bg-pink-500',   name: 'Carol' },
-  dan:   { initials: 'DP', bg: 'bg-amber-500',  name: 'Dan' },
-  eve:   { initials: 'EL', bg: 'bg-teal-500',   name: 'Eve' },
+  bob: { initials: 'BK', bg: 'bg-sky-500', name: 'Bob' },
+  carol: { initials: 'CW', bg: 'bg-pink-500', name: 'Carol' },
+  dan: { initials: 'DP', bg: 'bg-amber-500', name: 'Dan' },
+  eve: { initials: 'EL', bg: 'bg-teal-500', name: 'Eve' },
 }
+
+export const frameworks: optionsT = [
+  { value: 'next', label: 'Next.js' },
+  { value: 'remix', label: 'Remix' },
+  { value: 'astro', label: 'Astro' },
+  { value: 'sveltekit', label: 'SvelteKit' },
+  { value: 'nuxt', label: 'Nuxt.js' },
+  { value: 'solid-start', label: 'SolidStart' },
+]
+
+export const groupedTech: optionsT = [
+  {
+    group: 'Frontend',
+    options: [
+      { value: 'react', label: 'React' },
+      { value: 'vue', label: 'Vue' },
+      { value: 'svelte', label: 'Svelte' },
+      { value: 'solid', label: 'Solid' },
+    ],
+  },
+  {
+    group: 'Backend',
+    options: [
+      { value: 'node', label: 'Node.js' },
+      { value: 'deno', label: 'Deno' },
+      { value: 'bun', label: 'Bun' },
+      { value: 'go', label: 'Go' },
+    ],
+  },
+  {
+    group: 'Database',
+    options: [
+      { value: 'postgres', label: 'PostgreSQL' },
+      { value: 'mysql', label: 'MySQL' },
+      { value: 'mongo', label: 'MongoDB' },
+    ],
+  },
+]
