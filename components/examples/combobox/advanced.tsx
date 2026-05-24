@@ -11,6 +11,7 @@ import {
   teamMeta,
   teamOptions,
 } from '@/components/examples/data/options'
+import { renderSearchStatus, renderSearchEmpty } from '@/components/examples/common'
 import { ComboboxWrapper } from '@/components/ui/combobox'
 
 function hasMatch(items: optionsT, query: string): boolean {
@@ -31,6 +32,42 @@ export function AsyncExample() {
       isLoading={isLoading}
       placeholder="Loading options…"
       triggerCls="w-52"
+    />
+  )
+}
+
+export function AsyncSearchExample() {
+  const [results, setResults] = React.useState<string[]>([])
+  const [isFetching, setIsFetching] = React.useState(false)
+  const [hasTyped, setHasTyped] = React.useState(false)
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function handleInputChange(query: string) {
+    const typed = query.trim().length > 0
+    setHasTyped(typed)
+    if (timerRef.current) clearTimeout(timerRef.current)
+    if (!typed) {
+      setResults([])
+      setIsFetching(false)
+      return
+    }
+    setIsFetching(true)
+    timerRef.current = setTimeout(() => {
+      setResults(fruits.filter(f => String(f).toLowerCase().includes(query.toLowerCase())) as string[])
+      setIsFetching(false)
+    }, 400)
+  }
+
+  return (
+    <ComboboxWrapper
+      items={results}
+      filter={() => true}
+      onInputValueChange={handleInputChange}
+      placeholder="Type to search fruit…"
+      triggerCls="w-64"
+      showClear
+      renderStatus={renderSearchStatus(false, isFetching)}
+      renderEmpty={renderSearchEmpty(hasTyped, false, isFetching)}
     />
   )
 }

@@ -15,7 +15,7 @@ import {
   DisabledExample,
 } from './state'
 import {
-  AsyncExample,
+  AsyncSearchExample,
 } from './advanced'
 
 export function AutocompleteExample() {
@@ -55,8 +55,8 @@ export function AutocompleteExample() {
       </ExRow>
 
       <ExRow label="Async">
-        <ExItem label="Debounced search — filter=null, items set externally after 500ms">
-          <AsyncExample />
+        <ExItem label="Async search — filter=null, results fetched on typing, 400ms debounce">
+          <AsyncSearchExample />
         </ExItem>
       </ExRow>
     </div>

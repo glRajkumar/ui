@@ -241,9 +241,9 @@ function OptionsBody({ item, index, itemCls, groupCls }: OptionsBodyProps) {
       >
         <AutocompleteLabel>{item.group}</AutocompleteLabel>
         <AutocompleteCollection>
-          {(opt: allowedPrimitiveT | optionT) => (
+          {(opt: allowedPrimitiveT | optionT, i) => (
             <OptionItem
-              key={getKey(opt, 0)}
+              key={getKey(opt, i)}
               option={opt}
               className={itemCls}
             />
@@ -281,6 +281,8 @@ type AutocompleteWrapperProps = Omit<
   itemCls?: string
   groupCls?: string
   inputProps?: Omit<React.ComponentProps<'input'>, 'value' | 'onChange'>
+  renderStatus?: React.ReactNode
+  renderEmpty?: React.ReactNode
 }
 
 function AutocompleteWrapper({
@@ -295,8 +297,9 @@ function AutocompleteWrapper({
   itemCls,
   groupCls,
   inputProps,
+  renderStatus,
+  renderEmpty,
   disabled,
-  value,
   ...props
 }: AutocompleteWrapperProps) {
   const itemsForBase = React.useMemo(() => {
@@ -308,7 +311,6 @@ function AutocompleteWrapper({
     <AutocompleteRoot
       items={itemsForBase as unknown[]}
       disabled={disabled}
-      value={value}
       itemToStringValue={(item: unknown) => {
         const opt = item as allowedPrimitiveT | optionT
         const label = getLabel(opt)
@@ -318,20 +320,24 @@ function AutocompleteWrapper({
       {...props}
     >
       <AutocompleteInput
-        placeholder={placeholder}
         disabled={disabled}
         showClear={showClear}
         showTrigger={showTrigger}
+        placeholder={placeholder}
         className={className}
         {...(inputProps as AutocompletePrimitive.Input.Props)}
       />
       <AutocompleteContent className={contentCls}>
         <AutocompleteStatus>
-          {isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='animate-spin' /> Loading...</p>}
+          {renderStatus !== undefined
+            ? renderStatus
+            : isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='size-4 animate-spin' /> Loading...</p>}
         </AutocompleteStatus>
 
         <AutocompleteEmpty>
-          {!isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
+          {renderEmpty !== undefined
+            ? renderEmpty
+            : !isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
         </AutocompleteEmpty>
 
         <AutocompleteList>

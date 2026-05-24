@@ -1,3 +1,7 @@
+'use client'
+
+import * as React from 'react'
+import { Loader2 } from 'lucide-react'
 import { cn } from "@/lib/utils"
 
 type exRowProps = {
@@ -28,4 +32,29 @@ export function ExItem({ label, children, className }: exItemProps) {
       {children}
     </div>
   )
+}
+
+export function renderSearchStatus(isLoading: boolean, isFetching: boolean): React.ReactNode {
+  if (isLoading) return (
+    <p className='flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground'>
+      <Loader2 className='size-4 animate-spin' /> Loading...
+    </p>
+  )
+  if (isFetching) return (
+    <p className='flex items-center gap-2 p-2 text-sm text-muted-foreground'>
+      <Loader2 className='size-4 animate-spin' /> Fetching...
+    </p>
+  )
+  return null
+}
+
+export function renderSearchEmpty(
+  hasTyped: boolean,
+  isLoading: boolean,
+  isFetching: boolean,
+  message = 'No results found',
+): React.ReactNode {
+  if (!hasTyped && !isLoading && !isFetching) return <p className='py-6'>Start typing to fetch results...</p>
+  if (!hasTyped || isLoading || isFetching) return null
+  return <p className='py-6'>{message}</p>
 }

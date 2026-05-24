@@ -339,9 +339,9 @@ function OptionsBody({ item, index, itemCls, groupCls, indicatorAt }: OptionsBod
       >
         <ComboboxLabel>{item.group}</ComboboxLabel>
         <ComboboxCollection>
-          {(opt: allowedPrimitiveT | optionT) => (
+          {(opt: allowedPrimitiveT | optionT, i) => (
             <OptionItem
-              key={getKey(opt, 0)}
+              key={getKey(opt, i)}
               option={opt}
               className={cn(itemCls)}
               indicatorAt={indicatorAt}
@@ -385,6 +385,8 @@ type ComboboxWrapperProps<
   hideList?: boolean
   renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode
   getItemLabel?: (value: string) => string
+  renderStatus?: React.ReactNode
+  renderEmpty?: React.ReactNode
 }
 
 function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
@@ -404,6 +406,8 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
   hideList,
   renderValue,
   getItemLabel,
+  renderStatus,
+  renderEmpty,
   items,
   ...props
 }: ComboboxWrapperProps<Value, Multiple>) {
@@ -538,11 +542,15 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
         }
 
         <ComboboxStatus>
-          {isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='animate-spin' /> Loading...</p>}
+          {renderStatus !== undefined
+            ? renderStatus
+            : isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='size-4 animate-spin' /> Loading...</p>}
         </ComboboxStatus>
 
         <ComboboxEmpty>
-          {!isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
+          {renderEmpty !== undefined
+            ? renderEmpty
+            : !isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
         </ComboboxEmpty>
 
         <ComboboxList>

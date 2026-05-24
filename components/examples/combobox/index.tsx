@@ -23,6 +23,7 @@ import {
 } from './state'
 import {
   AsyncExample,
+  AsyncSearchExample,
   ClickCreateExample,
   EnterCreateExample,
   PriorityChipsExample,
@@ -98,6 +99,9 @@ export function ComboboxExample() {
       <ExRow label="Async">
         <ExItem label="Async load — 1.5 s simulated delay">
           <AsyncExample />
+        </ExItem>
+        <ExItem label="Async search — filter on typing, 400 ms debounce">
+          <AsyncSearchExample />
         </ExItem>
       </ExRow>
 
