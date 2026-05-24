@@ -12,7 +12,7 @@ function NumberFieldGroup({ className, ...props }: React.ComponentProps<typeof N
     <NumberFieldPrimitive.Group
       data-slot="number-field-group"
       className={cn(
-        'flex h-8 w-full items-center rounded-lg border border-input bg-transparent text-sm transition-colors',
+        'flex h-9 w-full items-center rounded-md border border-input bg-transparent text-sm shadow-xs transition-colors',
         'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50',
         'has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
@@ -44,7 +44,7 @@ function NumberFieldDecrement({ className, ...props }: React.ComponentProps<type
     <NumberFieldPrimitive.Decrement
       data-slot="number-field-decrement"
       className={cn(
-        'flex size-7 shrink-0 items-center justify-center rounded-l-md text-muted-foreground',
+        'flex h-full w-8 shrink-0 items-center justify-center rounded-l-[calc(var(--radius)-2px)] text-muted-foreground',
         'transition-colors hover:bg-accent hover:text-foreground',
         'disabled:pointer-events-none disabled:opacity-50',
         '[&_svg]:pointer-events-none [&_svg]:size-3.5',
@@ -62,7 +62,7 @@ function NumberFieldIncrement({ className, ...props }: React.ComponentProps<type
     <NumberFieldPrimitive.Increment
       data-slot="number-field-increment"
       className={cn(
-        'flex size-7 shrink-0 items-center justify-center rounded-r-md text-muted-foreground',
+        'flex h-full w-8 shrink-0 items-center justify-center rounded-r-[calc(var(--radius)-2px)] text-muted-foreground',
         'transition-colors hover:bg-accent hover:text-foreground',
         'disabled:pointer-events-none disabled:opacity-50',
         '[&_svg]:pointer-events-none [&_svg]:size-3.5',

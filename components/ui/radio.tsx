@@ -11,7 +11,7 @@ function RadioIndicator({ className, ...props }: RadioPrimitive.Root.Props) {
     <RadioPrimitive.Root
       data-slot="radio-group-item"
       className={cn(
-        'group/radio-group-item peer relative flex aspect-square size-4 shrink-0 rounded-full border border-input outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary',
+        'group/radio-group-item peer relative flex aspect-square size-4.5 shrink-0 rounded-full border border-input outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary',
         className,
       )}
       {...props}
@@ -36,11 +36,11 @@ type RadioProps = {
 function Radio({ label, description, wrapperCls, className, as: Comp = 'label', ...props }: RadioProps) {
   return (
     <Comp className={cn('flex cursor-pointer select-none items-start gap-2 has-[:disabled]:cursor-not-allowed', wrapperCls)}>
-      <RadioIndicator className={cn('mt-0.5', className)} {...props} />
-      <div className="grid gap-0.5">
+      <RadioIndicator className={cn(className)} {...props} />
+      <p className="grid">
         <span className="text-sm font-medium leading-none">{label}</span>
-        {description && <span className="text-xs text-muted-foreground">{description}</span>}
-      </div>
+        {description && <span className="mt-0.5 text-xs text-muted-foreground">{description}</span>}
+      </p>
     </Comp>
   )
 }

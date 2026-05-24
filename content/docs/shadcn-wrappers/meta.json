@@ -30,6 +30,8 @@
     "---Form---",
     "field",
     "form",
+    "input-group",
+    "input-otp",
     "checkbox",
     "radio",
     "toggle",

@@ -253,7 +253,7 @@ export function DatePickerWrapper({
             <Button
               id={name}
               variant={'outline'}
-              className={cn('w-full pl-3 text-left font-normal', !value && 'text-muted-foreground')}
+              className={cn('w-full pl-3 text-left font-normal shadow-xs', !value && 'text-muted-foreground')}
               aria-invalid={isInvalid}
             >
               {value ? format(value, 'dd/MM/yyyy') : <span>Pick a date</span>}
