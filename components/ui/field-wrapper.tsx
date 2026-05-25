@@ -113,7 +113,7 @@ export function RadioWrapper({
       {label && <FieldLegend variant="label">{label}</FieldLegend>}
       <Radio
         {...props}
-        value={value ? String(value) : undefined}
+        value={value != null ? String(value) : undefined}
         onValueChange={val => onValueChange?.(parseAllowedPrimitive(val))}
         aria-invalid={isInvalid}
       />
@@ -216,7 +216,7 @@ export function SelectWrapper({
         {...props}
         id={name}
         options={options}
-        value={value ? String(value) : undefined}
+        value={value != null ? String(value) : undefined}
         placeholder={placeholder ?? (labelString(label) && `Select ${labelString(label)}`)}
         onValueChange={val => onValueChange?.(parseAllowedPrimitive(val as any))}
         aria-invalid={isInvalid}

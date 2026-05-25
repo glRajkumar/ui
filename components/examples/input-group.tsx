@@ -122,22 +122,6 @@ function FieldWrapperExample() {
   )
 }
 
-function PrimitivesExample() {
-  return (
-    <InputGroup className="w-64">
-      <InputGroupAddon align="inline-start">
-        <InputGroupText><SearchIcon /></InputGroupText>
-      </InputGroupAddon>
-      <InputGroupInput placeholder="Search..." />
-      <InputGroupAddon align="inline-end">
-        <InputGroupButton>
-          <CopyIcon />
-        </InputGroupButton>
-      </InputGroupAddon>
-    </InputGroup>
-  )
-}
-
 export function InputGroupExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -177,12 +161,6 @@ export function InputGroupExample() {
         </ExItem>
         <ExItem label="Error state">
           <ErrorExample />
-        </ExItem>
-      </ExRow>
-
-      <ExRow label="Primitives">
-        <ExItem label="Manual composition — InputGroup + Addon + Input">
-          <PrimitivesExample />
         </ExItem>
       </ExRow>
     </div>

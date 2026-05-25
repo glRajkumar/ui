@@ -119,11 +119,6 @@ const filterOptions = [
     options: ['Engineering', 'Marketing', 'Sales', 'HR', 'Finance'],
   },
   {
-    value: 'role',
-    lable: 'Role',
-    options: ['Manager', 'Senior', 'Junior', 'Lead', 'Intern'],
-  },
-  {
     value: 'location',
     lable: 'Location',
     options: ['New York', 'San Francisco', 'London', 'Tokyo', 'Berlin'],
@@ -135,7 +130,7 @@ export function DataTableExample() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-4 mb-3">
+      <div className="flex items-center flex-wrap gap-4 mb-3">
         <Input
           className="w-60"
           value={table.getState().globalFilter}
@@ -147,15 +142,21 @@ export function DataTableExample() {
           title="Role"
           column={table.getColumn('role')}
           options={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
+          triggerCls="w-40"
         />
 
         <ColumnFacetedFilter
           title="Status"
           column={table.getColumn('status')}
           options={statusOptions}
+          triggerCls="w-40"
         />
 
-        <FilterGroup table={table} options={filterOptions} />
+        <FilterGroup
+          table={table}
+          options={filterOptions}
+          columnFilterProps={{ triggerCls: "w-40" }}
+        />
 
         <ColumnToggle table={table} />
       </div>

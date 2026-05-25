@@ -1,8 +1,11 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Column } from '@tanstack/react-table'
 
 import { getLabel, getValue, isGroup } from '@/lib/utils'
 
-import { ComboboxWrapper, type ComboboxWrapperProps } from '../combobox'
+import { ComboboxWrapper, type ComboboxWrapperProps } from '@/components/ui/combobox'
 
 interface ColumnFacetedFilterProps<TData, TValue>
   extends Omit<ComboboxWrapperProps, 'options' | 'value' | 'onValueChange' | 'label'> {
@@ -36,7 +39,11 @@ export function ColumnFacetedFilter<TData, TValue>({
   options,
   ...props
 }: ColumnFacetedFilterProps<TData, TValue>) {
-  const facets = column?.getFacetedUniqueValues()
+  const [facets, setFacets] = useState<Map<unknown, number> | undefined>()
+
+  useEffect(() => {
+    setFacets(column?.getFacetedUniqueValues())
+  }, [column])
 
   const newOptions = options.map(option => {
     if (isGroup(option)) {
@@ -57,12 +64,10 @@ export function ColumnFacetedFilter<TData, TValue>({
     <ComboboxWrapper
       multiple
       items={newOptions}
-      value={column?.getFilterValue() as string[]}
+      value={(column?.getFilterValue() as string[]) ?? []}
       onValueChange={v => onSelect(v as any)}
       // label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}
-      // indicatorAt="left"
-      contentCls="w-fit"
-      // matchTriggerWidth={false}
+      indicatorAt="left"
       {...props}
     />
   )

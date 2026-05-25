@@ -2,9 +2,13 @@ import { useState } from 'react'
 import { CirclePlus } from 'lucide-react'
 import { Table } from '@tanstack/react-table'
 
-import { MenuCheckboxWrapper } from '../menu-wrapper'
-import { buttonVariants } from '../button'
+import { type ComboboxWrapperProps } from '@/components/ui/combobox'
+import { MenuCheckboxWrapper } from '@/components/ui/menu-wrapper'
+import { buttonVariants } from '@/components/ui/button'
 import { ColumnFilter } from './column-filter'
+
+type ColumnFilterPassthroughProps = Omit<ComboboxWrapperProps, 'items' | 'value' | 'onValueChange' | 'label' | 'multiple'>
+type MenuCheckboxPassthroughProps = Omit<React.ComponentProps<typeof MenuCheckboxWrapper>, 'trigger' | 'options' | 'checked' | 'onCheckedChange'>
 
 interface FilterGroupProps<TData> {
   table: Table<TData>
@@ -12,11 +16,13 @@ interface FilterGroupProps<TData> {
     value: string
     lable: React.ReactNode
     options: optionsT
+    columnFilterProps?: ColumnFilterPassthroughProps
   }[]
-  indicatorAt?: indicatorAtT
+  columnFilterProps?: ColumnFilterPassthroughProps
+  menuCheckboxProps?: MenuCheckboxPassthroughProps
 }
 
-export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupProps<TData>) {
+export function FilterGroup<TData>({ table, options, columnFilterProps, menuCheckboxProps }: FilterGroupProps<TData>) {
   const [selected, setSelected] = useState<allowedPrimitiveT[]>([])
 
   return (
@@ -29,22 +35,20 @@ export function FilterGroup<TData>({ table, options, indicatorAt }: FilterGroupP
             title={opt.lable}
             column={table.getColumn(opt.value)}
             options={opt.options}
+            {...columnFilterProps}
+            {...opt.columnFilterProps}
           />
         ))}
 
       <MenuCheckboxWrapper
+        trigger={<><CirclePlus className="size-4" /> Filter</>}
+        triggerCls={buttonVariants({ variant: 'outline' })}
+        {...menuCheckboxProps}
         checked={selected}
         onCheckedChange={(val, checked) =>
           setSelected(prev => (!checked ? prev.filter(p => !p) : [...prev, val]))
         }
         options={options.map(m => ({ label: m.lable, value: m.value }))}
-        indicatorAt={indicatorAt}
-        trigger={
-          <>
-            <CirclePlus className="size-4" /> Filter
-          </>
-        }
-        triggerCls={buttonVariants({ variant: 'outline' })}
       />
     </>
   )
