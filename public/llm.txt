@@ -1,0 +1,957 @@
+# Glrk UI — Component Wrapper Reference
+
+Glrk UI is a shadcn/ui + Base UI wrapper library for React + TypeScript + Tailwind v4.
+Components ship as thin wrappers that reduce boilerplate while exposing full primitive access.
+
+Install via shadcn CLI:
+  npx shadcn@latest add @glrk-ui/<component-name>
+
+Registry entry in components.json:
+  { "registries": { "@glrk-ui": "https://ui.glrk.dev/registry/{name}.json" } }
+
+---
+
+## Type System
+
+All selection components share a common type system from types/general.d.ts:
+
+  type allowedPrimitiveT = string | number | boolean
+  type optionT = { label: ReactNode; value: allowedPrimitiveT; className?: string; disabled?: boolean }
+  type groupT = { group: string; options: optionT[]; className?: string }
+  type optionsT = (allowedPrimitiveT | optionT | groupT | "---")[]
+
+"---" is a visual separator. Primitives use the same value as label.
+
+Menu-specific types (menuOptionsT) extend optionsT with:
+  - shortcut: string — keyboard shortcut display
+  - variant: "destructive" — destructive item styling
+  - submenu: string — creates nested submenu (label string, not ReactNode)
+  - { group: string, options: [] } — groups items under a label
+
+String conversion: Base UI controlled components use strings internally. Use `parseAllowedPrimitive(str)` from lib/utils to convert back to original type. Or keep state as string.
+
+---
+
+## Overlay Family — Dialog · AlertDialog · Sheet · Drawer
+
+These four components share nearly identical structure. Dialog is documented fully; the others note only differences.
+
+### Dialog — components/ui/dialog.tsx
+Wrapper: DialogWrapper
+Base: Base UI Dialog
+
+Props:
+  trigger?: ReactNode          — content for auto-wrapped trigger button
+  triggerCls?: string          — CSS for trigger
+  triggerProps?                — Omit<Dialog.Trigger.Props, 'children'|'className'>
+                                 use render for custom element, handle for detached trigger
+  title?: ReactNode
+  description?: ReactNode      — set "" to hide
+  children?: ReactNode         — renders between header and footer
+  showCloseButton?: boolean    — default true
+  contentCls?: string
+  headerCls?: string
+  titleCls?: string
+  descriptionCls?: string
+  cancel?: ReactNode           — cancel button text, "" to hide, default "Cancel"
+  action?: ReactNode           — action button text, "" to hide
+  loading?: boolean            — disables buttons, shows spinner, blocks close
+  footerCls?: string
+  actionCls?: string
+  cancelCls?: string
+  onAction?: () => void
+  onCancel?: () => void
+  // All Dialog.Root props forwarded: open, onOpenChange, handle, defaultOpen, etc.
+
+Detached trigger: use Dialog.createHandle() from @base-ui/react/dialog, pass handle to triggerProps and wrapper.
+Multiple triggers with payload: pass typed handle and payload to DialogTrigger.
+Nested dialogs: render DialogWrapper inside children of another DialogWrapper.
+Custom footer: set action="" cancel="", render DialogFooter/DialogClose inside children.
+
+Also exports: DialogTrigger, DialogClose, DialogFooter (primitives)
+
+---
+
+### AlertDialog — components/ui/alert-dialog.tsx
+Wrapper: AlertDialogWrapper
+
+Same props as DialogWrapper EXCEPT:
+  - Adds: media?: ReactNode — icon/image rendered above title in header
+  - No showCloseButton prop (alert dialogs don't have X close)
+  - Default title: "Are you absolutely sure?"
+  - Default description: "This action cannot be undone..."
+  - Default action: "Confirm"
+
+Detached trigger: AlertDialog.createHandle() from @base-ui/react/alert-dialog
+
+---
+
+### Sheet — components/ui/sheet.tsx
+Wrapper: SheetWrapper
+
+Same props as DialogWrapper PLUS:
+  - side?: 'top' | 'bottom' | 'right' | 'left'  — default "right"
+
+Sheet uses Dialog.Root underneath — same handle/detached trigger pattern applies.
+Also exports: SheetClose, SheetFooter
+
+---
+
+### Drawer — components/ui/drawer.tsx
+Wrapper: DrawerWrapper
+
+Same props as DialogWrapper PLUS:
+  - side?: 'bottom' | 'top' | 'left' | 'right'  — default "bottom"
+  - swipeDirection — forwarded to Drawer.Root (match to side)
+  - snapPoints?: number[]  — e.g. [0.4, 1] for snap heights
+  - modal?: boolean  — default true; false = page stays interactive
+
+Base: Base UI Drawer (not Dialog).
+Also exports: DrawerClose, DrawerFooter
+
+---
+
+## Menu Family — Menu · Menubar · ContextMenu
+
+All three use menuOptionsT and share rendering logic. Plain, checkbox, and radio variants exist for each.
+
+### Menu (Dropdown) — components/ui/menu-wrapper.tsx
+Wrappers: MenuWrapper, MenuCheckboxWrapper, MenuRadioWrapper
+Base: Base UI Menu
+
+MenuWrapper props:
+  trigger: ReactNode           — required
+  triggerCls?: string
+  triggerProps?                — Omit<MenuTrigger.Props, 'children'|'className'>
+  options: menuOptionsT        — see type below
+  itemCls?: string
+  groupCls?: string
+  groupLabelCls?: string
+  contentProps?                — forwarded to MenuContent
+  onSelect?: (value: allowedPrimitiveT) => void
+  // All Menu.Root props forwarded
+
+menuOptionsT item shapes:
+  "Simple string"
+  42 / true                    — primitives
+  "---"                        — separator
+  { label, value, shortcut?, variant?: "destructive", className? }
+  { group: "Label", options: [...] }
+  { submenu: "Label", options: [...] }  — nested submenu
+
+MenuCheckboxWrapper additional props:
+  checked?: allowedPrimitiveT[]
+  onCheckedChange?: (value, checked) => void
+  indicatorAt?: "left" | "right"  — default "left"
+
+MenuRadioWrapper additional props:
+  value?: allowedPrimitiveT
+  onValueChange?: (value) => void
+  indicatorAt?: "left" | "right"  — default "left"
+
+---
+
+### Menubar — components/ui/menubar-wrapper.tsx
+Wrappers: MenubarWrapper, MenubarCheckboxWrapper, MenubarRadioWrapper
+Base: Shadcn Menubar
+
+MenubarWrapper props:
+  options: {
+    key: string;
+    trigger: ReactNode;
+    options: menuOptionsT;
+    triggerCls?: string;
+    itemCls?: string; groupCls?: string; groupLabelCls?: string;
+    contentProps?;
+    onSelect?: (value) => void;
+  }[]
+  triggerCls?: string           — global, merged with per-menu
+  triggerProps?                 — global
+  itemCls?: string              — global
+  groupCls?: string             — global
+  groupLabelCls?: string        — global
+  contentProps?                 — global
+  onSelect?: (value) => void    — global fallback
+  // All Menubar.Root props forwarded
+
+Per-menu props override global ones.
+
+MenubarCheckboxWrapper: same options array shape + global checked, onCheckedChange, indicatorAt
+MenubarRadioWrapper: same options array shape + global value, onValueChange, indicatorAt
+
+---
+
+### ContextMenu — components/ui/context-menu-wrapper.tsx
+Wrappers: ContextWrapper, ContextCheckboxWrapper, ContextRadioWrapper
+Base: Shadcn Context Menu
+
+Key difference from Menu: triggered by right-click on children (no trigger prop).
+  children: ReactNode          — receives the right-click event (required)
+
+ContextWrapper props (no trigger/triggerCls/triggerProps):
+  children: ReactNode
+  options: menuOptionsT
+  itemCls?: string
+  groupCls?: string
+  groupLabelCls?: string
+  contentProps?
+  onSelect?: (value) => void
+
+ContextCheckboxWrapper: children + options + checked + onCheckedChange + indicatorAt
+ContextRadioWrapper: children + options + value + onValueChange + indicatorAt
+
+---
+
+## Selection Family — Select · Combobox · Autocomplete
+
+### Select — components/ui/select.tsx
+Wrapper: SelectWrapper
+Base: Base UI Select
+
+Props:
+  id?: string
+  options: optionsT
+  placeholder?: string
+  indicatorAt?: "left" | "right"  — default "right"
+  size?: "sm" | "default"         — default "default"
+  backdrop?: boolean               — default false
+  renderValue?: (value: string, option) => ReactNode  — custom trigger display
+  triggerCls?: string
+  contentCls?: string
+  groupCls?: string
+  groupLabelCls?: string
+  itemCls?: string
+  // All Select.Root props forwarded: value, onValueChange, defaultValue, disabled, open, onOpenChange, name, required
+
+renderValue is only needed when trigger display should differ from list item. Otherwise labels (including ReactNode) mirror automatically.
+
+Also exports primitives: Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectSeparator
+
+---
+
+### Combobox — components/ui/combobox.tsx
+Wrapper: ComboboxWrapper
+Base: Base UI Combobox
+
+Props:
+  items?: optionsT             — note: prop is "items" not "options"
+  multiple?: boolean           — enables chip multi-select, default false
+  placeholder?: string
+  emptyMessage?: string        — default "No options found"
+  isLoading?: boolean
+  indicatorAt?: "left" | "right"  — default "right"
+  showTrigger?: boolean        — chevron button, default true
+  showClear?: boolean          — clear button, default false
+  hideList?: boolean           — hide dropdown (for create-new patterns), default false
+  renderValue?: (value, option) => ReactNode  — chip label in multiple mode
+  getItemLabel?: (value) => string  — string for input after selection (single mode)
+  inputProps?: React.ComponentProps<"input">
+  triggerCls?: string
+  contentCls?: string
+  groupCls?: string
+  itemCls?: string
+  renderStatus?: ReactNode     — replaces default isLoading spinner
+  renderEmpty?: ReactNode      — replaces default emptyMessage
+  // All Combobox.Root props forwarded: value, onValueChange, defaultValue, query, onQueryChange, open, onOpenChange, disabled, filter, etc.
+
+Async search: set filter={() => true} to disable client filtering, update items externally on onInputValueChange.
+Controlled value single: value?: allowedPrimitiveT
+Controlled value multiple: value?: allowedPrimitiveT[]
+
+### Combobox Virtualised — components/ui/combobox-virtualised.tsx
+Wrapper: ComboboxVirtualisedWrapper
+Install: npx shadcn@latest add @glrk-ui/combobox-virtual
+
+Same props as ComboboxWrapper EXCEPT: no multiple, no hideList, no groupCls, no renderValue
+Additional props:
+  estimateSize?: number    — row height px, default 32
+  maxHeight?: number       — list height px, default 300
+  virtualizerOptions?      — Partial<Omit<VirtualizerOptions, "count"|"getScrollElement">>
+
+---
+
+### Autocomplete — components/ui/autocomplete.tsx
+Wrapper: AutocompleteWrapper
+Base: Base UI Autocomplete
+
+Props:
+  items?: optionsT
+  className?: string           — applied to input group container
+  placeholder?: string
+  isLoading?: boolean
+  emptyMessage?: string        — default "No results found"
+  showClear?: boolean          — default false
+  showTrigger?: boolean        — chevron button, default false
+  contentCls?: string
+  itemCls?: string
+  groupCls?: string
+  inputProps?: Omit<ComponentProps<'input'>, 'value'|'onChange'>
+  renderStatus?: ReactNode
+  renderEmpty?: ReactNode
+  // All Autocomplete.Root props forwarded: value, onValueChange, open, onOpenChange, mode, limit, filter, etc.
+
+Async search: set filter={null} to disable client filtering, update items externally.
+Inline mode: mode="inline" completes input text as user types.
+
+### Autocomplete Virtualised — components/ui/autocomplete-virtualised.tsx
+Wrapper: AutocompleteVirtualisedWrapper
+Install: npx shadcn@latest add @glrk-ui/autocomplete-virtual
+
+Same as AutocompleteWrapper EXCEPT: no groupCls
+Additional: estimateSize, maxHeight, virtualizerOptions (same as Combobox virtualised)
+
+---
+
+## Form Input Wrappers
+
+### Checkbox — components/ui/checkbox.tsx
+Wrappers: Checkbox (single), CheckboxWrapper (group)
+Base: Base UI Checkbox + CheckboxGroup
+
+checkboxOptionT = string | number | boolean | { value, label: ReactNode, description?: ReactNode, className?, disabled? }
+
+Checkbox props (single):
+  label: ReactNode
+  description?: ReactNode
+  wrapperCls?: string
+  as?: ElementType           — wrapper element, default 'label'
+  // All Checkbox.Root props: checked, defaultChecked, onCheckedChange, indeterminate, disabled, readOnly, required, name, value
+
+CheckboxWrapper props (group):
+  options: checkboxOptionT[]
+  parentLabel?: ReactNode    — select-all parent (shows indeterminate when partial)
+  orientation?: "horizontal" | "vertical"  — default "vertical"
+  itemCls?: string
+  as?: ElementType
+  // All CheckboxGroup props: value, defaultValue, onValueChange, disabled
+
+---
+
+### Radio — components/ui/radio.tsx
+Wrappers: Radio (single), RadioWrapper (group)
+Base: Base UI Radio + RadioGroup
+
+radioOptionT = string | number | boolean | { value, label: ReactNode, description?: ReactNode, className?, disabled? }
+
+Radio props (single):
+  label: ReactNode
+  description?: ReactNode
+  wrapperCls?: string
+  as?: ElementType
+  // All Radio.Root props: value (required), disabled, readOnly, required, inputRef
+
+RadioWrapper props (group):
+  options: radioOptionT[]
+  orientation?: "horizontal" | "vertical"  — default "vertical"
+  itemCls?: string
+  as?: ElementType
+  // All RadioGroup props: value, defaultValue, onValueChange, disabled, readOnly, required, name
+
+---
+
+### Toggle — components/ui/toggle.tsx
+Wrapper: ToggleWrapper
+Base: Base UI ToggleGroup
+
+toggleItemT = string | number | boolean | { label: ReactNode; value: string|number|boolean; className?: string; "aria-label"?: string }
+
+ToggleWrapper props:
+  options: toggleItemT[]
+  itemCls?: string
+  variant?: "default" | "outline"      — default "default"
+  size?: "sm" | "default" | "lg"       — default "default"
+  spacing?: number                     — 0 = joined group, 1+ = gap in 4px units, default 0
+  multiple?: boolean                   — allow multiple active, default false
+  orientation?: "horizontal" | "vertical"  — default "horizontal"
+  loopFocus?: boolean                  — default true
+  disabled?: boolean
+  // All ToggleGroup.Root props: value, defaultValue, onValueChange
+
+Always provide aria-label for icon-only toggle items.
+
+---
+
+### Switch — components/ui/switch.tsx
+Primitive switch component. Use via field-wrapper.
+
+---
+
+### Slider — components/ui/slider.tsx
+Wrapper: Slider
+Base: Base UI Slider
+
+Thin wrapper — accepts all Base UI Slider.Root props directly:
+  value?: number | number[]      — single or multi-thumb
+  defaultValue?: number | number[]
+  min?: number                   — default 0
+  max?: number                   — default 100
+  step?: number
+  orientation?: "horizontal" | "vertical"
+  disabled?: boolean
+  onValueChange?: (value: number[]) => void
+  onValueCommitted?: (value: number[]) => void
+  name?: string
+  className?: string
+
+Multi-thumb: pass array to value/defaultValue.
+
+---
+
+### NumberField — components/ui/number-field.tsx
+Wrapper: NumberFieldWrapper
+Base: Base UI NumberField
+
+Props:
+  value?: number | null
+  onValueChange?: (value: number | null) => void
+  onValueCommitted?: (value: number | null) => void
+  min?: number
+  max?: number
+  step?: number                — default 1
+  largeStep?: number           — Shift+Arrow, default 10
+  smallStep?: number           — Meta+Arrow, default 0.1
+  format?: Intl.NumberFormatOptions  — e.g. { style: 'currency', currency: 'USD' }
+  allowWheelScrub?: boolean    — default false
+  snapOnStep?: boolean         — default false
+  allowOutOfRange?: boolean    — default false
+  name?: string
+  className?: string
+  placeholder?: string
+  disabled?: boolean
+  readOnly?: boolean
+  required?: boolean
+
+Also exports primitives: NumberFieldRoot, NumberFieldGroup, NumberFieldInput, NumberFieldDecrement, NumberFieldIncrement, NumberFieldScrubArea, NumberFieldScrubAreaCursor
+
+---
+
+### InputOTP — components/ui/input-otp.tsx
+Wrapper: InputOTPWrapper
+Base: Base UI OTPField
+
+Props:
+  length?: number                        — default 6
+  separator?: boolean | number           — true = split in half, number = split after Nth slot
+  slotClassName?: string
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value, eventDetails) => void
+  onValueComplete?: (value, eventDetails) => void
+  autoSubmit?: boolean                   — default false
+  mask?: boolean                         — password mode, default false
+  validationType?: 'numeric' | 'alphanumeric' | 'none'  — default 'numeric'
+  name?: string
+  className?: string
+  disabled?: boolean
+  readOnly?: boolean
+  required?: boolean
+
+Also exports primitives: InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator
+
+---
+
+### InputGroup — components/ui/input-group.tsx
+Wrapper: InputGroupWrapper (standalone)
+Composable with addons (text labels, icons, buttons).
+
+Props:
+  addonStart?: ReactNode       — left addon: use InputGroupText or InputGroupButton
+  addonEnd?: ReactNode         — right addon
+  wrapperClassName?: string    — outer InputGroup container
+  className?: string           — inner input
+  placeholder?: string
+  value?: string
+  defaultValue?: string
+  onChange?: ChangeEventHandler
+  disabled?: boolean
+  readOnly?: boolean
+  required?: boolean
+  name?: string
+  id?: string
+  type?: string
+
+Addon components:
+  InputGroupText             — text/icon label addon
+  InputGroupButton           — clickable button addon
+  InputGroupAddon            — low-level addon with align: "inline-start"|"inline-end"|"block-start"|"block-end"
+  InputGroupInput            — input element within group
+  InputGroupTextarea         — textarea element within group
+
+---
+
+## Field Wrapper (Form Integration)
+
+### Generic — components/ui/field-wrapper.tsx
+
+Wraps each input inside Field + FieldLabel + FieldError. All wrappers share base props:
+  name: string                 — required; used as id and form field name
+  label?: ReactNode
+  error?: { message?: string }
+  invalid?: boolean
+  className?: string
+
+Available wrappers:
+  InputWrapper       — standard text/email/password input (+ all HTMLInputElement attrs)
+  TextareaWrapper    — textarea (+ all HTMLTextAreaElement attrs)
+  SelectWrapper      — SelectWrapper with label/error
+  ComboboxWrapper    — ComboboxWrapper with label/error
+  AutocompleteWrapper— AutocompleteWrapper with label/error
+  RadioWrapper       — RadioWrapper with fieldset/legend/error
+  CheckboxWrapper    — CheckboxWrapper with fieldset/legend/error
+  SwitchWrapper      — Switch with label/error (checked, onCheckedChange)
+  SliderWrapper      — Slider with label/error (+ all Slider props)
+  NumberWrapper      — NumberFieldWrapper with label/error (+ all NumberFieldWrapper props)
+  OTPWrapper         — InputOTPWrapper with label/error (+ all InputOTPWrapper props)
+  InputGroupWrapper  — InputGroupWrapper with label/error (+ addonStart, addonEnd)
+  DatePickerWrapper  — Calendar in Popover with label/error (value: Date, onSelect)
+
+---
+
+### React Hook Form — components/ui/field-wrapper-rhf.tsx
+
+Same wrappers as generic field-wrapper with added:
+  control: Control<any>        — from useForm()
+  rules?: RegisterOptions      — validation rules
+
+Wrappers: InputWrapper, TextareaWrapper, SelectWrapper, ComboboxWrapper, AutocompleteWrapper, RadioWrapper, CheckboxWrapper, SwitchWrapper, SliderWrapper, NumberWrapper, OTPWrapper, InputGroupWrapper, DatePickerWrapper
+
+---
+
+### TanStack Form — components/ui/field-wrapper-tf.tsx
+
+Used via form.AppField render prop:
+  <form.AppField name="fieldName" validators={...}>
+    {field => <field.InputField label="Label" />}
+  </form.AppField>
+
+Field methods: field.InputField, field.TextareaField, field.SelectField, field.ComboboxField, field.AutocompleteField, field.RadioField, field.CheckboxField, field.SwitchField, field.SliderField, field.NumberField, field.OTPField, field.InputGroupField, field.DatePickerField
+
+---
+
+## Form — components/ui/form.tsx
+
+Wrapper: Form
+Base: Base UI Form
+
+Props:
+  errors?: Record<string, string | string[]>    — server-side errors keyed by field name; propagated via context to Field.Root with matching name
+  onFormSubmit?: (values: Record<string, unknown>, event) => void  — receives parsed form values; preventDefault called automatically
+  validationMode?: 'onSubmit' | 'onBlur' | 'onChange'  — default "onSubmit"
+  actionsRef?: RefObject<{ validate: (fieldName?: string) => void } | null>  — imperative validate()
+  className?: string
+  children?: ReactNode
+
+Use with Field, FieldLabel, FieldNativeError from components/ui/field.tsx for native HTML validation.
+
+Native validation pattern:
+  <Form validationMode="onChange" onFormSubmit={handleSubmit}>
+    <Field name="email" validate={(val) => !val ? "Required" : null}>
+      <FieldLabel>Email</FieldLabel>
+      <Input name="email" required />
+      <FieldNativeError />
+    </Field>
+  </Form>
+
+Server errors auto-clear when field values change.
+
+---
+
+## Accordion — components/ui/accordion.tsx
+Wrapper: AccordionWrapper
+Base: Base UI Accordion
+
+accordionItemT: { value: string; trigger: ReactNode; content: ReactNode; className? }
+  + accordionSharedT fields per item (override globals)
+
+AccordionWrapper props:
+  items: accordionItemT[]
+  itemCls?: string
+  multiple? (Accordion.Root prop)            — allow multiple open panels
+  disabled? (Accordion.Root prop)
+  value? / defaultValue? / onValueChange?   — controlled state (array of strings)
+  // accordionSharedT (applied globally, overridden per item):
+  triggerCls?: string
+  contentCls?: string
+  indicatorAt?: "right" | "left"            — default "right"
+  itemProps?: Omit<Accordion.Item.Props, 'value'|'className'>
+  triggerProps?: Omit<Accordion.Trigger.Props, 'className'|'children'> & { headerProps? }
+  contentProps?: Omit<Accordion.Panel.Props, 'className'|'children'>  — supports keepMounted, hiddenUntilFound
+
+Custom heading: triggerProps={{ headerProps: { render: <h2 /> } }}
+
+---
+
+## Collapsible — components/ui/collapsible.tsx
+Wrapper: CollapsibleWrapper
+Base: Base UI Collapsible
+
+Props:
+  trigger: ReactNode           — required
+  children: ReactNode          — panel content, required
+  triggerCls?: string
+  contentCls?: string
+  triggerProps?                — Omit<Collapsible.Trigger.Props, 'children'|'className'>; use render for custom element
+  contentProps?                — Omit<Collapsible.Panel.Props, 'children'|'className'>; supports keepMounted, hiddenUntilFound
+  // All Collapsible.Root props: open, defaultOpen, onOpenChange, disabled
+
+---
+
+## Tabs — components/ui/tabs.tsx
+Wrapper: TabsWrapper
+Base: Base UI Tabs
+
+tabItemT: { value: string; trigger: ReactNode; content: ReactNode; disabled?: boolean; triggerCls?: string; contentCls?: string }
+
+TabsWrapper props:
+  tabs: tabItemT[]
+  variant?: "default" | "line"            — default "default" (pill) | "line" (underline)
+  listCls?: string
+  triggerCls?: string                     — global; per-item triggerCls overrides
+  contentCls?: string                     — global; per-item contentCls overrides
+  activateOnFocus?: boolean               — activate on arrow key, default false
+  loopFocus?: boolean                     — default true
+  // All Tabs.Root props: value, defaultValue, onValueChange, orientation
+
+---
+
+## Popover — components/ui/popover.tsx
+Wrapper: PopoverWrapper
+Base: Base UI Popover
+
+Props:
+  trigger?: ReactNode
+  title?: ReactNode
+  description?: ReactNode
+  content?: ReactNode                     — arbitrary content below title/description
+  triggerCls?: string
+  triggerProps?                           — Omit<Popover.Trigger.Props, 'className'|'children'>
+                                            render: (props, state) => ReactNode for state-aware trigger
+                                            openOnHover: true + delay/closeDelay for hover trigger
+  contentCls?: string
+  contentProps?                           — side, sideOffset, align, alignOffset, showArrow, arrowClassName, collisionPadding
+  // All Popover.Root props: open, onOpenChange, modal, defaultOpen, actionsRef
+
+Modal popover blocks scroll/pointer outside and traps focus. Add PopoverClose in content.
+Also exports: PopoverClose
+
+---
+
+## Tooltip — components/ui/tooltip.tsx
+Wrapper: TooltipWrapper
+Provider: TooltipProvider
+Base: Base UI Tooltip
+
+TooltipWrapper props:
+  trigger?: ReactNode
+  content: ReactNode                      — required; tooltip popup content
+  triggerCls?: string
+  triggerProps?                           — Omit<Tooltip.Trigger.Props, 'className'|'children'>
+                                            delay, closeDelay, closeOnClick, disabled
+                                            render: (props, state) => ReactNode for state-aware trigger
+  contentCls?: string
+  contentProps?                           — side, sideOffset, align, alignOffset, showArrow (default true), arrowClassName
+  // All Tooltip.Root props: open, onOpenChange, defaultOpen, delay, closeDelay, trackCursorAxis, disableHoverablePopup
+
+Arrow shown by default. Hide: contentProps={{ showArrow: false }}
+
+TooltipProvider props:
+  delay?: number         — default 0
+  closeDelay?: number
+  timeout?: number       — instant-reopen window ms, default 400
+
+Wrap multiple tooltips in TooltipProvider to share timing and enable instant-reopen.
+Also exports: Tooltip, TooltipTrigger, TooltipContent
+
+---
+
+## Toast — components/ui/toast.tsx
+Wrapper: Toaster + useToast hook
+Base: Base UI Toast
+
+Setup: wrap app (or subtree) in <Toaster>. Call useToast() inside.
+
+useToast() returns:
+  toast.add(options) → string id
+  toast.success(description, options?) → string id
+  toast.error(description, options?) → string id
+  toast.warning(description, options?) → string id
+  toast.info(description, options?) → string id
+  toast.promise(promise, { loading, success, error }, options?) → Promise
+  toast.update(id, partialOptions)
+  toast.close(id?, position?)  — omit id to close all
+
+toast.add options:
+  title?: ReactNode
+  description?: ReactNode
+  type?: "default"|"success"|"error"|"warning"|"info"|"loading"
+  timeout?: number             — ms, 0 = persistent, default 5000
+  priority?: 'low' | 'high'   — aria-live politeness
+  position?: toastPositionT
+  actionProps?: ButtonProps    — action button inside toast
+  onClose?: () => void
+  onRemove?: () => void
+  icon?: ReactNode | null      — null suppresses icon
+
+toastPositionT: "top-left"|"top-center"|"top-right"|"bottom-left"|"bottom-center"|"bottom-right"
+
+Toaster props:
+  position?: toastPositionT    — default "bottom-right"
+  timeout?: number             — default 5000
+  limit?: number               — max visible per position, default 3
+  swipeDirection?: string[]    — default ['down','right']
+  showClose?: boolean          — default true
+  viewportCls / toastCls / contentCls / titleCls / descriptionCls / actionCls / closeCls
+
+External manager (outside React): use createToastManager() + ToastProvider with toastManager prop.
+
+---
+
+## Navigation Menu — components/ui/navigation-menu-wrapper.tsx
+Wrapper: NavigationMenuWrapper
+Base: Shadcn Navigation Menu
+
+Item shapes:
+  Link item: { key: string; href: string; children: ReactNode }
+  Trigger item: { key: string; trigger: ReactNode; content: ReactNode; triggerCls?; triggerProps?; contentCls?; contentProps? }
+
+NavigationMenuWrapper props:
+  items: navMenuItemsT         — mix of link and trigger items
+  defaultValue?: string | null
+  value?: string | null
+  onValueChange?: (value: string | null) => void
+  delay?: number               — hover open delay ms, default 50
+  closeDelay?: number          — default 50
+  orientation?: "horizontal" | "vertical"
+  triggerCls?: string          — global
+  triggerProps?                — global
+  contentCls?: string          — global
+  align?: "start" | "center" | "end"  — default "start"
+
+Helper components:
+  NavList({ items, wrapperCls? }) — renders <ul> of NavLinkItem
+  NavLinkItem({ href, children, className? }) — Next.js Link wrapper for nav items
+
+---
+
+## Breadcrumb — components/ui/breadcrumb.tsx
+Wrapper: BreadcrumbWrapper
+Base: Shadcn Breadcrumb
+
+Items: string | { label: ReactNode; href?: string; onClick?: () => void; className?: string }
+Last item (no href/onClick) renders as current page text.
+
+Props:
+  items: breadcrumbItems       — required
+  itemCls?: string
+  linkCls?: string
+  pageCls?: string
+  separator?: ReactNode        — default ">"
+  separatorCls?: string
+  maxItems?: number            — before collapsing, default 4
+  itemsBeforeCollapse?: number — default 1
+  itemsAfterCollapse?: number  — default 1
+  collapseType?: "ellipsis" | "dropdown"  — default "ellipsis"
+  containerCls?: string
+  dropdownCls?: string
+  listCls?: string
+
+---
+
+## Pagination — components/ui/pagination.tsx
+Wrapper: PaginationWrapper
+Base: Shadcn Pagination
+
+Props:
+  total: number                — required; total page count
+  page?: number                — controlled current page, default 1 (uncontrolled)
+  siblingCount?: number        — pages shown around current, default 1
+  onPageChange?: (page: number) => void
+  wrapperCls?: string
+  contentCls?: string
+  itemCls?: string
+  linkCls?: string
+
+---
+
+## Scroll Area — components/ui/scroll-area.tsx
+Wrapper: ScrollAreaWrapper
+Base: Base UI ScrollArea
+
+Props:
+  orientation?: 'vertical' | 'horizontal' | 'both'  — default "vertical"; 'both' adds Corner
+  viewportCls?: string         — for mask-image gradient fade
+  scrollbarCls?: string
+  keepMounted?: boolean        — prevent layout shift, default false
+  overflowEdgeThreshold?: number  — px before overflow fires, default 0
+  className?: string           — root container
+  children?: ReactNode
+
+Gradient fade example: viewportCls="[mask-image:linear-gradient(to_bottom,transparent_0,black_2rem,black_calc(100%-2rem),transparent_100%)]"
+
+Also exports: ScrollAreaRoot, ScrollAreaViewport, ScrollAreaCorner, ScrollBar
+
+---
+
+## Card — components/ui/card.tsx
+Wrapper: CardWrapper
+Base: Shadcn Card
+
+Props:
+  title?: ReactNode
+  description?: ReactNode
+  children?: ReactNode         — CardContent
+  footer?: ReactNode           — string auto-wrapped in CardFooter; ReactNode rendered as-is; null/undefined hides
+  actions?: ReactNode          — renders in header after title/description (buttons, menus)
+  wrapperCls?: string
+  headerCls?: string
+  titleCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  footerCls?: string
+
+---
+
+## Item — components/ui/item.tsx
+Wrappers: ItemWrapper, ItemGroupWrapper
+Base: Shadcn Item
+
+ItemWrapper props:
+  header?: ReactNode           — above title; badges, timestamps, metadata
+  title?: ReactNode
+  media?: ReactNode            — avatar, icon, image (left side)
+  description?: ReactNode
+  actions?: ReactNode          — right side or bottom; buttons
+  content?: ReactNode          — extra content between description and actions
+  footer?: ReactNode
+  itemWrapperCls?: string
+  headerCls / titleCls / mediaCls / descriptionCls / contentCls / actionsCls / footerCls: string
+  itemProps?: Omit<HTMLAttributes<HTMLDivElement>, 'className'>
+  itemMediaProps?              — variant, size for media container
+
+ItemGroupWrapper props:
+  items: itemsT                — array of ItemWrapper-shaped objects
+  wrapperCls?: string          — group container
+  // global: itemWrapperCls, headerCls, titleCls, descriptionCls, contentCls, mediaCls, actionsCls, footerCls, itemProps, itemMediaProps
+  // per-item values override globals
+
+---
+
+## Empty — components/ui/empty.tsx
+Wrapper: EmptyWrapper
+Base: Shadcn Empty
+
+Props:
+  title?: ReactNode
+  description?: ReactNode
+  media?: ReactNode            — icon/illustration above title
+  content?: ReactNode          — CTAs/action buttons
+  wrapperCls?: string
+  headerCls?: string
+  titleCls?: string
+  mediaCls?: string
+  descriptionCls?: string
+  contentCls?: string
+  mediaVariant?: "default" | "muted" | "outline"  — default "default"
+
+---
+
+## Carousel — components/ui/carousel.tsx
+Wrapper: CarouselWrapper
+Base: Shadcn Carousel (Embla)
+
+carouselItemT: { content: ReactNode; itemCls?: string }
+
+Props:
+  items: carouselItemT[]       — required
+  showControls?: boolean       — Previous/Next buttons, default true
+  contentCls?: string
+  itemCls?: string             — global; per-item itemCls merges
+  previousCls?: string
+  nextCls?: string
+  // All Carousel root props forwarded: opts, plugins, orientation, setApi
+
+Multi-slide: opts={{ align: "start" }} + itemCls="basis-1/3"
+Controlled: setApi={setApi} gives access to Embla API
+
+---
+
+## Data Table — components/ui/data-table/
+
+Based on TanStack Table. Install: npx shadcn@latest add @glrk-ui/data-table
+
+### useTable hook
+  import { useTable } from '@/components/ui/use-table'
+  const table = useTable({ data, columns })
+
+Pre-configured with: columnVisibility, columnFilters (faceted), sorting, rowSelection, globalFilter, pagination.
+
+### DataTable
+  <DataTable table={table} emptyMessage? className? />
+
+### DataTableVirtualized (optional, requires @tanstack/react-virtual)
+Install: npx shadcn@latest add @glrk-ui/data-table-virtual
+  <DataTableVirtualized
+    table={table}
+    className="h-[600px]"    — fixed height required
+    hasNextPage?
+    isFetchingNextPage?
+    fetchNextPage?
+    virtualizerOptions?
+    emptyMessage?
+  />
+
+### Column utilities
+
+ColumnSorter({ column, title, className? })
+  — simple sort header
+
+ColumnHeader({ column, title, className? })
+  — sort + hide/show dropdown in header
+
+ColumnFilter({ column, title, options: optionsT, ...ComboboxWrapper props })
+  — multi-select dropdown filter
+
+ColumnFacetedFilter({ column, title, options: optionsT, ...ComboboxWrapper props })
+  — multi-select with faceted value counts
+
+ColumnToggle({ table })
+  — dropdown to show/hide columns
+
+FilterGroup({ table, options: [{ key, lable, options }][] })
+  — dynamic add/remove ColumnFilter controls
+
+Pagination({ table })
+  — page controls with page-size selector
+
+---
+
+## Common Patterns
+
+### Controlled open state (all overlays)
+  const [open, setOpen] = useState(false)
+  <DialogWrapper open={open} onOpenChange={setOpen} ... />
+
+### Async action with loading
+  const [loading, setLoading] = useState(false)
+  async function handle() {
+    setLoading(true); await action(); setLoading(false); setOpen(false)
+  }
+  <DialogWrapper loading={loading} onAction={handle} ... />
+
+### Custom trigger element
+  triggerProps={{ render: <a href="#" />, nativeButton: false }}
+
+### Render-prop trigger (Popover, Tooltip)
+  triggerProps={{ render: (props, state) => <button {...props}>{state.open ? "Close" : "Open"}</button> }}
+
+### Options with groups and separators
+  options={[
+    "Simple item",
+    { label: "Custom", value: "val", className: "..." },
+    "---",
+    { group: "Group", options: ["A", "B"] },
+  ]}
+
+### Type-safe primitive conversion
+  import { parseAllowedPrimitive } from "@/lib/utils"
+  onValueChange={v => setState(parseAllowedPrimitive(v))}
