@@ -100,7 +100,10 @@ Also exports: SheetClose, SheetFooter
 ### Drawer — components/ui/drawer.tsx
 Wrapper: DrawerWrapper
 
-Same props as DialogWrapper PLUS:
+Same props as DialogWrapper EXCEPT:
+  - No showCloseButton prop (Drawer has no X close button)
+
+Additional Drawer-only props:
   - side?: 'bottom' | 'top' | 'left' | 'right'  — default "bottom"
   - swipeDirection — forwarded to Drawer.Root (match to side)
   - snapPoints?: number[]  — e.g. [0.4, 1] for snap heights
@@ -153,7 +156,7 @@ MenuRadioWrapper additional props:
 
 ### Menubar — components/ui/menubar-wrapper.tsx
 Wrappers: MenubarWrapper, MenubarCheckboxWrapper, MenubarRadioWrapper
-Base: Shadcn Menubar
+Base: Base UI Menubar
 
 MenubarWrapper props:
   options: {
@@ -183,7 +186,7 @@ MenubarRadioWrapper: same options array shape + global value, onValueChange, ind
 
 ### ContextMenu — components/ui/context-menu-wrapper.tsx
 Wrappers: ContextWrapper, ContextCheckboxWrapper, ContextRadioWrapper
-Base: Shadcn Context Menu
+Base: Base UI Context Menu
 
 Key difference from Menu: triggered by right-click on children (no trigger prop).
   children: ReactNode          — receives the right-click event (required)
@@ -213,8 +216,8 @@ Props:
   options: optionsT
   placeholder?: string
   indicatorAt?: "left" | "right"  — default "right"
-  size?: "sm" | "default"         — default "default"
   backdrop?: boolean               — default false
+  multiple?: boolean               — multi-select; trigger shows chip badges, default false
   renderValue?: (value: string, option) => ReactNode  — custom trigger display
   triggerCls?: string
   contentCls?: string
@@ -281,7 +284,7 @@ Props:
   isLoading?: boolean
   emptyMessage?: string        — default "No results found"
   showClear?: boolean          — default false
-  showTrigger?: boolean        — chevron button, default false
+  showTrigger?: boolean        — chevron button, default true
   contentCls?: string
   itemCls?: string
   groupCls?: string
@@ -590,6 +593,7 @@ Props:
   children: ReactNode          — panel content, required
   triggerCls?: string
   contentCls?: string
+  indicatorAt?: "left" | "right"  — chevron position, default "right"
   triggerProps?                — Omit<Collapsible.Trigger.Props, 'children'|'className'>; use render for custom element
   contentProps?                — Omit<Collapsible.Panel.Props, 'children'|'className'>; supports keepMounted, hiddenUntilFound
   // All Collapsible.Root props: open, defaultOpen, onOpenChange, disabled
@@ -708,7 +712,7 @@ External manager (outside React): use createToastManager() + ToastProvider with 
 
 ## Navigation Menu — components/ui/navigation-menu-wrapper.tsx
 Wrapper: NavigationMenuWrapper
-Base: Shadcn Navigation Menu
+Base: Base UI Navigation Menu
 
 Item shapes:
   Link item: { key: string; href: string; children: ReactNode }
@@ -745,7 +749,7 @@ Props:
   itemCls?: string
   linkCls?: string
   pageCls?: string
-  separator?: ReactNode        — default ">"
+  separator?: ReactNode        — default chevron icon
   separatorCls?: string
   maxItems?: number            — before collapsing, default 4
   itemsBeforeCollapse?: number — default 1
@@ -838,7 +842,7 @@ ItemGroupWrapper props:
 
 ## Empty — components/ui/empty.tsx
 Wrapper: EmptyWrapper
-Base: Shadcn Empty
+Base: Custom
 
 Props:
   title?: ReactNode
@@ -851,7 +855,7 @@ Props:
   mediaCls?: string
   descriptionCls?: string
   contentCls?: string
-  mediaVariant?: "default" | "muted" | "outline"  — default "default"
+  mediaVariant?: "default" | "icon"  — default "default"; "icon" = rounded muted bg with sized SVG
 
 ---
 
@@ -880,7 +884,7 @@ Controlled: setApi={setApi} gives access to Embla API
 Based on TanStack Table. Install: npx shadcn@latest add @glrk-ui/data-table
 
 ### useTable hook
-  import { useTable } from '@/components/ui/use-table'
+  import { useTable } from '@/components/ui/data-table'
   const table = useTable({ data, columns })
 
 Pre-configured with: columnVisibility, columnFilters (faceted), sorting, rowSelection, globalFilter, pagination.

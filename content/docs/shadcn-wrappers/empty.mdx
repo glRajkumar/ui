@@ -233,21 +233,18 @@ type={`export interface EmptyWrapper {
   contentCls?: string;
 
   /**
-   * Visual style variant for the media element
-   * 
-   * Controls the appearance/styling of the media container
-   * 
-   * Available variants depend on your \`emptyMediaVariants\` configuration
-   * 
+   * Visual style variant for the media container.
+   *
+   * - \`"default"\` — no background, media renders as-is
+   * - \`"icon"\` — small rounded muted background (size-8), auto-sizes SVG icons to size-4
+   *
    * \`\`\`tsx
-   * mediaVariant="default"
-   * mediaVariant="muted"
-   * mediaVariant="outline"
+   * mediaVariant="icon"
    * \`\`\`
-   * 
+   *
    * @default "default"
    */
-  mediaVariant?: "default" | "muted" | "outline"
+  mediaVariant?: "default" | "icon"
 }`} 
 />
 

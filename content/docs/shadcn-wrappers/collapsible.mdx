@@ -165,6 +165,12 @@ type={`export interface CollapsibleWrapper {
   contentCls?: string;
 
   /**
+   * Position of the chevron indicator inside the trigger.
+   * @default "right"
+   */
+  indicatorAt?: "left" | "right";
+
+  /**
    * Props forwarded to CollapsibleTrigger — all Collapsible.Trigger.Props
    * except className and children. Use for render, nativeButton, etc.
    *

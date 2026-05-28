@@ -139,7 +139,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { DataTableVirtualized } from '@/components/ui/data-table-virtualized';
+import { DataTableVirtualized } from '@/components/ui/data-table';
 
 function MyTable() {
   const {
@@ -172,8 +172,7 @@ Custom hook for managing table state and configuration. Pre-configured with `col
 So you can use most of the functionality of `tanstack-table` just using this hook.
 
 ```tsx
-import { useTable } from '@/components/ui/use-table';
-import { DataTable } from '@/components/ui/data-table';
+import { useTable, DataTable } from '@/components/ui/data-table';
 
 function MyTable() {
   const table = useTable({ data, columns })
@@ -389,9 +388,9 @@ type={`export type useTable = {
   data: Record<string, any>[]
 
   /**
-   * Ref to column that the filter applies to
+   * Column definitions for the table
    */
-  column: Column
+  columns: ColumnDef[]
 }`} 
 />
 
@@ -456,7 +455,7 @@ type={`export interface DataTableVirtualized {
    * Virtualizer config overrides: 
    * Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, "count" | "getScrollElement">>
    */
-  virtualizerOptions: VirtualizerOptions
+  virtualizerOptions?: VirtualizerOptions
 }`} 
 />
 

@@ -140,15 +140,14 @@ type={`export interface Breadcrumb {
   pageCls?: string;
 
   /**
-   * Custom separator element between breadcrumb items
+   * Custom separator element between breadcrumb items.
+   * Defaults to a ChevronRight icon.
    * 
    * \`\`\`tsx
-   * separator={<ChevronRight />}
-   * separator=">"
+   * separator={<SlashIcon />}
+   * separator="/"
    * separator={<span className="mx-2">/</span>}
    * \`\`\`
-   * 
-   * @default ">"
    */
   separator?: React.ReactNode;
 

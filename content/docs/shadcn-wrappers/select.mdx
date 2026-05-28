@@ -1,6 +1,6 @@
 ---
 title: Select
-description: A wrapper for Base UI Select with flexible option types, grouped options, size variants, backdrop, and custom value rendering.
+description: A wrapper for Base UI Select with flexible option types, grouped options, backdrop, custom value rendering, and multiple selection.
 ---
 
 import { SelectEx } from "@/components/examples";
@@ -86,13 +86,6 @@ const options = [
   ]}
   placeholder="Select food"
 />
-```
-
-### Size
-
-```tsx
-<SelectWrapper options={options} size="sm" placeholder="Small" />
-<SelectWrapper options={options} size="default" placeholder="Default" />
 ```
 
 ### Indicator placement
@@ -193,7 +186,7 @@ import {
 } from "@/components/ui/select"
 
 <Select>
-  <SelectTrigger size="sm">
+  <SelectTrigger>
     <SelectValue placeholder="Pick one" />
   </SelectTrigger>
   <SelectContent>
@@ -248,12 +241,6 @@ type={`export interface SelectWrapper {
    * @default "right"
    */
   indicatorAt?: "left" | "right";
-
-  /**
-   * Trigger height variant.
-   * @default "default"
-   */
-  size?: "sm" | "default";
 
   /**
    * Render a fixed backdrop behind the dropdown popup.
