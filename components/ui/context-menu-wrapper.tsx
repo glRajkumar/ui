@@ -9,7 +9,12 @@ import {
   isSeparator,
   parseAllowedPrimitive,
 } from '@/lib/utils'
-import { isSubMenu, isGroupMenu, isInputSubMenu, isInputGroupMenu } from '@/lib/menu'
+import {
+  isSubMenu,
+  isGroupMenu,
+  isInputSubMenu,
+  isInputGroupMenu
+} from '@/lib/menu'
 
 import {
   ContextMenu,

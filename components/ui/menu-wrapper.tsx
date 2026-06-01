@@ -9,7 +9,12 @@ import {
   isSeparator,
   parseAllowedPrimitive,
 } from '@/lib/utils'
-import { isSubMenu, isGroupMenu, isInputSubMenu, isInputGroupMenu } from '@/lib/menu'
+import {
+  isSubMenu,
+  isGroupMenu,
+  isInputSubMenu,
+  isInputGroupMenu
+} from '@/lib/menu'
 
 import {
   Menu,
@@ -93,7 +98,7 @@ function CheckboxItem({
   className,
   checked = false,
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: checkboxItemProps) {
   const value = getValue(option)
 
@@ -215,7 +220,7 @@ function CheckboxSubMenu({
   groupLabelCls,
   checked = [],
   indicatorAt,
-  onCheckedChange = () => {},
+  onCheckedChange = () => { },
 }: CheckboxSubMenuProps) {
   return (
     <MenuSub>
@@ -298,7 +303,7 @@ function RadioSubMenu({
   groupLabelCls,
   value = '',
   indicatorAt,
-  onValueChange = () => {},
+  onValueChange = () => { },
 }: RadioSubMenuProps) {
   return (
     <MenuSub>
