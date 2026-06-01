@@ -2,23 +2,20 @@
 
 import { createFormHookContexts, createFormHook } from '@tanstack/react-form'
 
-import { type ComboboxWrapperProps } from './combobox'
-import { type selectProps } from './select'
-
 import {
+  OTPWrapper as OTP,
   InputWrapper as Input,
-  TextareaWrapper as Textarea,
   RadioWrapper as Radio,
-  CheckboxWrapper as Checkbox,
   SwitchWrapper as Switch,
   SelectWrapper as Select,
-  DatePickerWrapper as DatePicker,
+  SliderWrapper as Slider,
+  NumberWrapper as NumberInput,
+  TextareaWrapper as Textarea,
+  CheckboxWrapper as Checkbox,
   ComboboxWrapper as Combobox,
-  NumberWrapper as NumberWrapperBase,
-  SliderWrapper as SliderBase,
-  AutocompleteWrapper as AutocompleteBase,
-  OTPWrapper as OTPBase,
-  InputGroupWrapper as InputGroupBase,
+  DatePickerWrapper as DatePicker,
+  InputGroupWrapper as InputGroup,
+  AutocompleteWrapper as Autocomplete,
 } from './field-wrapper'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
@@ -132,9 +129,7 @@ function SwitchField(props: switchFieldProps) {
   )
 }
 
-type selectFieldProps = Omit<selectProps, 'value' | 'onValueChange'> & {
-  label?: React.ReactNode
-}
+type selectFieldProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 function SelectField(props: selectFieldProps) {
   const field = useFieldContext<allowedPrimitiveT>()
 
@@ -175,9 +170,7 @@ function DatePickerField(props: datePickerFieldProps) {
   )
 }
 
-type comboboxFieldProps = ComboboxWrapperProps & {
-  label?: React.ReactNode
-}
+type comboboxFieldProps = Omit<React.ComponentProps<typeof Combobox>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 function ComboboxField(props: comboboxFieldProps) {
   const field = useFieldContext<allowedPrimitiveT | allowedPrimitiveT[]>()
 
@@ -196,14 +189,14 @@ function ComboboxField(props: comboboxFieldProps) {
 }
 
 type numberFieldProps = Omit<
-  React.ComponentProps<typeof NumberWrapperBase>,
+  React.ComponentProps<typeof NumberInput>,
   'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
 > & { label?: React.ReactNode }
 function NumberField(props: numberFieldProps) {
   const field = useFieldContext<number | null>()
 
   return (
-    <NumberWrapperBase
+    <NumberInput
       {...props}
       name={field.name}
       value={field.state.value}
@@ -217,14 +210,14 @@ function NumberField(props: numberFieldProps) {
 }
 
 type sliderFieldProps = Omit<
-  React.ComponentProps<typeof SliderBase>,
+  React.ComponentProps<typeof Slider>,
   'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
 > & { label?: React.ReactNode }
 function SliderField(props: sliderFieldProps) {
   const field = useFieldContext<number | number[]>()
 
   return (
-    <SliderBase
+    <Slider
       {...props}
       name={field.name}
       value={field.state.value}
@@ -238,14 +231,14 @@ function SliderField(props: sliderFieldProps) {
 }
 
 type autocompleteFieldProps = Omit<
-  React.ComponentProps<typeof AutocompleteBase>,
+  React.ComponentProps<typeof Autocomplete>,
   'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
 > & { label?: React.ReactNode }
 function AutocompleteField(props: autocompleteFieldProps) {
   const field = useFieldContext<string>()
 
   return (
-    <AutocompleteBase
+    <Autocomplete
       {...props}
       name={field.name}
       value={field.state.value ?? ''}
@@ -259,14 +252,14 @@ function AutocompleteField(props: autocompleteFieldProps) {
 }
 
 type otpFieldProps = Omit<
-  React.ComponentProps<typeof OTPBase>,
+  React.ComponentProps<typeof OTP>,
   'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
 > & { label?: React.ReactNode }
 function OTPField(props: otpFieldProps) {
   const field = useFieldContext<string>()
 
   return (
-    <OTPBase
+    <OTP
       {...props}
       name={field.name}
       value={field.state.value ?? ''}
@@ -280,14 +273,14 @@ function OTPField(props: otpFieldProps) {
 }
 
 type inputGroupFieldProps = Omit<
-  React.ComponentProps<typeof InputGroupBase>,
+  React.ComponentProps<typeof InputGroup>,
   'name' | 'value' | 'onChange' | 'onBlur' | 'error' | 'invalid'
 > & { label?: React.ReactNode }
 function InputGroupField(props: inputGroupFieldProps) {
   const field = useFieldContext<string>()
 
   return (
-    <InputGroupBase
+    <InputGroup
       {...props}
       name={field.name}
       value={field.state.value ?? ''}

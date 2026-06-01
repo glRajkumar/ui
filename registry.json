@@ -92,6 +92,24 @@
       ],
       "files": [
         {
+          "path": "types/general.d.ts",
+          "type": "registry:file",
+          "target": "types/general.d.ts"
+        },
+        {
+          "path": "types/menu.d.ts",
+          "type": "registry:file",
+          "target": "types/menu.d.ts"
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/menu.ts",
+          "type": "registry:lib"
+        },
+        {
           "path": "components/ui/menu.tsx",
           "type": "registry:ui"
         },
@@ -102,14 +120,6 @@
         {
           "path": "components/ui/breadcrumb.tsx",
           "type": "registry:ui"
-        },
-        {
-          "path": "lib/utils.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "lib/menu.ts",
-          "type": "registry:lib"
         }
       ]
     },
@@ -288,6 +298,11 @@
           "target": "types/general.d.ts"
         },
         {
+          "path": "types/menu.d.ts",
+          "type": "registry:file",
+          "target": "types/menu.d.ts"
+        },
+        {
           "path": "lib/utils.ts",
           "type": "registry:lib"
         },
@@ -429,7 +444,7 @@
       "name": "field-wrapper",
       "type": "registry:ui",
       "title": "Field Wrapper",
-      "description": "Opinionated field wrappers combining Field layout, label, and error display for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, and Slider.",
+      "description": "Opinionated field wrappers combining Field layout, label, and error display for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
       "registryDependencies": [
         "select",
         "popover",
@@ -487,6 +502,14 @@
           "type": "registry:ui"
         },
         {
+          "path": "components/ui/input-otp.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/input-group.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/field-wrapper.tsx",
           "type": "registry:ui"
         }
@@ -496,7 +519,7 @@
       "name": "field-wrapper-rhf",
       "type": "registry:ui",
       "title": "Field Wrapper — React Hook Form",
-      "description": "Field wrappers with React Hook Form Controller integration for all field types.",
+      "description": "Field wrappers with React Hook Form Controller integration for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
       "dependencies": [
         "react-hook-form"
       ],
@@ -557,6 +580,14 @@
           "type": "registry:ui"
         },
         {
+          "path": "components/ui/input-otp.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/input-group.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/field-wrapper.tsx",
           "type": "registry:ui"
         },
@@ -570,7 +601,7 @@
       "name": "field-wrapper-tf",
       "type": "registry:ui",
       "title": "Field Wrapper — TanStack Form",
-      "description": "Field wrappers with TanStack Form createFormHook integration for all field types.",
+      "description": "Field wrappers with TanStack Form createFormHook integration for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
       "dependencies": [
         "@tanstack/react-form"
       ],
@@ -628,6 +659,14 @@
         },
         {
           "path": "components/ui/slider.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/input-otp.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/input-group.tsx",
           "type": "registry:ui"
         },
         {
@@ -772,6 +811,10 @@
         "navigation-menu"
       ],
       "files": [
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        },
         {
           "path": "components/ui/navigation-menu.tsx",
           "type": "registry:ui"

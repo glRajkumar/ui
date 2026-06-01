@@ -6,16 +6,16 @@ import { format } from 'date-fns'
 
 import { cn, parseAllowedPrimitive } from '@/lib/utils'
 
-import { type AutocompleteWrapperProps, AutocompleteWrapper as AutocompletePrimitive } from './autocomplete'
-import { type selectProps, SelectWrapper as SelectPrimitiveWrapper } from './select'
-import { type ComboboxWrapperProps, ComboboxWrapper as Combobox } from './combobox'
-import { type CheckboxWrapperProps, CheckboxWrapper as Checkbox } from './checkbox'
 import { Field, FieldLabel, FieldSet, FieldLegend, FieldError } from './field'
-import { type RadioWrapperProps, RadioWrapper as Radio } from './radio'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
+import { AutocompleteWrapper as Autocomplete } from './autocomplete'
+import { InputGroupWrapper as InputGroup } from './input-group'
+import { InputOTPWrapper as InputOTP } from './input-otp'
+import { ComboboxWrapper as Combobox } from './combobox'
+import { CheckboxWrapper as Checkbox } from './checkbox'
+import { SelectWrapper as Select } from './select'
+import { RadioWrapper as Radio } from './radio'
 import { NumberFieldWrapper } from './number-field'
-import { InputOTPWrapper, type InputOTPWrapperProps } from './input-otp'
-import { InputGroupWrapper as InputGroupWrapperPrimitive, type InputGroupWrapperProps as InputGroupWrapperBaseProps } from './input-group'
 import { Calendar } from './calendar'
 import { Textarea } from './textarea'
 import { Slider } from './slider'
@@ -92,7 +92,7 @@ export function TextareaWrapper({
 }
 
 type RadioProps = BaseProps &
-  Omit<RadioWrapperProps, 'value' | 'onValueChange' | 'as'> & {
+  Omit<React.ComponentProps<typeof Radio>, 'value' | 'onValueChange' | 'as'> & {
     value?: allowedPrimitiveT
     onValueChange?: (value: allowedPrimitiveT) => void
   }
@@ -123,7 +123,7 @@ export function RadioWrapper({
 }
 
 type CheckboxProps = BaseProps &
-  Omit<CheckboxWrapperProps, 'value' | 'onValueChange' | 'as'> & {
+  Omit<React.ComponentProps<typeof Checkbox>, 'value' | 'onValueChange' | 'as'> & {
     value?: allowedPrimitiveT[]
     onValueChange?: (value: allowedPrimitiveT[]) => void
   }
@@ -191,7 +191,7 @@ export function SwitchWrapper({
 }
 
 type SelectProps = BaseProps &
-  Omit<selectProps, 'value' | 'onValueChange'> & {
+  Omit<React.ComponentProps<typeof Select>, 'value' | 'onValueChange'> & {
     value?: allowedPrimitiveT
     onValueChange?: (value: allowedPrimitiveT) => void
   }
@@ -212,7 +212,7 @@ export function SelectWrapper({
   return (
     <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
-      <SelectPrimitiveWrapper
+      <Select
         {...props}
         id={name}
         options={options}
@@ -282,7 +282,7 @@ export function DatePickerWrapper({
   )
 }
 
-type ComboboxProps = BaseProps & ComboboxWrapperProps
+type ComboboxProps = BaseProps & React.ComponentProps<typeof Combobox>
 export function ComboboxWrapper({
   name,
   label,
@@ -355,7 +355,7 @@ export function SliderWrapper({
 }
 
 type AutocompleteProps = BaseProps &
-  Omit<AutocompleteWrapperProps, 'className'>
+  Omit<React.ComponentProps<typeof Autocomplete>, 'className'>
 export function AutocompleteWrapper({
   name,
   label,
@@ -369,13 +369,13 @@ export function AutocompleteWrapper({
   return (
     <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
-      <AutocompletePrimitive aria-invalid={isInvalid} {...props} />
+      <Autocomplete aria-invalid={isInvalid} {...props} />
       <FieldError errors={[error]} />
     </Field>
   )
 }
 
-type OTPProps = BaseProps & Omit<InputOTPWrapperProps, 'className'>
+type OTPProps = BaseProps & Omit<React.ComponentProps<typeof InputOTP>, 'className'>
 export function OTPWrapper({
   name,
   label,
@@ -389,13 +389,13 @@ export function OTPWrapper({
   return (
     <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel>{label}</FieldLabel>}
-      <InputOTPWrapper name={name} aria-invalid={isInvalid} {...props} />
+      <InputOTP name={name} aria-invalid={isInvalid} {...props} />
       <FieldError errors={[error]} />
     </Field>
   )
 }
 
-type InputGroupFieldProps = BaseProps & Omit<InputGroupWrapperBaseProps, 'wrapperClassName'>
+type InputGroupFieldProps = BaseProps & Omit<React.ComponentProps<typeof InputGroup>, 'wrapperClassName'>
 export function InputGroupWrapper({
   name,
   label,
@@ -409,7 +409,7 @@ export function InputGroupWrapper({
   return (
     <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
-      <InputGroupWrapperPrimitive
+      <InputGroup
         id={name}
         name={name}
         aria-invalid={isInvalid}

@@ -2,23 +2,20 @@
 
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form'
 
-import { type ComboboxWrapperProps } from './combobox'
-import { type selectProps } from './select'
-
 import {
+  OTPWrapper as OTP,
   InputWrapper as Input,
-  TextareaWrapper as Textarea,
   RadioWrapper as Radio,
-  CheckboxWrapper as Checkbox,
   SwitchWrapper as Switch,
   SelectWrapper as Select,
-  DatePickerWrapper as DatePicker,
+  SliderWrapper as Slider,
+  NumberWrapper as NumberInput,
+  TextareaWrapper as Textarea,
+  CheckboxWrapper as Checkbox,
   ComboboxWrapper as Combobox,
-  NumberWrapper as Number,
-  SliderWrapper as SliderBase,
-  AutocompleteWrapper as AutocompleteBase,
-  OTPWrapper as OTPBase,
-  InputGroupWrapper as InputGroupBase,
+  DatePickerWrapper as DatePicker,
+  InputGroupWrapper as InputGroup,
+  AutocompleteWrapper as Autocomplete,
 } from './field-wrapper'
 
 type BaseProps<T extends FieldValues> = {
@@ -145,7 +142,7 @@ export function SwitchWrapper<T extends FieldValues>({ name, control, ...props }
 }
 
 type SelectProps<T extends FieldValues> = BaseProps<T> &
-  Omit<selectProps, 'value' | 'onValueChange'>
+  Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 export function SelectWrapper<T extends FieldValues>({ name, control, ...props }: SelectProps<T>) {
   return (
     <Controller
@@ -190,7 +187,7 @@ export function DatePickerWrapper<T extends FieldValues>({
   )
 }
 
-type ComboboxProps<T extends FieldValues> = BaseProps<T> & ComboboxWrapperProps
+type ComboboxProps<T extends FieldValues> = BaseProps<T> & Omit<React.ComponentProps<typeof Combobox>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 export function ComboboxWrapper<T extends FieldValues>({
   name,
   control,
@@ -215,14 +212,14 @@ export function ComboboxWrapper<T extends FieldValues>({
 }
 
 type NumberProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof Number>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+  Omit<React.ComponentProps<typeof NumberInput>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 export function NumberWrapper<T extends FieldValues>({ name, control, ...props }: NumberProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <Number
+        <NumberInput
           {...props}
           name={name}
           value={field.value ?? null}
@@ -236,14 +233,14 @@ export function NumberWrapper<T extends FieldValues>({ name, control, ...props }
 }
 
 type SliderProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof SliderBase>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+  Omit<React.ComponentProps<typeof Slider>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 export function SliderWrapper<T extends FieldValues>({ name, control, ...props }: SliderProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <SliderBase
+        <Slider
           {...props}
           name={name}
           value={field.value}
@@ -257,14 +254,14 @@ export function SliderWrapper<T extends FieldValues>({ name, control, ...props }
 }
 
 type AutocompleteProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof AutocompleteBase>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+  Omit<React.ComponentProps<typeof Autocomplete>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 export function AutocompleteWrapper<T extends FieldValues>({ name, control, ...props }: AutocompleteProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <AutocompleteBase
+        <Autocomplete
           {...props}
           name={name}
           value={field.value ?? ''}
@@ -278,14 +275,14 @@ export function AutocompleteWrapper<T extends FieldValues>({ name, control, ...p
 }
 
 type OTPProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof OTPBase>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+  Omit<React.ComponentProps<typeof OTP>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
 export function OTPWrapper<T extends FieldValues>({ name, control, ...props }: OTPProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <OTPBase
+        <OTP
           {...props}
           name={name}
           value={field.value ?? ''}
@@ -299,14 +296,14 @@ export function OTPWrapper<T extends FieldValues>({ name, control, ...props }: O
 }
 
 type InputGroupProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof InputGroupBase>, 'name' | 'value' | 'onChange' | 'onBlur' | 'error' | 'invalid'>
+  Omit<React.ComponentProps<typeof InputGroup>, 'name' | 'value' | 'onChange' | 'onBlur' | 'error' | 'invalid'>
 export function InputGroupWrapper<T extends FieldValues>({ name, control, ...props }: InputGroupProps<T>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <InputGroupBase
+        <InputGroup
           {...props}
           name={name}
           value={field.value ?? ''}
