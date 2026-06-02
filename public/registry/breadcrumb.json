@@ -27,7 +27,8 @@
     {
       "path": "lib/menu.ts",
       "content": "import { optionTypeChecker } from './utils'\n\nexport const isSubMenu = optionTypeChecker<subMenuT>('submenu')\nexport const isGroupMenu = optionTypeChecker<menuGroupT>('group')\nexport const isInputSubMenu = optionTypeChecker<inputSubMenuT>('submenu')\nexport const isInputGroupMenu = optionTypeChecker<menuInputGroupT>('group')\n",
-      "type": "registry:lib"
+      "type": "registry:lib",
+      "target": "lib/menu.ts"
     },
     {
       "path": "components/ui/menu.tsx",

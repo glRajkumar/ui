@@ -107,7 +107,8 @@
         },
         {
           "path": "lib/menu.ts",
-          "type": "registry:lib"
+          "type": "registry:lib",
+          "target": "lib/menu.ts"
         },
         {
           "path": "components/ui/menu.tsx",
@@ -264,7 +265,8 @@
         },
         {
           "path": "lib/menu.ts",
-          "type": "registry:lib"
+          "type": "registry:lib",
+          "target": "lib/menu.ts"
         },
         {
           "path": "components/ui/context-menu.tsx",
@@ -308,7 +310,8 @@
         },
         {
           "path": "lib/menu.ts",
-          "type": "registry:lib"
+          "type": "registry:lib",
+          "target": "lib/menu.ts"
         },
         {
           "path": "components/ui/menu.tsx",
@@ -316,6 +319,10 @@
         },
         {
           "path": "components/ui/menu-wrapper.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/popover.tsx",
           "type": "registry:ui"
         },
         {
@@ -486,6 +493,10 @@
           "type": "registry:ui"
         },
         {
+          "path": "components/ui/popover.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/combobox.tsx",
           "type": "registry:ui"
         },
@@ -561,6 +572,10 @@
         },
         {
           "path": "components/ui/select.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/popover.tsx",
           "type": "registry:ui"
         },
         {
@@ -643,6 +658,10 @@
         },
         {
           "path": "components/ui/select.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/popover.tsx",
           "type": "registry:ui"
         },
         {
@@ -757,7 +776,8 @@
         },
         {
           "path": "lib/menu.ts",
-          "type": "registry:lib"
+          "type": "registry:lib",
+          "target": "lib/menu.ts"
         },
         {
           "path": "components/ui/menu-wrapper.tsx",
@@ -798,7 +818,8 @@
         },
         {
           "path": "lib/menu.ts",
-          "type": "registry:lib"
+          "type": "registry:lib",
+          "target": "lib/menu.ts"
         }
       ]
     },
