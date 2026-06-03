@@ -1,12 +1,52 @@
 'use client'
 
 import * as React from 'react'
-import { DayPicker, getDefaultClassNames, type DayButton, type Locale } from 'react-day-picker'
+import { DayPicker, getDefaultClassNames, type DayButton, type DropdownProps, type Locale } from '@daypicker/react'
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button, buttonVariants } from '@/components/ui/button'
+
+function CalendarDropdown({ options = [], value, onChange, disabled, className }: DropdownProps) {
+  const stringValue = value !== undefined ? String(value) : undefined
+  const labelMap = React.useMemo(
+    () => Object.fromEntries(options.map(o => [String(o.value), o.label])),
+    [options],
+  )
+
+  function handleValueChange(val: string | null) {
+    if (!onChange || val === null) return
+    const event = { target: { value: val } } as React.ChangeEvent<HTMLSelectElement>
+    onChange(event)
+  }
+
+  return (
+    <Select value={stringValue} onValueChange={handleValueChange as (val: string | null) => void} disabled={disabled}>
+      <SelectTrigger
+        className={cn(
+          'h-7 border-0 shadow-none bg-transparent hover:bg-accent px-2 pr-1 font-medium gap-0.5 text-sm',
+          className,
+        )}
+      >
+        <SelectValue>{() => labelMap[stringValue ?? ''] ?? stringValue}</SelectValue>
+      </SelectTrigger>
+      <SelectContent className="min-w-16">
+        {options.map(({ value: val, label, disabled: optDisabled }) => (
+          <SelectItem
+            key={val}
+            value={String(val)}
+            disabled={optDisabled}
+            className="px-2! [&_svg]:hidden"
+          >
+            {label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
 
 function Calendar({
   className,
@@ -43,17 +83,17 @@ function Calendar({
         months: cn('relative flex flex-col gap-4 md:flex-row', defaultClassNames.months),
         month: cn('flex w-full flex-col gap-4', defaultClassNames.month),
         nav: cn(
-          'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1',
+          'pointer-events-none absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1',
           defaultClassNames.nav,
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant }),
-          'size-(--cell-size) p-0 select-none aria-disabled:opacity-50',
+          'pointer-events-auto size-(--cell-size) p-0 select-none aria-disabled:opacity-50',
           defaultClassNames.button_previous,
         ),
         button_next: cn(
           buttonVariants({ variant: buttonVariant }),
-          'size-(--cell-size) p-0 select-none aria-disabled:opacity-50',
+          'pointer-events-auto size-(--cell-size) p-0 select-none aria-disabled:opacity-50',
           defaultClassNames.button_next,
         ),
         month_caption: cn(
@@ -73,7 +113,7 @@ function Calendar({
             : 'flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground',
           defaultClassNames.caption_label,
         ),
-        table: 'w-full border-collapse',
+        month_grid: 'w-full border-collapse',
         weekdays: cn('flex', defaultClassNames.weekdays),
         weekday: cn(
           'flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none',
@@ -114,6 +154,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        Dropdown: CalendarDropdown,
         Root: ({ className, rootRef, ...props }) => {
           return <div data-slot="calendar" ref={rootRef} className={cn(className)} {...props} />
         },
@@ -183,4 +224,8 @@ function CalendarDayButton({
   )
 }
 
-export { Calendar, CalendarDayButton }
+export {
+  Calendar,
+  CalendarDayButton,
+  CalendarDropdown,
+}
