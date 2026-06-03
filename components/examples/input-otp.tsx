@@ -11,11 +11,7 @@ function BasicExample() {
 
   return (
     <div className="flex flex-col gap-2">
-      <InputOTPWrapper
-        length={6}
-        value={value}
-        onValueChange={(v) => setValue(v)}
-      />
+      <InputOTPWrapper length={6} value={value} onValueChange={v => setValue(v)} />
       <p className="text-sm text-muted-foreground">Value: {value || '—'}</p>
     </div>
   )
@@ -24,52 +20,25 @@ function BasicExample() {
 function PinExample() {
   const [value, setValue] = useState('')
 
-  return (
-    <InputOTPWrapper
-      length={4}
-      value={value}
-      onValueChange={(v) => setValue(v)}
-    />
-  )
+  return <InputOTPWrapper length={4} value={value} onValueChange={v => setValue(v)} />
 }
 
 function SeparatorExample() {
   const [value, setValue] = useState('')
 
-  return (
-    <InputOTPWrapper
-      length={6}
-      separator
-      value={value}
-      onValueChange={(v) => setValue(v)}
-    />
-  )
+  return <InputOTPWrapper length={6} separator value={value} onValueChange={v => setValue(v)} />
 }
 
 function CustomSeparatorExample() {
   const [value, setValue] = useState('')
 
-  return (
-    <InputOTPWrapper
-      length={8}
-      separator={4}
-      value={value}
-      onValueChange={(v) => setValue(v)}
-    />
-  )
+  return <InputOTPWrapper length={8} separator={4} value={value} onValueChange={v => setValue(v)} />
 }
 
 function MaskExample() {
   const [value, setValue] = useState('')
 
-  return (
-    <InputOTPWrapper
-      length={6}
-      mask
-      value={value}
-      onValueChange={(v) => setValue(v)}
-    />
-  )
+  return <InputOTPWrapper length={6} mask value={value} onValueChange={v => setValue(v)} />
 }
 
 function AlphaNumericExample() {
@@ -80,7 +49,7 @@ function AlphaNumericExample() {
       length={6}
       validationType="alphanumeric"
       value={value}
-      onValueChange={(v) => setValue(v)}
+      onValueChange={v => setValue(v)}
     />
   )
 }
@@ -112,7 +81,7 @@ function FieldWrapperExample() {
       length={6}
       separator
       value={value}
-      onValueChange={(v) => setValue(v)}
+      onValueChange={v => setValue(v)}
     />
   )
 }

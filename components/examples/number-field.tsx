@@ -133,27 +133,11 @@ function ErrorExample() {
 }
 
 function DisabledExample() {
-  return (
-    <NumberWrapper
-      name="dis-qty"
-      label="Quantity"
-      value={10}
-      disabled
-      className="w-48"
-    />
-  )
+  return <NumberWrapper name="dis-qty" label="Quantity" value={10} disabled className="w-48" />
 }
 
 function ReadOnlyExample() {
-  return (
-    <NumberWrapper
-      name="ro-qty"
-      label="Quantity"
-      value={42}
-      readOnly
-      className="w-48"
-    />
-  )
+  return <NumberWrapper name="ro-qty" label="Quantity" value={42} readOnly className="w-48" />
 }
 
 export function NumberFieldExample() {

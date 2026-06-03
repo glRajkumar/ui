@@ -25,7 +25,23 @@ const codeLines = [
   '}',
 ]
 
-const tags2 = ['React', 'TypeScript', 'Next.js', 'Tailwind', 'Radix', 'Base UI', 'Zod', 'Prisma', 'tRPC', 'Drizzle', 'Hono', 'Bun', 'Vite', 'Vitest', 'Playwright']
+const tags2 = [
+  'React',
+  'TypeScript',
+  'Next.js',
+  'Tailwind',
+  'Radix',
+  'Base UI',
+  'Zod',
+  'Prisma',
+  'tRPC',
+  'Drizzle',
+  'Hono',
+  'Bun',
+  'Vite',
+  'Vitest',
+  'Playwright',
+]
 
 function VerticalExample() {
   return (
@@ -125,10 +141,7 @@ function FadeExample() {
 
 function OverflowThresholdExample() {
   return (
-    <ScrollAreaWrapper
-      className="h-48 w-56 rounded-md border"
-      overflowEdgeThreshold={20}
-    >
+    <ScrollAreaWrapper className="h-48 w-56 rounded-md border" overflowEdgeThreshold={20}>
       <div className="p-4">
         {tags.map(tag => (
           <div key={tag} className="py-1 text-sm">

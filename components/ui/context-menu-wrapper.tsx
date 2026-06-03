@@ -1,20 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  cn,
-  getKey,
-  getLabel,
-  getValue,
-  isSeparator,
-  parseAllowedPrimitive,
-} from '@/lib/utils'
-import {
-  isSubMenu,
-  isGroupMenu,
-  isInputSubMenu,
-  isInputGroupMenu
-} from '@/lib/menu'
+import { cn, getKey, getLabel, getValue, isSeparator, parseAllowedPrimitive } from '@/lib/utils'
+import { isSubMenu, isGroupMenu, isInputSubMenu, isInputGroupMenu } from '@/lib/menu'
 
 import {
   ContextMenu,
@@ -96,7 +84,7 @@ function CheckboxItem({
   className,
   checked = false,
   indicatorAt,
-  onCheckedChange = () => { },
+  onCheckedChange = () => {},
 }: checkboxItemProps) {
   const value = getValue(option)
 
@@ -218,7 +206,7 @@ function CheckboxSubMenu({
   groupLabelCls,
   checked = [],
   indicatorAt,
-  onCheckedChange = () => { },
+  onCheckedChange = () => {},
 }: CheckboxSubMenuProps) {
   return (
     <ContextMenuSub>
@@ -301,7 +289,7 @@ function RadioSubMenu({
   groupLabelCls,
   value = '',
   indicatorAt,
-  onValueChange = () => { },
+  onValueChange = () => {},
 }: RadioSubMenuProps) {
   return (
     <ContextMenuSub>

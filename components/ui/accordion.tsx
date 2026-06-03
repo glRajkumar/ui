@@ -115,7 +115,8 @@ type accordionItemsT = accordionItemT[]
 type accordionWrapperProps = {
   items: accordionItemsT
   itemCls?: string
-} & accordionSharedT & React.ComponentProps<typeof AccordionPrimitive.Root>
+} & accordionSharedT &
+  React.ComponentProps<typeof AccordionPrimitive.Root>
 
 function AccordionWrapper({
   items,

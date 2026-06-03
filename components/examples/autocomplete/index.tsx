@@ -10,14 +10,9 @@ import {
   LimitExample,
   InlineModeExample,
 } from './basic'
-import {
-  ControlledExample,
-  DisabledExample,
-} from './state'
-import {
-  AsyncSearchExample,
-} from './advanced'
 import { VirtualisedExample, VirtualisedCustomSizeExample } from './virtual'
+import { ControlledExample, DisabledExample } from './state'
+import { AsyncSearchExample } from './advanced'
 
 export function AutocompleteExample() {
   return (

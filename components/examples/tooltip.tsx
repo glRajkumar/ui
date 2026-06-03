@@ -45,7 +45,7 @@ function ProviderExample() {
   return (
     <TooltipProvider delay={600} closeDelay={200}>
       <div className="flex gap-3">
-        {(['First', 'Second', 'Third'] as const).map((label) => (
+        {(['First', 'Second', 'Third'] as const).map(label => (
           <TooltipWrapper
             key={label}
             trigger={label}
@@ -104,7 +104,7 @@ function ControlledExample() {
     <div className="flex items-center gap-3">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(v => !v)}
         className="px-4 py-1.5 border rounded text-sm"
       >
         {open ? 'Hide' : 'Show'} tooltip
@@ -125,7 +125,7 @@ function SideExample() {
 
   return (
     <div className="grid grid-cols-2 gap-2">
-      {sides.map((side) => (
+      {sides.map(side => (
         <TooltipWrapper
           key={side}
           trigger={side}

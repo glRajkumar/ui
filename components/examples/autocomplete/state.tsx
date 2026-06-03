@@ -28,11 +28,6 @@ export function ControlledExample() {
 
 export function DisabledExample() {
   return (
-    <AutocompleteWrapper
-      items={fruits}
-      placeholder="Search fruit..."
-      disabled
-      className="w-64"
-    />
+    <AutocompleteWrapper items={fruits} placeholder="Search fruit..." disabled className="w-64" />
   )
 }

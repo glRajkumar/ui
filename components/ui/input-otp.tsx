@@ -6,10 +6,7 @@ import { MinusIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-function InputOTP({
-  className,
-  ...props
-}: React.ComponentProps<typeof OTPFieldPrimitive.Root>) {
+function InputOTP({ className, ...props }: React.ComponentProps<typeof OTPFieldPrimitive.Root>) {
   return (
     <OTPFieldPrimitive.Root
       data-slot="input-otp"
@@ -21,11 +18,7 @@ function InputOTP({
 
 function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div
-      data-slot="input-otp-group"
-      className={cn('flex items-center', className)}
-      {...props}
-    />
+    <div data-slot="input-otp-group" className={cn('flex items-center', className)} {...props} />
   )
 }
 
@@ -117,5 +110,5 @@ export {
   InputOTPSlot,
   InputOTPSeparator,
   InputOTPWrapper,
-  type InputOTPWrapperProps
+  type InputOTPWrapperProps,
 }

@@ -26,7 +26,7 @@ function ControlledExample() {
     <div className="flex flex-col gap-3">
       <RadioWrapper
         value={value}
-        onValueChange={(v) => setValue(v as string)}
+        onValueChange={v => setValue(v as string)}
         options={[
           { value: 'email', label: 'Email' },
           { value: 'sms', label: 'SMS' },

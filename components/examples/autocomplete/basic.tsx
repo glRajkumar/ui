@@ -4,23 +4,12 @@ import { fruits, frameworks, groupedTech } from '@/components/examples/data/opti
 import { AutocompleteWrapper } from '@/components/ui/autocomplete'
 
 export function BasicExample() {
-  return (
-    <AutocompleteWrapper
-      items={fruits}
-      placeholder="Search fruit..."
-      className="w-64"
-    />
-  )
+  return <AutocompleteWrapper items={fruits} placeholder="Search fruit..." className="w-64" />
 }
 
 export function WithClearExample() {
   return (
-    <AutocompleteWrapper
-      items={fruits}
-      placeholder="Search fruit..."
-      showClear
-      className="w-64"
-    />
+    <AutocompleteWrapper items={fruits} placeholder="Search fruit..." showClear className="w-64" />
   )
 }
 
@@ -49,12 +38,7 @@ export function GroupedExample() {
 
 export function LimitExample() {
   return (
-    <AutocompleteWrapper
-      items={fruits}
-      placeholder="Max 5 results..."
-      limit={5}
-      className="w-64"
-    />
+    <AutocompleteWrapper items={fruits} placeholder="Max 5 results..." limit={5} className="w-64" />
   )
 }
 

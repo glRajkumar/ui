@@ -6,7 +6,7 @@ import { AlertDialogWrapper } from '@/components/ui/alert-dialog'
 import { buttonVariants } from '@/components/ui/button'
 
 function simulateRequest() {
-  return new Promise<void>((resolve) => setTimeout(resolve, 1500))
+  return new Promise<void>(resolve => setTimeout(resolve, 1500))
 }
 
 export function AsyncActionExample() {

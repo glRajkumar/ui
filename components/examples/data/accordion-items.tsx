@@ -16,7 +16,11 @@ export const accordionItems: accordionItemsT = [
   },
   {
     value: 'item-3',
-    trigger: <><Apple className="size-4" /> Product Information</>,
+    trigger: (
+      <>
+        <Apple className="size-4" /> Product Information
+      </>
+    ),
     content: (
       <div>
         <p>

@@ -155,7 +155,7 @@ export function DataTableExample() {
         <FilterGroup
           table={table}
           options={filterOptions}
-          columnFilterProps={{ triggerCls: "w-40" }}
+          columnFilterProps={{ triggerCls: 'w-40' }}
         />
 
         <ColumnToggle table={table} />

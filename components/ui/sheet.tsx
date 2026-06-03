@@ -140,7 +140,12 @@ function SheetFooterWrapper({
       {cancel && (
         <SheetClose
           render={
-            <Button variant="secondary" onClick={onCancel} className={cn('border', cancelCls)} disabled={loading} />
+            <Button
+              variant="secondary"
+              onClick={onCancel}
+              className={cn('border', cancelCls)}
+              disabled={loading}
+            />
           }
         >
           {cancel}

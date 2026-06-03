@@ -195,10 +195,7 @@ function MenubarLabel({
   )
 }
 
-function MenubarSeparator({
-  className,
-  ...props
-}: React.ComponentProps<typeof MenuSeparator>) {
+function MenubarSeparator({ className, ...props }: React.ComponentProps<typeof MenuSeparator>) {
   return (
     <MenuSeparator
       data-slot="menubar-separator"
@@ -208,10 +205,7 @@ function MenubarSeparator({
   )
 }
 
-function MenubarShortcut({
-  className,
-  ...props
-}: React.ComponentProps<typeof MenuShortcut>) {
+function MenubarShortcut({ className, ...props }: React.ComponentProps<typeof MenuShortcut>) {
   return (
     <MenuShortcut
       data-slot="menubar-shortcut"
@@ -248,10 +242,7 @@ function MenubarSubTrigger({
   )
 }
 
-function MenubarSubContent({
-  className,
-  ...props
-}: React.ComponentProps<typeof MenuSubContent>) {
+function MenubarSubContent({ className, ...props }: React.ComponentProps<typeof MenuSubContent>) {
   return (
     <MenuSubContent
       data-slot="menubar-sub-content"

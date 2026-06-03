@@ -63,7 +63,9 @@ function Counter() {
   const [count, setCount] = React.useState(0)
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm">Count: <strong>{count}</strong></span>
+      <span className="text-sm">
+        Count: <strong>{count}</strong>
+      </span>
       <button
         onClick={() => setCount(c => c + 1)}
         className="rounded border px-2 py-0.5 text-xs hover:bg-muted"
@@ -82,7 +84,8 @@ function HiddenUntilFoundExample() {
         {
           value: 'search',
           trigger: 'Hidden Until Found — try Ctrl+F "findable"',
-          content: 'This findable text is discoverable by browser search even when panel is closed.',
+          content:
+            'This findable text is discoverable by browser search even when panel is closed.',
         },
         { value: 'other', trigger: 'Another item', content: 'Regular content.' },
       ]}
@@ -99,7 +102,7 @@ function ControlledExample() {
     <AccordionWrapper
       items={items}
       value={value}
-      onValueChange={(val) => setValue(val as string[])}
+      onValueChange={val => setValue(val as string[])}
       multiple
       className="w-80"
     />
@@ -112,9 +115,14 @@ function CustomStyleExample() {
       items={[
         {
           value: 'a',
-          trigger: <><ShieldCheck className="size-4 text-emerald-500" /> Security</>,
+          trigger: (
+            <>
+              <ShieldCheck className="size-4 text-emerald-500" /> Security
+            </>
+          ),
           content: 'End-to-end encrypted. Your data never leaves the device.',
-          contentCls: 'bg-emerald-50 dark:bg-emerald-950/30 rounded-md text-emerald-700 dark:text-emerald-300',
+          contentCls:
+            'bg-emerald-50 dark:bg-emerald-950/30 rounded-md text-emerald-700 dark:text-emerald-300',
         },
         {
           value: 'b',
@@ -126,7 +134,8 @@ function CustomStyleExample() {
           value: 'c',
           trigger: 'Pricing',
           content: 'Free tier includes 10k requests/month. No credit card required.',
-          contentCls: 'bg-violet-50 dark:bg-violet-950/30 rounded-md text-violet-700 dark:text-violet-300',
+          contentCls:
+            'bg-violet-50 dark:bg-violet-950/30 rounded-md text-violet-700 dark:text-violet-300',
         },
       ]}
       triggerCls="font-semibold"
@@ -144,7 +153,9 @@ function CustomHeadingExample() {
         trigger: (
           <span className="flex items-center gap-2">
             {item.trigger}
-            <span className="ml-auto rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">h2</span>
+            <span className="ml-auto rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+              h2
+            </span>
           </span>
         ),
       }))}
@@ -157,7 +168,7 @@ function CustomHeadingExample() {
 export function AccordionExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
-      <ExRow className='[&_.row-container]:gap-8' label="Basic">
+      <ExRow className="[&_.row-container]:gap-8" label="Basic">
         <ExItem label="Single open — only one panel expands at a time">
           <SingleOpenExample />
         </ExItem>
@@ -169,7 +180,7 @@ export function AccordionExample() {
         </ExItem>
       </ExRow>
 
-      <ExRow className='[&_.row-container]:gap-8' label="State">
+      <ExRow className="[&_.row-container]:gap-8" label="State">
         <ExItem label="Default open — item-1 expanded on mount">
           <DefaultOpenExample />
         </ExItem>
@@ -181,7 +192,7 @@ export function AccordionExample() {
         </ExItem>
       </ExRow>
 
-      <ExRow className='[&_.row-container]:gap-8' label="Panel Behaviour">
+      <ExRow className="[&_.row-container]:gap-8" label="Panel Behaviour">
         <ExItem label="Keep mounted — panel DOM preserved on close, state persists">
           <PersistStateExample />
         </ExItem>
@@ -190,13 +201,13 @@ export function AccordionExample() {
         </ExItem>
       </ExRow>
 
-      <ExRow className='[&_.row-container]:gap-8' label="Controlled">
+      <ExRow className="[&_.row-container]:gap-8" label="Controlled">
         <ExItem label="Controlled — open state managed externally via value/onValueChange">
           <ControlledExample />
         </ExItem>
       </ExRow>
 
-      <ExRow className='[&_.row-container]:gap-8' label="Custom Style">
+      <ExRow className="[&_.row-container]:gap-8" label="Custom Style">
         <ExItem label="Per-item content colours, bold triggers, left border">
           <CustomStyleExample />
         </ExItem>

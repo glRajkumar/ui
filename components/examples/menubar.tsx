@@ -57,9 +57,7 @@ function CheckboxDefaultExample() {
     <MenubarCheckboxWrapper
       options={opts}
       checked={checked}
-      onCheckedChange={(v, c) =>
-        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
-      }
+      onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
     />
   )
 }
@@ -80,9 +78,7 @@ function CheckboxGroupedExample() {
     <MenubarCheckboxWrapper
       options={opts}
       checked={checked}
-      onCheckedChange={(v, c) =>
-        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
-      }
+      onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
     />
   )
 }
@@ -95,13 +91,7 @@ function RadioControlledExample() {
     { key: 'lang', trigger: 'Language', options: ['English', 'Spanish', 'French'] },
   ]
 
-  return (
-    <MenubarRadioWrapper
-      options={opts}
-      value={val}
-      onValueChange={setVal}
-    />
-  )
+  return <MenubarRadioWrapper options={opts} value={val} onValueChange={setVal} />
 }
 
 function RadioLeftExample() {
@@ -116,13 +106,7 @@ function RadioGroupedExample() {
   const opts: menubarRadioOptionsT = [
     { key: 'theme', trigger: 'Theme', options: groupedRadioOptions },
   ]
-  return (
-    <MenubarRadioWrapper
-      options={opts}
-      value={val}
-      onValueChange={setVal}
-    />
-  )
+  return <MenubarRadioWrapper options={opts} value={val} onValueChange={setVal} />
 }
 
 export function MenubarExample() {

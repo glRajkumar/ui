@@ -1,7 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { AlertTriangleIcon, CheckCircle2Icon, InfoIcon, Loader2Icon, XCircleIcon, XIcon } from 'lucide-react'
+import {
+  AlertTriangleIcon,
+  CheckCircle2Icon,
+  InfoIcon,
+  Loader2Icon,
+  XCircleIcon,
+  XIcon,
+} from 'lucide-react'
 import type { ToastManagerAddOptions, ToastManagerPromiseOptions } from '@base-ui/react/toast'
 import { Toast as ToastPrimitive } from '@base-ui/react/toast'
 
@@ -25,10 +32,11 @@ type toastCustomDataT = {
   closeCls?: string
 }
 
-type toastOptsT = Omit<ToastManagerAddOptions<toastCustomDataT>, 'data'> & toastCustomDataT & {
-  position?: toastPositionT
-  data?: Record<string, unknown>
-}
+type toastOptsT = Omit<ToastManagerAddOptions<toastCustomDataT>, 'data'> &
+  toastCustomDataT & {
+    position?: toastPositionT
+    data?: Record<string, unknown>
+  }
 
 type toastPromiseMessages<V> = {
   loading: string
@@ -86,8 +94,12 @@ const topPlacementCls = [
 ].join(' ')
 
 const ALL_POSITIONS: toastPositionT[] = [
-  'top-left', 'top-center', 'top-right',
-  'bottom-left', 'bottom-center', 'bottom-right',
+  'top-left',
+  'top-center',
+  'top-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
 ]
 
 type toastRouterCtxT = {
@@ -262,13 +274,13 @@ function ToastList({
     const hasCustomIcon = custom && 'icon' in custom
     const DefaultIcon = typeIcons[type]
 
-    const iconNode = hasCustomIcon
-      ? custom.icon !== null && custom.icon !== undefined
-        ? <span className="mt-0.5 shrink-0 *:h-4 *:w-4">{custom.icon as React.ReactNode}</span>
-        : null
-      : DefaultIcon
-        ? <DefaultIcon className={cn('mt-0.5 h-4 w-4 shrink-0', iconStyles[type])} />
-        : null
+    const iconNode = hasCustomIcon ? (
+      custom.icon !== null && custom.icon !== undefined ? (
+        <span className="mt-0.5 shrink-0 *:h-4 *:w-4">{custom.icon as React.ReactNode}</span>
+      ) : null
+    ) : DefaultIcon ? (
+      <DefaultIcon className={cn('mt-0.5 h-4 w-4 shrink-0', iconStyles[type])} />
+    ) : null
 
     return (
       <ToastRoot
@@ -283,9 +295,7 @@ function ToastList({
             <div className="flex-1 space-y-0.5 pr-5">
               <ToastTitle className={cn(titleCls, custom?.titleCls)} />
               <ToastDescription className={cn(descriptionCls, custom?.descriptionCls)} />
-              {toast.actionProps && (
-                <ToastAction className={cn(actionCls, custom?.actionCls)} />
-              )}
+              {toast.actionProps && <ToastAction className={cn(actionCls, custom?.actionCls)} />}
             </div>
           </div>
           {showClose && <ToastClose className={cn(closeCls, custom?.closeCls)} />}
@@ -343,8 +353,9 @@ function Toaster({
   swipeDirection,
   children,
 }: toasterProps) {
-  const [managers] = React.useState<Map<toastPositionT, toastManagerT>>(() =>
-    new Map(ALL_POSITIONS.map(p => [p, ToastPrimitive.createToastManager<toastCustomDataT>()])),
+  const [managers] = React.useState<Map<toastPositionT, toastManagerT>>(
+    () =>
+      new Map(ALL_POSITIONS.map(p => [p, ToastPrimitive.createToastManager<toastCustomDataT>()])),
   )
 
   const listProps: Omit<positionPortalProps, 'position'> = {
@@ -370,11 +381,7 @@ function Toaster({
           timeout={timeout}
           limit={limit}
         >
-          <PositionPortal
-            {...listProps}
-            position={pos}
-            isTop={pos.startsWith('top')}
-          />
+          <PositionPortal {...listProps} position={pos} isTop={pos.startsWith('top')} />
         </ToastPrimitive.Provider>
       ))}
     </ToastRouterCtx.Provider>
@@ -396,35 +403,57 @@ function useToast() {
 
   function success(description: string, opts?: Partial<toastOptsT>) {
     const { position, ...rest } = opts ?? {}
-    return getManager(position)?.add(extractCustomData({ description, type: 'success', ...rest })) ?? ''
+    return (
+      getManager(position)?.add(extractCustomData({ description, type: 'success', ...rest })) ?? ''
+    )
   }
 
   function error(description: string, opts?: Partial<toastOptsT>) {
     const { position, ...rest } = opts ?? {}
-    return getManager(position)?.add(extractCustomData({ description, type: 'error', ...rest })) ?? ''
+    return (
+      getManager(position)?.add(extractCustomData({ description, type: 'error', ...rest })) ?? ''
+    )
   }
 
   function warning(description: string, opts?: Partial<toastOptsT>) {
     const { position, ...rest } = opts ?? {}
-    return getManager(position)?.add(extractCustomData({ description, type: 'warning', ...rest })) ?? ''
+    return (
+      getManager(position)?.add(extractCustomData({ description, type: 'warning', ...rest })) ?? ''
+    )
   }
 
   function info(description: string, opts?: Partial<toastOptsT>) {
     const { position, ...rest } = opts ?? {}
-    return getManager(position)?.add(extractCustomData({ description, type: 'info', ...rest })) ?? ''
+    return (
+      getManager(position)?.add(extractCustomData({ description, type: 'info', ...rest })) ?? ''
+    )
   }
 
-  function promise<V>(p: Promise<V>, messages: toastPromiseMessages<V>, opts?: { position?: toastPositionT }) {
+  function promise<V>(
+    p: Promise<V>,
+    messages: toastPromiseMessages<V>,
+    opts?: { position?: toastPositionT },
+  ) {
     const manager = getManager(opts?.position)
-    return manager?.promise<V>(p, {
-      loading: { description: messages.loading, type: 'loading', timeout: 0 },
-      success: typeof messages.success === 'function'
-        ? (v: V) => ({ description: (messages.success as (v: V) => string)(v), type: 'success' })
-        : { description: messages.success as string, type: 'success' },
-      error: typeof messages.error === 'function'
-        ? (e: unknown) => ({ description: (messages.error as (e: unknown) => string)(e), type: 'error' })
-        : { description: messages.error as string, type: 'error' },
-    } as ToastManagerPromiseOptions<V, toastCustomDataT>) ?? p
+    return (
+      manager?.promise<V>(p, {
+        loading: { description: messages.loading, type: 'loading', timeout: 0 },
+        success:
+          typeof messages.success === 'function'
+            ? (v: V) => ({
+                description: (messages.success as (v: V) => string)(v),
+                type: 'success',
+              })
+            : { description: messages.success as string, type: 'success' },
+        error:
+          typeof messages.error === 'function'
+            ? (e: unknown) => ({
+                description: (messages.error as (e: unknown) => string)(e),
+                type: 'error',
+              })
+            : { description: messages.error as string, type: 'error' },
+      } as ToastManagerPromiseOptions<V, toastCustomDataT>) ?? p
+    )
   }
 
   function update(id: string, opts: Partial<toastOptsT>) {

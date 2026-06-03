@@ -4,11 +4,7 @@ import { useState } from 'react'
 
 import { ExRow, ExItem } from '@/components/examples/common'
 import { dropdownOptions } from './data'
-import {
-  MenuCheckboxWrapper,
-  MenuRadioWrapper,
-  MenuWrapper,
-} from '@/components/ui/menu-wrapper'
+import { MenuCheckboxWrapper, MenuRadioWrapper, MenuWrapper } from '@/components/ui/menu-wrapper'
 import { buttonVariants } from '@/components/ui/button'
 
 const actionOptions: menuOptionsT = [
@@ -89,9 +85,7 @@ function CheckboxDefaultExample() {
     <MenuCheckboxWrapper
       options={featureOptions}
       checked={checked}
-      onCheckedChange={(v, c) =>
-        setChecked((prev) => (c ? [...prev, v] : prev.filter((x) => x !== v)))
-      }
+      onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
       trigger="Features"
       triggerCls={buttonVariants({ variant: 'outline' })}
     />
@@ -115,9 +109,7 @@ function CheckboxGroupedExample() {
     <MenuCheckboxWrapper
       options={groupedCheckboxOptions}
       checked={checked}
-      onCheckedChange={(v, c) =>
-        setChecked((prev) => (c ? [...prev, v] : prev.filter((x) => x !== v)))
-      }
+      onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
       trigger="Settings"
       triggerCls={buttonVariants({ variant: 'outline' })}
     />

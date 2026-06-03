@@ -2,8 +2,18 @@
 
 import { ExRow } from '@/components/examples/common'
 
-import { BasicExample, NoDescriptionExample, NoActionExample, NoCloseButtonExample, IconTriggerExample } from './basic'
-import { CustomElementTriggerExample, DetachedTriggerExample, MultipleTriggersExample } from './triggers'
+import {
+  BasicExample,
+  NoDescriptionExample,
+  NoActionExample,
+  NoCloseButtonExample,
+  IconTriggerExample,
+} from './basic'
+import {
+  CustomElementTriggerExample,
+  DetachedTriggerExample,
+  MultipleTriggersExample,
+} from './triggers'
 import { ControlledExample, AsyncActionExample } from './controlled'
 import { NestedDialogExample, MultipleOpenExample } from './advanced'
 

@@ -16,12 +16,36 @@ const generateEmployeeData = (): Employee[] => {
   const statuses: Employee['status'][] = ['active', 'inactive', 'pending', 'on-leave']
   const locations = ['New York', 'San Francisco', 'London', 'Tokyo', 'Berlin']
   const names = [
-    'John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Williams', 'David Brown',
-    'Emily Davis', 'Michael Wilson', 'Jessica Moore', 'Christopher Taylor', 'Amanda Anderson',
-    'James Thomas', 'Jennifer Jackson', 'Robert White', 'Lisa Harris', 'William Martin',
-    'Mary Thompson', 'Richard Garcia', 'Patricia Martinez', 'Charles Robinson', 'Linda Clark',
-    'Daniel Rodriguez', 'Barbara Lewis', 'Matthew Lee', 'Susan Walker', 'Joseph Hall',
-    'Karen Allen', 'Thomas Young', 'Nancy Hernandez', 'Paul King', 'Betty Wright',
+    'John Doe',
+    'Jane Smith',
+    'Mike Johnson',
+    'Sarah Williams',
+    'David Brown',
+    'Emily Davis',
+    'Michael Wilson',
+    'Jessica Moore',
+    'Christopher Taylor',
+    'Amanda Anderson',
+    'James Thomas',
+    'Jennifer Jackson',
+    'Robert White',
+    'Lisa Harris',
+    'William Martin',
+    'Mary Thompson',
+    'Richard Garcia',
+    'Patricia Martinez',
+    'Charles Robinson',
+    'Linda Clark',
+    'Daniel Rodriguez',
+    'Barbara Lewis',
+    'Matthew Lee',
+    'Susan Walker',
+    'Joseph Hall',
+    'Karen Allen',
+    'Thomas Young',
+    'Nancy Hernandez',
+    'Paul King',
+    'Betty Wright',
   ]
 
   return names.map((name, index) => ({
@@ -36,7 +60,9 @@ const generateEmployeeData = (): Employee[] => {
       2020 + Math.floor(Math.random() * 5),
       Math.floor(Math.random() * 12),
       Math.floor(Math.random() * 28),
-    ).toISOString().split('T')[0],
+    )
+      .toISOString()
+      .split('T')[0],
     location: locations[index % locations.length],
   }))
 }

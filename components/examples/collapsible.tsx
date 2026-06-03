@@ -9,10 +9,7 @@ import { buttonVariants } from '@/components/ui/button'
 
 function BasicExample() {
   return (
-    <CollapsibleWrapper
-      trigger="Details"
-      className="w-72 rounded-lg border p-3"
-    >
+    <CollapsibleWrapper trigger="Details" className="w-72 rounded-lg border p-3">
       <p className="mt-2 text-sm text-muted-foreground">
         This panel collapses and expands with a smooth height animation.
       </p>
@@ -22,14 +19,8 @@ function BasicExample() {
 
 function IndicatorLeftExample() {
   return (
-    <CollapsibleWrapper
-      trigger="Details"
-      indicatorAt="left"
-      className="w-72 rounded-lg border p-3"
-    >
-      <p className="mt-2 text-sm text-muted-foreground">
-        Chevron indicator on the left side.
-      </p>
+    <CollapsibleWrapper trigger="Details" indicatorAt="left" className="w-72 rounded-lg border p-3">
+      <p className="mt-2 text-sm text-muted-foreground">Chevron indicator on the left side.</p>
     </CollapsibleWrapper>
   )
 }
@@ -50,11 +41,7 @@ function DefaultOpenExample() {
 
 function DisabledExample() {
   return (
-    <CollapsibleWrapper
-      disabled
-      trigger="Disabled"
-      className="w-72 rounded-lg border p-3"
-    >
+    <CollapsibleWrapper disabled trigger="Disabled" className="w-72 rounded-lg border p-3">
       <p className="mt-2 text-sm text-muted-foreground">Unreachable content.</p>
     </CollapsibleWrapper>
   )
@@ -93,9 +80,7 @@ function KeepMountedExample() {
       contentProps={{ keepMounted: true }}
       className="w-72 rounded-lg border p-3"
     >
-      <p className="mt-2 text-sm text-muted-foreground">
-        Panel DOM stays mounted when closed.
-      </p>
+      <p className="mt-2 text-sm text-muted-foreground">Panel DOM stays mounted when closed.</p>
     </CollapsibleWrapper>
   )
 }
@@ -103,7 +88,11 @@ function KeepMountedExample() {
 function CustomTriggerExample() {
   return (
     <CollapsibleWrapper
-      trigger={<><Settings className="size-4" /> Settings</>}
+      trigger={
+        <>
+          <Settings className="size-4" /> Settings
+        </>
+      }
       triggerProps={{
         render: <div role="button" tabIndex={0} />,
         nativeButton: false,

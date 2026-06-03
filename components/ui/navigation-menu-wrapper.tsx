@@ -29,7 +29,10 @@ type navMenuItemT = {
       content: React.ReactNode
       triggerCls?: string
       contentCls?: string
-      triggerProps?: Omit<React.ComponentProps<typeof NavigationMenuTrigger>, 'children' | 'className'>
+      triggerProps?: Omit<
+        React.ComponentProps<typeof NavigationMenuTrigger>,
+        'children' | 'className'
+      >
       contentProps?: React.ComponentProps<typeof NavigationMenuContent>
     }
   | navLinkItemT
@@ -103,8 +106,12 @@ function NavigationMenuWrapper({
             )
           }
 
-          const { itemProps, children: linkChildren, className: linkCls, ...linkProps } =
-            item as { itemProps?: React.ComponentProps<typeof NavigationMenuItem> } & navLinkItemT
+          const {
+            itemProps,
+            children: linkChildren,
+            className: linkCls,
+            ...linkProps
+          } = item as { itemProps?: React.ComponentProps<typeof NavigationMenuItem> } & navLinkItemT
           return (
             <NavigationMenuItem key={key} {...itemProps}>
               <NavigationMenuLink

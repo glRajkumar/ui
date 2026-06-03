@@ -10,11 +10,7 @@ const ScrollAreaContent = ScrollAreaPrimitive.Content
 const ScrollAreaThumb = ScrollAreaPrimitive.Thumb
 const ScrollAreaCorner = ScrollAreaPrimitive.Corner
 
-function ScrollArea({
-  className,
-  children,
-  ...props
-}: ScrollAreaPrimitive.Root.Props) {
+function ScrollArea({ className, children, ...props }: ScrollAreaPrimitive.Root.Props) {
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"

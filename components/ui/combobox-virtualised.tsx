@@ -20,10 +20,18 @@ type ComboboxVirtualListProps = {
   indicatorAt?: indicatorAtT
   estimateSize: number
   maxHeight: number
-  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>>
+  virtualizerOptions?: Partial<
+    Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>
+  >
 }
 
-function ComboboxVirtualList({ itemCls, indicatorAt, estimateSize, maxHeight, virtualizerOptions }: ComboboxVirtualListProps) {
+function ComboboxVirtualList({
+  itemCls,
+  indicatorAt,
+  estimateSize,
+  maxHeight,
+  virtualizerOptions,
+}: ComboboxVirtualListProps) {
   const items = (ComboboxPrimitive.useFilteredItems() ?? []) as (allowedPrimitiveT | optionT)[]
   const parentRef = React.useRef<HTMLDivElement>(null)
 
@@ -74,7 +82,10 @@ function ComboboxVirtualList({ itemCls, indicatorAt, estimateSize, maxHeight, vi
   )
 }
 
-type ComboboxVirtualisedWrapperProps = Omit<ComboboxPrimitive.Root.Props<unknown, false>, 'items' | 'multiple'> & {
+type ComboboxVirtualisedWrapperProps = Omit<
+  ComboboxPrimitive.Root.Props<unknown, false>,
+  'items' | 'multiple'
+> & {
   items?: optionsT
   isLoading?: boolean
   placeholder?: string
@@ -90,7 +101,9 @@ type ComboboxVirtualisedWrapperProps = Omit<ComboboxPrimitive.Root.Props<unknown
   renderEmpty?: React.ReactNode
   estimateSize?: number
   maxHeight?: number
-  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>>
+  virtualizerOptions?: Partial<
+    Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>
+  >
 }
 
 function ComboboxVirtualisedWrapper({
@@ -123,7 +136,7 @@ function ComboboxVirtualisedWrapper({
       if (!isSeparator(val)) {
         const key = String(val)
         const label = getLabel(o)
-        map[key] = typeof label === 'string' ? label : (extractText(label).trim() || key)
+        map[key] = typeof label === 'string' ? label : extractText(label).trim() || key
       }
     }
     return map
@@ -131,7 +144,9 @@ function ComboboxVirtualisedWrapper({
 
   const itemsForBase = React.useMemo(() => {
     if (!items) return []
-    return items.filter(item => !isGroup(item) && !isSeparator(getValue(item as allowedPrimitiveT | optionT))) as (allowedPrimitiveT | optionT)[]
+    return items.filter(
+      item => !isGroup(item) && !isSeparator(getValue(item as allowedPrimitiveT | optionT)),
+    ) as (allowedPrimitiveT | optionT)[]
   }, [items])
 
   return (
@@ -139,7 +154,7 @@ function ComboboxVirtualisedWrapper({
       disabled={disabled}
       items={itemsForBase as unknown[]}
       virtualized
-      itemToStringLabel={(item) => {
+      itemToStringLabel={item => {
         const key = String(getValue(item as allowedPrimitiveT | optionT))
         return labelStringMap[key] ?? key
       }}
@@ -158,13 +173,17 @@ function ComboboxVirtualisedWrapper({
         <ComboboxStatus>
           {renderStatus !== undefined
             ? renderStatus
-            : isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='size-4 animate-spin' /> Loading...</p>}
+            : isLoading && (
+                <p className="flex items-center justify-center gap-2 py-6">
+                  <Loader2 className="size-4 animate-spin" /> Loading...
+                </p>
+              )}
         </ComboboxStatus>
 
         <ComboboxEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? 'No options found'}</p>}
         </ComboboxEmpty>
 
         <ComboboxVirtualList
@@ -179,7 +198,4 @@ function ComboboxVirtualisedWrapper({
   )
 }
 
-export {
-  ComboboxVirtualisedWrapper,
-  type ComboboxVirtualisedWrapperProps,
-}
+export { ComboboxVirtualisedWrapper, type ComboboxVirtualisedWrapperProps }

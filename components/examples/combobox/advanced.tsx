@@ -19,7 +19,10 @@ function hasMatch(items: optionsT, query: string): boolean {
   return items.some(item => {
     if (typeof item === 'string') return item.toLowerCase().includes(lower)
     if (typeof item === 'number' || typeof item === 'boolean') return String(item).includes(lower)
-    if (typeof item === 'object' && 'value' in item) return String((item as optionT).value).toLowerCase().includes(lower)
+    if (typeof item === 'object' && 'value' in item)
+      return String((item as optionT).value)
+        .toLowerCase()
+        .includes(lower)
     return false
   })
 }
@@ -53,7 +56,9 @@ export function AsyncSearchExample() {
     }
     setIsFetching(true)
     timerRef.current = setTimeout(() => {
-      setResults(fruits.filter(f => String(f).toLowerCase().includes(query.toLowerCase())) as string[])
+      setResults(
+        fruits.filter(f => String(f).toLowerCase().includes(query.toLowerCase())) as string[],
+      )
       setIsFetching(false)
     }, 400)
   }
@@ -141,7 +146,7 @@ export function PriorityChipsExample() {
       placeholder="Select priorities…"
       triggerCls="w-72"
       showClear
-      renderValue={(value) => {
+      renderValue={value => {
         const p = priorityMeta[value]
         if (!p) return <span className="capitalize">{value}</span>
         return (
@@ -163,7 +168,7 @@ export function TeamChipsExample() {
       placeholder="Add team members…"
       triggerCls="w-72"
       showClear
-      renderValue={(value) => {
+      renderValue={value => {
         const m = teamMeta[value]
         return (
           <span className="flex items-center gap-1">

@@ -132,7 +132,14 @@ function AlertDialogAction({
   variant = 'destructive',
   ...props
 }: React.ComponentProps<typeof Button>) {
-  return <Button data-slot="alert-dialog-action" variant={variant} className={cn(className)} {...props} />
+  return (
+    <Button
+      data-slot="alert-dialog-action"
+      variant={variant}
+      className={cn(className)}
+      {...props}
+    />
+  )
 }
 
 function AlertDialogCancel({
@@ -152,7 +159,6 @@ function AlertDialogCancel({
   )
 }
 
-
 type AlertDialogFooterWrapperProps = {
   cancel?: React.ReactNode
   action?: React.ReactNode
@@ -171,8 +177,8 @@ function AlertDialogFooterWrapper({
   footerCls,
   actionCls,
   cancelCls,
-  onAction = () => { },
-  onCancel = () => { },
+  onAction = () => {},
+  onCancel = () => {},
 }: AlertDialogFooterWrapperProps) {
   return (
     <AlertDialogFooter className={cn(footerCls)}>
@@ -184,7 +190,8 @@ function AlertDialogFooterWrapper({
 
       {action && (
         <AlertDialogAction onClick={onAction} className={cn(actionCls)} disabled={loading}>
-          {loading && <Loader className="animate-spin" />}{action}
+          {loading && <Loader className="animate-spin" />}
+          {action}
         </AlertDialogAction>
       )}
     </AlertDialogFooter>

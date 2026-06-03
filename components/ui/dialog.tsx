@@ -139,7 +139,12 @@ function DialogFooterWrapper({
       {cancel && (
         <DialogClose
           render={
-            <Button variant="outline" onClick={onCancel} className={cn(cancelCls)} disabled={loading} />
+            <Button
+              variant="outline"
+              onClick={onCancel}
+              className={cn(cancelCls)}
+              disabled={loading}
+            />
           }
         >
           {cancel}

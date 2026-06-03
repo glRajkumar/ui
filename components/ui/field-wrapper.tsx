@@ -253,7 +253,10 @@ export function DatePickerWrapper({
             <Button
               id={name}
               variant={'outline'}
-              className={cn('w-full pl-3 text-left font-normal shadow-xs', !value && 'text-muted-foreground')}
+              className={cn(
+                'w-full pl-3 text-left font-normal shadow-xs',
+                !value && 'text-muted-foreground',
+              )}
               aria-invalid={isInvalid}
             >
               {value ? format(value, 'dd/MM/yyyy') : <span>Pick a date</span>}
@@ -314,14 +317,7 @@ export function ComboboxWrapper({
 
 type NumberProps = BaseProps &
   Omit<React.ComponentProps<typeof NumberFieldWrapper>, 'name' | 'id' | 'className'>
-export function NumberWrapper({
-  name,
-  label,
-  error,
-  invalid,
-  className,
-  ...props
-}: NumberProps) {
+export function NumberWrapper({ name, label, error, invalid, className, ...props }: NumberProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -333,16 +329,8 @@ export function NumberWrapper({
   )
 }
 
-type SliderProps = BaseProps &
-  Omit<React.ComponentProps<typeof Slider>, 'name'>
-export function SliderWrapper({
-  name,
-  label,
-  error,
-  invalid,
-  className,
-  ...props
-}: SliderProps) {
+type SliderProps = BaseProps & Omit<React.ComponentProps<typeof Slider>, 'name'>
+export function SliderWrapper({ name, label, error, invalid, className, ...props }: SliderProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -354,8 +342,7 @@ export function SliderWrapper({
   )
 }
 
-type AutocompleteProps = BaseProps &
-  Omit<React.ComponentProps<typeof Autocomplete>, 'className'>
+type AutocompleteProps = BaseProps & Omit<React.ComponentProps<typeof Autocomplete>, 'className'>
 export function AutocompleteWrapper({
   name,
   label,
@@ -376,14 +363,7 @@ export function AutocompleteWrapper({
 }
 
 type OTPProps = BaseProps & Omit<React.ComponentProps<typeof InputOTP>, 'className'>
-export function OTPWrapper({
-  name,
-  label,
-  error,
-  invalid,
-  className,
-  ...props
-}: OTPProps) {
+export function OTPWrapper({ name, label, error, invalid, className, ...props }: OTPProps) {
   const isInvalid = invalid || !!error
 
   return (
@@ -395,7 +375,8 @@ export function OTPWrapper({
   )
 }
 
-type InputGroupFieldProps = BaseProps & Omit<React.ComponentProps<typeof InputGroup>, 'wrapperClassName'>
+type InputGroupFieldProps = BaseProps &
+  Omit<React.ComponentProps<typeof InputGroup>, 'wrapperClassName'>
 export function InputGroupWrapper({
   name,
   label,
@@ -409,12 +390,7 @@ export function InputGroupWrapper({
   return (
     <Field className={className} invalid={isInvalid}>
       {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
-      <InputGroup
-        id={name}
-        name={name}
-        aria-invalid={isInvalid}
-        {...props}
-      />
+      <InputGroup id={name} name={name} aria-invalid={isInvalid} {...props} />
       <FieldError errors={[error]} />
     </Field>
   )

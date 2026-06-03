@@ -22,7 +22,7 @@ export function ColumnFilter<TData, TValue>({
   return (
     <ComboboxWrapper
       items={options}
-      value={column?.getFilterValue() ?? ""}
+      value={column?.getFilterValue() ?? ''}
       onValueChange={v => onSelect(v as any)}
       // label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}
       {...props}

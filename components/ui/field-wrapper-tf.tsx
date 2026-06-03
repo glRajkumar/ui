@@ -129,7 +129,10 @@ function SwitchField(props: switchFieldProps) {
   )
 }
 
-type selectFieldProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+type selectFieldProps = Omit<
+  React.ComponentProps<typeof Select>,
+  'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
+>
 function SelectField(props: selectFieldProps) {
   const field = useFieldContext<allowedPrimitiveT>()
 
@@ -170,7 +173,10 @@ function DatePickerField(props: datePickerFieldProps) {
   )
 }
 
-type comboboxFieldProps = Omit<React.ComponentProps<typeof Combobox>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
+type comboboxFieldProps = Omit<
+  React.ComponentProps<typeof Combobox>,
+  'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
+>
 function ComboboxField(props: comboboxFieldProps) {
   const field = useFieldContext<allowedPrimitiveT | allowedPrimitiveT[]>()
 
@@ -263,7 +269,7 @@ function OTPField(props: otpFieldProps) {
       {...props}
       name={field.name}
       value={field.state.value ?? ''}
-      onValueChange={(value) => field.handleChange(value)}
+      onValueChange={value => field.handleChange(value)}
       error={
         field.state.meta.errors.length > 0 ? { message: field.state.meta.errors[0] } : undefined
       }

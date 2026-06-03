@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  fruits,
-  grouped,
-  withSeparator,
-} from '@/components/examples/data/options'
+import { fruits, grouped, withSeparator } from '@/components/examples/data/options'
 import { ComboboxWrapper } from '@/components/ui/combobox'
 
 export function FlatExample() {
@@ -28,7 +24,9 @@ export function WithClearExample() {
 }
 
 export function SearchOnlyExample() {
-  return <ComboboxWrapper items={fruits} placeholder="Search…" triggerCls="w-52" showTrigger={false} />
+  return (
+    <ComboboxWrapper items={fruits} placeholder="Search…" triggerCls="w-52" showTrigger={false} />
+  )
 }
 
 export function IndicatorRightExample() {
@@ -36,5 +34,12 @@ export function IndicatorRightExample() {
 }
 
 export function IndicatorLeftExample() {
-  return <ComboboxWrapper items={fruits} placeholder="Select fruit" triggerCls="w-52" indicatorAt="left" />
+  return (
+    <ComboboxWrapper
+      items={fruits}
+      placeholder="Select fruit"
+      triggerCls="w-52"
+      indicatorAt="left"
+    />
+  )
 }

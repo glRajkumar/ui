@@ -1,20 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  cn,
-  getKey,
-  getLabel,
-  getValue,
-  isSeparator,
-  parseAllowedPrimitive,
-} from '@/lib/utils'
-import {
-  isSubMenu,
-  isGroupMenu,
-  isInputSubMenu,
-  isInputGroupMenu
-} from '@/lib/menu'
+import { cn, getKey, getLabel, getValue, isSeparator, parseAllowedPrimitive } from '@/lib/utils'
+import { isSubMenu, isGroupMenu, isInputSubMenu, isInputGroupMenu } from '@/lib/menu'
 
 import {
   Menubar,
@@ -122,7 +110,7 @@ function CheckboxItem({
   className,
   checked = false,
   indicatorAt,
-  onCheckedChange = () => { },
+  onCheckedChange = () => {},
 }: checkboxItemProps) {
   const value = getValue(option)
 
@@ -242,7 +230,7 @@ function CheckboxSubMenu({
   groupLabelCls,
   checked = [],
   indicatorAt,
-  onCheckedChange = () => { },
+  onCheckedChange = () => {},
 }: CheckboxSubMenuProps) {
   return (
     <MenubarSub>
@@ -323,7 +311,7 @@ function RadioSubMenu({
   groupLabelCls,
   value = '',
   indicatorAt,
-  onValueChange = () => { },
+  onValueChange = () => {},
 }: RadioSubMenuProps) {
   return (
     <MenubarSub>
@@ -404,7 +392,9 @@ function MenubarWrapperInner({
 }: wrapperInner) {
   return (
     <MenubarMenu>
-      <MenubarTrigger className={triggerCls} {...triggerProps}>{trigger}</MenubarTrigger>
+      <MenubarTrigger className={triggerCls} {...triggerProps}>
+        {trigger}
+      </MenubarTrigger>
 
       <MenubarContent {...contentProps}>
         {options.map((option, i) => {
@@ -491,7 +481,9 @@ function MenubarCheckboxWrapperInner({
 
   return (
     <MenubarMenu>
-      <MenubarTrigger className={triggerCls} {...triggerProps}>{trigger}</MenubarTrigger>
+      <MenubarTrigger className={triggerCls} {...triggerProps}>
+        {trigger}
+      </MenubarTrigger>
 
       <MenubarContent {...contentProps}>
         {options.map((option, i) => {
@@ -584,7 +576,9 @@ function MenubarRadioWrapperInner({
 
   return (
     <MenubarMenu>
-      <MenubarTrigger className={cn(triggerCls)} {...triggerProps}>{trigger}</MenubarTrigger>
+      <MenubarTrigger className={cn(triggerCls)} {...triggerProps}>
+        {trigger}
+      </MenubarTrigger>
 
       <MenubarContent {...contentProps}>
         <MenubarRadioGroup

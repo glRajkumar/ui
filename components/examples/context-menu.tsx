@@ -19,7 +19,11 @@ const groupedCheckboxOptions: menuInputOptionsT = [
   },
   {
     group: 'Display',
-    options: ['Line numbers', 'Minimap', { label: 'Breadcrumbs', value: 'breadcrumbs', disabled: true }],
+    options: [
+      'Line numbers',
+      'Minimap',
+      { label: 'Breadcrumbs', value: 'breadcrumbs', disabled: true },
+    ],
   },
 ]
 
@@ -58,9 +62,7 @@ function CheckboxDefaultExample() {
     <ContextCheckboxWrapper
       options={featureOptions}
       checked={checked}
-      onCheckedChange={(v, c) =>
-        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
-      }
+      onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
     >
       <TriggerArea />
     </ContextCheckboxWrapper>
@@ -81,9 +83,7 @@ function CheckboxGroupedExample() {
     <ContextCheckboxWrapper
       options={groupedCheckboxOptions}
       checked={checked}
-      onCheckedChange={(v, c) =>
-        setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
-      }
+      onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
     >
       <TriggerArea />
     </ContextCheckboxWrapper>

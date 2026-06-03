@@ -58,7 +58,11 @@ export function NoCloseButtonExample() {
 export function IconTriggerExample() {
   return (
     <DialogWrapper
-      trigger={<><Settings /> Settings</>}
+      trigger={
+        <>
+          <Settings /> Settings
+        </>
+      }
       triggerCls={buttonVariants({ variant: 'secondary', size: 'sm' })}
       title="Settings"
       description="Manage your application preferences."

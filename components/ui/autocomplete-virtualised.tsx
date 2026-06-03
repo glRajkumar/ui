@@ -19,10 +19,17 @@ type AutocompleteVirtualListProps = {
   itemCls?: string
   estimateSize: number
   maxHeight: number
-  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>>
+  virtualizerOptions?: Partial<
+    Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>
+  >
 }
 
-function AutocompleteVirtualList({ itemCls, estimateSize, maxHeight, virtualizerOptions }: AutocompleteVirtualListProps) {
+function AutocompleteVirtualList({
+  itemCls,
+  estimateSize,
+  maxHeight,
+  virtualizerOptions,
+}: AutocompleteVirtualListProps) {
   const items = (AutocompletePrimitive.useFilteredItems() ?? []) as (allowedPrimitiveT | optionT)[]
   const parentRef = React.useRef<HTMLDivElement>(null)
 
@@ -89,7 +96,9 @@ type AutocompleteVirtualisedWrapperProps = Omit<
   renderEmpty?: React.ReactNode
   estimateSize?: number
   maxHeight?: number
-  virtualizerOptions?: Partial<Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>>
+  virtualizerOptions?: Partial<
+    Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>
+  >
 }
 
 function AutocompleteVirtualisedWrapper({
@@ -141,13 +150,17 @@ function AutocompleteVirtualisedWrapper({
         <AutocompleteStatus>
           {renderStatus !== undefined
             ? renderStatus
-            : isLoading && <p className='flex items-center justify-center gap-2 py-6'><Loader2 className='size-4 animate-spin' /> Loading...</p>}
+            : isLoading && (
+                <p className="flex items-center justify-center gap-2 py-6">
+                  <Loader2 className="size-4 animate-spin" /> Loading...
+                </p>
+              )}
         </AutocompleteStatus>
 
         <AutocompleteEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className='py-6'>{emptyMessage ?? 'No options found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? 'No options found'}</p>}
         </AutocompleteEmpty>
 
         <AutocompleteVirtualList
@@ -161,7 +174,4 @@ function AutocompleteVirtualisedWrapper({
   )
 }
 
-export {
-  AutocompleteVirtualisedWrapper,
-  type AutocompleteVirtualisedWrapperProps,
-}
+export { AutocompleteVirtualisedWrapper, type AutocompleteVirtualisedWrapperProps }

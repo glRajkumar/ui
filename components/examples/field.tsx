@@ -179,7 +179,11 @@ export function FieldExample() {
         placeholder="username"
         value={value.username}
         onChange={e => setValue(prev => ({ ...prev, username: e.target.value }))}
-        addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+        addonStart={
+          <InputGroupText>
+            <AtSignIcon />
+          </InputGroupText>
+        }
       />
 
       <Button type="submit">Submit</Button>

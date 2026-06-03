@@ -167,7 +167,10 @@ type DrawerWrapperProps = {
   title?: React.ReactNode
   trigger?: React.ReactNode
   triggerCls?: string
-  triggerProps?: Omit<React.ComponentProps<typeof DrawerPrimitive.Trigger>, 'children' | 'className'>
+  triggerProps?: Omit<
+    React.ComponentProps<typeof DrawerPrimitive.Trigger>,
+    'children' | 'className'
+  >
   children?: React.ReactNode
   description?: React.ReactNode
   descriptionCls?: string

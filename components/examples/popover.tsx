@@ -74,7 +74,7 @@ function ControlledExample() {
     <div className="flex items-center gap-3">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(v => !v)}
         className="px-4 py-1.5 border rounded text-sm"
       >
         {open ? 'Close' : 'Open'} externally
@@ -107,7 +107,7 @@ function DetachedExample() {
     <div className="flex items-start gap-6">
       {/* Triggers — live outside Popover.Root */}
       <div className="flex flex-col gap-1.5">
-        {MEMBERS.map((m) => (
+        {MEMBERS.map(m => (
           <div
             key={m.name}
             className="flex items-center justify-between gap-6 border rounded px-3 py-2 text-sm"
@@ -145,7 +145,7 @@ function DetachedExample() {
 function ArrowExample() {
   return (
     <div className="flex gap-3">
-      {(['top', 'bottom', 'left', 'right'] as const).map((side) => (
+      {(['top', 'bottom', 'left', 'right'] as const).map(side => (
         <PopoverWrapper
           key={side}
           trigger={side}
@@ -185,7 +185,7 @@ function SidesExample() {
 
   return (
     <div className="grid grid-cols-2 gap-2">
-      {sides.map((side) => (
+      {sides.map(side => (
         <PopoverWrapper
           key={side}
           trigger={side}

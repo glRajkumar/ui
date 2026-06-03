@@ -38,7 +38,9 @@ function InputExamples() {
 }
 
 function TextareaExample() {
-  return <TextareaWrapper name="bio" label="Bio" placeholder="Tell us about yourself" className="w-64" />
+  return (
+    <TextareaWrapper name="bio" label="Bio" placeholder="Tell us about yourself" className="w-64" />
+  )
 }
 
 function RadioExample() {

@@ -7,8 +7,14 @@ import { MenuCheckboxWrapper } from '@/components/ui/menu-wrapper'
 import { buttonVariants } from '@/components/ui/button'
 import { ColumnFilter } from './column-filter'
 
-type ColumnFilterPassthroughProps = Omit<ComboboxWrapperProps, 'items' | 'value' | 'onValueChange' | 'label' | 'multiple'>
-type MenuCheckboxPassthroughProps = Omit<React.ComponentProps<typeof MenuCheckboxWrapper>, 'trigger' | 'options' | 'checked' | 'onCheckedChange'>
+type ColumnFilterPassthroughProps = Omit<
+  ComboboxWrapperProps,
+  'items' | 'value' | 'onValueChange' | 'label' | 'multiple'
+>
+type MenuCheckboxPassthroughProps = Omit<
+  React.ComponentProps<typeof MenuCheckboxWrapper>,
+  'trigger' | 'options' | 'checked' | 'onCheckedChange'
+>
 
 interface FilterGroupProps<TData> {
   table: Table<TData>
@@ -22,7 +28,12 @@ interface FilterGroupProps<TData> {
   menuCheckboxProps?: MenuCheckboxPassthroughProps
 }
 
-export function FilterGroup<TData>({ table, options, columnFilterProps, menuCheckboxProps }: FilterGroupProps<TData>) {
+export function FilterGroup<TData>({
+  table,
+  options,
+  columnFilterProps,
+  menuCheckboxProps,
+}: FilterGroupProps<TData>) {
   const [selected, setSelected] = useState<allowedPrimitiveT[]>([])
 
   return (
@@ -41,7 +52,11 @@ export function FilterGroup<TData>({ table, options, columnFilterProps, menuChec
         ))}
 
       <MenuCheckboxWrapper
-        trigger={<><CirclePlus className="size-4" /> Filter</>}
+        trigger={
+          <>
+            <CirclePlus className="size-4" /> Filter
+          </>
+        }
         triggerCls={buttonVariants({ variant: 'outline' })}
         {...menuCheckboxProps}
         checked={selected}

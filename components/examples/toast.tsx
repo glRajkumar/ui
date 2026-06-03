@@ -47,7 +47,10 @@ function ToastTriggers() {
 
   function handleUpdate() {
     const id = toast.add({ description: 'Uploading...', type: 'loading', timeout: 0 })
-    setTimeout(() => toast.update(id, { description: 'Upload complete.', type: 'success', timeout: 3000 }), 2000)
+    setTimeout(
+      () => toast.update(id, { description: 'Upload complete.', type: 'success', timeout: 3000 }),
+      2000,
+    )
   }
 
   return (
@@ -92,7 +95,13 @@ function ToastTriggers() {
 
         <Button
           variant="outline"
-          onClick={() => toast.add({ title: 'Pinned', description: 'Close manually — no auto-dismiss.', timeout: 0 })}
+          onClick={() =>
+            toast.add({
+              title: 'Pinned',
+              description: 'Close manually — no auto-dismiss.',
+              timeout: 0,
+            })
+          }
         >
           Persistent
         </Button>
@@ -125,11 +134,7 @@ function ToastTriggers() {
         <p className="text-muted-foreground mb-2 text-xs">Position</p>
         <div className="flex flex-wrap gap-2">
           {positions.map(pos => (
-            <Button
-              key={pos}
-              variant="outline"
-              onClick={() => toast.info(pos, { position: pos })}
-            >
+            <Button key={pos} variant="outline" onClick={() => toast.info(pos, { position: pos })}>
               {pos}
             </Button>
           ))}

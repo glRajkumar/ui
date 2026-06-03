@@ -2,7 +2,15 @@
 
 import { ExRow } from '@/components/examples/common'
 
-import { BasicExample, NoActionExample, NoCloseButtonExample, SideRightExample, SideLeftExample, SideTopExample, SideBottomExample } from './basic'
+import {
+  BasicExample,
+  NoActionExample,
+  NoCloseButtonExample,
+  SideRightExample,
+  SideLeftExample,
+  SideTopExample,
+  SideBottomExample,
+} from './basic'
 import { NestedSheetExample, MultipleOpenExample } from './advanced'
 import { ControlledExample, AsyncActionExample } from './controlled'
 

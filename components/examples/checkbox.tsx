@@ -3,7 +3,12 @@
 import { useState } from 'react'
 
 import { ExItem, ExRow } from '@/components/examples/common'
-import { CheckboxIndicator, Checkbox, CheckboxGroup, CheckboxWrapper } from '@/components/ui/checkbox'
+import {
+  CheckboxIndicator,
+  Checkbox,
+  CheckboxGroup,
+  CheckboxWrapper,
+} from '@/components/ui/checkbox'
 
 function BasicExample() {
   return (
@@ -40,7 +45,7 @@ function ControlledExample() {
     <div className="flex flex-col gap-3">
       <CheckboxWrapper
         value={value}
-        onValueChange={(v) => setValue(v)}
+        onValueChange={v => setValue(v)}
         parentLabel="Select all"
         options={[
           { value: 'email', label: 'Email' },
@@ -114,21 +119,26 @@ function IndeterminateExample() {
   }
 
   function toggleChild(fruit: Fruit) {
-    setSelected((prev) =>
-      prev.includes(fruit) ? prev.filter((f) => f !== fruit) : [...prev, fruit],
-    )
+    setSelected(prev => (prev.includes(fruit) ? prev.filter(f => f !== fruit) : [...prev, fruit]))
   }
 
   return (
     <div className="flex flex-col gap-2">
       <label className="flex cursor-pointer select-none items-center gap-2">
-        <CheckboxIndicator checked={allChecked} indeterminate={someChecked} onCheckedChange={toggleParent} />
+        <CheckboxIndicator
+          checked={allChecked}
+          indeterminate={someChecked}
+          onCheckedChange={toggleParent}
+        />
         <span className="text-sm font-medium">All fruits</span>
       </label>
       <div className="ml-6 flex flex-col gap-2">
-        {FRUITS.map((fruit) => (
+        {FRUITS.map(fruit => (
           <label key={fruit} className="flex cursor-pointer select-none items-center gap-2">
-            <CheckboxIndicator checked={selected.includes(fruit)} onCheckedChange={() => toggleChild(fruit)} />
+            <CheckboxIndicator
+              checked={selected.includes(fruit)}
+              onCheckedChange={() => toggleChild(fruit)}
+            />
             <span className="text-sm capitalize">{fruit}</span>
           </label>
         ))}

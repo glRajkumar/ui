@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  fruits,
-  grouped,
-  withSeparator,
-} from '@/components/examples/data/options'
+import { fruits, grouped, withSeparator } from '@/components/examples/data/options'
 import { SelectWrapper } from '@/components/ui/select'
 
 export function FlatExample() {
@@ -24,5 +20,12 @@ export function IndicatorRightExample() {
 }
 
 export function IndicatorLeftExample() {
-  return <SelectWrapper options={fruits} placeholder="Select fruit" triggerCls="w-44" indicatorAt="left" />
+  return (
+    <SelectWrapper
+      options={fruits}
+      placeholder="Select fruit"
+      triggerCls="w-44"
+      indicatorAt="left"
+    />
+  )
 }

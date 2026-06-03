@@ -86,7 +86,12 @@ function DisabledFieldSetExample() {
       <FieldLegend>Account details</FieldLegend>
       <FieldGroup>
         <InputWrapper name="fs-d-name" label="Name" defaultValue="John Smith" />
-        <InputWrapper name="fs-d-email" label="Email" defaultValue="john@example.com" type="email" />
+        <InputWrapper
+          name="fs-d-email"
+          label="Email"
+          defaultValue="john@example.com"
+          type="email"
+        />
       </FieldGroup>
     </FieldSet>
   )

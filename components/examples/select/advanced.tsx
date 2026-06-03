@@ -29,7 +29,13 @@ export function FormExample() {
         alert(new FormData(e.currentTarget).get('fruit'))
       }}
     >
-      <SelectWrapper options={fruits} name="fruit" placeholder="Select fruit" triggerCls="w-44" required />
+      <SelectWrapper
+        options={fruits}
+        name="fruit"
+        placeholder="Select fruit"
+        triggerCls="w-44"
+        required
+      />
       <button type="submit" className="text-left text-xs text-muted-foreground underline">
         Submit →
       </button>
@@ -43,7 +49,7 @@ export function StatusPickerExample() {
       options={statusOptions}
       placeholder="Set status"
       triggerCls="w-48"
-      renderValue={(value) => {
+      renderValue={value => {
         const s = statusStyle[value]
         if (!s) return value
         return (
@@ -63,12 +69,17 @@ export function AssigneePickerExample() {
       options={memberOptions}
       placeholder="Assign to..."
       triggerCls="w-60"
-      renderValue={(value) => {
+      renderValue={value => {
         const m = memberMeta[value]
         if (!m) return value
         return (
           <span className="flex min-w-0 items-center gap-2">
-            <span className={cn('flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white', m.bg)}>
+            <span
+              className={cn(
+                'flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white',
+                m.bg,
+              )}
+            >
               {m.initials}
             </span>
             <span className="truncate font-medium">{m.name}</span>

@@ -25,7 +25,9 @@ export function AsyncSearchExample() {
     }
     setIsFetching(true)
     timerRef.current = setTimeout(() => {
-      setResults(fruits.filter(f => String(f).toLowerCase().includes(val.toLowerCase())) as string[])
+      setResults(
+        fruits.filter(f => String(f).toLowerCase().includes(val.toLowerCase())) as string[],
+      )
       setIsFetching(false)
     }, 400)
   }

@@ -17,7 +17,7 @@ async function SingleCode({ filePath }: { filePath: string }) {
 
 async function MultiCode({ paths }: { paths: string[] }) {
   const files = await Promise.all(
-    paths.map(async (filePath) => {
+    paths.map(async filePath => {
       const absolute = path.join(process.cwd(), filePath)
       const code = await fs.promises.readFile(absolute, 'utf8')
       const name = filePath.split('/').pop() ?? filePath

@@ -29,14 +29,7 @@ export function CustomEmptyExample() {
 }
 
 export function MultipleExample() {
-  return (
-    <ComboboxWrapper
-      multiple
-      items={fruits}
-      placeholder="Select fruits"
-      triggerCls="w-64"
-    />
-  )
+  return <ComboboxWrapper multiple items={fruits} placeholder="Select fruits" triggerCls="w-64" />
 }
 
 export function MultipleClearExample() {

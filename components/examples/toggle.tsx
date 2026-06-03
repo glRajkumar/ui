@@ -38,9 +38,30 @@ function IconTextExample() {
   return (
     <ToggleWrapper
       options={[
-        { label: <><AlignLeft /> Left</>, value: 'left' },
-        { label: <><AlignCenter /> Center</>, value: 'center' },
-        { label: <><AlignRight /> Right</>, value: 'right' },
+        {
+          label: (
+            <>
+              <AlignLeft /> Left
+            </>
+          ),
+          value: 'left',
+        },
+        {
+          label: (
+            <>
+              <AlignCenter /> Center
+            </>
+          ),
+          value: 'center',
+        },
+        {
+          label: (
+            <>
+              <AlignRight /> Right
+            </>
+          ),
+          value: 'right',
+        },
       ]}
     />
   )
@@ -54,7 +75,7 @@ function ControlledExample() {
       <ToggleWrapper
         options={['Bold', 'Italic', 'Underline']}
         value={value}
-        onValueChange={(v) => setValue(v)}
+        onValueChange={v => setValue(v)}
         multiple
       />
       <span className="text-sm text-muted-foreground">{value.join(', ') || 'none'}</span>
@@ -66,10 +87,38 @@ function VerticalExample() {
   return (
     <ToggleWrapper
       options={[
-        { label: <><AlignLeft /> Left</>, value: 'left' },
-        { label: <><AlignCenter /> Center</>, value: 'center' },
-        { label: <><AlignRight /> Right</>, value: 'right' },
-        { label: <><AlignJustify /> Justify</>, value: 'justify' },
+        {
+          label: (
+            <>
+              <AlignLeft /> Left
+            </>
+          ),
+          value: 'left',
+        },
+        {
+          label: (
+            <>
+              <AlignCenter /> Center
+            </>
+          ),
+          value: 'center',
+        },
+        {
+          label: (
+            <>
+              <AlignRight /> Right
+            </>
+          ),
+          value: 'right',
+        },
+        {
+          label: (
+            <>
+              <AlignJustify /> Justify
+            </>
+          ),
+          value: 'justify',
+        },
       ]}
       orientation="vertical"
     />

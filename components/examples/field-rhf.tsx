@@ -111,14 +111,24 @@ export function Field_RHF_Example() {
 
         <SliderWrapper name="volume" label="Volume" control={form.control} min={0} max={100} />
 
-        <OTPWrapper name="otp" label="Verification Code" control={form.control} length={6} separator />
+        <OTPWrapper
+          name="otp"
+          label="Verification Code"
+          control={form.control}
+          length={6}
+          separator
+        />
 
         <InputGroupWrapper
           name="username"
           label="Username"
           control={form.control}
           placeholder="username"
-          addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+          addonStart={
+            <InputGroupText>
+              <AtSignIcon />
+            </InputGroupText>
+          }
         />
 
         <Button type="submit">Submit</Button>

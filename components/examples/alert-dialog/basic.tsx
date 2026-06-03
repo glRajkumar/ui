@@ -37,7 +37,11 @@ export function BasicExample() {
 export function NoDescriptionExample() {
   return (
     <AlertDialogWrapper
-      trigger={<><LogOut /> Sign out</>}
+      trigger={
+        <>
+          <LogOut /> Sign out
+        </>
+      }
       triggerCls={buttonVariants({ variant: 'outline', size: 'sm' })}
       title="Sign out of your account?"
       description=""
@@ -62,7 +66,11 @@ export function NoActionExample() {
 export function WithMediaExample() {
   return (
     <AlertDialogWrapper
-      trigger={<><Trash2 /> With Media</>}
+      trigger={
+        <>
+          <Trash2 /> With Media
+        </>
+      }
       triggerCls={buttonVariants({ variant: 'outline', size: 'sm' })}
       media={<Trash2 />}
       title="Delete account?"
@@ -89,7 +97,11 @@ export function CustomStylingExample() {
 export function IconTriggerExample() {
   return (
     <AlertDialogWrapper
-      trigger={<><Trash2 /> Icon + Text</>}
+      trigger={
+        <>
+          <Trash2 /> Icon + Text
+        </>
+      }
       triggerCls={buttonVariants({ variant: 'destructive', size: 'sm' })}
       title="Delete permanently?"
       description="This action cannot be undone."
@@ -113,15 +125,19 @@ export function IconOnlyTriggerExample() {
 export function CustomElementTriggerExample() {
   return (
     <AlertDialogWrapper
-      trigger={<><TriangleAlert className="size-4" /> div trigger</>}
+      trigger={
+        <>
+          <TriangleAlert className="size-4" /> div trigger
+        </>
+      }
       triggerProps={{
         render: <div role="button" tabIndex={0} />,
         nativeButton: false,
       }}
       triggerCls={cn(
-        "flex cursor-pointer items-center gap-1.5 px-2 py-1",
-        "text-sm text-destructive hover:bg-destructive/10",
-        "rounded border border-dashed border-destructive/50",
+        'flex cursor-pointer items-center gap-1.5 px-2 py-1',
+        'text-sm text-destructive hover:bg-destructive/10',
+        'rounded border border-dashed border-destructive/50',
       )}
       title="Sign out?"
       description="You will be logged out of your account."
@@ -133,14 +149,18 @@ export function CustomElementTriggerExample() {
 export function AnchorTriggerExample() {
   return (
     <AlertDialogWrapper
-      trigger={<><Link className="size-3" /> anchor trigger</>}
+      trigger={
+        <>
+          <Link className="size-3" /> anchor trigger
+        </>
+      }
       triggerProps={{
         render: <a href="#" />,
         nativeButton: false,
       }}
       triggerCls={cn(
-        "inline-flex items-center gap-1",
-        "text-sm text-primary underline underline-offset-4 hover:text-primary/70 cursor-pointer"
+        'inline-flex items-center gap-1',
+        'text-sm text-primary underline underline-offset-4 hover:text-primary/70 cursor-pointer',
       )}
       title="Delete file?"
       description="The file will be permanently removed."
@@ -152,7 +172,11 @@ export function AnchorTriggerExample() {
 export function CustomComponentTriggerExample() {
   return (
     <AlertDialogWrapper
-      trigger={<><Trash2 className="size-4" /> custom comp</>}
+      trigger={
+        <>
+          <Trash2 className="size-4" /> custom comp
+        </>
+      }
       triggerProps={{ render: <CardTrigger />, nativeButton: false }}
       title="Delete record?"
       description="This record and all associated data will be permanently deleted."

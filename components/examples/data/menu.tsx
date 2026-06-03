@@ -4,7 +4,14 @@ export const dropdownOptions: menuOptionsT = [
   { label: 'New File', value: 'new', shortcut: 'Ctrl+N' },
   'Save',
   12,
-  { label: <><Banana /> Banana</>, value: 'banana' },
+  {
+    label: (
+      <>
+        <Banana /> Banana
+      </>
+    ),
+    value: 'banana',
+  },
   '---',
   {
     group: 'Settings',
@@ -13,7 +20,14 @@ export const dropdownOptions: menuOptionsT = [
   {
     submenu: 'More',
     options: [
-      { label: <><Apple /> Apple</>, value: 'apple' },
+      {
+        label: (
+          <>
+            <Apple /> Apple
+          </>
+        ),
+        value: 'apple',
+      },
       {
         group: 'Tools',
         options: [{ label: 'Formatter', value: 'formatter' }, false],

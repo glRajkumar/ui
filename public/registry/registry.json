@@ -8,9 +8,7 @@
       "type": "registry:ui",
       "title": "Accordion",
       "description": "Accordion componet with wrapper",
-      "registryDependencies": [
-        "accordion"
-      ],
+      "registryDependencies": ["accordion"],
       "files": [
         {
           "path": "components/ui/accordion.tsx",
@@ -23,9 +21,7 @@
       "type": "registry:ui",
       "title": "Alert Dialog",
       "description": "Alert Dialog componet with wrapper",
-      "registryDependencies": [
-        "alert-dialog"
-      ],
+      "registryDependencies": ["alert-dialog"],
       "files": [
         {
           "path": "components/ui/alert-dialog.tsx",
@@ -59,9 +55,7 @@
       "type": "registry:ui",
       "title": "Autocomplete Virtualised",
       "description": "Virtualised autocomplete wrapper using @tanstack/react-virtual — renders large flat lists efficiently without grouping.",
-      "dependencies": [
-        "@tanstack/react-virtual"
-      ],
+      "dependencies": ["@tanstack/react-virtual"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -87,9 +81,7 @@
       "type": "registry:ui",
       "title": "Breadcrumb",
       "description": "Breadcrumb componet with wrapper",
-      "registryDependencies": [
-        "breadcrumb"
-      ],
+      "registryDependencies": ["breadcrumb"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -129,9 +121,7 @@
       "type": "registry:ui",
       "title": "Button",
       "description": "Button componet with wrapper",
-      "registryDependencies": [
-        "button"
-      ],
+      "registryDependencies": ["button"],
       "files": [
         {
           "path": "components/ui/button.tsx",
@@ -144,9 +134,7 @@
       "type": "registry:ui",
       "title": "Card",
       "description": "card componet with wrapper",
-      "registryDependencies": [
-        "card"
-      ],
+      "registryDependencies": ["card"],
       "files": [
         {
           "path": "components/ui/card.tsx",
@@ -159,9 +147,7 @@
       "type": "registry:ui",
       "title": "Carousel",
       "description": "Carousel componet with wrapper",
-      "registryDependencies": [
-        "carousel"
-      ],
+      "registryDependencies": ["carousel"],
       "files": [
         {
           "path": "components/ui/carousel.tsx",
@@ -217,9 +203,7 @@
       "type": "registry:ui",
       "title": "Combobox Virtualised",
       "description": "Virtualised combobox wrapper using @tanstack/react-virtual — renders large flat lists efficiently without grouping.",
-      "dependencies": [
-        "@tanstack/react-virtual"
-      ],
+      "dependencies": ["@tanstack/react-virtual"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -245,9 +229,7 @@
       "type": "registry:ui",
       "title": "Context Menu",
       "description": "Context Menu componet with wrapper",
-      "registryDependencies": [
-        "context-menu"
-      ],
+      "registryDependencies": ["context-menu"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -283,16 +265,8 @@
       "type": "registry:ui",
       "title": "Data Table Wrapper",
       "description": "Data Table componet with wrapper",
-      "dependencies": [
-        "@tanstack/react-table"
-      ],
-      "registryDependencies": [
-        "select",
-        "popover",
-        "button",
-        "badge",
-        "table"
-      ],
+      "dependencies": ["@tanstack/react-table"],
+      "registryDependencies": ["select", "popover", "button", "badge", "table"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -377,9 +351,7 @@
       "type": "registry:ui",
       "title": "Data Table Virtualized",
       "description": "Data Table Virtualized componet with wrapper",
-      "dependencies": [
-        "@tanstack/react-virtual"
-      ],
+      "dependencies": ["@tanstack/react-virtual"],
       "files": [
         {
           "path": "components/ui/data-table/data-table-virtualized.tsx",
@@ -396,10 +368,7 @@
       "type": "registry:ui",
       "title": "Dialog",
       "description": "Dialog componet with wrapper",
-      "registryDependencies": [
-        "dialog",
-        "button"
-      ],
+      "registryDependencies": ["dialog", "button"],
       "files": [
         {
           "path": "components/ui/dialog.tsx",
@@ -425,9 +394,7 @@
       "type": "registry:ui",
       "title": "Empty",
       "description": "Empty componet with wrapper",
-      "registryDependencies": [
-        "empty"
-      ],
+      "registryDependencies": ["empty"],
       "files": [
         {
           "path": "components/ui/empty.tsx",
@@ -531,9 +498,7 @@
       "type": "registry:ui",
       "title": "Field Wrapper — React Hook Form",
       "description": "Field wrappers with React Hook Form Controller integration for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
-      "dependencies": [
-        "react-hook-form"
-      ],
+      "dependencies": ["react-hook-form"],
       "registryDependencies": [
         "select",
         "popover",
@@ -617,9 +582,7 @@
       "type": "registry:ui",
       "title": "Field Wrapper — TanStack Form",
       "description": "Field wrappers with TanStack Form createFormHook integration for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
-      "dependencies": [
-        "@tanstack/react-form"
-      ],
+      "dependencies": ["@tanstack/react-form"],
       "registryDependencies": [
         "select",
         "popover",
@@ -739,9 +702,7 @@
       "type": "registry:ui",
       "title": "Item",
       "description": "Item componet with wrapper",
-      "registryDependencies": [
-        "item"
-      ],
+      "registryDependencies": ["item"],
       "files": [
         {
           "path": "components/ui/item.tsx",
@@ -790,9 +751,7 @@
       "type": "registry:ui",
       "title": "Menubar",
       "description": "Menubar componet with wrapper",
-      "registryDependencies": [
-        "menubar"
-      ],
+      "registryDependencies": ["menubar"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -828,9 +787,7 @@
       "type": "registry:ui",
       "title": "Navigation Menu",
       "description": "Navigation Menu componet with wrapper",
-      "registryDependencies": [
-        "navigation-menu"
-      ],
+      "registryDependencies": ["navigation-menu"],
       "files": [
         {
           "path": "lib/utils.ts",
@@ -863,9 +820,7 @@
       "type": "registry:ui",
       "title": "Pagination",
       "description": "Pagination componet with wrapper",
-      "registryDependencies": [
-        "pagination"
-      ],
+      "registryDependencies": ["pagination"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -887,9 +842,7 @@
       "type": "registry:ui",
       "title": "Popover",
       "description": "Popover componet with wrapper",
-      "registryDependencies": [
-        "popover"
-      ],
+      "registryDependencies": ["popover"],
       "files": [
         {
           "path": "components/ui/popover.tsx",
@@ -935,9 +888,7 @@
       "type": "registry:ui",
       "title": "Select",
       "description": "Select componet with wrapper",
-      "registryDependencies": [
-        "select"
-      ],
+      "registryDependencies": ["select"],
       "files": [
         {
           "path": "types/general.d.ts",
@@ -959,9 +910,7 @@
       "type": "registry:ui",
       "title": "Sheet",
       "description": "Sheet componet with wrapper",
-      "registryDependencies": [
-        "sheet"
-      ],
+      "registryDependencies": ["sheet"],
       "files": [
         {
           "path": "components/ui/sheet.tsx",
@@ -974,9 +923,7 @@
       "type": "registry:ui",
       "title": "Tabs",
       "description": "Tabs componet with wrapper",
-      "registryDependencies": [
-        "tabs"
-      ],
+      "registryDependencies": ["tabs"],
       "files": [
         {
           "path": "components/ui/tabs.tsx",
@@ -1023,9 +970,7 @@
       "type": "registry:ui",
       "title": "Tooltip",
       "description": "Tooltip componet with wrapper",
-      "registryDependencies": [
-        "tooltip"
-      ],
+      "registryDependencies": ["tooltip"],
       "files": [
         {
           "path": "components/ui/tooltip.tsx",

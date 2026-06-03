@@ -20,8 +20,22 @@ function GroupLabelContent() {
       <NavList
         wrapperCls="mb-3"
         items={[
-          { href: '/dashboard', children: <><LayoutDashboard className="size-4" /> Dashboard</> },
-          { href: '/settings', children: <><Settings className="size-4" /> Settings</> },
+          {
+            href: '/dashboard',
+            children: (
+              <>
+                <LayoutDashboard className="size-4" /> Dashboard
+              </>
+            ),
+          },
+          {
+            href: '/settings',
+            children: (
+              <>
+                <Settings className="size-4" /> Settings
+              </>
+            ),
+          },
         ]}
       />
       <p className="mb-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
@@ -29,7 +43,14 @@ function GroupLabelContent() {
       </p>
       <NavList
         items={[
-          { href: '/audit', children: <><ShieldCheck className="size-4" /> Audit Log</> },
+          {
+            href: '/audit',
+            children: (
+              <>
+                <ShieldCheck className="size-4" /> Audit Log
+              </>
+            ),
+          },
           { href: '/roles', children: 'Roles & Permissions' },
         ]}
       />

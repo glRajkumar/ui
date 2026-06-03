@@ -88,10 +88,7 @@ export function CollapsibleEx() {
 export function AccordionEx() {
   return (
     <Wrapper
-      path={[
-        '/components/examples/accordion.tsx',
-        '/components/examples/data/accordion-items.tsx',
-      ]}
+      path={['/components/examples/accordion.tsx', '/components/examples/data/accordion-items.tsx']}
     >
       <AccordionExample />
     </Wrapper>

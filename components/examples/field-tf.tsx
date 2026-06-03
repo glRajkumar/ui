@@ -150,7 +150,11 @@ export function Field_TF_Example() {
           <field.InputGroupField
             label="Username"
             placeholder="username"
-            addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+            addonStart={
+              <InputGroupText>
+                <AtSignIcon />
+              </InputGroupText>
+            }
           />
         )}
       </form.AppField>

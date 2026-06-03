@@ -35,7 +35,7 @@ export function AsyncActionExample() {
 
   async function handleSave() {
     setLoading(true)
-    await new Promise<void>((r) => setTimeout(r, 1500))
+    await new Promise<void>(r => setTimeout(r, 1500))
     setLoading(false)
     setOpen(false)
   }

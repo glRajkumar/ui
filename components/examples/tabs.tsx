@@ -24,9 +24,33 @@ function IconsExample() {
   return (
     <TabsWrapper
       tabs={[
-        { value: 'profile', trigger: <><User /> Profile</>, content: 'Profile content.' },
-        { value: 'settings', trigger: <><Settings /> Settings</>, content: 'Settings content.' },
-        { value: 'alerts', trigger: <><Bell /> Alerts</>, content: 'Notification settings.' },
+        {
+          value: 'profile',
+          trigger: (
+            <>
+              <User /> Profile
+            </>
+          ),
+          content: 'Profile content.',
+        },
+        {
+          value: 'settings',
+          trigger: (
+            <>
+              <Settings /> Settings
+            </>
+          ),
+          content: 'Settings content.',
+        },
+        {
+          value: 'alerts',
+          trigger: (
+            <>
+              <Bell /> Alerts
+            </>
+          ),
+          content: 'Notification settings.',
+        },
       ]}
       defaultValue="profile"
       className="w-80"
@@ -53,11 +77,15 @@ function ActivationExample() {
   return (
     <div className="flex flex-col gap-4 w-80">
       <div>
-        <p className="text-xs text-muted-foreground mb-2">Manual (default) — Enter/Space to activate</p>
+        <p className="text-xs text-muted-foreground mb-2">
+          Manual (default) — Enter/Space to activate
+        </p>
         <TabsWrapper tabs={TABS} defaultValue="profile" />
       </div>
       <div>
-        <p className="text-xs text-muted-foreground mb-2">activateOnFocus — arrow keys activate immediately</p>
+        <p className="text-xs text-muted-foreground mb-2">
+          activateOnFocus — arrow keys activate immediately
+        </p>
         <TabsWrapper tabs={TABS} defaultValue="profile" activateOnFocus />
       </div>
     </div>

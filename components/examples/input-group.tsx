@@ -37,7 +37,11 @@ function PrefixIconExample() {
   return (
     <InputGroupWrapper
       placeholder="Search..."
-      addonStart={<InputGroupText><SearchIcon /></InputGroupText>}
+      addonStart={
+        <InputGroupText>
+          <SearchIcon />
+        </InputGroupText>
+      }
       className="w-56"
     />
   )
@@ -47,7 +51,11 @@ function BothAddonsExample() {
   return (
     <InputGroupWrapper
       placeholder="0.00"
-      addonStart={<InputGroupText><DollarSignIcon /></InputGroupText>}
+      addonStart={
+        <InputGroupText>
+          <DollarSignIcon />
+        </InputGroupText>
+      }
       addonEnd={<InputGroupText>USD</InputGroupText>}
       className="w-56"
     />
@@ -73,7 +81,11 @@ function BothButtonsExample() {
   return (
     <InputGroupWrapper
       placeholder="Message..."
-      addonStart={<InputGroupText><AtSignIcon /></InputGroupText>}
+      addonStart={
+        <InputGroupText>
+          <AtSignIcon />
+        </InputGroupText>
+      }
       addonEnd={
         <InputGroupButton>
           <SendIcon />
@@ -115,7 +127,11 @@ function FieldWrapperExample() {
       name="amount"
       label="Amount"
       placeholder="0.00"
-      addonStart={<InputGroupText><DollarSignIcon /></InputGroupText>}
+      addonStart={
+        <InputGroupText>
+          <DollarSignIcon />
+        </InputGroupText>
+      }
       addonEnd={<InputGroupText>USD</InputGroupText>}
       className="w-64"
     />
