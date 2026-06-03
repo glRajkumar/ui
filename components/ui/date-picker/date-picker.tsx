@@ -12,7 +12,10 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from './calendar'
 import { type Selected, formatSelected, getDefaultMonth } from './utils'
 
-type DatePickerProps = Omit<React.ComponentProps<typeof Calendar>, 'mode' | 'selected' | 'onSelect'> & {
+type DatePickerProps = Omit<
+  React.ComponentProps<typeof Calendar>,
+  'mode' | 'selected' | 'onSelect'
+> & {
   mode?: 'single' | 'multiple' | 'range'
   selected?: Selected
   onSelect?: (...args: any[]) => void

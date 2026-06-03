@@ -5,13 +5,7 @@ import { CalendarIcon, Clock } from 'lucide-react'
 import { format } from 'date-fns'
 
 import { cn } from '@/lib/utils'
-import {
-  type MinuteStep,
-  type HourFormat,
-  snapToStep,
-  snapTimeForward,
-  defaultNow,
-} from './utils'
+import { type MinuteStep, type HourFormat, snapToStep, snapTimeForward, defaultNow } from './utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -95,8 +89,10 @@ function DateTimePicker({
   const isMinTimeDay = React.useMemo(() => {
     if (!effectiveMinTime) return false
     const reference = internalDate ?? new Date()
-    const a = new Date(effectiveMinTime); a.setHours(0, 0, 0, 0)
-    const b = new Date(reference); b.setHours(0, 0, 0, 0)
+    const a = new Date(effectiveMinTime)
+    a.setHours(0, 0, 0, 0)
+    const b = new Date(reference)
+    b.setHours(0, 0, 0, 0)
     return a.getTime() === b.getTime()
   }, [effectiveMinTime, internalDate])
 
@@ -114,8 +110,10 @@ function DateTimePicker({
     merged.setSeconds(0)
     merged.setMilliseconds(0)
     if (effectiveMinTime) {
-      const minDay = new Date(effectiveMinTime); minDay.setHours(0, 0, 0, 0)
-      const selDay = new Date(merged); selDay.setHours(0, 0, 0, 0)
+      const minDay = new Date(effectiveMinTime)
+      minDay.setHours(0, 0, 0, 0)
+      const selDay = new Date(merged)
+      selDay.setHours(0, 0, 0, 0)
       if (selDay.getTime() === minDay.getTime() && merged < effectiveMinTime) {
         const { hours, minutes } = snapTimeForward(
           effectiveMinTime.getHours(),
@@ -151,9 +149,7 @@ function DateTimePicker({
   }
 
   const selectedSlotKey =
-    internalDate !== undefined
-      ? internalDate.getHours() * 60 + internalDate.getMinutes()
-      : -1
+    internalDate !== undefined ? internalDate.getHours() * 60 + internalDate.getMinutes() : -1
 
   React.useEffect(() => {
     if (selectedSlotKey >= 0) {
@@ -163,7 +159,8 @@ function DateTimePicker({
 
   function selectSlot(hour: number, minute: number) {
     if (effectiveMinTime && isMinTimeDay) {
-      if (hour * 60 + minute < effectiveMinTime.getHours() * 60 + effectiveMinTime.getMinutes()) return
+      if (hour * 60 + minute < effectiveMinTime.getHours() * 60 + effectiveMinTime.getMinutes())
+        return
     }
     const base = internalDate ?? defaultNow(minuteStep)
     const next = new Date(base)
@@ -185,7 +182,11 @@ function DateTimePicker({
         effectiveMinTime.getMinutes(),
         minuteStep,
       )
-      n.setFullYear(effectiveMinTime.getFullYear(), effectiveMinTime.getMonth(), effectiveMinTime.getDate())
+      n.setFullYear(
+        effectiveMinTime.getFullYear(),
+        effectiveMinTime.getMonth(),
+        effectiveMinTime.getDate(),
+      )
       n.setHours(hours)
       n.setMinutes(minutes)
       n.setSeconds(0)
@@ -195,21 +196,26 @@ function DateTimePicker({
 
   const calendarDisabled = React.useMemo(() => {
     return (date: Date) => {
-      const d = new Date(date); d.setHours(0, 0, 0, 0)
+      const d = new Date(date)
+      d.setHours(0, 0, 0, 0)
       if (disablePast) {
-        const today = new Date(); today.setHours(0, 0, 0, 0)
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
         if (d < today) return true
       }
       if (minTime) {
-        const mt = new Date(minTime); mt.setHours(0, 0, 0, 0)
+        const mt = new Date(minTime)
+        mt.setHours(0, 0, 0, 0)
         if (d < mt) return true
       }
       if (minDate) {
-        const m = new Date(minDate); m.setHours(0, 0, 0, 0)
+        const m = new Date(minDate)
+        m.setHours(0, 0, 0, 0)
         if (d < m) return true
       }
       if (maxDate) {
-        const m = new Date(maxDate); m.setHours(23, 59, 59, 999)
+        const m = new Date(maxDate)
+        m.setHours(23, 59, 59, 999)
         if (date > m) return true
       }
       return false
@@ -272,14 +278,17 @@ function DateTimePicker({
                     return (
                       <button
                         key={key}
-                        ref={el => { slotRefs.current[key] = el }}
+                        ref={el => {
+                          slotRefs.current[key] = el
+                        }}
                         type="button"
                         disabled={disabled}
                         onClick={() => selectSlot(hour, minute)}
                         className={cn(
                           'h-7 w-full rounded-md px-1.5 text-center text-xs font-medium tabular-nums transition-colors',
                           'hover:bg-accent hover:text-accent-foreground',
-                          active && 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-xs',
+                          active &&
+                            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-xs',
                           disabled && 'pointer-events-none opacity-30',
                         )}
                       >
@@ -293,7 +302,13 @@ function DateTimePicker({
           </div>
 
           <div className="flex items-center gap-1 p-2 border-t">
-            <Button type="button" variant="ghost" size="sm" onClick={setNow} className="h-7 px-2 text-xs">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={setNow}
+              className="h-7 px-2 text-xs"
+            >
               Now
             </Button>
             <Button

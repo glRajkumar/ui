@@ -364,6 +364,44 @@
       ]
     },
     {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Popover-based date picker and date-time picker. Supports single, range, and multiple selection modes with smart auto-close. DateTimePicker adds a scrollable time slot panel with 12/24h format, minute step, and past/min/max constraints.",
+      "dependencies": ["@daypicker/react", "date-fns"],
+      "registryDependencies": ["button", "popover", "select", "scroll-area"],
+      "files": [
+        {
+          "path": "components/ui/date-picker/utils.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-dropdown.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-day-button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/date-picker.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/date-time-picker.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/index.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "dialog",
       "type": "registry:ui",
       "title": "Dialog",
@@ -419,10 +457,10 @@
       "type": "registry:ui",
       "title": "Field Wrapper",
       "description": "Opinionated field wrappers combining Field layout, label, and error display for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
+      "dependencies": ["@daypicker/react", "date-fns"],
       "registryDependencies": [
         "select",
         "popover",
-        "calendar",
         "textarea",
         "button",
         "input",
@@ -485,6 +523,30 @@
         },
         {
           "path": "components/ui/input-group.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/utils.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-dropdown.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-day-button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/date-picker.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/index.tsx",
           "type": "registry:ui"
         },
         {
@@ -498,11 +560,10 @@
       "type": "registry:ui",
       "title": "Field Wrapper — React Hook Form",
       "description": "Field wrappers with React Hook Form Controller integration for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
-      "dependencies": ["react-hook-form"],
+      "dependencies": ["react-hook-form", "@daypicker/react", "date-fns"],
       "registryDependencies": [
         "select",
         "popover",
-        "calendar",
         "textarea",
         "button",
         "input",
@@ -565,6 +626,30 @@
         },
         {
           "path": "components/ui/input-group.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/utils.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-dropdown.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-day-button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/date-picker.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/index.tsx",
           "type": "registry:ui"
         },
         {
@@ -582,11 +667,10 @@
       "type": "registry:ui",
       "title": "Field Wrapper — TanStack Form",
       "description": "Field wrappers with TanStack Form createFormHook integration for Input, Textarea, Radio, Checkbox, Switch, Select, DatePicker, Combobox, Autocomplete, NumberField, Slider, OTP, and InputGroup.",
-      "dependencies": ["@tanstack/react-form"],
+      "dependencies": ["@tanstack/react-form", "@daypicker/react", "date-fns"],
       "registryDependencies": [
         "select",
         "popover",
-        "calendar",
         "textarea",
         "button",
         "input",
@@ -649,6 +733,30 @@
         },
         {
           "path": "components/ui/input-group.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/utils.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-dropdown.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar-day-button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/calendar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/date-picker.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/date-picker/index.tsx",
           "type": "registry:ui"
         },
         {

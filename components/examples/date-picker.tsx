@@ -155,13 +155,7 @@ function DateTimeStepExample() {
 
 function DateTimeDisablePastExample() {
   const [date, setDate] = React.useState<Date | undefined>()
-  return (
-    <DateTimePicker
-      selected={date}
-      onSelect={setDate}
-      disablePast
-    />
-  )
+  return <DateTimePicker selected={date} onSelect={setDate} disablePast />
 }
 
 function DateTimeMinMaxExample() {
@@ -171,28 +165,14 @@ function DateTimeMinMaxExample() {
   minDate.setDate(today.getDate() - 3)
   const maxDate = new Date(today)
   maxDate.setDate(today.getDate() + 7)
-  return (
-    <DateTimePicker
-      selected={date}
-      onSelect={setDate}
-      minDate={minDate}
-      maxDate={maxDate}
-    />
-  )
+  return <DateTimePicker selected={date} onSelect={setDate} minDate={minDate} maxDate={maxDate} />
 }
 
 function DateTimeMinTimeExample() {
   const [date, setDate] = React.useState<Date | undefined>()
   const minTime = new Date()
   minTime.setMinutes(minTime.getMinutes() + 30)
-  return (
-    <DateTimePicker
-      selected={date}
-      onSelect={setDate}
-      minTime={minTime}
-      disablePast
-    />
-  )
+  return <DateTimePicker selected={date} onSelect={setDate} minTime={minTime} disablePast />
 }
 
 export function DatePickerExample() {
