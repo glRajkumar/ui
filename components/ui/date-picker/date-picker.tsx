@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { type DateRange } from '@daypicker/react'
 import { CalendarIcon } from 'lucide-react'
-import { format } from 'date-fns'
 
 import { cn } from '@/lib/utils'
 
@@ -11,28 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button'
 
 import { Calendar } from './calendar'
-
-type Selected = Date | Date[] | DateRange | undefined
-
-function formatSelected(selected: Selected, fmt: string): string | null {
-  if (!selected) return null
-  if (selected instanceof Date) return format(selected, fmt)
-  if (Array.isArray(selected)) {
-    if (!selected.length) return null
-    return selected.length === 1 ? format(selected[0]!, fmt) : `${selected.length} dates selected`
-  }
-  const range = selected as DateRange
-  if (!range.from) return null
-  if (!range.to) return format(range.from, fmt)
-  return `${format(range.from, fmt)} - ${format(range.to, fmt)}`
-}
-
-function getDefaultMonth(selected: Selected): Date | undefined {
-  if (!selected) return undefined
-  if (selected instanceof Date) return selected
-  if (Array.isArray(selected)) return selected[0]
-  return (selected as DateRange).from
-}
+import { type Selected, formatSelected, getDefaultMonth } from './utils'
 
 type DatePickerProps = Omit<React.ComponentProps<typeof Calendar>, 'mode' | 'selected' | 'onSelect'> & {
   mode?: 'single' | 'multiple' | 'range'

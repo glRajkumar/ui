@@ -1,6 +1,6 @@
 ---
 title: Date Picker
-description: A popover-based date picker wrapping Calendar and Popover. Supports single, range, and multiple selection modes with smart auto-close behavior.
+description: A popover-based date picker wrapping Calendar and Popover. Supports single, range, and multiple selection modes with smart auto-close behavior. Includes a DateTimePicker variant with a scrollable time slot panel.
 ---
 
 import { DatePickerEx } from "@/components/examples";
@@ -25,6 +25,10 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 
 Copy and paste the following code into your project.
 
+<include cwd meta='title="ui/date-picker/utils.ts"'>
+  ./components/ui/date-picker/utils.ts
+</include>
+
 <include cwd meta='title="ui/date-picker/calendar-dropdown.tsx"'>
   ./components/ui/date-picker/calendar-dropdown.tsx
 </include>
@@ -41,11 +45,15 @@ Copy and paste the following code into your project.
   ./components/ui/date-picker/date-picker.tsx
 </include>
 
+<include cwd meta='title="ui/date-picker/date-time-picker.tsx"'>
+  ./components/ui/date-picker/date-time-picker.tsx
+</include>
+
 </Tab>
 </Tabs>
 
 
-## Usage
+## DatePicker
 
 ### Single (default)
 
@@ -99,17 +107,7 @@ const [dates, setDates] = React.useState<Date[] | undefined>()
 `dateFormat` is a [date-fns format string](https://date-fns.org/docs/format):
 
 ```tsx
-<DatePicker
-  selected={date}
-  onSelect={setDate}
-  dateFormat="MMM dd, yyyy"
-/>
-```
-
-### Placeholder
-
-```tsx
-<DatePicker placeholder="Select a date" selected={date} onSelect={setDate} />
+<DatePicker selected={date} onSelect={setDate} dateFormat="MMM dd, yyyy" />
 ```
 
 ### Custom trigger
@@ -130,12 +128,7 @@ const [dates, setDates] = React.useState<Date[] | undefined>()
 ```tsx
 const [open, setOpen] = React.useState(false)
 
-<DatePicker
-  open={open}
-  onOpenChange={setOpen}
-  selected={date}
-  onSelect={setDate}
-/>
+<DatePicker open={open} onOpenChange={setOpen} selected={date} onSelect={setDate} />
 ```
 
 ### Popup alignment
@@ -147,7 +140,7 @@ const [open, setOpen] = React.useState(false)
 
 ### Dropdown navigation bounds
 
-`captionLayout="dropdown"` is the default. Use `startMonth` / `endMonth` to limit the selectable range in the month/year dropdowns:
+`captionLayout="dropdown"` is the default. Use `startMonth` / `endMonth` to limit the month/year dropdown range:
 
 ```tsx
 <DatePicker
@@ -158,13 +151,110 @@ const [open, setOpen] = React.useState(false)
 />
 ```
 
-### Label caption (no dropdowns)
+### Label caption
 
 ```tsx
 <DatePicker captionLayout="label" selected={date} onSelect={setDate} />
 ```
 
+## DateTimePicker
+
+Combines the calendar with a scrollable time slot panel in the same popover. Single mode only. Changing the day preserves the selected time; changing the time slot preserves the selected day.
+
+### Basic
+
+```tsx
+import { DateTimePicker } from "@/components/ui/date-picker"
+
+const [date, setDate] = React.useState<Date | undefined>()
+
+<DateTimePicker
+  selected={date}
+  onSelect={setDate}
+  startMonth={new Date(2020, 0)}
+  endMonth={new Date(2030, 11)}
+/>
+```
+
+### 12-hour format
+
+```tsx
+<DateTimePicker
+  selected={date}
+  onSelect={setDate}
+  hourFormat={12}
+/>
+```
+
+### Minute step
+
+Controls the interval between time slots. Defaults to `5`:
+
+```tsx
+<DateTimePicker selected={date} onSelect={setDate} minuteStep={15} />
+<DateTimePicker selected={date} onSelect={setDate} minuteStep={30} />
+```
+
+Allowed values: `1 | 5 | 10 | 15 | 20 | 30`.
+
+### Custom date format
+
+Defaults to `"dd/MM/yyyy HH:mm"` (24h) or `"dd/MM/yyyy hh:mm a"` (12h):
+
+```tsx
+<DateTimePicker selected={date} onSelect={setDate} dateFormat="MMM dd, yyyy HH:mm" />
+```
+
+### Disable past
+
+Blocks all past dates in the calendar and all past time slots on today:
+
+```tsx
+<DateTimePicker selected={date} onSelect={setDate} disablePast />
+```
+
+### Date range constraint
+
+```tsx
+<DateTimePicker
+  selected={date}
+  onSelect={setDate}
+  minDate={new Date(2025, 0, 1)}
+  maxDate={new Date(2025, 11, 31)}
+/>
+```
+
+### Minimum datetime
+
+Disables dates before `minTime`'s calendar day, and disables time slots before `minTime` on that day. Compose with `disablePast` — the later constraint wins:
+
+```tsx
+const earliest = addMinutes(new Date(), 30)
+
+<DateTimePicker
+  selected={date}
+  onSelect={setDate}
+  minTime={earliest}
+  disablePast
+/>
+```
+
+### Now / Clear / Done
+
+The footer always shows three actions:
+- **Now** — snaps selection to the current time (rounded to `minuteStep`)
+- **Clear** — resets the value to `undefined`
+- **Done** — closes the popover
+
+### Controlled open state
+
+```tsx
+<DateTimePicker open={open} onOpenChange={setOpen} selected={date} onSelect={setDate} />
+```
+
 ## Reference
+
+### DatePicker
 
 <AutoTypeTable
 name="DatePicker"
@@ -187,13 +277,12 @@ type={`export interface DatePicker {
   selected?: Date | DateRange | Date[] | undefined;
 
   /**
-   * Called when the selection changes. Signature mirrors the active mode.
+   * Called when the selection changes.
    */
   onSelect?: (value: Date | DateRange | Date[] | undefined) => void;
 
   /**
-   * Controlled open state for the popover.
-   * Omit to let DatePicker manage its own open state internally.
+   * Controlled open state. Omit to use internal state.
    */
   open?: boolean;
 
@@ -209,18 +298,13 @@ type={`export interface DatePicker {
   placeholder?: string;
 
   /**
-   * date-fns format string used to display the selected date in the trigger.
+   * date-fns format string for the trigger display.
    * @default "dd/MM/yyyy"
    */
   dateFormat?: string;
 
   /**
    * Props forwarded to the trigger Button — all Button props except children.
-   * Use to override variant, className, size, id, aria-invalid, etc.
-   *
-   * \`\`\`tsx
-   * triggerProps={{ variant: "ghost", className: "w-48 border border-dashed" }}
-   * \`\`\`
    */
   triggerProps?: Omit<ButtonProps, "children">;
 
@@ -231,9 +315,99 @@ type={`export interface DatePicker {
   align?: "start" | "center" | "end";
 
   /**
-   * ...calendarProps: All Calendar / DayPicker props are forwarded —
-   * startMonth, endMonth, captionLayout, disabled, showWeekNumber,
-   * numberOfMonths, locale, formatters, classNames, components, etc.
+   * ...calendarProps: All Calendar / DayPicker props forwarded —
+   * startMonth, endMonth, captionLayout, showWeekNumber, numberOfMonths, etc.
+   */
+  otherProps?: never;
+}`}
+/>
+
+### DateTimePicker
+
+<AutoTypeTable
+name="DateTimePicker"
+type={`export interface DateTimePicker {
+  /**
+   * Currently selected date+time value.
+   */
+  selected?: Date;
+
+  /**
+   * Called when the date or time changes. undefined when cleared.
+   */
+  onSelect?: (date: Date | undefined) => void;
+
+  /**
+   * Controlled open state. Omit to use internal state.
+   */
+  open?: boolean;
+
+  /**
+   * Called when the popover open state changes.
+   */
+  onOpenChange?: (open: boolean) => void;
+
+  /**
+   * Text shown in the trigger when no value is selected.
+   * @default "Pick date & time"
+   */
+  placeholder?: string;
+
+  /**
+   * date-fns format string for the trigger display.
+   * Defaults to "dd/MM/yyyy HH:mm" (24h) or "dd/MM/yyyy hh:mm a" (12h).
+   */
+  dateFormat?: string;
+
+  /**
+   * Minute increment used in the time slot list.
+   * @default 5
+   */
+  minuteStep?: 1 | 5 | 10 | 15 | 20 | 30;
+
+  /**
+   * Hour display format.
+   * @default 24
+   */
+  hourFormat?: 12 | 24;
+
+  /**
+   * Props forwarded to the trigger Button — all Button props except children.
+   */
+  triggerProps?: Omit<ButtonProps, "children">;
+
+  /**
+   * Alignment of the popup relative to the trigger.
+   * @default "start"
+   */
+  align?: "start" | "center" | "end";
+
+  /**
+   * Disable all past dates in the calendar and past time slots on today.
+   * @default false
+   */
+  disablePast?: boolean;
+
+  /**
+   * Earliest selectable calendar day (time part ignored).
+   */
+  minDate?: Date;
+
+  /**
+   * Latest selectable calendar day (time part ignored).
+   */
+  maxDate?: Date;
+
+  /**
+   * Minimum selectable datetime. Dates before minTime's day are disabled.
+   * On minTime's day, time slots before minTime are disabled.
+   * Compose with disablePast — the later constraint wins.
+   */
+  minTime?: Date;
+
+  /**
+   * ...calendarProps: All Calendar / DayPicker props forwarded —
+   * startMonth, endMonth, captionLayout, locale, etc.
    */
   otherProps?: never;
 }`}

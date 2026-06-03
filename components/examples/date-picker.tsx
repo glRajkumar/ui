@@ -4,7 +4,7 @@ import * as React from 'react'
 import { type DateRange } from '@daypicker/react'
 
 import { ExItem, ExRow } from '@/components/examples/common'
-import { DatePicker } from '@/components/ui/date-picker'
+import { DatePicker, DateTimePicker } from '@/components/ui/date-picker'
 
 function SingleExample() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
@@ -113,6 +113,88 @@ function ControlledExample() {
   )
 }
 
+// ── DateTimePicker examples ───────────────────────────────────────────────────
+
+function DateTimeBasicExample() {
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  return (
+    <DateTimePicker
+      selected={date}
+      onSelect={setDate}
+      startMonth={new Date(2020, 0)}
+      endMonth={new Date(2030, 11)}
+    />
+  )
+}
+
+function DateTimeHour12Example() {
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  return (
+    <DateTimePicker
+      selected={date}
+      onSelect={setDate}
+      hourFormat={12}
+      startMonth={new Date(2020, 0)}
+      endMonth={new Date(2030, 11)}
+    />
+  )
+}
+
+function DateTimeStepExample() {
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  return (
+    <DateTimePicker
+      selected={date}
+      onSelect={setDate}
+      minuteStep={15}
+      startMonth={new Date(2020, 0)}
+      endMonth={new Date(2030, 11)}
+    />
+  )
+}
+
+function DateTimeDisablePastExample() {
+  const [date, setDate] = React.useState<Date | undefined>()
+  return (
+    <DateTimePicker
+      selected={date}
+      onSelect={setDate}
+      disablePast
+    />
+  )
+}
+
+function DateTimeMinMaxExample() {
+  const [date, setDate] = React.useState<Date | undefined>()
+  const today = new Date()
+  const minDate = new Date(today)
+  minDate.setDate(today.getDate() - 3)
+  const maxDate = new Date(today)
+  maxDate.setDate(today.getDate() + 7)
+  return (
+    <DateTimePicker
+      selected={date}
+      onSelect={setDate}
+      minDate={minDate}
+      maxDate={maxDate}
+    />
+  )
+}
+
+function DateTimeMinTimeExample() {
+  const [date, setDate] = React.useState<Date | undefined>()
+  const minTime = new Date()
+  minTime.setMinutes(minTime.getMinutes() + 30)
+  return (
+    <DateTimePicker
+      selected={date}
+      onSelect={setDate}
+      minTime={minTime}
+      disablePast
+    />
+  )
+}
+
 export function DatePickerExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -149,6 +231,30 @@ export function DatePickerExample() {
       <ExRow label="Controlled">
         <ExItem label="open / onOpenChange — external state control">
           <ControlledExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Date & Time">
+        <ExItem label="default — 24h, 5 min step">
+          <DateTimeBasicExample />
+        </ExItem>
+        <ExItem label="hourFormat={12} — AM/PM">
+          <DateTimeHour12Example />
+        </ExItem>
+        <ExItem label="minuteStep={15}">
+          <DateTimeStepExample />
+        </ExItem>
+      </ExRow>
+
+      <ExRow label="Date & Time constraints">
+        <ExItem label="disablePast — blocks past dates and times">
+          <DateTimeDisablePastExample />
+        </ExItem>
+        <ExItem label="minDate / maxDate — ±3 / +7 days from today">
+          <DateTimeMinMaxExample />
+        </ExItem>
+        <ExItem label="minTime — earliest = now + 30 min">
+          <DateTimeMinTimeExample />
         </ExItem>
       </ExRow>
     </div>
