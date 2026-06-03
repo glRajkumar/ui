@@ -1,52 +1,13 @@
 'use client'
 
 import * as React from 'react'
-import { DayPicker, getDefaultClassNames, type DayButton, type DropdownProps, type Locale } from '@daypicker/react'
+import { DayPicker, getDefaultClassNames, type Locale } from '@daypicker/react'
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
-
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button, buttonVariants } from '@/components/ui/button'
-
-function CalendarDropdown({ options = [], value, onChange, disabled, className }: DropdownProps) {
-  const stringValue = value !== undefined ? String(value) : undefined
-  const labelMap = React.useMemo(
-    () => Object.fromEntries(options.map(o => [String(o.value), o.label])),
-    [options],
-  )
-
-  function handleValueChange(val: string | null) {
-    if (!onChange || val === null) return
-    const event = { target: { value: val } } as React.ChangeEvent<HTMLSelectElement>
-    onChange(event)
-  }
-
-  return (
-    <Select value={stringValue} onValueChange={handleValueChange as (val: string | null) => void} disabled={disabled}>
-      <SelectTrigger
-        className={cn(
-          'h-7 border-0 shadow-none bg-transparent hover:bg-accent px-2 pr-1 font-medium gap-0.5 text-sm',
-          className,
-        )}
-      >
-        <SelectValue>{() => labelMap[stringValue ?? ''] ?? stringValue}</SelectValue>
-      </SelectTrigger>
-      <SelectContent className="min-w-16">
-        {options.map(({ value: val, label, disabled: optDisabled }) => (
-          <SelectItem
-            key={val}
-            value={String(val)}
-            disabled={optDisabled}
-            className="px-2! [&_svg]:hidden"
-          >
-            {label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  )
-}
+import { CalendarDropdown } from './calendar-dropdown'
+import { CalendarDayButton } from './calendar-day-button'
 
 function Calendar({
   className,
@@ -186,46 +147,4 @@ function Calendar({
   )
 }
 
-function CalendarDayButton({
-  className,
-  day,
-  modifiers,
-  locale,
-  ...props
-}: React.ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {
-  const defaultClassNames = getDefaultClassNames()
-
-  const ref = React.useRef<HTMLButtonElement>(null)
-  React.useEffect(() => {
-    if (modifiers.focused) ref.current?.focus()
-  }, [modifiers.focused])
-
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      data-day={day.date.toLocaleDateString(locale?.code)}
-      data-selected-single={
-        modifiers.selected &&
-        !modifiers.range_start &&
-        !modifiers.range_end &&
-        !modifiers.range_middle
-      }
-      data-range-start={modifiers.range_start}
-      data-range-end={modifiers.range_end}
-      data-range-middle={modifiers.range_middle}
-      className={cn(
-        'relative flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70',
-        defaultClassNames.day,
-        className,
-      )}
-      {...props}
-    />
-  )
-}
-
-export {
-  Calendar,
-  CalendarDayButton,
-  CalendarDropdown,
-}
+export { Calendar }

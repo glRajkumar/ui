@@ -1,0 +1,245 @@
+---
+title: Date Picker
+description: A popover-based date picker wrapping Calendar and Popover. Supports single, range, and multiple selection modes with smart auto-close behavior.
+---
+
+import { DatePickerEx } from "@/components/examples";
+
+<DatePickerEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/date-picker
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/date-picker/calendar-dropdown.tsx"'>
+  ./components/ui/date-picker/calendar-dropdown.tsx
+</include>
+
+<include cwd meta='title="ui/date-picker/calendar-day-button.tsx"'>
+  ./components/ui/date-picker/calendar-day-button.tsx
+</include>
+
+<include cwd meta='title="ui/date-picker/calendar.tsx"'>
+  ./components/ui/date-picker/calendar.tsx
+</include>
+
+<include cwd meta='title="ui/date-picker/date-picker.tsx"'>
+  ./components/ui/date-picker/date-picker.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Single (default)
+
+```tsx
+import { DatePicker } from "@/components/ui/date-picker"
+
+const [date, setDate] = React.useState<Date | undefined>()
+
+<DatePicker
+  selected={date}
+  onSelect={setDate}
+  startMonth={new Date(2020, 0)}
+  endMonth={new Date(2030, 11)}
+/>
+```
+
+### Range
+
+Closes automatically once both `from` and `to` are selected:
+
+```tsx
+import { type DateRange } from "@daypicker/react"
+
+const [range, setRange] = React.useState<DateRange | undefined>()
+
+<DatePicker
+  mode="range"
+  selected={range}
+  onSelect={setRange}
+  startMonth={new Date(2020, 0)}
+  endMonth={new Date(2030, 11)}
+/>
+```
+
+### Multiple
+
+Stays open — no auto-close when toggling individual dates:
+
+```tsx
+const [dates, setDates] = React.useState<Date[] | undefined>()
+
+<DatePicker
+  mode="multiple"
+  selected={dates}
+  onSelect={setDates}
+/>
+```
+
+### Custom date format
+
+`dateFormat` is a [date-fns format string](https://date-fns.org/docs/format):
+
+```tsx
+<DatePicker
+  selected={date}
+  onSelect={setDate}
+  dateFormat="MMM dd, yyyy"
+/>
+```
+
+### Placeholder
+
+```tsx
+<DatePicker placeholder="Select a date" selected={date} onSelect={setDate} />
+```
+
+### Custom trigger
+
+`triggerProps` forwards to the trigger `Button` — accepts all `Button` props except `children`:
+
+```tsx
+<DatePicker
+  triggerProps={{ variant: "ghost", className: "w-52 border border-dashed" }}
+  placeholder="Pick a date..."
+  selected={date}
+  onSelect={setDate}
+/>
+```
+
+### Controlled open state
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<DatePicker
+  open={open}
+  onOpenChange={setOpen}
+  selected={date}
+  onSelect={setDate}
+/>
+```
+
+### Popup alignment
+
+```tsx
+<DatePicker align="center" selected={date} onSelect={setDate} />
+{/* align: "start" | "center" | "end" — default "start" */}
+```
+
+### Dropdown navigation bounds
+
+`captionLayout="dropdown"` is the default. Use `startMonth` / `endMonth` to limit the selectable range in the month/year dropdowns:
+
+```tsx
+<DatePicker
+  startMonth={new Date(2020, 0)}
+  endMonth={new Date(2030, 11)}
+  selected={date}
+  onSelect={setDate}
+/>
+```
+
+### Label caption (no dropdowns)
+
+```tsx
+<DatePicker captionLayout="label" selected={date} onSelect={setDate} />
+```
+
+## Reference
+
+<AutoTypeTable
+name="DatePicker"
+type={`export interface DatePicker {
+  /**
+   * Selection mode.
+   * - "single": picks one date, closes on selection
+   * - "range": picks from+to pair, closes when both are set
+   * - "multiple": toggles individual dates, never auto-closes
+   * @default "single"
+   */
+  mode?: "single" | "range" | "multiple";
+
+  /**
+   * Currently selected value. Type depends on mode:
+   * - single:   Date | undefined
+   * - range:    DateRange | undefined
+   * - multiple: Date[] | undefined
+   */
+  selected?: Date | DateRange | Date[] | undefined;
+
+  /**
+   * Called when the selection changes. Signature mirrors the active mode.
+   */
+  onSelect?: (value: Date | DateRange | Date[] | undefined) => void;
+
+  /**
+   * Controlled open state for the popover.
+   * Omit to let DatePicker manage its own open state internally.
+   */
+  open?: boolean;
+
+  /**
+   * Called when the popover open state changes.
+   */
+  onOpenChange?: (open: boolean) => void;
+
+  /**
+   * Text shown in the trigger when no date is selected.
+   * @default "Pick a date"
+   */
+  placeholder?: string;
+
+  /**
+   * date-fns format string used to display the selected date in the trigger.
+   * @default "dd/MM/yyyy"
+   */
+  dateFormat?: string;
+
+  /**
+   * Props forwarded to the trigger Button — all Button props except children.
+   * Use to override variant, className, size, id, aria-invalid, etc.
+   *
+   * \`\`\`tsx
+   * triggerProps={{ variant: "ghost", className: "w-48 border border-dashed" }}
+   * \`\`\`
+   */
+  triggerProps?: Omit<ButtonProps, "children">;
+
+  /**
+   * Alignment of the popup relative to the trigger.
+   * @default "start"
+   */
+  align?: "start" | "center" | "end";
+
+  /**
+   * ...calendarProps: All Calendar / DayPicker props are forwarded —
+   * startMonth, endMonth, captionLayout, disabled, showWeekNumber,
+   * numberOfMonths, locale, formatters, classNames, components, etc.
+   */
+  otherProps?: never;
+}`}
+/>
+
+## Related Components
+
+- [react-day-picker](https://daypicker.dev)
+- [Base UI Popover](https://base-ui.com/react/components/popover)

@@ -36,6 +36,7 @@
     "radio",
     "toggle",
     "select",
+    "date-picker",
     "combobox",
     "autocomplete",
     "number-field",

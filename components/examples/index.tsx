@@ -1,3 +1,4 @@
+import { DatePickerExample } from './date-picker'
 import { FieldPrimitivesExample } from './field-primitives'
 import { NavigationMenuExample } from './navigation-menu'
 import { AutocompleteExample } from './autocomplete'
@@ -385,6 +386,14 @@ export function InputGroupEx() {
   return (
     <Wrapper path="/components/examples/input-group.tsx">
       <InputGroupExample />
+    </Wrapper>
+  )
+}
+
+export function DatePickerEx() {
+  return (
+    <Wrapper path="/components/examples/date-picker.tsx">
+      <DatePickerExample />
     </Wrapper>
   )
 }
