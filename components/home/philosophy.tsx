@@ -9,7 +9,7 @@ function Philosophy() {
 
       <ul className="grid gap-4 justify-center my-8 text-sm">
         <li className="p-4 bg-muted rounded-md">
-          1. Minimal to Zero CSS modifications - keep shadcn styling intact.
+          1. Minimal to zero CSS modifications — keep Base UI + shadcn styling intact.
         </li>
         <li className="p-4 bg-muted rounded-md">
           2. API improvements only - no breaking underlying behavior.

@@ -1,5 +1,4 @@
 import { DatePickerExample } from './date-picker'
-import { FieldPrimitivesExample } from './field-primitives'
 import { NavigationMenuExample } from './navigation-menu'
 import { AutocompleteExample } from './autocomplete'
 import { AlertDialogExample } from './alert-dialog'
@@ -14,7 +13,6 @@ import { DataTableExample } from './data-table'
 import { AccordionExample } from './accordion'
 import { CarouselExample } from './carousel'
 import { ComboboxExample } from './combobox'
-import { FieldSetExample } from './fieldset'
 import { CheckboxExample } from './checkbox'
 import { ContextExample } from './context-menu'
 import { TooltipExample } from './tooltip'
@@ -358,21 +356,6 @@ export function FormEx() {
   )
 }
 
-export function FieldPrimitivesEx() {
-  return (
-    <Wrapper path="/components/examples/field-primitives.tsx">
-      <FieldPrimitivesExample />
-    </Wrapper>
-  )
-}
-
-export function FieldSetEx() {
-  return (
-    <Wrapper path="/components/examples/fieldset.tsx">
-      <FieldSetExample />
-    </Wrapper>
-  )
-}
 
 export function InputOTPEx() {
   return (

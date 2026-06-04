@@ -9,12 +9,12 @@ function Header() {
     <section className="min-h-[90vh] flex justify-center flex-col">
       <div className="mb-12 text-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold tracking-tight">
-          Build Faster with Opinionated <br /> Shadcn Wrappers
+          Build Faster with Opinionated <br /> UI Wrappers
         </h1>
 
         <p className="my-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-          A clean, reusable, type-safe wrapper built on top of shadcn/ui. Designed for real-world
-          web development with consistent APIs, shared utilities, and improved DX.
+          Type-safe UI wrappers built on Base UI and Shadcn primitives.
+          Consistent APIs, shared utilities, and improved DX for real-world web development.
         </p>
 
         <Button

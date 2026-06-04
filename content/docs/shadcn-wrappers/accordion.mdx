@@ -155,21 +155,6 @@ Global props apply to all items. Per-item props override globals:
 />
 ```
 
-### Using primitives
-
-```tsx
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent, AccordionHeader } from "@/components/ui/accordion"
-
-<Accordion>
-  <AccordionItem value="a">
-    <AccordionTrigger indicatorAt="left" headerProps={{ render: <h2 /> }}>
-      Title
-    </AccordionTrigger>
-    <AccordionContent keepMounted>Content</AccordionContent>
-  </AccordionItem>
-</Accordion>
-```
-
 ## Reference
 
 #### accordionSharedT

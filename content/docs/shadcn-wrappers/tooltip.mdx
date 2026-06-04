@@ -121,27 +121,6 @@ const [open, setOpen] = React.useState(false)
 <TooltipWrapper trigger="Left"   content="Left"   contentProps={{ side: "left" }} />
 ```
 
-### Using primitives
-
-For render prop triggers or custom layouts, use primitives directly:
-
-```tsx
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-
-<Tooltip>
-  <TooltipTrigger
-    render={(props, state) => (
-      <button {...props} className={state.open ? "bg-foreground text-background" : "border"}>
-        Hover
-      </button>
-    )}
-  />
-  <TooltipContent side="right" sideOffset={8}>
-    Built with primitives
-  </TooltipContent>
-</Tooltip>
-```
-
 ## Reference
 
 #### TooltipWrapper

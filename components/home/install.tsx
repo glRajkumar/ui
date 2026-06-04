@@ -39,7 +39,7 @@ async function Install() {
       <div className="mt-8">
         <p className="pb-2 text-center">
           <strong className="font-medium">Note:</strong> Before proceeding, make sure you have the
-          Shadcn base set up and apply the following updates.
+          shadcn base setup and apply the following updates.
         </p>
         <CodeBlock title="components.json" className="max-w-md mx-auto">
           {`{

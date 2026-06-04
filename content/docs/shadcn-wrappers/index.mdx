@@ -1,25 +1,25 @@
 ---
 title: Introduction
-description: A streamlined approach to using Shadcn UI components with type-safe wrappers and flexible option handling
+description: Type-safe UI component wrappers built on Base UI and Shadcn primitives, installed via the shadcn CLI
 ---
 
-# Shadcn Component Wrappers
+# UI Component Wrappers
 
 ## Overview
 
-Shadcn UI provides an excellent foundation for building design systems, but directly importing and composing individual components throughout your application can lead to verbose, repetitive code. This guide demonstrates a wrapper-based approach that simplifies component usage while maintaining the flexibility to use native Shadcn components when needed for complex UI scenarios.
+These are opinionated wrappers built on top of [Base UI](https://base-ui.com) and [Shadcn](https://ui.shadcn.com) primitives. Directly composing raw primitives throughout an application leads to verbose, repetitive code — these wrappers give you a clean, consistent API while keeping full access to the underlying Base UI or Shadcn UI components when you need advanced control.
 
 ## Key Benefits
 
-- **Reduced Boilerplate**: Eliminate repetitive component composition patterns
+- **Reduced Boilerplate**: Eliminate repetitive primitive composition patterns
 - **Type Safety**: Built-in TypeScript support for common value types
 - **Consistent API**: Standardized interface across similar components
-- **Flexibility**: Preserve access to native Shadcn components for advanced use cases
+- **Flexibility**: Preserve access to underlying Base UI and shadcn primitives for advanced use cases
 
 ---
 
 ## Prerequest
-- Shadcn base setup
+- shadcn base setup
 - add following to your `components.json` at `registries` block
 
 ```json
@@ -129,7 +129,7 @@ const options: optionsT = [
 
 ### Understanding String Conversion
 
-Shadcn's controlled components use string values internally. The wrapper system handles conversion between strings and primitive types transparently. Some components directly supports type conversion. If the component not supported this feature, you can use following guide.
+Controlled components use string values internally. The wrapper system handles conversion between strings and primitive types transparently. Some components directly support type conversion. If a component doesn't support this feature, use the following guide.
 
 ### Implementation Patterns
 
@@ -170,4 +170,4 @@ const [value, setValue] = useState<allowedPrimitiveT>(true)
 
 ### Next Steps
 
-With this foundation in place, you can create wrapper components for common Shadcn UI elements. Checkout custom wrappers.
+With this foundation in place, you can use the wrapper components for common UI elements. Checkout the wrappers.
