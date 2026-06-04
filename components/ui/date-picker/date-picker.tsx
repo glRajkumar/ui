@@ -76,7 +76,7 @@ function DatePicker({
             )}
           >
             {label ?? <span>{placeholder}</span>}
-            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" aria-hidden="true" />
           </Button>
         }
       />

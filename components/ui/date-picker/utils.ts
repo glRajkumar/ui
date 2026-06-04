@@ -48,3 +48,9 @@ export function defaultNow(step: number): Date {
   n.setMilliseconds(0)
   return n
 }
+
+export function startOfDay(date: Date): number {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  return d.getTime()
+}

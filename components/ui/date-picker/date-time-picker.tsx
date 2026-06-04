@@ -5,7 +5,14 @@ import { CalendarIcon, Clock } from 'lucide-react'
 import { format } from 'date-fns'
 
 import { cn } from '@/lib/utils'
-import { type MinuteStep, type HourFormat, snapToStep, snapTimeForward, defaultNow } from './utils'
+import {
+  type MinuteStep,
+  type HourFormat,
+  snapToStep,
+  snapTimeForward,
+  defaultNow,
+  startOfDay,
+} from './utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -56,18 +63,6 @@ function DateTimePicker({
 
   const [internalDate, setInternalDate] = React.useState<Date | undefined>(selected)
   const slotRefs = React.useRef<Record<number, HTMLButtonElement | null>>({})
-  const calendarRef = React.useRef<HTMLDivElement>(null)
-  const [calendarHeight, setCalendarHeight] = React.useState<number>(0)
-
-  React.useLayoutEffect(() => {
-    if (!open) return
-    const el = calendarRef.current
-    if (!el) return
-    setCalendarHeight(el.offsetHeight)
-    const ro = new ResizeObserver(() => setCalendarHeight(el.offsetHeight))
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [open])
 
   React.useEffect(() => {
     setInternalDate(selected)
@@ -84,16 +79,18 @@ function DateTimePicker({
     if (minTime) candidates.push(minTime)
     if (!candidates.length) return null
     return candidates.reduce((a, b) => (a > b ? a : b))
-  }, [disablePast, minTime, open])
+  }, [disablePast, minTime])
+
+  const effectiveMinTotalMinutes = React.useMemo(
+    () =>
+      effectiveMinTime ? effectiveMinTime.getHours() * 60 + effectiveMinTime.getMinutes() : -1,
+    [effectiveMinTime],
+  )
 
   const isMinTimeDay = React.useMemo(() => {
     if (!effectiveMinTime) return false
     const reference = internalDate ?? new Date()
-    const a = new Date(effectiveMinTime)
-    a.setHours(0, 0, 0, 0)
-    const b = new Date(reference)
-    b.setHours(0, 0, 0, 0)
-    return a.getTime() === b.getTime()
+    return startOfDay(effectiveMinTime) === startOfDay(reference)
   }, [effectiveMinTime, internalDate])
 
   function commit(next: Date | undefined) {
@@ -110,11 +107,7 @@ function DateTimePicker({
     merged.setSeconds(0)
     merged.setMilliseconds(0)
     if (effectiveMinTime) {
-      const minDay = new Date(effectiveMinTime)
-      minDay.setHours(0, 0, 0, 0)
-      const selDay = new Date(merged)
-      selDay.setHours(0, 0, 0, 0)
-      if (selDay.getTime() === minDay.getTime() && merged < effectiveMinTime) {
+      if (startOfDay(merged) === startOfDay(effectiveMinTime) && merged < effectiveMinTime) {
         const { hours, minutes } = snapTimeForward(
           effectiveMinTime.getHours(),
           effectiveMinTime.getMinutes(),
@@ -144,8 +137,8 @@ function DateTimePicker({
   }
 
   function isSlotDisabled(hour: number, minute: number): boolean {
-    if (!effectiveMinTime || !isMinTimeDay) return false
-    return hour * 60 + minute < effectiveMinTime.getHours() * 60 + effectiveMinTime.getMinutes()
+    if (effectiveMinTotalMinutes < 0 || !isMinTimeDay) return false
+    return hour * 60 + minute < effectiveMinTotalMinutes
   }
 
   const selectedSlotKey =
@@ -158,10 +151,7 @@ function DateTimePicker({
   }, [selectedSlotKey, open])
 
   function selectSlot(hour: number, minute: number) {
-    if (effectiveMinTime && isMinTimeDay) {
-      if (hour * 60 + minute < effectiveMinTime.getHours() * 60 + effectiveMinTime.getMinutes())
-        return
-    }
+    if (isSlotDisabled(hour, minute)) return
     const base = internalDate ?? defaultNow(minuteStep)
     const next = new Date(base)
     next.setHours(hour)
@@ -195,29 +185,17 @@ function DateTimePicker({
   }
 
   const calendarDisabled = React.useMemo(() => {
+    const todayMs = disablePast ? startOfDay(new Date()) : -1
+    const minTimeMs = minTime ? startOfDay(minTime) : -1
+    const minDateMs = minDate ? startOfDay(minDate) : -1
+    const maxDateMs = maxDate ? new Date(maxDate).setHours(23, 59, 59, 999) : Infinity
+
     return (date: Date) => {
-      const d = new Date(date)
-      d.setHours(0, 0, 0, 0)
-      if (disablePast) {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        if (d < today) return true
-      }
-      if (minTime) {
-        const mt = new Date(minTime)
-        mt.setHours(0, 0, 0, 0)
-        if (d < mt) return true
-      }
-      if (minDate) {
-        const m = new Date(minDate)
-        m.setHours(0, 0, 0, 0)
-        if (d < m) return true
-      }
-      if (maxDate) {
-        const m = new Date(maxDate)
-        m.setHours(23, 59, 59, 999)
-        if (date > m) return true
-      }
+      const d = startOfDay(date)
+      if (todayMs >= 0 && d < todayMs) return true
+      if (minTimeMs >= 0 && d < minTimeMs) return true
+      if (minDateMs >= 0 && d < minDateMs) return true
+      if (date.getTime() > maxDateMs) return true
       return false
     }
   }, [disablePast, minTime, minDate, maxDate])
@@ -239,7 +217,7 @@ function DateTimePicker({
             )}
           >
             {internalDate ? format(internalDate, fmt) : <span>{placeholder}</span>}
-            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" aria-hidden="true" />
           </Button>
         }
       />
@@ -247,7 +225,7 @@ function DateTimePicker({
       <PopoverContent className="w-auto p-0 overflow-hidden" align={align} sideOffset={8}>
         <div className="flex flex-col">
           <div className="flex">
-            <div ref={calendarRef}>
+            <div>
               <Calendar
                 {...({
                   autoFocus: true,
@@ -261,16 +239,18 @@ function DateTimePicker({
             </div>
 
             <div
-              className="flex w-20 flex-col border-l overflow-hidden"
-              style={calendarHeight ? { height: calendarHeight } : undefined}
+              className={cn(
+                'flex flex-col border-l overflow-hidden',
+                hourFormat === 12 ? 'w-24' : 'w-20',
+              )}
             >
-              <div className="flex items-center gap-1.5 px-2 pt-3 pb-2 text-xs font-medium">
-                <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <div className="flex items-center justify-center gap-1.5 px-2 pt-3 pb-2 text-xs font-medium">
+                <Clock className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
                 <span>Time</span>
               </div>
 
               <ScrollArea className="flex-1 min-h-0 max-h-64 pb-2">
-                <div className="flex flex-col gap-0.5 px-1">
+                <div role="listbox" aria-label="Select time" className="flex flex-col gap-0.5 px-1">
                   {timeSlots.map(({ hour, minute }) => {
                     const key = hour * 60 + minute
                     const active = key === selectedSlotKey
@@ -282,11 +262,14 @@ function DateTimePicker({
                           slotRefs.current[key] = el
                         }}
                         type="button"
+                        role="option"
+                        aria-selected={active}
                         disabled={disabled}
                         onClick={() => selectSlot(hour, minute)}
                         className={cn(
-                          'h-7 w-full rounded-md px-1.5 text-center text-xs font-medium tabular-nums transition-colors',
+                          'h-7 w-full rounded-md px-1.5 text-center text-xs tabular-nums transition-colors',
                           'hover:bg-accent hover:text-accent-foreground',
+                          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                           active &&
                             'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-xs',
                           disabled && 'pointer-events-none opacity-30',
@@ -307,7 +290,7 @@ function DateTimePicker({
               variant="ghost"
               size="sm"
               onClick={setNow}
-              className="h-7 px-2 text-xs"
+              className="h-8 px-2 text-xs"
             >
               Now
             </Button>
@@ -316,7 +299,7 @@ function DateTimePicker({
               variant="ghost"
               size="sm"
               onClick={() => commit(undefined)}
-              className="h-7 px-2 text-xs ml-auto"
+              className="h-8 px-2 text-xs ml-auto"
             >
               Clear
             </Button>
@@ -325,7 +308,7 @@ function DateTimePicker({
               size="sm"
               disabled={!internalDate}
               onClick={() => handleOpenChange(false)}
-              className="h-7 px-2 text-xs"
+              className="h-8 px-2 text-xs"
             >
               Done
             </Button>
