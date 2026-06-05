@@ -9,6 +9,26 @@ Install via shadcn CLI:
 Registry entry in components.json:
   { "registries": { "@glrk-ui": "https://ui.glrk.dev/registry/{name}.json" } }
 
+## Per-component docs (raw markdown)
+
+Append .md to any docs URL to get the raw MDX source for that component:
+
+  https://ui.glrk.dev/docs/shadcn-wrappers/dialog.md
+  https://ui.glrk.dev/docs/shadcn-wrappers/date-picker.md
+  https://ui.glrk.dev/docs/shadcn-wrappers/data-table.md
+  https://ui.glrk.dev/docs/shadcn-wrappers/field.md       ← field wrapper family
+  https://ui.glrk.dev/docs/shadcn-wrappers/field/react-hook-form.md
+  https://ui.glrk.dev/docs/shadcn-wrappers/field/tanstack-form.md
+
+Full component list — all accept .md suffix:
+  dialog · alert-dialog · sheet · drawer · popover · tooltip · toast
+  menu · menubar · context-menu · navigation-menu
+  select · combobox · autocomplete
+  checkbox · radio · toggle · switch · slider · number-field · input-otp · input-group
+  date-picker · data-table
+  accordion · collapsible · tabs · scroll-area
+  card · item · empty · carousel · breadcrumb · pagination
+
 ---
 
 ## Type System
@@ -482,6 +502,84 @@ Addon components:
 
 ---
 
+## Date Picker — components/ui/date-picker/
+
+Install: npx shadcn@latest add @glrk-ui/date-picker
+Base: @daypicker/react (DayPicker v9)
+
+Exports: Calendar, CalendarDayButton, CalendarDropdown, DatePicker, DateTimePicker
+
+### Calendar — components/ui/date-picker/calendar.tsx
+
+Styled DayPicker wrapper. Accepts all DayPicker.Root props plus:
+  buttonVariant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
+                              — nav button variant, default "ghost"
+
+captionLayout defaults to "label"; pass "dropdown" for month/year dropdowns.
+CalendarDropdown renders month/year selects using shadcn Select.
+CalendarDayButton renders day cells using shadcn Button with range/selection data-attrs.
+
+---
+
+### DatePicker — components/ui/date-picker/date-picker.tsx
+Wrapper: DatePicker
+
+Calendar inside a Popover trigger. Supports single, multiple, and range selection.
+
+type Selected = Date | Date[] | DateRange | undefined
+  DateRange = { from?: Date; to?: Date }  (from @daypicker/react)
+
+Props:
+  mode?: 'single' | 'multiple' | 'range'  — default "single"
+  selected?: Selected
+  onSelect?: (...args: any[]) => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  placeholder?: string                     — default "Pick a date"
+  dateFormat?: string                      — date-fns format string, default "dd/MM/yyyy"
+  triggerProps?: Omit<Button.Props, 'children'>
+  align?: 'start' | 'center' | 'end'      — popover alignment, default "start"
+  // All Calendar (DayPicker) props forwarded except mode/selected/onSelect
+
+Auto-close: single → closes on select; range → closes when both from + to are set; multiple → stays open.
+
+Trigger display:
+  single   → formatted date or placeholder
+  multiple → "N dates selected" (or formatted if only 1)
+  range    → "from - to" or just "from" if no end
+
+---
+
+### DateTimePicker — components/ui/date-picker/date-time-picker.tsx
+Wrapper: DateTimePicker
+
+Calendar + scrollable time slot list side-by-side inside a Popover. Single date+time only.
+
+type MinuteStep = 1 | 5 | 10 | 15 | 20 | 30
+type HourFormat = 12 | 24
+
+Props:
+  selected?: Date
+  onSelect?: (date: Date | undefined) => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  placeholder?: string                     — default "Pick date & time"
+  dateFormat?: string                      — date-fns format; default "dd/MM/yyyy HH:mm" (24h) or "dd/MM/yyyy hh:mm a" (12h)
+  minuteStep?: MinuteStep                  — time slot interval, default 5
+  hourFormat?: HourFormat                  — 12h/24h display, default 24
+  triggerProps?: Omit<Button.Props, 'children'>
+  align?: 'start' | 'center' | 'end'      — default "start"
+  disablePast?: boolean                    — disables past dates + past times on today, default false
+  minDate?: Date                           — disable dates before this
+  maxDate?: Date                           — disable dates after this
+  minTime?: Date                           — disable time slots before this time (applies on same day)
+  // All Calendar (DayPicker) props forwarded except mode/selected/onSelect/disabled
+
+Toolbar buttons: Now (selects current time snapped to minuteStep), Clear (clears selection), Done (closes popover).
+When day changes, existing time is preserved but snapped forward to effectiveMinTime if on a restricted day.
+
+---
+
 ## Field Wrapper (Form Integration)
 
 ### Generic — components/ui/field-wrapper.tsx
@@ -506,7 +604,7 @@ Available wrappers:
   NumberWrapper      — NumberFieldWrapper with label/error (+ all NumberFieldWrapper props)
   OTPWrapper         — InputOTPWrapper with label/error (+ all InputOTPWrapper props)
   InputGroupWrapper  — InputGroupWrapper with label/error (+ addonStart, addonEnd)
-  DatePickerWrapper  — Calendar in Popover with label/error (value: Date, onSelect)
+  DatePickerWrapper  — DatePicker with label/error (value: Date, onSelect: (date) => void)
 
 ---
 

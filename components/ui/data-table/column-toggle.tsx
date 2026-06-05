@@ -1,10 +1,8 @@
-'use client'
-
 import { Settings2 } from 'lucide-react'
 import { Table } from '@tanstack/react-table'
 
-import { buttonVariants } from '@/components/ui/button'
 import { Menu, MenuCheckboxItem, MenuContent, MenuTrigger } from '@/components/ui/menu'
+import { buttonVariants } from '@/components/ui/button'
 
 interface ColumnToggleProps<TData> {
   table: Table<TData>

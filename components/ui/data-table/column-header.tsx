@@ -3,8 +3,8 @@ import { Column } from '@tanstack/react-table'
 
 import { cn } from '@/lib/utils'
 
-import { buttonVariants } from '@/components/ui/button'
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@/components/ui/menu'
+import { buttonVariants } from '@/components/ui/button'
 
 interface ColumnHeaderProps<TData, TValue> {
   className?: string

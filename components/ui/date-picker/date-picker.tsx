@@ -4,13 +4,13 @@ import * as React from 'react'
 import { type DateRange } from '@daypicker/react'
 import { CalendarIcon } from 'lucide-react'
 
+import { type Selected, formatSelected, getDefaultMonth } from './utils'
 import { cn } from '@/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 
 import { Calendar } from './calendar'
-import { type Selected, formatSelected, getDefaultMonth } from './utils'
 
 type DatePickerProps = Omit<
   React.ComponentProps<typeof Calendar>,

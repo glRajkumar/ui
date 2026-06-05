@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 import { getDefaultClassNames, type DayButton, type Locale } from '@daypicker/react'
 
