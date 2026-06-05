@@ -167,7 +167,7 @@ type textareaFieldProps = Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>
 ```ts
 type radioFieldProps = {
   label?: React.ReactNode
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
   className?: string
 }
 ```
@@ -177,7 +177,7 @@ type radioFieldProps = {
   {(field) => (
     <field.RadioField
       label="Role"
-      options={['Developer', 'Designer', 'Manager', 'Other']}
+      items={['Developer', 'Designer', 'Manager', 'Other']}
     />
   )}
 </form.AppField>
@@ -191,7 +191,7 @@ Checkbox also shares same props as `radioFieldProps`
   {(field) => (
     <field.CheckboxField
       label="Hobbies"
-      options={['Reading', 'Gaming', 'Sports', 'Music', 'Travel']}
+      items={['Reading', 'Gaming', 'Sports', 'Music', 'Travel']}
     />
   )}
 </form.AppField>
@@ -227,7 +227,7 @@ type selectFieldProps = Omit<selectProps, 'value' | 'onValueChange'> & {
   {(field) => (
     <field.SelectField
       label="Country"
-      options={['USA', 'UK', 'Canada', 'Australia', 'India']}
+      items={['USA', 'UK', 'Canada', 'Australia', 'India']}
       placeholder="Select your country"
     />
   )}
@@ -265,7 +265,7 @@ type comboboxFieldProps = Omit<comboboxProps, 'value' | 'onValueChange' | 'name'
   {(field) => (
     <field.ComboboxField
       label="Country"
-      options={['USA', 'UK', 'Canada', 'Australia', 'India']}
+      items={['USA', 'UK', 'Canada', 'Australia', 'India']}
       placeholder="Select your country"
     />
   )}
@@ -351,4 +351,3 @@ type inputGroupFieldProps = Omit<InputGroupWrapper, 'name' | 'value' | 'onChange
 - [Checkbox](/docs/shadcn-wrappers/checkbox)
 - [Input Group](/docs/shadcn-wrappers/input-group)
 - [Input OTP](/docs/shadcn-wrappers/input-otp)
-

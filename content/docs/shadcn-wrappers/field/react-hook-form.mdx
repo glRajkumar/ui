@@ -143,7 +143,7 @@ type TextareaProps<T extends FieldValues> = BaseProps<T> &
 
 ```ts
 type RadioProps<T extends FieldValues> = BaseProps<T> & {
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
 }
 ```
 
@@ -152,7 +152,7 @@ type RadioProps<T extends FieldValues> = BaseProps<T> & {
   name="gender"
   label="Gender"
   control={form.control}
-  options={["male", "female", "other"]}
+  items={["male", "female", "other"]}
 />
 ```
 
@@ -161,7 +161,7 @@ type RadioProps<T extends FieldValues> = BaseProps<T> & {
 
 ```ts
 type CheckboxProps<T extends FieldValues> = BaseProps<T> & {
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
 }
 ```
 
@@ -170,7 +170,7 @@ type CheckboxProps<T extends FieldValues> = BaseProps<T> & {
   name="interest"
   label="Interest"
   control={form.control}
-  options={["Book reading", "Music", "TV", "Movie"]}
+  items={["Book reading", "Music", "TV", "Movie"]}
 />
 ```
 
@@ -203,7 +203,7 @@ type SelectProps<T extends FieldValues> =
   name="country"
   label="Country"
   control={form.control}
-  options={[
+  items={[
     { value: "in", label: "India" },
     { value: "us", label: "USA" }
   ]}
@@ -237,7 +237,7 @@ type ComboboxProps<T extends FieldValues> = BaseProps<T> &
   name="fruit"
   label="Favorite Fruit"
   control={form.control}
-  options={["Apple", "Banana", "Mango"]}
+  items={["Apple", "Banana", "Mango"]}
 />
 ```
 

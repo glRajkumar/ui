@@ -41,26 +41,26 @@ Copy and paste the following code into your project.
 ```tsx
 import { ToggleWrapper } from "@/components/ui/toggle"
 
-<ToggleWrapper options={["Bold", "Italic", "Underline"]} />
+<ToggleWrapper items={["Bold", "Italic", "Underline"]} />
 ```
 
 ### Multiple selection
 
 ```tsx
-<ToggleWrapper options={["Bold", "Italic", "Underline"]} multiple />
+<ToggleWrapper items={["Bold", "Italic", "Underline"]} multiple />
 ```
 
-### Options format
+### Items format
 
-Options accept primitives (`string | number | boolean`) or objects with `label`, `value`, and optional `className` / `aria-label`:
+Items accept primitives (`string | number | boolean`) or objects with `label`, `value`, and optional `className` / `aria-label`:
 
 ```tsx
 // Primitives
-<ToggleWrapper options={["Bold", "Italic", 42, true]} />
+<ToggleWrapper items={["Bold", "Italic", 42, true]} />
 
 // Icon only — always provide aria-label
 <ToggleWrapper
-  options={[
+  items={[
     { label: <Bold />, value: "bold", "aria-label": "Toggle bold" },
     { label: <Italic />, value: "italic", "aria-label": "Toggle italic" },
   ]}
@@ -68,7 +68,7 @@ Options accept primitives (`string | number | boolean`) or objects with `label`,
 
 // Icon + label
 <ToggleWrapper
-  options={[
+  items={[
     { label: <><AlignLeft /> Left</>, value: "left" },
     { label: <><AlignCenter /> Center</>, value: "center" },
   ]}
@@ -81,7 +81,7 @@ Options accept primitives (`string | number | boolean`) or objects with `label`,
 const [value, setValue] = React.useState<string[]>(["italic"])
 
 <ToggleWrapper
-  options={["Bold", "Italic", "Underline"]}
+  items={["Bold", "Italic", "Underline"]}
   value={value}
   onValueChange={(v) => setValue(v)}
   multiple
@@ -91,7 +91,7 @@ const [value, setValue] = React.useState<string[]>(["italic"])
 ### Orientation
 
 ```tsx
-<ToggleWrapper options={options} orientation="vertical" />
+<ToggleWrapper items={items} orientation="vertical" />
 ```
 
 Arrow key navigation adjusts automatically — up/down for vertical, left/right for horizontal. Focus loops by default (`loopFocus` defaults to `true`).
@@ -101,39 +101,39 @@ Arrow key navigation adjusts automatically — up/down for vertical, left/right 
 `spacing={0}` (default) joins items into a single connected group. Larger values add gap:
 
 ```tsx
-<ToggleWrapper options={options} spacing={0} />  {/* joined */}
-<ToggleWrapper options={options} spacing={1} />  {/* 4px gap */}
-<ToggleWrapper options={options} spacing={2} />  {/* 8px gap */}
+<ToggleWrapper items={items} spacing={0} />  {/* joined */}
+<ToggleWrapper items={items} spacing={1} />  {/* 4px gap */}
+<ToggleWrapper items={items} spacing={2} />  {/* 8px gap */}
 ```
 
 ### Variants
 
 ```tsx
-<ToggleWrapper options={options} variant="default" />
-<ToggleWrapper options={options} variant="outline" />
+<ToggleWrapper items={items} variant="default" />
+<ToggleWrapper items={items} variant="outline" />
 ```
 
 ### Sizes
 
 ```tsx
-<ToggleWrapper options={options} size="sm" />
-<ToggleWrapper options={options} size="default" />
-<ToggleWrapper options={options} size="lg" />
+<ToggleWrapper items={items} size="sm" />
+<ToggleWrapper items={items} size="default" />
+<ToggleWrapper items={items} size="lg" />
 ```
 
 ### Disabled
 
 ```tsx
-<ToggleWrapper options={options} disabled />
+<ToggleWrapper items={items} disabled />
 ```
 
 ### Item CSS class
 
-Apply shared CSS to all items via `itemCls`. Individual options override with their own `className`:
+Apply shared CSS to all items via `itemCls`. Individual items override with their own `className`:
 
 ```tsx
 <ToggleWrapper
-  options={[
+  items={[
     "Bold",
     { label: "Custom", value: "custom", className: "text-primary" },
   ]}
@@ -178,14 +178,14 @@ type={`export type toggleItemT =
 name="ToggleWrapper"
 type={`export interface ToggleWrapper {
   /**
-   * Array of toggle options. Supports primitives and option objects.
+   * Array of toggle items. Supports primitives and item objects.
    *
    * \`\`\`tsx
-   * options={["Bold", "Italic"]}
-   * options={[{ label: <Bold />, value: "bold", "aria-label": "Toggle bold" }]}
+   * items={["Bold", "Italic"]}
+   * items={[{ label: <Bold />, value: "bold", "aria-label": "Toggle bold" }]}
    * \`\`\`
    */
-  options: toggleItemT[];
+  items: toggleItemT[];
 
   /**
    * CSS class applied to every toggle item. Per-item className overrides this.

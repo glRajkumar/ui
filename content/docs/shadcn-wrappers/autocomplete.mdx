@@ -1,6 +1,6 @@
 ---
 title: Autocomplete
-description: A wrapper for Base UI Autocomplete with type-to-filter suggestions, grouped options, async search, inline completion mode, and clear/trigger controls.
+description: A wrapper for Base UI Autocomplete with type-to-filter suggestions, grouped items, async search, inline completion mode, and clear/trigger controls.
 ---
 
 import { AutocompleteEx } from "@/components/examples";
@@ -104,7 +104,7 @@ const [value, setValue] = useState("")
 />
 ```
 
-### Option objects
+### Item objects
 
 ```tsx
 const frameworks = [
@@ -116,20 +116,20 @@ const frameworks = [
 <AutocompleteWrapper items={frameworks} placeholder="Select framework..." />
 ```
 
-### Grouped options
+### Grouped items
 
 ```tsx
 const grouped = [
   {
     group: "Frontend",
-    options: [
+    items: [
       { value: "react", label: "React" },
       { value: "vue", label: "Vue" },
     ],
   },
   {
     group: "Backend",
-    options: [
+    items: [
       { value: "node", label: "Node.js" },
       { value: "go", label: "Go" },
     ],
@@ -213,7 +213,7 @@ import { AutocompleteVirtualisedWrapper } from "@/components/ui/autocomplete-vir
 
 <AutocompleteVirtualisedWrapper
   items={largeList}
-  placeholder="Search 1000 options…"
+  placeholder="Search 1000 items…"
   className="w-64"
   showClear
 />
@@ -237,10 +237,10 @@ Custom row height and overscan:
 name="AutocompleteWrapperProps"
 type={`export type AutocompleteWrapperProps = {
   /**
-   * Suggestion items. Accepts strings, optionT objects ({ value, label }),
-   * or groupT objects ({ group, options[] }).
+   * Suggestion items. Accepts strings, itemT objects ({ value, label }),
+   * or groupT objects ({ group, items[] }).
    */
-  items?: optionsT;
+  items?: itemsT;
 
   /**
    * CSS class applied to the input group (the visible input container).

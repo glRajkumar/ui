@@ -110,7 +110,7 @@ import {
 <SelectWrapper
   name="country"
   label="Country"
-  options={[
+  items={[
     { value: "us", label: "United States" },
     { value: "uk", label: "United Kingdom" },
   ]}
@@ -167,7 +167,7 @@ const form = useForm({ defaultValues: { email: "", country: "" } })
 <FormProvider {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)}>
     <InputWrapper name="email" label="Email" type="email" control={form.control} />
-    <SelectWrapper name="country" label="Country" options={countryOptions} control={form.control} />
+    <SelectWrapper name="country" label="Country" items={countryOptions} control={form.control} />
     <NumberWrapper name="qty" label="Quantity" control={form.control} min={0} />
     <SliderWrapper name="volume" label="Volume" control={form.control} min={0} max={100} />
     <AutocompleteWrapper name="city" label="City" items={cities} control={form.control} />
@@ -384,7 +384,7 @@ type TextareaProps = BaseProps &
 
 ```ts
 type RadioProps = BaseProps & {
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
   value?: allowedPrimitiveT
   onValueChange?: (value: allowedPrimitiveT) => void
 }
@@ -394,7 +394,7 @@ type RadioProps = BaseProps & {
 <RadioWrapper
   name="gender"
   label="Gender"
-  options={["male", "female", "other"]}
+  items={["male", "female", "other"]}
   value={value}
   onValueChange={val => onChange(val)}
 />
@@ -404,7 +404,7 @@ type RadioProps = BaseProps & {
 
 ```ts
 type CheckboxProps = BaseProps & {
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
   value?: allowedPrimitiveT[]
   onValueChange?: (value: allowedPrimitiveT[]) => void
 }
@@ -414,7 +414,7 @@ type CheckboxProps = BaseProps & {
 <CheckboxWrapper
   name="interest"
   label="Interest"
-  options={["Book reading", "Music", "TV", "Movie"]}
+  items={["Book reading", "Music", "TV", "Movie"]}
   value={value}
   onValueChange={val => onChange(val)}
 />
@@ -451,7 +451,7 @@ type SelectProps = BaseProps & Omit<selectProps, "value" | "onValueChange"> & {
 <SelectWrapper
   name="country"
   label="Country"
-  options={[
+  items={[
     { value: "in", label: "India" },
     { value: "us", label: "USA" }
   ]}
@@ -488,7 +488,7 @@ type ComboboxProps = BaseProps & comboboxProps
 <ComboboxWrapper
   name="fruit"
   label="Favorite Fruit"
-  options={["Apple", "Banana", "Mango"]}
+  items={["Apple", "Banana", "Mango"]}
   value={value}
   onValueChange={val => onChange(val)}
 />

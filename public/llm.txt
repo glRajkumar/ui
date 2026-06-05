@@ -36,17 +36,17 @@ Full component list — all accept .md suffix:
 All selection components share a common type system from types/general.d.ts:
 
   type allowedPrimitiveT = string | number | boolean
-  type optionT = { label: ReactNode; value: allowedPrimitiveT; className?: string; disabled?: boolean }
-  type groupT = { group: string; options: optionT[]; className?: string }
-  type optionsT = (allowedPrimitiveT | optionT | groupT | "---")[]
+  type itemT = { label: ReactNode; value: allowedPrimitiveT; className?: string; disabled?: boolean }
+  type groupT = { group: string; items: itemT[]; className?: string }
+  type itemsT = (allowedPrimitiveT | itemT | groupT | "---")[]
 
 "---" is a visual separator. Primitives use the same value as label.
 
-Menu-specific types (menuOptionsT) extend optionsT with:
+Menu-specific types (menuItemsT) extend itemsT with:
   - shortcut: string — keyboard shortcut display
   - variant: "destructive" — destructive item styling
   - submenu: string — creates nested submenu (label string, not ReactNode)
-  - { group: string, options: [] } — groups items under a label
+  - { group: string, items: [] } — groups items under a label
 
 String conversion: Base UI controlled components use strings internally. Use `parseAllowedPrimitive(str)` from lib/utils to convert back to original type. Or keep state as string.
 
@@ -136,7 +136,7 @@ Also exports: DrawerClose, DrawerFooter
 
 ## Menu Family — Menu · Menubar · ContextMenu
 
-All three use menuOptionsT and share rendering logic. Plain, checkbox, and radio variants exist for each.
+All three use menuItemsT and share rendering logic. Plain, checkbox, and radio variants exist for each.
 
 ### Menu (Dropdown) — components/ui/menu-wrapper.tsx
 Wrappers: MenuWrapper, MenuCheckboxWrapper, MenuRadioWrapper
@@ -146,7 +146,7 @@ MenuWrapper props:
   trigger: ReactNode           — required
   triggerCls?: string
   triggerProps?                — Omit<MenuTrigger.Props, 'children'|'className'>
-  options: menuOptionsT        — see type below
+  items: menuItemsT            — see type below
   itemCls?: string
   groupCls?: string
   groupLabelCls?: string
@@ -154,20 +154,22 @@ MenuWrapper props:
   onSelect?: (value: allowedPrimitiveT) => void
   // All Menu.Root props forwarded
 
-menuOptionsT item shapes:
+menuItemsT item shapes:
   "Simple string"
   42 / true                    — primitives
   "---"                        — separator
   { label, value, shortcut?, variant?: "destructive", className? }
-  { group: "Label", options: [...] }
-  { submenu: "Label", options: [...] }  — nested submenu
+  { group: "Label", items: [...] }
+  { submenu: "Label", items: [...] }  — nested submenu
 
 MenuCheckboxWrapper additional props:
+  items: menuInputItemsT
   checked?: allowedPrimitiveT[]
   onCheckedChange?: (value, checked) => void
   indicatorAt?: "left" | "right"  — default "left"
 
 MenuRadioWrapper additional props:
+  items: menuInputItemsT
   value?: allowedPrimitiveT
   onValueChange?: (value) => void
   indicatorAt?: "left" | "right"  — default "left"
@@ -179,10 +181,10 @@ Wrappers: MenubarWrapper, MenubarCheckboxWrapper, MenubarRadioWrapper
 Base: Base UI Menubar
 
 MenubarWrapper props:
-  options: {
+  items: {
     key: string;
     trigger: ReactNode;
-    options: menuOptionsT;
+    items: menuItemsT;
     triggerCls?: string;
     itemCls?: string; groupCls?: string; groupLabelCls?: string;
     contentProps?;
@@ -199,8 +201,8 @@ MenubarWrapper props:
 
 Per-menu props override global ones.
 
-MenubarCheckboxWrapper: same options array shape + global checked, onCheckedChange, indicatorAt
-MenubarRadioWrapper: same options array shape + global value, onValueChange, indicatorAt
+MenubarCheckboxWrapper: same items array shape (items: menuInputItemsT) + global checked, onCheckedChange, indicatorAt
+MenubarRadioWrapper: same items array shape (items: menuInputItemsT) + global value, onValueChange, indicatorAt
 
 ---
 
@@ -213,15 +215,15 @@ Key difference from Menu: triggered by right-click on children (no trigger prop)
 
 ContextWrapper props (no trigger/triggerCls/triggerProps):
   children: ReactNode
-  options: menuOptionsT
+  items: menuItemsT
   itemCls?: string
   groupCls?: string
   groupLabelCls?: string
   contentProps?
   onSelect?: (value) => void
 
-ContextCheckboxWrapper: children + options + checked + onCheckedChange + indicatorAt
-ContextRadioWrapper: children + options + value + onValueChange + indicatorAt
+ContextCheckboxWrapper: children + items (menuInputItemsT) + checked + onCheckedChange + indicatorAt
+ContextRadioWrapper: children + items (menuInputItemsT) + value + onValueChange + indicatorAt
 
 ---
 
@@ -233,7 +235,7 @@ Base: Base UI Select
 
 Props:
   id?: string
-  options: optionsT
+  items: itemsT
   placeholder?: string
   indicatorAt?: "left" | "right"  — default "right"
   backdrop?: boolean               — default false
@@ -257,10 +259,10 @@ Wrapper: ComboboxWrapper
 Base: Base UI Combobox
 
 Props:
-  items?: optionsT             — note: prop is "items" not "options"
+  items?: itemsT
   multiple?: boolean           — enables chip multi-select, default false
   placeholder?: string
-  emptyMessage?: string        — default "No options found"
+  emptyMessage?: string        — default "No items found"
   isLoading?: boolean
   indicatorAt?: "left" | "right"  — default "right"
   showTrigger?: boolean        — chevron button, default true
@@ -298,7 +300,7 @@ Wrapper: AutocompleteWrapper
 Base: Base UI Autocomplete
 
 Props:
-  items?: optionsT
+  items?: itemsT
   className?: string           — applied to input group container
   placeholder?: string
   isLoading?: boolean
@@ -331,7 +333,7 @@ Additional: estimateSize, maxHeight, virtualizerOptions (same as Combobox virtua
 Wrappers: Checkbox (single), CheckboxWrapper (group)
 Base: Base UI Checkbox + CheckboxGroup
 
-checkboxOptionT = string | number | boolean | { value, label: ReactNode, description?: ReactNode, className?, disabled? }
+checkboxItemT = string | number | boolean | { value, label: ReactNode, description?: ReactNode, className?, disabled? }
 
 Checkbox props (single):
   label: ReactNode
@@ -341,7 +343,7 @@ Checkbox props (single):
   // All Checkbox.Root props: checked, defaultChecked, onCheckedChange, indeterminate, disabled, readOnly, required, name, value
 
 CheckboxWrapper props (group):
-  options: checkboxOptionT[]
+  items: checkboxItemT[]
   parentLabel?: ReactNode    — select-all parent (shows indeterminate when partial)
   orientation?: "horizontal" | "vertical"  — default "vertical"
   itemCls?: string
@@ -364,7 +366,7 @@ Radio props (single):
   // All Radio.Root props: value (required), disabled, readOnly, required, inputRef
 
 RadioWrapper props (group):
-  options: radioOptionT[]
+  items: radioOptionT[]
   orientation?: "horizontal" | "vertical"  — default "vertical"
   itemCls?: string
   as?: ElementType
@@ -379,7 +381,7 @@ Base: Base UI ToggleGroup
 toggleItemT = string | number | boolean | { label: ReactNode; value: string|number|boolean; className?: string; "aria-label"?: string }
 
 ToggleWrapper props:
-  options: toggleItemT[]
+  items: toggleItemT[]
   itemCls?: string
   variant?: "default" | "outline"      — default "default"
   size?: "sm" | "default" | "lg"       — default "default"
@@ -1010,16 +1012,16 @@ ColumnSorter({ column, title, className? })
 ColumnHeader({ column, title, className? })
   — sort + hide/show dropdown in header
 
-ColumnFilter({ column, title, options: optionsT, ...ComboboxWrapper props })
+ColumnFilter({ column, title, items: itemsT, ...ComboboxWrapper props })
   — multi-select dropdown filter
 
-ColumnFacetedFilter({ column, title, options: optionsT, ...ComboboxWrapper props })
+ColumnFacetedFilter({ column, title, items: itemsT, ...ComboboxWrapper props })
   — multi-select with faceted value counts
 
 ColumnToggle({ table })
   — dropdown to show/hide columns
 
-FilterGroup({ table, options: [{ key, lable, options }][] })
+FilterGroup({ table, items: [{ key, lable, items }][] })
   — dynamic add/remove ColumnFilter controls
 
 Pagination({ table })
@@ -1046,12 +1048,12 @@ Pagination({ table })
 ### Render-prop trigger (Popover, Tooltip)
   triggerProps={{ render: (props, state) => <button {...props}>{state.open ? "Close" : "Open"}</button> }}
 
-### Options with groups and separators
-  options={[
+### Items with groups and separators
+  items={[
     "Simple item",
     { label: "Custom", value: "val", className: "..." },
     "---",
-    { group: "Group", options: ["A", "B"] },
+    { group: "Group", items: ["A", "B"] },
   ]}
 
 ### Type-safe primitive conversion

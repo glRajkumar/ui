@@ -1,6 +1,6 @@
 ---
 title: Context Menu
-description: A wrapper for Base UI Context Menu — same options API as Menu, triggered by right-click on any element.
+description: A wrapper for Base UI Context Menu — same items API as Menu, triggered by right-click on any element.
 ---
 
 import { ContextMenuEx } from "@/components/examples";
@@ -60,7 +60,7 @@ Copy and paste the following code into your project.
 ```tsx
 import { ContextWrapper } from "@/components/ui/context-menu-wrapper"
 
-<ContextWrapper options={["Cut", "Copy", "Paste"]}>
+<ContextWrapper items={["Cut", "Copy", "Paste"]}>
   <div className="border border-dashed rounded-lg p-8">
     Right-click here
   </div>
@@ -71,7 +71,7 @@ import { ContextWrapper } from "@/components/ui/context-menu-wrapper"
 
 ```tsx
 <ContextWrapper
-  options={[
+  items={[
     { label: "Edit", value: "edit", shortcut: "⌘E" },
     { label: "Delete", value: "delete", variant: "destructive", shortcut: "⌘⌫" },
   ]}
@@ -87,7 +87,7 @@ import { ContextWrapper } from "@/components/ui/context-menu-wrapper"
 const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 
 <ContextCheckboxWrapper
-  options={["Auto-save", "Spellcheck", "Dark mode"]}
+  items={["Auto-save", "Spellcheck", "Dark mode"]}
   checked={checked}
   onCheckedChange={(v, c) =>
     setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
@@ -103,7 +103,7 @@ const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 const [val, setVal] = useState<allowedPrimitiveT>("Light")
 
 <ContextRadioWrapper
-  options={["Light", "Dark", "System"]}
+  items={["Light", "Dark", "System"]}
   value={val}
   onValueChange={setVal}
 >
@@ -114,7 +114,7 @@ const [val, setVal] = useState<allowedPrimitiveT>("Light")
 ### Indicator position
 
 ```tsx
-<ContextCheckboxWrapper options={options} indicatorAt="right">
+<ContextCheckboxWrapper items={items} indicatorAt="right">
   <div>Right-click here</div>
 </ContextCheckboxWrapper>
 ```
@@ -122,17 +122,17 @@ const [val, setVal] = useState<allowedPrimitiveT>("Light")
 ### Groups, submenus, separators
 
 ```tsx
-const options: menuOptionsT = [
+const items: menuItemsT = [
   { label: "Cut", value: "cut", shortcut: "⌘X" },
   { label: "Copy", value: "copy", shortcut: "⌘C" },
   "---",
   {
     group: "Actions",
-    options: ["Save", "Export"],
+    items: ["Save", "Export"],
   },
   {
     submenu: "Share",
-    options: ["Email", "Link"],
+    items: ["Email", "Link"],
   },
 ]
 ```
@@ -149,20 +149,20 @@ type={`export interface ContextWrapper {
   children: React.ReactNode;
 
   /**
-   * Array of menu options. Supports primitives, separator "---", objects, groups, and submenus.
+   * Array of menu items. Supports primitives, separator "---", objects, groups, and submenus.
    *
    * \`\`\`tsx
-   * options={[
+   * items={[
    *   "Simple item",
    *   { label: "Edit", value: "edit", shortcut: "⌘E" },
    *   { label: "Delete", value: "delete", variant: "destructive" },
    *   "---",
-   *   { group: "Actions", options: ["Save", "Export"] },
-   *   { submenu: "Share", options: ["Email", "Link"] }
+   *   { group: "Actions", items: ["Save", "Export"] },
+   *   { submenu: "Share", items: ["Email", "Link"] }
    * ]}
    * \`\`\`
    */
-  options: menuOptionsT;
+  items: menuItemsT;
 
   /**
    * CSS class applied to all menu items.
@@ -210,9 +210,9 @@ type={`export interface ContextCheckboxWrapper {
   children: React.ReactNode;
 
   /**
-   * Array of checkbox options.
+   * Array of checkbox items.
    */
-  options: menuInputOptionsT;
+  items: menuInputItemsT;
 
   /**
    * Controlled checked values. If omitted, manages own state.
@@ -267,9 +267,9 @@ type={`export interface ContextRadioWrapper {
   children: React.ReactNode;
 
   /**
-   * Array of radio options.
+   * Array of radio items.
    */
-  options: menuInputOptionsT;
+  items: menuInputItemsT;
 
   /**
    * Controlled selected value. If omitted, manages own state (defaults to "").
@@ -318,4 +318,4 @@ type={`export interface ContextRadioWrapper {
 
 - [Base UI Context Menu](https://base-ui.com/react/components/context-menu)
 - [Shadcn Context Menu](https://ui.shadcn.com/docs/components/context-menu)
-- [Menu](/docs/shadcn-wrappers/menu) — same options API, triggered by click
+- [Menu](/docs/shadcn-wrappers/menu) — same items API, triggered by click

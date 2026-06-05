@@ -58,14 +58,14 @@ The wrapper system supports three primitive value types that cover the majority 
 
 ---
 
-## Options Configuration
+## Items Configuration
 
-### Flexible Option Formats
+### Flexible Item Formats
 
-The wrapper system supports multiple option formats to accommodate different use cases:
+The wrapper system supports multiple item formats to accommodate different use cases:
 
 ```tsx
-const options: optionsT = [
+const items: itemsT = [
   // Simple primitive values (label equals value)
   "Data 1",
   false,
@@ -95,10 +95,10 @@ const options: optionsT = [
   
   "---",
   
-  // Grouped options
+  // Grouped items
   {
     group: "Group 1",
-    options: [
+    items: [
       "grp 1",
       21,
       true,
@@ -106,21 +106,21 @@ const options: optionsT = [
     ],
   },
   
-  // Grouped options with styling
+  // Grouped items with styling
   {
     group: "Group 2",
-    options: ["grp 2", 22],
+    items: ["grp 2", 22],
     className: "bg-amber-50",
   },
 ]
 ```
 
-### Option Format Guidelines
+### Item Format Guidelines
 
 - **Primitive values**: Use directly when the display label matches the value
 - **Separators**: Use `"---"` string for visual separation between items
 - **Object format**: Use when you need custom labels, styling, or rich content
-- **Grouped options**: Organize related options under labeled groups
+- **Grouped items**: Organize related items under labeled groups
 - **Custom styling**: Apply Tailwind classes via `className` for visual distinction
 
 ---

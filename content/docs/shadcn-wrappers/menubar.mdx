@@ -58,29 +58,29 @@ Copy and paste the following code into your project.
 ### Basic
 
 ```tsx
-import { type menubarOptionsT, MenubarWrapper } from "@/components/ui/menubar-wrapper"
+import { type menubaritemsT, MenubarWrapper } from "@/components/ui/menubar-wrapper"
 
-const opts: menubarOptionsT = [
-  { key: "file", trigger: "File", options: ["New", "Open", "Save"] },
-  { key: "edit", trigger: "Edit", options: ["Cut", "Copy", "Paste"] },
+const opts: menubaritemsT = [
+  { key: "file", trigger: "File", items: ["New", "Open", "Save"] },
+  { key: "edit", trigger: "Edit", items: ["Cut", "Copy", "Paste"] },
 ]
 
-<MenubarWrapper options={opts} />
+<MenubarWrapper items={opts} />
 ```
 
 ### Checkbox
 
 ```tsx
-import { type menubarCheckboxOptionsT, MenubarCheckboxWrapper } from "@/components/ui/menubar-wrapper"
+import { type menubarCheckboxitemsT, MenubarCheckboxWrapper } from "@/components/ui/menubar-wrapper"
 
 const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 
-const opts: menubarCheckboxOptionsT = [
-  { key: "view", trigger: "View", options: ["Sidebar", "Toolbar", "Status Bar"] },
+const opts: menubarCheckboxitemsT = [
+  { key: "view", trigger: "View", items: ["Sidebar", "Toolbar", "Status Bar"] },
 ]
 
 <MenubarCheckboxWrapper
-  options={opts}
+  items={opts}
   checked={checked}
   onCheckedChange={(v, c) =>
     setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
@@ -91,34 +91,34 @@ const opts: menubarCheckboxOptionsT = [
 ### Radio
 
 ```tsx
-import { type menubarRadioOptionsT, MenubarRadioWrapper } from "@/components/ui/menubar-wrapper"
+import { type menubarRadioitemsT, MenubarRadioWrapper } from "@/components/ui/menubar-wrapper"
 
 const [val, setVal] = useState<allowedPrimitiveT>("Light")
 
-const opts: menubarRadioOptionsT = [
-  { key: "theme", trigger: "Theme", options: ["Light", "Dark", "System"] },
+const opts: menubarRadioitemsT = [
+  { key: "theme", trigger: "Theme", items: ["Light", "Dark", "System"] },
 ]
 
-<MenubarRadioWrapper options={opts} value={val} onValueChange={setVal} />
+<MenubarRadioWrapper items={opts} value={val} onValueChange={setVal} />
 ```
 
 ### Indicator position
 
 ```tsx
-<MenubarCheckboxWrapper options={opts} indicatorAt="right" />
-<MenubarRadioWrapper options={opts} indicatorAt="right" />
+<MenubarCheckboxWrapper items={opts} indicatorAt="right" />
+<MenubarRadioWrapper items={opts} indicatorAt="right" />
 ```
 
 ### Per-menu overrides
 
-Each menu item in the `options` array can override global props:
+Each menu item in the `items` array can override global props:
 
 ```tsx
-const opts: menubarOptionsT = [
+const opts: menubaritemsT = [
   {
     key: "file",
     trigger: "File",
-    options: fileOptions,
+    items: fileItems,
     triggerCls: "font-semibold",
     onSelect: v => handleFileAction(v),
     contentProps: { align: "start" },
@@ -126,24 +126,24 @@ const opts: menubarOptionsT = [
   {
     key: "edit",
     trigger: "Edit",
-    options: editOptions,
+    items: editItems,
   },
 ]
 ```
 
-### Complex options (groups, submenus, separators)
+### Complex items (groups, submenus, separators)
 
 ```tsx
-const opts: menubarOptionsT = [
+const opts: menubaritemsT = [
   {
     key: "file",
     trigger: "File",
-    options: [
+    items: [
       { label: "New", value: "new", shortcut: "⌘N" },
       "Open",
       "---",
-      { group: "Recent", options: ["file1.txt", "file2.txt"] },
-      { submenu: "Export", options: ["PDF", "HTML"] },
+      { group: "Recent", items: ["file1.txt", "file2.txt"] },
+      { submenu: "Export", items: ["PDF", "HTML"] },
     ],
   },
 ]
@@ -159,16 +159,16 @@ type={`export interface MenubarWrapper {
    * Array of menu configurations — each becomes a separate dropdown in the bar.
    *
    * \`\`\`tsx
-   * options={[
-   *   { key: "file", trigger: "File", options: ["New", "Open"] },
-   *   { key: "edit", trigger: "Edit", options: ["Cut", "Copy"] },
+   * items={[
+   *   { key: "file", trigger: "File", items: ["New", "Open"] },
+   *   { key: "edit", trigger: "Edit", items: ["Cut", "Copy"] },
    * ]}
    * \`\`\`
    */
-  options: {
+  items: {
     key: string;
     trigger: React.ReactNode;
-    options: menuOptionsT;
+    items: menuItemsT;
     triggerCls?: string;
     itemCls?: string;
     groupCls?: string;
@@ -227,10 +227,10 @@ type={`export interface MenubarCheckboxWrapper {
   /**
    * Array of checkbox menu configurations.
    */
-  options: {
+  items: {
     key: string;
     trigger: React.ReactNode;
-    options: menuInputOptionsT;
+    items: menuInputItemsT;
     triggerCls?: string;
     itemCls?: string;
     groupCls?: string;
@@ -296,10 +296,10 @@ type={`export interface MenubarRadioWrapper {
   /**
    * Array of radio menu configurations.
    */
-  options: {
+  items: {
     key: string;
     trigger: React.ReactNode;
-    options: menuInputOptionsT;
+    items: menuInputItemsT;
     triggerCls?: string;
     itemCls?: string;
     groupCls?: string;
@@ -362,4 +362,4 @@ type={`export interface MenubarRadioWrapper {
 
 - [Base UI Menubar](https://base-ui.com/react/components/menubar)
 - [Shadcn Menubar](https://ui.shadcn.com/docs/components/menubar)
-- [Menu](/docs/shadcn-wrappers/menu) — single dropdown, same options API
+- [Menu](/docs/shadcn-wrappers/menu) — single dropdown, same items API

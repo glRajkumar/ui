@@ -42,7 +42,7 @@ import { RadioWrapper } from "@/components/ui/radio"
 
 <RadioWrapper
   defaultValue="email"
-  options={[
+  items={[
     { value: "email", label: "Email", description: "Receive updates via email." },
     { value: "sms", label: "SMS", description: "Receive updates via text." },
     { value: "push", label: "Push notifications" },
@@ -59,7 +59,7 @@ const [value, setValue] = useState("email")
 <RadioWrapper
   value={value}
   onValueChange={(v) => setValue(v as string)}
-  options={[
+  items={[
     { value: "email", label: "Email" },
     { value: "sms", label: "SMS" },
     { value: "push", label: "Push" },
@@ -73,7 +73,7 @@ const [value, setValue] = useState("email")
 <RadioWrapper
   defaultValue="light"
   orientation="horizontal"
-  options={[
+  items={[
     { value: "light", label: "Light" },
     { value: "dark", label: "Dark" },
     { value: "system", label: "System" },
@@ -140,7 +140,7 @@ type={`export interface Radio {
 <AutoTypeTable
 name="RadioWrapper"
 type={`export interface RadioWrapper {
-  options: radioOptionT[];
+  items: radioOptionT[];
 
   /**
    * Stack direction for items.

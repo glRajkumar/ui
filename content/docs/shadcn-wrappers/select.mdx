@@ -1,6 +1,6 @@
 ---
 title: Select
-description: A wrapper for Base UI Select with flexible option types, grouped options, backdrop, custom value rendering, and multiple selection.
+description: A wrapper for Base UI Select with flexible item types, grouped items, backdrop, custom value rendering, and multiple selection.
 ---
 
 import { SelectEx } from "@/components/examples";
@@ -49,17 +49,17 @@ Copy and paste the following code into your project.
 import { SelectWrapper } from "@/components/ui/select"
 
 <SelectWrapper
-  options={["Apple", "Banana", "Orange"]}
+  items={["Apple", "Banana", "Orange"]}
   placeholder="Select a fruit"
 />
 ```
 
-### Options format
+### Items format
 
-`options` accepts primitives, option objects, groups, and separators — mixed freely:
+`items` accepts primitives, item objects, groups, and separators — mixed freely:
 
 ```tsx
-const options = [
+const items = [
   "Simple string",
   42,
   true,
@@ -69,20 +69,20 @@ const options = [
   { label: "Disabled", value: "off", disabled: true },
   {
     group: "Category",
-    options: ["Option A", "Option B"],
+    items: ["Option A", "Option B"],
   },
 ]
 
-<SelectWrapper options={options} placeholder="Pick one" />
+<SelectWrapper items={items} placeholder="Pick one" />
 ```
 
-### Grouped options
+### Grouped items
 
 ```tsx
 <SelectWrapper
-  options={[
-    { group: "Fruits", options: ["Apple", "Banana"] },
-    { group: "Veggies", options: ["Carrot", "Broccoli"] },
+  items={[
+    { group: "Fruits", items: ["Apple", "Banana"] },
+    { group: "Veggies", items: ["Carrot", "Broccoli"] },
   ]}
   placeholder="Select food"
 />
@@ -91,17 +91,17 @@ const options = [
 ### Indicator placement
 
 ```tsx
-<SelectWrapper options={options} indicatorAt="left" placeholder="Left check" />
-<SelectWrapper options={options} indicatorAt="right" placeholder="Right check" /> {/* default */}
+<SelectWrapper items={items} indicatorAt="left" placeholder="Left check" />
+<SelectWrapper items={items} indicatorAt="right" placeholder="Right check" /> {/* default */}
 ```
 
 ### Disabled item
 
-Pass `disabled: true` on any option object:
+Pass `disabled: true` on any item object:
 
 ```tsx
 <SelectWrapper
-  options={[
+  items={[
     { label: "Available", value: "a" },
     { label: "Unavailable", value: "b", disabled: true },
   ]}
@@ -114,7 +114,7 @@ Pass `disabled: true` on any option object:
 Renders a fixed backdrop behind the dropdown — useful for modal-style behaviour:
 
 ```tsx
-<SelectWrapper options={options} backdrop placeholder="Select with backdrop" />
+<SelectWrapper items={items} backdrop placeholder="Select with backdrop" />
 ```
 
 ### Controlled
@@ -123,7 +123,7 @@ Renders a fixed backdrop behind the dropdown — useful for modal-style behaviou
 const [value, setValue] = useState("apple")
 
 <SelectWrapper
-  options={["apple", "banana", "orange"]}
+  items={["apple", "banana", "orange"]}
   value={value}
   onValueChange={setValue}
 />
@@ -132,16 +132,16 @@ const [value, setValue] = useState("apple")
 With `defaultValue` (uncontrolled):
 
 ```tsx
-<SelectWrapper options={options} defaultValue="banana" />
+<SelectWrapper items={items} defaultValue="banana" />
 ```
 
 ### Custom value rendering
 
-Use `renderValue` to customise what appears in the trigger after selection. Receives the raw value string and the matched option object:
+Use `renderValue` to customise what appears in the trigger after selection. Receives the raw value string and the matched item object:
 
 ```tsx
 <SelectWrapper
-  options={[
+  items={[
     { label: <><SunIcon /> Light</>, value: "light" },
     { label: <><MoonIcon /> Dark</>, value: "dark" },
   ]}
@@ -161,7 +161,7 @@ Use `renderValue` to customise what appears in the trigger after selection. Rece
 
 ```tsx
 <SelectWrapper
-  options={options}
+  items={items}
   placeholder="Styled"
   triggerCls="w-64 bg-muted"
   contentCls="min-w-64"
@@ -182,24 +182,24 @@ type={`export interface SelectWrapper {
   id?: string;
 
   /**
-   * Array of options. Supports primitives, option objects, groups, and separators.
+   * Array of items. Supports primitives, item objects, groups, and separators.
    *
    * - Primitives: string | number | boolean — label and value are the same
-   * - Option object: { label: ReactNode, value: string | number | boolean, className?: string, disabled?: boolean }
-   * - Group: { group: string, options: Array<...>, className?: string }
+   * - Item object: { label: ReactNode, value: string | number | boolean, className?: string, disabled?: boolean }
+   * - Group: { group: string, items: Array<...>, className?: string }
    * - Separator: use the string "---"
    *
    * \`\`\`tsx
-   * options={[
+   * items={[
    *   "Apple",
    *   { label: <><SunIcon /> Light</>, value: "light" },
    *   { label: "Disabled", value: "x", disabled: true },
    *   "---",
-   *   { group: "Veggies", options: ["Carrot", "Broccoli"] },
+   *   { group: "Veggies", items: ["Carrot", "Broccoli"] },
    * ]}
    * \`\`\`
    */
-  options: optionsT;
+  items: itemsT;
 
   /**
    * Placeholder shown in the trigger when no value is selected.
@@ -220,7 +220,7 @@ type={`export interface SelectWrapper {
 
   /**
    * Custom render function for the selected value shown in the trigger.
-   * Receives the raw value string and the matched option (if found).
+   * Receives the raw value string and the matched item (if found).
    *
    * Use this when the trigger display should differ from the list item.
    * If omitted, the item label (ReactNode) is mirrored automatically.
@@ -229,7 +229,7 @@ type={`export interface SelectWrapper {
    * renderValue={(value, option) => <span>{value.toUpperCase()}</span>}
    * \`\`\`
    */
-  renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode;
+  renderValue?: (value: string, option: allowedPrimitiveT | itemT | undefined) => React.ReactNode;
 
   /**
    * CSS classes applied to the trigger button.
@@ -252,8 +252,8 @@ type={`export interface SelectWrapper {
   groupLabelCls?: string;
 
   /**
-   * CSS classes applied to each option item.
-   * Individual options can override with their own className.
+   * CSS classes applied to each item.
+   * Individual items can override with their own className.
    */
   itemCls?: string;
 

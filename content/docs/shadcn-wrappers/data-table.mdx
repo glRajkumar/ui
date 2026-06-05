@@ -1,6 +1,6 @@
 ---
 title: Data Table
-description: A simplified wrapper for Shadcn Data Table with flexible option handling and automatic type conversion
+description: A simplified wrapper for Shadcn Data Table with flexible item handling and automatic type conversion
 ---
 
 import { DataTableEx } from "@/components/examples";
@@ -222,7 +222,7 @@ Multi-select dropdown filter for column values.
 <ColumnFilter
   title="Role"
   column={table.getColumn('role')}
-  options={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
+  items={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
 />
 ```
 
@@ -233,7 +233,7 @@ Multi-select dropdown filter with faceted value counts.
 <ColumnFacetedFilter
   title="Role"
   column={table.getColumn('role')}
-  options={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
+  items={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
 />
 ```
 
@@ -243,16 +243,16 @@ Dynamic filter management component that allows adding/removing filters (`Column
 ```tsx
 <FilterGroup
   table={table}
-  options={[
+  items={[
     {
       key: 'department',
       lable: 'Department',
-      options: ['Engineering', 'Marketing', 'Sales']
+      items: ['Engineering', 'Marketing', 'Sales']
     },
     {
       key: 'location',
       lable: 'Location',
-      options: ['New York', 'London', 'Tokyo']
+      items: ['New York', 'London', 'Tokyo']
     }
   ]}
 />
@@ -272,7 +272,7 @@ Comprehensive pagination controls with page size selection.
 <Pagination table={table} />
 ```
 
-Note: `options` array is of `optionsT` type, so you can pass allowed data. DataTable fully customizable with `column` array itself.
+Note: `items` array is of `itemsT` type, so you can pass allowed data. DataTable fully customizable with `column` array itself.
 
 
 ## Reference
@@ -293,16 +293,16 @@ type={`export interface props {
   title: React.ReactNode
 
   /**
-   * Array of options - can be primitives, objects, or groups
+   * Array of items - can be primitives, objects, or groups
    * 
    * Supports:
    * - Primitives: \`string | number | boolean\`
    * - Objects: \`{ label: React.ReactNode, value: allowedPrimitiveT, className?: string }\`
-   * - Groups: \`{ group: string, options: Array, className?: string }\`
+   * - Groups: \`{ group: string, items: Array, className?: string }\`
    * - Separators: Use \`"---"\` as a value
    * 
    * \`\`\`tsx
-   * const options = [
+   * const items = [
    *   "Simple string",
       *   42,
    *   true,
@@ -311,12 +311,12 @@ type={`export interface props {
    *   { label: <><Icon />Banana</>, value: "banana" },
    *   { 
    *      group: "Fruits", 
-   *      options: ["Apple", "Banana"] 
+   *      items: ["Apple", "Banana"] 
    *   },
    * ]
    * \`\`\`
    */
-  options: optionsT
+  items: itemsT
 
   /**
   * ...otherProps: All properties from ComboboxWrapper can be passed directly.

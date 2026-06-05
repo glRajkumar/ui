@@ -1,6 +1,6 @@
 ---
 title: Combobox
-description: A wrapper for Base UI Combobox with single and multi-select, chips, grouped options, async loading, custom label rendering, and create-new support.
+description: A wrapper for Base UI Combobox with single and multi-select, chips, grouped items, async loading, custom label rendering, and create-new support.
 ---
 
 import { ComboboxEx } from "@/components/examples";
@@ -89,9 +89,9 @@ Pass `multiple` to enable chip-based multi-select:
 />
 ```
 
-### Options format
+### Items format
 
-`items` accepts primitives, option objects, groups, and separators — mixed freely:
+`items` accepts primitives, item objects, groups, and separators — mixed freely:
 
 ```tsx
 const items = [
@@ -103,20 +103,20 @@ const items = [
   { label: "Disabled", value: "off", disabled: true },
   {
     group: "Category",
-    options: ["Option A", "Option B"],
+    items: ["Option A", "Option B"],
   },
 ]
 
 <ComboboxWrapper items={items} placeholder="Pick one" />
 ```
 
-### Grouped options
+### Grouped items
 
 ```tsx
 <ComboboxWrapper
   items={[
-    { group: "Fruits", options: ["Apple", "Banana"] },
-    { group: "Veggies", options: ["Carrot", "Broccoli"] },
+    { group: "Fruits", items: ["Apple", "Banana"] },
+    { group: "Veggies", items: ["Carrot", "Broccoli"] },
   ]}
   placeholder="Select food"
 />
@@ -204,7 +204,7 @@ const [open, setOpen] = useState(false)
 />
 ```
 
-### Async options
+### Async items
 
 Combine controlled query with async fetch:
 
@@ -272,7 +272,7 @@ Override the default loading/empty UI with `renderStatus` and `renderEmpty`:
 
 ### Custom chip label (renderValue)
 
-Used in `multiple` mode — controls what renders inside each chip. Receives the raw value string and the matched option:
+Used in `multiple` mode — controls what renders inside each chip. Receives the raw value string and the matched item:
 
 ```tsx
 <ComboboxWrapper
@@ -292,7 +292,7 @@ Used in `multiple` mode — controls what renders inside each chip. Receives the
 
 ### Custom input label (getItemLabel)
 
-Controls the string shown in the input after selection (single mode). Useful when option labels are ReactNodes:
+Controls the string shown in the input after selection (single mode). Useful when item labels are ReactNodes:
 
 ```tsx
 <ComboboxWrapper
@@ -306,7 +306,7 @@ Controls the string shown in the input after selection (single mode). Useful whe
 
 > Without `getItemLabel`, the wrapper uses `extractText` to derive a string from ReactNode labels automatically.
 
-### Create new option
+### Create new item
 
 Use `hideList` to hide the dropdown list (render your own "Create" item), and wire up `onValueChange` to extend items:
 
@@ -363,7 +363,7 @@ import { ComboboxVirtualisedWrapper } from "@/components/ui/combobox-virtualised
 
 <ComboboxVirtualisedWrapper
   items={largeList}
-  placeholder="Search 1000 options…"
+  placeholder="Search 1000 items…"
   triggerCls="w-64"
   showClear
 />
@@ -387,14 +387,14 @@ Custom row height and overscan:
 name="ComboboxWrapper"
 type={`export interface ComboboxWrapper {
   /**
-   * Array of options. Supports primitives, option objects, groups, and separators.
+   * Array of items. Supports primitives, item objects, groups, and separators.
    *
    * - Primitives: string | number | boolean
-   * - Option object: { label: ReactNode, value: string | number | boolean, className?: string, disabled?: boolean }
-   * - Group: { group: string, options: Array<...>, className?: string }
+   * - Item object: { label: ReactNode, value: string | number | boolean, className?: string, disabled?: boolean }
+   * - Group: { group: string, items: Array<...>, className?: string }
    * - Separator: use the string "---"
    */
-  items?: optionsT;
+  items?: itemsT;
 
   /**
    * Enable multi-select with chip-based input.
@@ -409,7 +409,7 @@ type={`export interface ComboboxWrapper {
 
   /**
    * Message shown when no items match the search query.
-   * @default "No options found"
+   * @default "No items found"
    */
   emptyMessage?: string;
 
@@ -446,15 +446,15 @@ type={`export interface ComboboxWrapper {
 
   /**
    * Custom render function for chip labels in multiple mode.
-   * Receives the raw value string and the matched option (if any).
+   * Receives the raw value string and the matched item (if any).
    *
-   * If omitted, the option label (ReactNode) is used directly.
+   * If omitted, the item label (ReactNode) is used directly.
    *
    * \`\`\`tsx
    * renderValue={(value, option) => <Badge>{value}</Badge>}
    * \`\`\`
    */
-  renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode;
+  renderValue?: (value: string, option: allowedPrimitiveT | itemT | undefined) => React.ReactNode;
 
   /**
    * Override the string shown in the input after selection (single mode).
@@ -489,7 +489,7 @@ type={`export interface ComboboxWrapper {
   groupCls?: string;
 
   /**
-   * CSS classes applied to each option item.
+   * CSS classes applied to each item.
    */
   itemCls?: string;
 

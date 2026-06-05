@@ -1,6 +1,6 @@
 ---
 title: Menu
-description: A wrapper for Base UI Menu — supports plain items, checkbox, radio, groups, submenus, and separators with a unified options API.
+description: A wrapper for Base UI Menu — supports plain items, checkbox, radio, groups, submenus, and separators with a unified items API.
 ---
 
 import { MenuEx } from "@/components/examples";
@@ -62,7 +62,7 @@ import { MenuWrapper } from "@/components/ui/menu-wrapper"
 import { buttonVariants } from "@/components/ui/button"
 
 <MenuWrapper
-  options={["Edit", "Duplicate", "---", "Delete"]}
+  items={["Edit", "Duplicate", "---", "Delete"]}
   trigger="Actions"
   triggerCls={buttonVariants({ variant: "outline" })}
 />
@@ -72,7 +72,7 @@ import { buttonVariants } from "@/components/ui/button"
 
 ```tsx
 <MenuWrapper
-  options={[
+  items={[
     { label: "Edit", value: "edit", shortcut: "⌘E" },
     { label: "Delete", value: "delete", variant: "destructive", shortcut: "⌘⌫" },
   ]}
@@ -88,7 +88,7 @@ import { buttonVariants } from "@/components/ui/button"
 const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 
 <MenuCheckboxWrapper
-  options={["Auto-save", "Spellcheck", "Dark mode"]}
+  items={["Auto-save", "Spellcheck", "Dark mode"]}
   checked={checked}
   onCheckedChange={(v, c) =>
     setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))
@@ -104,7 +104,7 @@ const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
 const [val, setVal] = useState<allowedPrimitiveT>("Light")
 
 <MenuRadioWrapper
-  options={["Light", "Dark", "System"]}
+  items={["Light", "Dark", "System"]}
   value={val}
   onValueChange={setVal}
   trigger={`Theme: ${val}`}
@@ -115,24 +115,24 @@ const [val, setVal] = useState<allowedPrimitiveT>("Light")
 ### Indicator position
 
 ```tsx
-<MenuCheckboxWrapper options={options} indicatorAt="right" trigger="..." />
-<MenuRadioWrapper options={options} indicatorAt="right" trigger="..." />
+<MenuCheckboxWrapper items={items} indicatorAt="right" trigger="..." />
+<MenuRadioWrapper items={items} indicatorAt="right" trigger="..." />
 ```
 
 ### Groups, submenus, separators
 
 ```tsx
-const options: menuOptionsT = [
+const items: menuItemsT = [
   { label: "New File", value: "new", shortcut: "⌘N" },
   "Save",
   "---",
   {
     group: "Settings",
-    options: [{ label: "Appearance", value: "appearance" }, "Shortcuts"],
+    items: [{ label: "Appearance", value: "appearance" }, "Shortcuts"],
   },
   {
     submenu: "Export",
-    options: ["PDF", "HTML", { group: "Advanced", options: ["LaTeX"] }],
+    items: ["PDF", "HTML", { group: "Advanced", items: ["LaTeX"] }],
   },
 ]
 ```
@@ -159,20 +159,20 @@ type={`export interface MenuWrapper {
   triggerProps?: Omit<React.ComponentProps<typeof MenuTrigger>, "children" | "className">;
 
   /**
-   * Array of menu options. Supports primitives, separator "---", objects, groups, and submenus.
+   * Array of menu items. Supports primitives, separator "---", objects, groups, and submenus.
    *
    * \`\`\`tsx
-   * options={[
+   * items={[
    *   "Simple item",
    *   { label: "Edit", value: "edit", shortcut: "⌘E" },
    *   { label: "Delete", value: "delete", variant: "destructive" },
    *   "---",
-   *   { group: "Actions", options: ["Save", "Export"] },
-   *   { submenu: "Share", options: ["Email", "Link"] }
+   *   { group: "Actions", items: ["Save", "Export"] },
+   *   { submenu: "Share", items: ["Email", "Link"] }
    * ]}
    * \`\`\`
    */
-  options: menuOptionsT;
+  items: menuItemsT;
 
   /**
    * CSS class applied to all menu items.
@@ -212,7 +212,7 @@ name="MenuCheckboxWrapper"
 type={`export interface MenuCheckboxWrapper {
   trigger: React.ReactNode;
   triggerCls?: string;
-  options: menuInputOptionsT;
+  items: menuInputItemsT;
 
   /**
    * Controlled checked values. If omitted, manages own state.
@@ -247,7 +247,7 @@ name="MenuRadioWrapper"
 type={`export interface MenuRadioWrapper {
   trigger: React.ReactNode;
   triggerCls?: string;
-  options: menuInputOptionsT;
+  items: menuInputItemsT;
 
   /**
    * Controlled selected value. If omitted, manages own state (defaults to "").
@@ -274,4 +274,4 @@ type={`export interface MenuRadioWrapper {
 - [Base UI Menu](https://base-ui.com/react/components/menu)
 - [Shadcn Dropdown Menu](https://ui.shadcn.com/docs/components/dropdown-menu)
 - [Menubar](/docs/shadcn-wrappers/menubar) — multiple menus in a horizontal bar
-- [Context Menu](/docs/shadcn-wrappers/context-menu) — same options API, triggered by right-click
+- [Context Menu](/docs/shadcn-wrappers/context-menu) — same items API, triggered by right-click
