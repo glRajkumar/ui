@@ -1,4 +1,4 @@
-export const options: optionsT = [
+export const options: itemsT = [
   'Data 1',
   false,
   12,
@@ -20,7 +20,7 @@ export const options: optionsT = [
   {
     group: 'Group 1',
     className: 'bg-pink-100',
-    options: [
+    items: [
       'grp 1',
       21,
       true,
@@ -35,6 +35,6 @@ export const options: optionsT = [
   {
     group: 'Group 2',
     className: 'bg-pink-100',
-    options: ['grp 2', 22],
+    items: ['grp 2', 22],
   },
 ]

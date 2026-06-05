@@ -38,7 +38,7 @@ export function ComboboxExample() {
         <ExItem label="Flat list">
           <FlatExample />
         </ExItem>
-        <ExItem label="Grouped options">
+        <ExItem label="Grouped items">
           <GroupedExample />
         </ExItem>
         <ExItem label="With separator">

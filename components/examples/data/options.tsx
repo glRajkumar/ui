@@ -14,7 +14,7 @@ import {
 
 import { delay } from '@/utils'
 
-export const options: optionsT = [
+export const options: itemsT = [
   'Data 1',
   false,
   12,
@@ -32,7 +32,7 @@ export const options: optionsT = [
   '---',
   {
     group: 'Group 1',
-    options: [
+    items: [
       'grp 1',
       21,
       true,
@@ -48,7 +48,7 @@ export const options: optionsT = [
     ],
   },
   '---',
-  { group: 'Group 2', options: ['grp 2', 22] },
+  { group: 'Group 2', items: ['grp 2', 22] },
 ]
 
 export const generateOptions = (n: number = 20) =>
@@ -59,7 +59,7 @@ export async function asyncOptions({ n, delayBy = 5000 }: { n?: number; delayBy?
   return generateOptions(n)
 }
 
-export const fruits: optionsT = [
+export const fruits: itemsT = [
   'Apple',
   'Banana',
   'Cherry',
@@ -102,13 +102,13 @@ export const fruits: optionsT = [
   'Longan',
 ]
 
-export const grouped: optionsT = [
-  { group: 'Citrus', options: ['Orange', 'Lemon', 'Lime', 'Grapefruit'] },
-  { group: 'Tropical', options: ['Mango', 'Papaya', 'Pineapple'] },
-  { group: 'Berries', options: ['Strawberry', 'Blueberry', 'Raspberry'] },
+export const grouped: itemsT = [
+  { group: 'Citrus', items: ['Orange', 'Lemon', 'Lime', 'Grapefruit'] },
+  { group: 'Tropical', items: ['Mango', 'Papaya', 'Pineapple'] },
+  { group: 'Berries', items: ['Strawberry', 'Blueberry', 'Raspberry'] },
 ]
 
-export const withSeparator: optionsT = [
+export const withSeparator: itemsT = [
   'Design',
   'Engineering',
   'Marketing',
@@ -117,14 +117,14 @@ export const withSeparator: optionsT = [
   'Legal',
 ]
 
-export const withDisabled: optionsT = [
+export const withDisabled: itemsT = [
   { label: 'Admin', value: 'admin' },
   { label: 'Editor', value: 'editor' },
   { label: 'Viewer (disabled)', value: 'viewer', disabled: true },
   { label: 'Guest', value: 'guest' },
 ]
 
-export const themed: optionsT = [
+export const themed: itemsT = [
   {
     label: (
       <>
@@ -151,7 +151,7 @@ export const themed: optionsT = [
   },
 ]
 
-export const regions: optionsT = [
+export const regions: itemsT = [
   {
     label: (
       <>
@@ -181,7 +181,7 @@ export const regions: optionsT = [
   },
 ]
 
-export const statusOptions: optionsT = [
+export const statusOptions: itemsT = [
   { label: 'Active', value: 'active' },
   { label: 'Pending review', value: 'pending' },
   { label: 'Inactive', value: 'inactive' },
@@ -213,7 +213,7 @@ export const memberMeta: Record<
   dan: { initials: 'DP', name: 'Dan Park', dept: 'Finance', bg: 'bg-amber-500' },
 }
 
-export const memberOptions: optionsT = [
+export const memberOptions: itemsT = [
   {
     label: (
       <span className="flex items-center gap-2">
@@ -272,7 +272,7 @@ export const memberOptions: optionsT = [
   },
 ]
 
-export const priorityOptions: optionsT = [
+export const priorityOptions: itemsT = [
   {
     label: (
       <>
@@ -326,7 +326,7 @@ export const priorityMeta: Record<string, { icon: ReactNode; cls: string }> = {
   },
 }
 
-export const teamOptions: optionsT = [
+export const teamOptions: itemsT = [
   { label: 'Alice Chen', value: 'alice' },
   { label: 'Bob Kim', value: 'bob' },
   { label: 'Carol Wang', value: 'carol' },
@@ -342,7 +342,7 @@ export const teamMeta: Record<string, { initials: string; bg: string; name: stri
   eve: { initials: 'EL', bg: 'bg-teal-500', name: 'Eve' },
 }
 
-export const frameworks: optionsT = [
+export const frameworks: itemsT = [
   { value: 'next', label: 'Next.js' },
   { value: 'remix', label: 'Remix' },
   { value: 'astro', label: 'Astro' },
@@ -351,10 +351,10 @@ export const frameworks: optionsT = [
   { value: 'solid-start', label: 'SolidStart' },
 ]
 
-export const groupedTech: optionsT = [
+export const groupedTech: itemsT = [
   {
     group: 'Frontend',
-    options: [
+    items: [
       { value: 'react', label: 'React' },
       { value: 'vue', label: 'Vue' },
       { value: 'svelte', label: 'Svelte' },
@@ -363,7 +363,7 @@ export const groupedTech: optionsT = [
   },
   {
     group: 'Backend',
-    options: [
+    items: [
       { value: 'node', label: 'Node.js' },
       { value: 'deno', label: 'Deno' },
       { value: 'bun', label: 'Bun' },
@@ -372,7 +372,7 @@ export const groupedTech: optionsT = [
   },
   {
     group: 'Database',
-    options: [
+    items: [
       { value: 'postgres', label: 'PostgreSQL' },
       { value: 'mysql', label: 'MySQL' },
       { value: 'mongo', label: 'MongoDB' },

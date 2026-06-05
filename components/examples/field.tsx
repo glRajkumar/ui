@@ -95,7 +95,7 @@ export function FieldExample() {
         name="gender"
         label="Gender"
         value={value.gender}
-        options={genderOptions}
+        items={genderOptions}
         onValueChange={val => onChange('gender', val)}
       />
 
@@ -103,7 +103,7 @@ export function FieldExample() {
         name="interest"
         label="Interest"
         value={value.interest}
-        options={interestOptions}
+        items={interestOptions}
         onValueChange={val => onChange('interest', val)}
       />
 
@@ -118,7 +118,7 @@ export function FieldExample() {
         name="country"
         label="Country"
         value={value.country}
-        options={countryOptions}
+        items={countryOptions}
         onValueChange={val => onChange('country', val)}
       />
 

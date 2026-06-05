@@ -24,42 +24,42 @@ type DateTimePickerProps = Omit<
   React.ComponentProps<typeof Calendar>,
   'mode' | 'selected' | 'onSelect' | 'disabled'
 > & {
-  selected?: Date
-  onSelect?: (date: Date | undefined) => void
   open?: boolean
-  onOpenChange?: (open: boolean) => void
+  align?: React.ComponentProps<typeof PopoverContent>['align']
+  minDate?: Date
+  maxDate?: Date
+  minTime?: Date
+  selected?: Date
   placeholder?: string
   dateFormat?: string
   minuteStep?: MinuteStep
   hourFormat?: HourFormat
-  triggerProps?: Omit<React.ComponentProps<typeof Button>, 'children'>
-  align?: React.ComponentProps<typeof PopoverContent>['align']
   disablePast?: boolean
-  minDate?: Date
-  maxDate?: Date
-  minTime?: Date
+  triggerProps?: Omit<React.ComponentProps<typeof Button>, 'children'>
+  onSelect?: (date: Date | undefined) => void
+  onOpenChange?: (open: boolean) => void
 }
 
 function DateTimePicker({
-  selected,
-  onSelect,
-  open: controlledOpen,
-  onOpenChange: onOpenChangeProp,
-  placeholder = 'Pick date & time',
-  dateFormat,
-  minuteStep = 5,
-  hourFormat = 24,
-  triggerProps,
-  align = 'start',
-  disablePast = false,
+  open,
   minDate,
   maxDate,
   minTime,
+  selected,
+  dateFormat,
+  triggerProps,
+  align = 'start',
+  minuteStep = 5,
+  hourFormat = 24,
+  placeholder = 'Pick date & time',
+  disablePast = false,
+  onSelect,
+  onOpenChange,
   ...calendarProps
 }: DateTimePickerProps) {
   const [internalOpen, setInternalOpen] = React.useState(false)
-  const isControlled = controlledOpen !== undefined
-  const open = isControlled ? controlledOpen : internalOpen
+  const isControlled = open !== undefined
+  const open_ = isControlled ? open : internalOpen
 
   const [internalDate, setInternalDate] = React.useState<Date | undefined>(selected)
   const slotRefs = React.useRef<Record<number, HTMLButtonElement | null>>({})
@@ -70,7 +70,7 @@ function DateTimePicker({
 
   function handleOpenChange(next: boolean) {
     if (!isControlled) setInternalOpen(next)
-    onOpenChangeProp?.(next)
+    onOpenChange?.(next)
   }
 
   const effectiveMinTime = React.useMemo(() => {
@@ -204,7 +204,7 @@ function DateTimePicker({
   const { className: triggerClassName, ...restTriggerProps } = triggerProps ?? {}
 
   return (
-    <Popover open={open} onOpenChange={handleOpenChange}>
+    <Popover open={open_} onOpenChange={handleOpenChange}>
       <PopoverTrigger
         render={
           <Button
@@ -271,7 +271,7 @@ function DateTimePicker({
                           'hover:bg-accent hover:text-accent-foreground',
                           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                           active &&
-                            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-xs',
+                          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-xs',
                           disabled && 'pointer-events-none opacity-30',
                         )}
                       >

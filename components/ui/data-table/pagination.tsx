@@ -20,7 +20,7 @@ export function Pagination<TData>({ table }: PaginationProps<TData>) {
         <SelectWrapper
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={value => table.setPageSize(Number(value))}
-          options={[10, 20, 30, 40, 50]}
+          items={[10, 20, 30, 40, 50]}
           placeholder={`${table.getState().pagination.pageSize}`}
           triggerCls="h-8 w-[70px]"
         />

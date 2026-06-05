@@ -10,16 +10,16 @@ import {
   ContextWrapper,
 } from '@/components/ui/context-menu-wrapper'
 
-const featureOptions: menuInputOptionsT = ['Auto-save', 'Spellcheck', 'Dark mode']
+const featureOptions: menuInputItemsT = ['Auto-save', 'Spellcheck', 'Dark mode']
 
-const groupedCheckboxOptions: menuInputOptionsT = [
+const groupedCheckboxOptions: menuInputItemsT = [
   {
     group: 'Editor',
-    options: ['Auto-save', 'Spellcheck', 'Word wrap'],
+    items: ['Auto-save', 'Spellcheck', 'Word wrap'],
   },
   {
     group: 'Display',
-    options: [
+    items: [
       'Line numbers',
       'Minimap',
       { label: 'Breadcrumbs', value: 'breadcrumbs', disabled: true },
@@ -27,16 +27,16 @@ const groupedCheckboxOptions: menuInputOptionsT = [
   },
 ]
 
-const themeOptions: menuInputOptionsT = ['Light', 'Dark', 'System']
+const themeOptions: menuInputItemsT = ['Light', 'Dark', 'System']
 
-const groupedRadioOptions: menuInputOptionsT = [
+const groupedRadioOptions: menuInputItemsT = [
   {
     group: 'Light',
-    options: ['Default', 'Warm', 'Cool'],
+    items: ['Default', 'Warm', 'Cool'],
   },
   {
     group: 'Dark',
-    options: ['Midnight', 'Slate'],
+    items: ['Midnight', 'Slate'],
   },
 ]
 
@@ -50,7 +50,7 @@ function TriggerArea() {
 
 function BasicExample() {
   return (
-    <ContextWrapper options={dropdownOptions}>
+    <ContextWrapper items={dropdownOptions}>
       <TriggerArea />
     </ContextWrapper>
   )
@@ -60,7 +60,7 @@ function CheckboxDefaultExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   return (
     <ContextCheckboxWrapper
-      options={featureOptions}
+      items={featureOptions}
       checked={checked}
       onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
     >
@@ -71,7 +71,7 @@ function CheckboxDefaultExample() {
 
 function CheckboxLeftExample() {
   return (
-    <ContextCheckboxWrapper options={featureOptions} indicatorAt="left">
+    <ContextCheckboxWrapper items={featureOptions} indicatorAt="left">
       <TriggerArea />
     </ContextCheckboxWrapper>
   )
@@ -81,7 +81,7 @@ function CheckboxGroupedExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   return (
     <ContextCheckboxWrapper
-      options={groupedCheckboxOptions}
+      items={groupedCheckboxOptions}
       checked={checked}
       onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
     >
@@ -93,7 +93,7 @@ function CheckboxGroupedExample() {
 function RadioControlledExample() {
   const [val, setVal] = useState<allowedPrimitiveT>('Light')
   return (
-    <ContextRadioWrapper options={themeOptions} value={val} onValueChange={setVal}>
+    <ContextRadioWrapper items={themeOptions} value={val} onValueChange={setVal}>
       <TriggerArea />
     </ContextRadioWrapper>
   )
@@ -101,7 +101,7 @@ function RadioControlledExample() {
 
 function RadioLeftExample() {
   return (
-    <ContextRadioWrapper options={themeOptions} indicatorAt="left">
+    <ContextRadioWrapper items={themeOptions} indicatorAt="left">
       <TriggerArea />
     </ContextRadioWrapper>
   )
@@ -110,7 +110,7 @@ function RadioLeftExample() {
 function RadioGroupedExample() {
   const [val, setVal] = useState<allowedPrimitiveT>('Default')
   return (
-    <ContextRadioWrapper options={groupedRadioOptions} value={val} onValueChange={setVal}>
+    <ContextRadioWrapper items={groupedRadioOptions} value={val} onValueChange={setVal}>
       <TriggerArea />
     </ContextRadioWrapper>
   )

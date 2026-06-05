@@ -12,8 +12,8 @@ interface ColumnHeaderProps<TData, TValue> {
 }
 
 export function ColumnSorter<TData, TValue>({
-  column,
   title,
+  column,
   className,
 }: ColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) return <div className={cn(className)}>{title}</div>

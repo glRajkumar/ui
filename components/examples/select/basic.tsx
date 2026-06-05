@@ -4,25 +4,25 @@ import { fruits, grouped, withSeparator } from '@/components/examples/data/optio
 import { SelectWrapper } from '@/components/ui/select'
 
 export function FlatExample() {
-  return <SelectWrapper options={fruits} placeholder="Select fruit" triggerCls="w-44" />
+  return <SelectWrapper items={fruits} placeholder="Select fruit" triggerCls="w-44" />
 }
 
 export function GroupedExample() {
-  return <SelectWrapper options={grouped} placeholder="Select fruit" triggerCls="w-44" />
+  return <SelectWrapper items={grouped} placeholder="Select fruit" triggerCls="w-44" />
 }
 
 export function SeparatorExample() {
-  return <SelectWrapper options={withSeparator} placeholder="Select team" triggerCls="w-44" />
+  return <SelectWrapper items={withSeparator} placeholder="Select team" triggerCls="w-44" />
 }
 
 export function IndicatorRightExample() {
-  return <SelectWrapper options={fruits} placeholder="Select fruit" triggerCls="w-44" />
+  return <SelectWrapper items={fruits} placeholder="Select fruit" triggerCls="w-44" />
 }
 
 export function IndicatorLeftExample() {
   return (
     <SelectWrapper
-      options={fruits}
+      items={fruits}
       placeholder="Select fruit"
       triggerCls="w-44"
       indicatorAt="left"

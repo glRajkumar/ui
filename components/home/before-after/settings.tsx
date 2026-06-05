@@ -31,7 +31,7 @@ function Settings({ settings, form }: props) {
                 name={key}
                 label={key}
                 control={form.control}
-                options={value.options}
+                items={value.options}
               />
             )
           }
@@ -43,7 +43,7 @@ function Settings({ settings, form }: props) {
                 name={key}
                 label={key}
                 control={form.control}
-                options={value.options}
+                items={value.options}
               />
             )
           }

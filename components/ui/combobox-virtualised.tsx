@@ -17,9 +17,9 @@ import {
 
 type ComboboxVirtualListProps = {
   itemCls?: string
-  indicatorAt?: indicatorAtT
-  estimateSize: number
   maxHeight: number
+  estimateSize: number
+  indicatorAt?: indicatorAtT
   virtualizerOptions?: Partial<
     Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>
   >
@@ -27,12 +27,12 @@ type ComboboxVirtualListProps = {
 
 function ComboboxVirtualList({
   itemCls,
+  maxHeight,
   indicatorAt,
   estimateSize,
-  maxHeight,
   virtualizerOptions,
 }: ComboboxVirtualListProps) {
-  const items = (ComboboxPrimitive.useFilteredItems() ?? []) as (allowedPrimitiveT | optionT)[]
+  const items = (ComboboxPrimitive.useFilteredItems() ?? []) as (allowedPrimitiveT | itemT)[]
   const parentRef = React.useRef<HTMLDivElement>(null)
 
   const virtualizer = useVirtualizer({
@@ -86,7 +86,7 @@ type ComboboxVirtualisedWrapperProps = Omit<
   ComboboxPrimitive.Root.Props<unknown, false>,
   'items' | 'multiple'
 > & {
-  items?: optionsT
+  items?: itemsT
   isLoading?: boolean
   placeholder?: string
   emptyMessage?: string
@@ -131,7 +131,7 @@ function ComboboxVirtualisedWrapper({
     if (!items) return map
     for (const opt of items) {
       if (isGroup(opt)) continue
-      const o = opt as allowedPrimitiveT | optionT
+      const o = opt as allowedPrimitiveT | itemT
       const val = getValue(o)
       if (!isSeparator(val)) {
         const key = String(val)
@@ -145,8 +145,8 @@ function ComboboxVirtualisedWrapper({
   const itemsForBase = React.useMemo(() => {
     if (!items) return []
     return items.filter(
-      item => !isGroup(item) && !isSeparator(getValue(item as allowedPrimitiveT | optionT)),
-    ) as (allowedPrimitiveT | optionT)[]
+      item => !isGroup(item) && !isSeparator(getValue(item as allowedPrimitiveT | itemT)),
+    ) as (allowedPrimitiveT | itemT)[]
   }, [items])
 
   return (
@@ -155,7 +155,7 @@ function ComboboxVirtualisedWrapper({
       items={itemsForBase as unknown[]}
       virtualized
       itemToStringLabel={item => {
-        const key = String(getValue(item as allowedPrimitiveT | optionT))
+        const key = String(getValue(item as allowedPrimitiveT | itemT))
         return labelStringMap[key] ?? key
       }}
       {...props}
@@ -174,16 +174,16 @@ function ComboboxVirtualisedWrapper({
           {renderStatus !== undefined
             ? renderStatus
             : isLoading && (
-                <p className="flex items-center justify-center gap-2 py-6">
-                  <Loader2 className="size-4 animate-spin" /> Loading...
-                </p>
-              )}
+              <p className="flex items-center justify-center gap-2 py-6">
+                <Loader2 className="size-4 animate-spin" /> Loading...
+              </p>
+            )}
         </ComboboxStatus>
 
         <ComboboxEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className="py-6">{emptyMessage ?? 'No options found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? 'No items found'}</p>}
         </ComboboxEmpty>
 
         <ComboboxVirtualList

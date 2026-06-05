@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:base-ui.com)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(pnpm exec *)"
     ]
   }
 }

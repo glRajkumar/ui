@@ -6,15 +6,14 @@ import { getLabel, getValue, isGroup } from '@/lib/utils'
 import { ComboboxWrapper, type ComboboxWrapperProps } from '@/components/ui/combobox'
 
 interface ColumnFacetedFilterProps<TData, TValue>
-  extends Omit<ComboboxWrapperProps, 'options' | 'value' | 'onValueChange' | 'label'> {
+  extends Omit<ComboboxWrapperProps, 'value' | 'onValueChange' | 'label'> {
   column?: Column<TData, TValue>
   title: React.ReactNode
-  options: optionsT
 }
 
-function change(option: allowedPrimitiveT | optionT, facets?: Map<any, number>) {
-  const value = getValue(option)
-  const label = getLabel(option)
+function change(item: allowedPrimitiveT | itemT, facets?: Map<any, number>) {
+  const value = getValue(item)
+  const label = getLabel(item)
 
   return {
     label: (
@@ -34,7 +33,7 @@ function change(option: allowedPrimitiveT | optionT, facets?: Map<any, number>) 
 export function ColumnFacetedFilter<TData, TValue>({
   column,
   title,
-  options,
+  items,
   ...props
 }: ColumnFacetedFilterProps<TData, TValue>) {
   const [facets, setFacets] = useState<Map<unknown, number> | undefined>()
@@ -43,15 +42,15 @@ export function ColumnFacetedFilter<TData, TValue>({
     setFacets(column?.getFacetedUniqueValues())
   }, [column])
 
-  const newOptions = options.map(option => {
-    if (isGroup(option)) {
+  const newItems = (items ?? []).map(item => {
+    if (isGroup(item)) {
       return {
-        ...option,
-        options: option.options.map(o => change(o, facets)),
+        ...item,
+        items: item.items.map(o => change(o, facets)),
       }
     }
 
-    return change(option, facets)
+    return change(item, facets)
   })
 
   function onSelect(selected: allowedPrimitiveT[]) {
@@ -61,7 +60,7 @@ export function ColumnFacetedFilter<TData, TValue>({
   return (
     <ComboboxWrapper
       multiple
-      items={newOptions}
+      items={newItems}
       value={(column?.getFilterValue() as string[]) ?? []}
       onValueChange={v => onSelect(v as any)}
       // label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}

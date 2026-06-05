@@ -92,7 +92,7 @@ export function Field_TF_Example() {
         {field => (
           <field.SelectField
             label="Country"
-            options={['USA', 'UK', 'Canada', 'Australia', 'India']}
+            items={['USA', 'UK', 'Canada', 'Australia', 'India']}
             placeholder="Select your country"
           />
         )}
@@ -100,7 +100,7 @@ export function Field_TF_Example() {
 
       <form.AppField name="role">
         {field => (
-          <field.RadioField label="Role" options={['Developer', 'Designer', 'Manager', 'Other']} />
+          <field.RadioField label="Role" items={['Developer', 'Designer', 'Manager', 'Other']} />
         )}
       </form.AppField>
 
@@ -108,7 +108,7 @@ export function Field_TF_Example() {
         {field => (
           <field.CheckboxField
             label="Hobbies"
-            options={['Reading', 'Gaming', 'Sports', 'Music', 'Travel']}
+            items={['Reading', 'Gaming', 'Sports', 'Music', 'Travel']}
           />
         )}
       </form.AppField>

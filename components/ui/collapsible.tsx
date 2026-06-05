@@ -11,8 +11,8 @@ function Collapsible(props: CollapsiblePrimitive.Root.Props) {
 }
 
 function CollapsibleTrigger({
-  className,
   children,
+  className,
   indicatorAt = 'right',
   ...props
 }: CollapsiblePrimitive.Trigger.Props & { indicatorAt?: indicatorAtT }) {
@@ -20,7 +20,7 @@ function CollapsibleTrigger({
     <ChevronDownIcon
       data-slot="collapsible-trigger-icon"
       className={cn(
-        'pointer-events-none shrink-0 transition-transform duration-200 group-data-[panel-open]/collapsible-trigger:rotate-180',
+        'pointer-events-none shrink-0 transition-transform duration-200 group-data-panel-open/collapsible-trigger:rotate-180',
         indicatorAt === 'right' && 'ml-auto',
       )}
     />

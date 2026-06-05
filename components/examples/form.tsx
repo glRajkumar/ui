@@ -99,7 +99,7 @@ function ProfileFormExample() {
       <SelectWrapper
         name="country"
         label="Country"
-        options={countryOptions}
+        items={countryOptions}
         value={values.country}
         onValueChange={val => set('country', val)}
         error={errors.country}
@@ -108,7 +108,7 @@ function ProfileFormExample() {
       <RadioWrapper
         name="role"
         label="Role"
-        options={['Admin', 'Editor', 'Viewer']}
+        items={['Admin', 'Editor', 'Viewer']}
         value={values.role}
         onValueChange={val => set('role', val)}
         error={errors.role}

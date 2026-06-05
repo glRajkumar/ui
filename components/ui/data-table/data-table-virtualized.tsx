@@ -11,9 +11,9 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/compon
 
 interface DataTableProps<TData> {
   table: TanstackTable<TData>
-  emptyMessage?: string
   className?: string
   hasNextPage?: boolean
+  emptyMessage?: string
   isFetchingNextPage?: boolean
   fetchNextPage?: () => void
   virtualizerOptions?: Partial<
@@ -23,11 +23,11 @@ interface DataTableProps<TData> {
 
 export function DataTableVirtualized<TData>({
   table,
-  emptyMessage = 'No matching results.',
   className = '',
   hasNextPage = false,
+  emptyMessage = 'No matching results.',
   isFetchingNextPage = false,
-  fetchNextPage = () => {},
+  fetchNextPage = () => { },
   virtualizerOptions,
 }: DataTableProps<TData>) {
   const rows = table.getRowModel().rows

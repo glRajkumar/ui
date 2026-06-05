@@ -11,7 +11,7 @@ export function VirtualisedExample() {
   return (
     <ComboboxVirtualisedWrapper
       items={largeList}
-      placeholder="Search 1000 options…"
+      placeholder="Search 1000 items…"
       triggerCls="w-64"
       showClear
     />
@@ -22,7 +22,7 @@ export function VirtualisedCustomSizeExample() {
   return (
     <ComboboxVirtualisedWrapper
       items={largeList}
-      placeholder="Search 1000 options…"
+      placeholder="Search 1000 items…"
       triggerCls="w-64"
       showClear
       maxHeight={200}

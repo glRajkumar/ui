@@ -15,17 +15,17 @@ import { ToggleWrapper } from '@/components/ui/toggle'
 import { ExItem, ExRow } from '@/components/examples/common'
 
 function BasicExample() {
-  return <ToggleWrapper options={['Bold', 'Italic', 'Underline']} />
+  return <ToggleWrapper items={['Bold', 'Italic', 'Underline']} />
 }
 
 function MultipleExample() {
-  return <ToggleWrapper options={['Bold', 'Italic', 'Underline']} multiple />
+  return <ToggleWrapper items={['Bold', 'Italic', 'Underline']} multiple />
 }
 
 function IconOnlyExample() {
   return (
     <ToggleWrapper
-      options={[
+      items={[
         { label: <Bold />, value: 'bold', 'aria-label': 'Toggle bold' },
         { label: <Italic />, value: 'italic', 'aria-label': 'Toggle italic' },
         { label: <Underline />, value: 'underline', 'aria-label': 'Toggle underline' },
@@ -37,7 +37,7 @@ function IconOnlyExample() {
 function IconTextExample() {
   return (
     <ToggleWrapper
-      options={[
+      items={[
         {
           label: (
             <>
@@ -73,7 +73,7 @@ function ControlledExample() {
   return (
     <div className="flex items-center gap-4">
       <ToggleWrapper
-        options={['Bold', 'Italic', 'Underline']}
+        items={['Bold', 'Italic', 'Underline']}
         value={value}
         onValueChange={v => setValue(v)}
         multiple
@@ -86,7 +86,7 @@ function ControlledExample() {
 function VerticalExample() {
   return (
     <ToggleWrapper
-      options={[
+      items={[
         {
           label: (
             <>
@@ -128,9 +128,9 @@ function VerticalExample() {
 function SpacingExample() {
   return (
     <div className="flex flex-col gap-3">
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} spacing={0} />
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} spacing={1} />
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} spacing={2} />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} spacing={0} />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} spacing={1} />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} spacing={2} />
     </div>
   )
 }
@@ -138,8 +138,8 @@ function SpacingExample() {
 function VariantsExample() {
   return (
     <div className="flex flex-col gap-3">
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} variant="default" />
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} variant="outline" />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} variant="default" />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} variant="outline" />
     </div>
   )
 }
@@ -147,22 +147,22 @@ function VariantsExample() {
 function SizesExample() {
   return (
     <div className="flex flex-col gap-3">
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} size="sm" />
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} size="default" />
-      <ToggleWrapper options={['Bold', 'Italic', 'Underline']} size="lg" />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} size="sm" />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} size="default" />
+      <ToggleWrapper items={['Bold', 'Italic', 'Underline']} size="lg" />
     </div>
   )
 }
 
 function DisabledExample() {
-  return <ToggleWrapper options={['Bold', 'Italic', 'Underline']} disabled />
+  return <ToggleWrapper items={['Bold', 'Italic', 'Underline']} disabled />
 }
 
 export function ToggleExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
       <ExRow label="Basic">
-        <ExItem label="Default — single selection, string options">
+        <ExItem label="Default — single selection, string items">
           <BasicExample />
         </ExItem>
         <ExItem label="multiple — several items active simultaneously">
@@ -170,7 +170,7 @@ export function ToggleExample() {
         </ExItem>
       </ExRow>
 
-      <ExRow label="Options format">
+      <ExRow label="Items format">
         <ExItem label="Icon only — use aria-label for accessibility">
           <IconOnlyExample />
         </ExItem>

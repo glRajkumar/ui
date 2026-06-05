@@ -14,13 +14,13 @@ import {
 import { renderSearchStatus, renderSearchEmpty } from '@/components/examples/common'
 import { ComboboxWrapper } from '@/components/ui/combobox'
 
-function hasMatch(items: optionsT, query: string): boolean {
+function hasMatch(items: itemsT, query: string): boolean {
   const lower = query.toLowerCase()
   return items.some(item => {
     if (typeof item === 'string') return item.toLowerCase().includes(lower)
     if (typeof item === 'number' || typeof item === 'boolean') return String(item).includes(lower)
     if (typeof item === 'object' && 'value' in item)
-      return String((item as optionT).value)
+      return String((item as itemT).value)
         .toLowerCase()
         .includes(lower)
     return false
@@ -33,7 +33,7 @@ export function AsyncExample() {
     <ComboboxWrapper
       items={list ?? []}
       isLoading={isLoading}
-      placeholder="Loading options…"
+      placeholder="Loading items…"
       triggerCls="w-52"
     />
   )

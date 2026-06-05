@@ -1,6 +1,6 @@
 import { Apple, Banana } from 'lucide-react'
 
-export const dropdownOptions: menuOptionsT = [
+export const dropdownOptions: menuItemsT = [
   { label: 'New File', value: 'new', shortcut: 'Ctrl+N' },
   'Save',
   12,
@@ -15,11 +15,11 @@ export const dropdownOptions: menuOptionsT = [
   '---',
   {
     group: 'Settings',
-    options: [{ label: 'Appearance', value: 'appearance' }, 22, true],
+    items: [{ label: 'Appearance', value: 'appearance' }, 22, true],
   },
   {
     submenu: 'More',
-    options: [
+    items: [
       {
         label: (
           <>
@@ -30,7 +30,7 @@ export const dropdownOptions: menuOptionsT = [
       },
       {
         group: 'Tools',
-        options: [{ label: 'Formatter', value: 'formatter' }, false],
+        items: [{ label: 'Formatter', value: 'formatter' }, false],
       },
     ],
   },

@@ -13,15 +13,15 @@ type ColumnFilterPassthroughProps = Omit<
 >
 type MenuCheckboxPassthroughProps = Omit<
   React.ComponentProps<typeof MenuCheckboxWrapper>,
-  'trigger' | 'options' | 'checked' | 'onCheckedChange'
+  'trigger' | 'items' | 'checked' | 'onCheckedChange'
 >
 
 interface FilterGroupProps<TData> {
   table: Table<TData>
-  options: {
+  items: {
     value: string
     lable: React.ReactNode
-    options: optionsT
+    items: itemsT
     columnFilterProps?: ColumnFilterPassthroughProps
   }[]
   columnFilterProps?: ColumnFilterPassthroughProps
@@ -30,7 +30,7 @@ interface FilterGroupProps<TData> {
 
 export function FilterGroup<TData>({
   table,
-  options,
+  items,
   columnFilterProps,
   menuCheckboxProps,
 }: FilterGroupProps<TData>) {
@@ -38,14 +38,14 @@ export function FilterGroup<TData>({
 
   return (
     <>
-      {options
+      {items
         .filter(f => selected.includes(f.value))
         .map(opt => (
           <ColumnFilter
             key={opt.value}
             title={opt.lable}
+            items={opt.items}
             column={table.getColumn(opt.value)}
-            options={opt.options}
             {...columnFilterProps}
             {...opt.columnFilterProps}
           />
@@ -63,7 +63,7 @@ export function FilterGroup<TData>({
         onCheckedChange={(val, checked) =>
           setSelected(prev => (!checked ? prev.filter(p => !p) : [...prev, val]))
         }
-        options={options.map(m => ({ label: m.lable, value: m.value }))}
+        items={items.map(m => ({ label: m.lable, value: m.value }))}
       />
     </>
   )

@@ -126,21 +126,21 @@ function ToggleGroupItem({
 
 type toggleItemT =
   | allowedPrimitiveT
-  | (optionT & {
+  | (itemT & {
       'aria-label'?: string
     })
 
 type toggleItemsT = toggleItemT[]
 
 type toggleWrapperProps = toggleGrpT & {
-  options: toggleItemT[]
+  items: toggleItemT[]
   itemCls?: string
 }
 
-function ToggleWrapper({ options, itemCls, ...props }: toggleWrapperProps) {
+function ToggleWrapper({ items, itemCls, ...props }: toggleWrapperProps) {
   return (
     <ToggleGroup {...props}>
-      {options.map((option, i) => {
+      {items.map((option, i) => {
         const value = getValue(option)
         const label = getLabel(option)
         const isObj = isOption(option)

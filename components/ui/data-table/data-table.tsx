@@ -13,14 +13,14 @@ import {
 
 interface DataTableProps<TData> {
   table: TanstackTable<TData>
-  emptyMessage?: string
   className?: string
+  emptyMessage?: string
 }
 
 export function DataTable<TData>({
   table,
-  emptyMessage = 'No matching results.',
   className = '',
+  emptyMessage = 'No matching results.',
 }: DataTableProps<TData>) {
   const columnCount = table?.getAllColumns()?.length
   const rows = table?.getRowModel()?.rows

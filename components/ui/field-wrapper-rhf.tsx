@@ -74,7 +74,7 @@ export function TextareaWrapper<T extends FieldValues>({
 }
 
 type RadioProps<T extends FieldValues> = BaseProps<T> & {
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
 }
 export function RadioWrapper<T extends FieldValues>({ name, control, ...props }: RadioProps<T>) {
   return (
@@ -96,7 +96,7 @@ export function RadioWrapper<T extends FieldValues>({ name, control, ...props }:
 }
 
 type CheckboxProps<T extends FieldValues> = BaseProps<T> & {
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
 }
 export function CheckboxWrapper<T extends FieldValues>({
   name,

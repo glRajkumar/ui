@@ -116,12 +116,12 @@ const filterOptions = [
   {
     value: 'department',
     lable: 'Department',
-    options: ['Engineering', 'Marketing', 'Sales', 'HR', 'Finance'],
+    items: ['Engineering', 'Marketing', 'Sales', 'HR', 'Finance'],
   },
   {
     value: 'location',
     lable: 'Location',
-    options: ['New York', 'San Francisco', 'London', 'Tokyo', 'Berlin'],
+    items: ['New York', 'San Francisco', 'London', 'Tokyo', 'Berlin'],
   },
 ]
 
@@ -141,20 +141,20 @@ export function DataTableExample() {
         <ColumnFilter
           title="Role"
           column={table.getColumn('role')}
-          options={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
+          items={['Manager', 'Senior', 'Junior', 'Lead', 'Intern']}
           triggerCls="w-40"
         />
 
         <ColumnFacetedFilter
           title="Status"
           column={table.getColumn('status')}
-          options={statusOptions}
+          items={statusOptions}
           triggerCls="w-40"
         />
 
         <FilterGroup
           table={table}
-          options={filterOptions}
+          items={filterOptions}
           columnFilterProps={{ triggerCls: 'w-40' }}
         />
 

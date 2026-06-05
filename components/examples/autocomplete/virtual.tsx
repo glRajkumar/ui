@@ -11,7 +11,7 @@ export function VirtualisedExample() {
   return (
     <AutocompleteVirtualisedWrapper
       items={largeList}
-      placeholder="Search 1000 options…"
+      placeholder="Search 1000 items…"
       showClear
       className="w-64"
     />

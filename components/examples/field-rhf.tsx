@@ -72,13 +72,13 @@ export function Field_RHF_Example() {
 
         <TextareaWrapper name="description" label="Description" control={form.control} />
 
-        <RadioWrapper name="gender" label="Gender" control={form.control} options={genderOptions} />
+        <RadioWrapper name="gender" label="Gender" control={form.control} items={genderOptions} />
 
         <CheckboxWrapper
           name="interest"
           label="Interest"
           control={form.control}
-          options={interestOptions}
+          items={interestOptions}
         />
 
         <SwitchWrapper name="isCompleted" label="Is completed" control={form.control} />
@@ -87,7 +87,7 @@ export function Field_RHF_Example() {
           name="country"
           label="Country"
           control={form.control}
-          options={countryOptions}
+          items={countryOptions}
         />
 
         <ComboboxWrapper

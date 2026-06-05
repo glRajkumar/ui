@@ -6,25 +6,25 @@ import { fruits } from '@/components/examples/data/options'
 import { SelectWrapper } from '@/components/ui/select'
 
 export function DefaultValueExample() {
-  return <SelectWrapper options={fruits} defaultValue="Mango" triggerCls="w-44" />
+  return <SelectWrapper items={fruits} defaultValue="Mango" triggerCls="w-44" />
 }
 
 export function DisabledRootExample() {
-  return <SelectWrapper options={fruits} placeholder="Disabled" triggerCls="w-44" disabled />
+  return <SelectWrapper items={fruits} placeholder="Disabled" triggerCls="w-44" disabled />
 }
 
 export function DisabledItemExample() {
-  const opts: optionsT = [
+  const opts: itemsT = [
     { label: 'Admin', value: 'admin' },
     { label: 'Editor', value: 'editor' },
     { label: 'Viewer (disabled)', value: 'viewer', disabled: true },
     { label: 'Guest', value: 'guest' },
   ]
-  return <SelectWrapper options={opts} placeholder="Pick role" triggerCls="w-44" />
+  return <SelectWrapper items={opts} placeholder="Pick role" triggerCls="w-44" />
 }
 
 export function ReadOnlyExample() {
-  return <SelectWrapper options={fruits} defaultValue="Banana" triggerCls="w-44" readOnly />
+  return <SelectWrapper items={fruits} defaultValue="Banana" triggerCls="w-44" readOnly />
 }
 
 export function MultipleExample() {
@@ -32,7 +32,7 @@ export function MultipleExample() {
   return (
     <div className="flex flex-col gap-2">
       <SelectWrapper
-        options={fruits}
+        items={fruits}
         placeholder="Select fruits"
         triggerCls="w-44"
         multiple
@@ -51,7 +51,7 @@ export function ControlledExample() {
   return (
     <div className="flex flex-col gap-2">
       <SelectWrapper
-        options={fruits}
+        items={fruits}
         placeholder="Select fruit"
         triggerCls="w-44"
         value={value}

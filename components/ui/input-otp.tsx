@@ -10,7 +10,7 @@ function InputOTP({ className, ...props }: React.ComponentProps<typeof OTPFieldP
   return (
     <OTPFieldPrimitive.Root
       data-slot="input-otp"
-      className={cn('flex items-center data-[disabled]:opacity-50', className)}
+      className={cn('flex items-center data-disabled:opacity-50', className)}
       {...props}
     />
   )
@@ -33,8 +33,8 @@ function InputOTPSlot({
         'size-9 border-y border-r border-input bg-transparent text-center text-sm transition-all outline-none',
         'first:rounded-l-md first:border-l last:rounded-r-md',
         'focus:border-ring focus:ring-3 focus:ring-ring/50',
-        'data-[invalid]:border-destructive data-[focused]:data-[invalid]:ring-destructive/20',
-        'dark:bg-input/30 dark:data-[focused]:data-[invalid]:ring-destructive/40',
+        'data-invalid:border-destructive data-focused:data-invalid:ring-destructive/20',
+        'dark:bg-input/30 dark:data-focused:data-invalid:ring-destructive/40',
         'disabled:cursor-not-allowed',
         className,
       )}

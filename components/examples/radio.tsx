@@ -9,7 +9,7 @@ function BasicExample() {
   return (
     <RadioWrapper
       defaultValue="email"
-      options={[
+      items={[
         { value: 'email', label: 'Email', description: 'Receive updates via email.' },
         { value: 'sms', label: 'SMS', description: 'Receive updates via text.' },
         { value: 'push', label: 'Push notifications' },
@@ -27,7 +27,7 @@ function ControlledExample() {
       <RadioWrapper
         value={value}
         onValueChange={v => setValue(v as string)}
-        options={[
+        items={[
           { value: 'email', label: 'Email' },
           { value: 'sms', label: 'SMS' },
           { value: 'push', label: 'Push' },
@@ -43,7 +43,7 @@ function HorizontalExample() {
     <RadioWrapper
       defaultValue="light"
       orientation="horizontal"
-      options={[
+      items={[
         { value: 'light', label: 'Light' },
         { value: 'dark', label: 'Dark' },
         { value: 'system', label: 'System' },
@@ -66,7 +66,7 @@ export function RadioExample() {
   return (
     <div className="flex flex-col gap-6 w-full">
       <ExRow label="RadioWrapper">
-        <ExItem label="options — with descriptions and disabled">
+        <ExItem label="items — with descriptions and disabled">
           <BasicExample />
         </ExItem>
         <ExItem label="value + onValueChange — controlled">

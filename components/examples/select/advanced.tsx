@@ -13,11 +13,11 @@ import {
 import { SelectWrapper } from '@/components/ui/select'
 
 export function IconItemsExample() {
-  return <SelectWrapper options={themed} placeholder="Select theme" triggerCls="w-44" />
+  return <SelectWrapper items={themed} placeholder="Select theme" triggerCls="w-44" />
 }
 
 export function ColoredItemsExample() {
-  return <SelectWrapper options={regions} placeholder="Select region" triggerCls="w-44" />
+  return <SelectWrapper items={regions} placeholder="Select region" triggerCls="w-44" />
 }
 
 export function FormExample() {
@@ -30,7 +30,7 @@ export function FormExample() {
       }}
     >
       <SelectWrapper
-        options={fruits}
+        items={fruits}
         name="fruit"
         placeholder="Select fruit"
         triggerCls="w-44"
@@ -46,7 +46,7 @@ export function FormExample() {
 export function StatusPickerExample() {
   return (
     <SelectWrapper
-      options={statusOptions}
+      items={statusOptions}
       placeholder="Set status"
       triggerCls="w-48"
       renderValue={value => {
@@ -66,7 +66,7 @@ export function StatusPickerExample() {
 export function AssigneePickerExample() {
   return (
     <SelectWrapper
-      options={memberOptions}
+      items={memberOptions}
       placeholder="Assign to..."
       triggerCls="w-60"
       renderValue={value => {

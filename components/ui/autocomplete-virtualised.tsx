@@ -17,8 +17,8 @@ import {
 
 type AutocompleteVirtualListProps = {
   itemCls?: string
-  estimateSize: number
   maxHeight: number
+  estimateSize: number
   virtualizerOptions?: Partial<
     Omit<VirtualizerOptions<HTMLDivElement, Element>, 'count' | 'getScrollElement'>
   >
@@ -26,11 +26,11 @@ type AutocompleteVirtualListProps = {
 
 function AutocompleteVirtualList({
   itemCls,
-  estimateSize,
   maxHeight,
+  estimateSize,
   virtualizerOptions,
 }: AutocompleteVirtualListProps) {
-  const items = (AutocompletePrimitive.useFilteredItems() ?? []) as (allowedPrimitiveT | optionT)[]
+  const items = (AutocompletePrimitive.useFilteredItems() ?? []) as (allowedPrimitiveT | itemT)[]
   const parentRef = React.useRef<HTMLDivElement>(null)
 
   const virtualizer = useVirtualizer({
@@ -82,7 +82,7 @@ type AutocompleteVirtualisedWrapperProps = Omit<
   AutocompletePrimitive.Root.Props<unknown>,
   'items' | 'itemToStringValue'
 > & {
-  items?: optionsT
+  items?: itemsT
   className?: string
   placeholder?: string
   isLoading?: boolean
@@ -122,7 +122,7 @@ function AutocompleteVirtualisedWrapper({
 }: AutocompleteVirtualisedWrapperProps) {
   const itemsForBase = React.useMemo(() => {
     if (!items) return []
-    return items.filter(item => !isGroup(item)) as (allowedPrimitiveT | optionT)[]
+    return items.filter(item => !isGroup(item)) as (allowedPrimitiveT | itemT)[]
   }, [items])
 
   return (
@@ -131,7 +131,7 @@ function AutocompleteVirtualisedWrapper({
       disabled={disabled}
       virtualized
       itemToStringValue={(item: unknown) => {
-        const opt = item as allowedPrimitiveT | optionT
+        const opt = item as allowedPrimitiveT | itemT
         const label = getLabel(opt)
         if (typeof label === 'string') return label
         return extractText(label).trim() || String(getValue(opt))
@@ -151,16 +151,16 @@ function AutocompleteVirtualisedWrapper({
           {renderStatus !== undefined
             ? renderStatus
             : isLoading && (
-                <p className="flex items-center justify-center gap-2 py-6">
-                  <Loader2 className="size-4 animate-spin" /> Loading...
-                </p>
-              )}
+              <p className="flex items-center justify-center gap-2 py-6">
+                <Loader2 className="size-4 animate-spin" /> Loading...
+              </p>
+            )}
         </AutocompleteStatus>
 
         <AutocompleteEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className="py-6">{emptyMessage ?? 'No options found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? 'No items found'}</p>}
         </AutocompleteEmpty>
 
         <AutocompleteVirtualList

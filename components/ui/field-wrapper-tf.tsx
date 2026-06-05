@@ -71,7 +71,7 @@ function TextareaField(props: textareaFieldProps) {
 
 type radioFieldProps = {
   label?: React.ReactNode
-  options: (allowedPrimitiveT | optionT)[]
+  items: (allowedPrimitiveT | itemT)[]
   className?: string
 }
 function RadioField(props: radioFieldProps) {

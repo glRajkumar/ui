@@ -7,14 +7,14 @@ import { dropdownOptions } from './data'
 import { MenuCheckboxWrapper, MenuRadioWrapper, MenuWrapper } from '@/components/ui/menu-wrapper'
 import { buttonVariants } from '@/components/ui/button'
 
-const actionOptions: menuOptionsT = [
+const actionOptions: menuItemsT = [
   { label: 'Edit', value: 'edit', shortcut: '⌘E' },
   { label: 'Duplicate', value: 'dup', shortcut: '⌘D' },
   '---',
   { label: 'Delete', value: 'delete', variant: 'destructive', shortcut: '⌘⌫' },
 ]
 
-const featureOptions: menuInputOptionsT = [
+const featureOptions: menuInputItemsT = [
   'Auto-save',
   'Spellcheck',
   'Dark mode',
@@ -22,34 +22,34 @@ const featureOptions: menuInputOptionsT = [
   { label: 'Beta features', value: 'beta', disabled: true },
 ]
 
-const groupedCheckboxOptions: menuInputOptionsT = [
+const groupedCheckboxOptions: menuInputItemsT = [
   {
     group: 'Appearance',
-    options: ['Dark mode', 'Compact view', 'Show avatars'],
+    items: ['Dark mode', 'Compact view', 'Show avatars'],
   },
   {
     group: 'Notifications',
-    options: ['Email', 'Push', { label: 'SMS', value: 'sms', disabled: true }],
+    items: ['Email', 'Push', { label: 'SMS', value: 'sms', disabled: true }],
   },
 ]
 
-const themeOptions: menuInputOptionsT = ['Light', 'Dark', 'System']
+const themeOptions: menuInputItemsT = ['Light', 'Dark', 'System']
 
-const groupedRadioOptions: menuInputOptionsT = [
+const groupedRadioOptions: menuInputItemsT = [
   {
     group: 'Light',
-    options: ['Default', 'Warm', 'Cool'],
+    items: ['Default', 'Warm', 'Cool'],
   },
   {
     group: 'Dark',
-    options: ['Midnight', 'Slate', { label: 'Dracula', value: 'dracula', disabled: true }],
+    items: ['Midnight', 'Slate', { label: 'Dracula', value: 'dracula', disabled: true }],
   },
 ]
 
 function BasicExample() {
   return (
     <MenuWrapper
-      options={actionOptions}
+      items={actionOptions}
       trigger="Actions"
       triggerCls={buttonVariants({ variant: 'outline' })}
     />
@@ -59,7 +59,7 @@ function BasicExample() {
 function ComplexExample() {
   return (
     <MenuWrapper
-      options={dropdownOptions}
+      items={dropdownOptions}
       trigger="Open"
       triggerCls={buttonVariants({ variant: 'outline' })}
     />
@@ -72,7 +72,7 @@ function ControlledOpenExample() {
     <MenuWrapper
       open={open}
       onOpenChange={setOpen}
-      options={actionOptions}
+      items={actionOptions}
       trigger={open ? 'Close me' : 'Open me'}
       triggerCls={buttonVariants({ variant: 'outline' })}
     />
@@ -83,7 +83,7 @@ function CheckboxDefaultExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   return (
     <MenuCheckboxWrapper
-      options={featureOptions}
+      items={featureOptions}
       checked={checked}
       onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
       trigger="Features"
@@ -95,7 +95,7 @@ function CheckboxDefaultExample() {
 function CheckboxLeftExample() {
   return (
     <MenuCheckboxWrapper
-      options={featureOptions}
+      items={featureOptions}
       indicatorAt="left"
       trigger="Features"
       triggerCls={buttonVariants({ variant: 'outline' })}
@@ -107,7 +107,7 @@ function CheckboxGroupedExample() {
   const [checked, setChecked] = useState<allowedPrimitiveT[]>([])
   return (
     <MenuCheckboxWrapper
-      options={groupedCheckboxOptions}
+      items={groupedCheckboxOptions}
       checked={checked}
       onCheckedChange={(v, c) => setChecked(prev => (c ? [...prev, v] : prev.filter(x => x !== v)))}
       trigger="Settings"
@@ -120,7 +120,7 @@ function RadioControlledExample() {
   const [val, setVal] = useState<allowedPrimitiveT>('Light')
   return (
     <MenuRadioWrapper
-      options={themeOptions}
+      items={themeOptions}
       value={val}
       onValueChange={setVal}
       trigger={`Theme: ${val}`}
@@ -132,7 +132,7 @@ function RadioControlledExample() {
 function RadioLeftExample() {
   return (
     <MenuRadioWrapper
-      options={themeOptions}
+      items={themeOptions}
       indicatorAt="left"
       trigger="Theme"
       triggerCls={buttonVariants({ variant: 'outline' })}
@@ -144,7 +144,7 @@ function RadioGroupedExample() {
   const [val, setVal] = useState<allowedPrimitiveT>('Default')
   return (
     <MenuRadioWrapper
-      options={groupedRadioOptions}
+      items={groupedRadioOptions}
       value={val}
       onValueChange={setVal}
       trigger={`Theme: ${val}`}

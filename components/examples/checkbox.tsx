@@ -14,7 +14,7 @@ function BasicExample() {
   return (
     <CheckboxWrapper
       defaultValue={['email']}
-      options={[
+      items={[
         { value: 'email', label: 'Email', description: 'Notify via email.' },
         { value: 'sms', label: 'SMS', description: 'Notify via text message.' },
         { value: 'push', label: 'Push notifications' },
@@ -29,7 +29,7 @@ function ParentExample() {
     <CheckboxWrapper
       defaultValue={['email']}
       parentLabel="All notifications"
-      options={[
+      items={[
         { value: 'email', label: 'Email' },
         { value: 'sms', label: 'SMS' },
         { value: 'push', label: 'Push' },
@@ -47,7 +47,7 @@ function ControlledExample() {
         value={value}
         onValueChange={v => setValue(v)}
         parentLabel="Select all"
-        options={[
+        items={[
           { value: 'email', label: 'Email' },
           { value: 'sms', label: 'SMS' },
           { value: 'push', label: 'Push' },
@@ -63,7 +63,7 @@ function HorizontalExample() {
     <CheckboxWrapper
       orientation="horizontal"
       defaultValue={['react']}
-      options={[
+      items={[
         { value: 'react', label: 'React' },
         { value: 'vue', label: 'Vue' },
         { value: 'svelte', label: 'Svelte' },
@@ -160,7 +160,7 @@ export function CheckboxExample() {
       </ExRow>
 
       <ExRow label="CheckboxWrapper">
-        <ExItem label="options — list with descriptions and disabled">
+        <ExItem label="items — list with descriptions and disabled">
           <BasicExample />
         </ExItem>
         <ExItem label="parentLabel — select-all with indeterminate state">

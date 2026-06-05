@@ -11,14 +11,14 @@ import { CalendarDayButton } from './calendar-day-button'
 import { CalendarDropdown } from './calendar-dropdown'
 
 function Calendar({
+  locale,
   className,
   classNames,
-  showOutsideDays = true,
-  captionLayout = 'label',
-  buttonVariant = 'ghost',
-  locale,
   formatters,
   components,
+  captionLayout = 'label',
+  buttonVariant = 'ghost',
+  showOutsideDays = true,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant']

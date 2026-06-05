@@ -29,8 +29,8 @@ export function AutocompleteExample() {
         </ExItem>
       </ExRow>
 
-      <ExRow label="Options">
-        <ExItem label="Grouped — options under labelled sections">
+      <ExRow label="Items">
+        <ExItem label="Grouped — items under labelled sections">
           <GroupedExample />
         </ExItem>
         <ExItem label="Limit — max 5 suggestions shown">

@@ -192,16 +192,16 @@ function SelectScrollDownButton({
 }
 
 type itemProps = {
-  option: allowedPrimitiveT | optionT
+  item: allowedPrimitiveT | itemT
   className?: string
   indicatorAt?: indicatorAtT
 }
 
-function Item({ option, className, indicatorAt }: itemProps) {
-  const value = getValue(option)
-  const label = getLabel(option)
-  const optCls = isOption(option) ? option.className : undefined
-  const disabled = isOption(option) ? option.disabled : undefined
+function Item({ item, className, indicatorAt }: itemProps) {
+  const value = getValue(item)
+  const label = getLabel(item)
+  const optCls = isOption(item) ? item.className : undefined
+  const disabled = isOption(item) ? item.disabled : undefined
 
   if (isSeparator(value)) return <SelectSeparator className={className} />
 
@@ -219,7 +219,7 @@ function Item({ option, className, indicatorAt }: itemProps) {
 
 type selectProps = {
   id?: string
-  options: optionsT
+  items: itemsT
   placeholder?: string
   indicatorAt?: indicatorAtT
   backdrop?: boolean
@@ -228,11 +228,11 @@ type selectProps = {
   groupCls?: string
   groupLabelCls?: string
   itemCls?: string
-  renderValue?: (value: string, option: allowedPrimitiveT | optionT | undefined) => React.ReactNode
-} & React.ComponentProps<typeof SelectPrimitive.Root>
+  renderValue?: (value: string, option: allowedPrimitiveT | itemT | undefined) => React.ReactNode
+} & Omit<React.ComponentProps<typeof SelectPrimitive.Root>, 'items'>
 function SelectWrapper({
   id,
-  options,
+  items,
   placeholder,
   indicatorAt,
   backdrop,
@@ -246,13 +246,13 @@ function SelectWrapper({
 }: selectProps) {
   const { labelMap, optionMap } = React.useMemo(() => {
     const labelMap: Record<string, React.ReactNode> = {}
-    const optionMap: Record<string, allowedPrimitiveT | optionT> = {}
-    const process = (opts: optionsT) => {
+    const optionMap: Record<string, allowedPrimitiveT | itemT> = {}
+    const process = (opts: itemsT) => {
       for (const opt of opts) {
         if (isGroup(opt)) {
-          process(opt.options as optionsT)
+          process(opt.items as itemsT)
         } else {
-          const o = opt as allowedPrimitiveT | optionT
+          const o = opt as allowedPrimitiveT | itemT
           const val = getValue(o)
           if (!isSeparator(val)) {
             const key = String(val)
@@ -262,9 +262,9 @@ function SelectWrapper({
         }
       }
     }
-    process(options)
+    process(items)
     return { labelMap, optionMap }
-  }, [options])
+  }, [items])
 
   return (
     <Select {...props}>
@@ -296,16 +296,16 @@ function SelectWrapper({
       </SelectTrigger>
 
       <SelectContent backdrop={backdrop} className={cn(contentCls)}>
-        {options.map((option, i) => {
-          if (isGroup(option)) {
+        {items.map((item, i) => {
+          if (isGroup(item)) {
             return (
-              <SelectGroup key={option.group} className={cn(groupCls, option.className)}>
-                <SelectLabel className={cn('pb-0.5', groupLabelCls)}>{option.group}</SelectLabel>
+              <SelectGroup key={item.group} className={cn(groupCls, item.className)}>
+                <SelectLabel className={cn('pb-0.5', groupLabelCls)}>{item.group}</SelectLabel>
 
-                {option.options.map((grOpts, j) => (
+                {item.items.map((grOpts, j) => (
                   <Item
                     key={getKey(grOpts, j)}
-                    option={grOpts}
+                    item={grOpts}
                     className={cn('pl-4', itemCls)}
                     indicatorAt={indicatorAt}
                   />
@@ -316,8 +316,8 @@ function SelectWrapper({
 
           return (
             <Item
-              key={getKey(option, i)}
-              option={option}
+              key={getKey(item, i)}
+              item={item}
               className={itemCls}
               indicatorAt={indicatorAt}
             />

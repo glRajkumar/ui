@@ -34,7 +34,7 @@ const settings: settingObjT = {
   },
 }
 
-function trans(options: optionsT, level = 2): string {
+function trans(options: itemsT, level = 2): string {
   let str = ''
 
   options.forEach(o => {
@@ -42,7 +42,7 @@ function trans(options: optionsT, level = 2): string {
       str +=
         `${indent(level)}<SelectGroup${o.className ? ` className="${o.className}"` : ''}>\n` +
         `${indent(level + 1)}<SelectLabel>${o.group}</SelectLabel>\n` +
-        trans(o.options, level + 1) +
+        trans(o.items, level + 1) +
         '\n' +
         `${indent(level)}</SelectGroup>\n`
       return
@@ -77,16 +77,16 @@ ${trans(options, 2)}
 }
 
 type afterParams = {
-  options: optionsT
+  options: itemsT
   placeholder: string
   indicatorAt: string
   groupCls: boolean
 }
 const after = ({ options, placeholder, indicatorAt, groupCls }: afterParams) => {
-  let base = `const options: optionsT = ${JSON?.stringify?.(options, null, 2)}
+  let base = `const options: itemsT = ${JSON?.stringify?.(options, null, 2)}
 
 <SelectWrapper
-  options={options}
+  items={options}
   placeholder="${placeholder}"
   indicatorAt="${indicatorAt}"
 `
@@ -131,7 +131,7 @@ export function SelectDemo() {
       })}
     >
       <SelectWrapper
-        options={filterOpt(options, val.components)}
+        items={filterOpt(options, val.components)}
         placeholder={val.placeholder}
         indicatorAt={val.indicatorAt as indicatorAtT}
         groupCls={val.groupCls ? 'bg-pink-100' : ''}
