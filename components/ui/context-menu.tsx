@@ -159,21 +159,23 @@ function ContextMenuCheckboxItem({
       className={cn(
         "relative flex cursor-default items-center gap-1.5 rounded-md py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
-        indicatorAt === 'right' ? 'pr-8 pl-2' : 'pr-2 pl-8',
+        indicatorAt === '' ? 'px-2' : indicatorAt === 'right' ? 'pr-8 pl-2' : 'pr-2 pl-8',
       )}
       checked={checked}
       {...props}
     >
-      <span
-        className={cn(
-          'pointer-events-none absolute',
-          indicatorAt === 'right' ? 'right-2' : 'left-2',
-        )}
-      >
-        <ContextMenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon />
-        </ContextMenuPrimitive.CheckboxItemIndicator>
-      </span>
+      {indicatorAt !== '' && (
+        <span
+          className={cn(
+            'pointer-events-none absolute',
+            indicatorAt === 'right' ? 'right-2' : 'left-2',
+          )}
+        >
+          <ContextMenuPrimitive.CheckboxItemIndicator>
+            <CheckIcon />
+          </ContextMenuPrimitive.CheckboxItemIndicator>
+        </span>
+      )}
       {children}
     </ContextMenuPrimitive.CheckboxItem>
   )
@@ -200,20 +202,22 @@ function ContextMenuRadioItem({
       className={cn(
         "relative flex cursor-default items-center gap-1.5 rounded-md py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
-        indicatorAt === 'right' ? 'pr-8 pl-2' : 'pr-2 pl-8',
+        indicatorAt === '' ? 'px-2' : indicatorAt === 'right' ? 'pr-8 pl-2' : 'pr-2 pl-8',
       )}
       {...props}
     >
-      <span
-        className={cn(
-          'pointer-events-none absolute',
-          indicatorAt === 'right' ? 'right-2' : 'left-2',
-        )}
-      >
-        <ContextMenuPrimitive.RadioItemIndicator>
-          <CheckIcon />
-        </ContextMenuPrimitive.RadioItemIndicator>
-      </span>
+      {indicatorAt !== '' && (
+        <span
+          className={cn(
+            'pointer-events-none absolute',
+            indicatorAt === 'right' ? 'right-2' : 'left-2',
+          )}
+        >
+          <ContextMenuPrimitive.RadioItemIndicator>
+            <CheckIcon />
+          </ContextMenuPrimitive.RadioItemIndicator>
+        </span>
+      )}
       {children}
     </ContextMenuPrimitive.RadioItem>
   )

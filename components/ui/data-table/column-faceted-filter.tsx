@@ -64,7 +64,7 @@ export function ColumnFacetedFilter<TData, TValue>({
       value={(column?.getFilterValue() as string[]) ?? []}
       onValueChange={v => onSelect(v as any)}
       // label={typeof title === "object" ? title : <span className="font-semibold">{title}</span>}
-      indicatorAt="left"
+      indicatorAt=""
       {...props}
     />
   )

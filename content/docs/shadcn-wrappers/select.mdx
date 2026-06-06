@@ -93,6 +93,7 @@ const items = [
 ```tsx
 <SelectWrapper items={items} indicatorAt="left" placeholder="Left check" />
 <SelectWrapper items={items} indicatorAt="right" placeholder="Right check" /> {/* default */}
+<SelectWrapper items={items} indicatorAt="" placeholder="No indicator" />
 ```
 
 ### Disabled item
@@ -210,7 +211,7 @@ type={`export interface SelectWrapper {
    * Position of the checkmark indicator inside each item.
    * @default "right"
    */
-  indicatorAt?: "left" | "right";
+  indicatorAt?: "left" | "right" | "";
 
   /**
    * Render a fixed backdrop behind the dropdown popup.

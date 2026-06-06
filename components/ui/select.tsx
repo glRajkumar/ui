@@ -125,7 +125,7 @@ function SelectItem({
       className={cn(
         "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className,
-        indicatorAt === 'right' ? 'pr-8 pl-2' : 'pr-2 pl-8',
+        indicatorAt === '' ? 'px-2' : indicatorAt === 'right' ? 'pr-8 pl-2' : 'pr-2 pl-8',
       )}
       {...props}
     >
@@ -133,14 +133,16 @@ function SelectItem({
         {children}
       </SelectPrimitive.ItemText>
 
-      <SelectPrimitive.ItemIndicator
-        className={cn(
-          'pointer-events-none absolute flex size-4 items-center justify-center',
-          indicatorAt === 'right' ? 'right-2' : 'left-2',
-        )}
-      >
-        <CheckIcon className="pointer-events-none" />
-      </SelectPrimitive.ItemIndicator>
+      {indicatorAt !== '' && (
+        <SelectPrimitive.ItemIndicator
+          className={cn(
+            'pointer-events-none absolute flex size-4 items-center justify-center',
+            indicatorAt === 'right' ? 'right-2' : 'left-2',
+          )}
+        >
+          <CheckIcon className="pointer-events-none" />
+        </SelectPrimitive.ItemIndicator>
+      )}
     </SelectPrimitive.Item>
   )
 }

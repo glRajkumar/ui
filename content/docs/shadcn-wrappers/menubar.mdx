@@ -237,7 +237,7 @@ type={`export interface MenubarCheckboxWrapper {
     groupLabelCls?: string;
     contentProps?: React.ComponentProps<typeof MenubarContent>;
     checked?: allowedPrimitiveT[];
-    indicatorAt?: "left" | "right";
+    indicatorAt?: "left" | "right" | "";
     onCheckedChange?: (value: allowedPrimitiveT, checked: boolean) => void;
   }[];
 
@@ -260,7 +260,7 @@ type={`export interface MenubarCheckboxWrapper {
    * Global indicator position. Per-menu indicatorAt takes precedence.
    * @default "left"
    */
-  indicatorAt?: "left" | "right";
+  indicatorAt?: "left" | "right" | "";
 
   /**
    * Global CSS class for all items.
@@ -306,7 +306,7 @@ type={`export interface MenubarRadioWrapper {
     groupLabelCls?: string;
     contentProps?: React.ComponentProps<typeof MenubarContent>;
     value?: allowedPrimitiveT;
-    indicatorAt?: "left" | "right";
+    indicatorAt?: "left" | "right" | "";
     onValueChange?: (value: allowedPrimitiveT) => void;
   }[];
 
@@ -329,7 +329,7 @@ type={`export interface MenubarRadioWrapper {
    * Global indicator position. Per-menu indicatorAt takes precedence.
    * @default "left"
    */
-  indicatorAt?: "left" | "right";
+  indicatorAt?: "left" | "right" | "";
 
   /**
    * Global CSS class for all items.

@@ -6,7 +6,7 @@
   "files": [
     {
       "path": "types/general.d.ts",
-      "content": "type allowedPrimitiveT = string | number | boolean\n\ntype itemT = {\n  label: React.ReactNode\n  value: allowedPrimitiveT\n  className?: string\n  disabled?: boolean\n}\n\ntype groupT = {\n  group: string\n  items: (allowedPrimitiveT | itemT)[]\n  className?: string\n}\n\ntype itemsT = (allowedPrimitiveT | itemT | groupT)[]\n\ntype indicatorAtT = 'right' | 'left'\n",
+      "content": "type allowedPrimitiveT = string | number | boolean\n\ntype itemT = {\n  label: React.ReactNode\n  value: allowedPrimitiveT\n  className?: string\n  disabled?: boolean\n}\n\ntype groupT = {\n  group: string\n  items: (allowedPrimitiveT | itemT)[]\n  className?: string\n}\n\ntype itemsT = (allowedPrimitiveT | itemT | groupT)[]\n\ntype indicatorAtT = 'right' | 'left' | ''\n",
       "type": "registry:file",
       "target": "types/general.d.ts"
     },

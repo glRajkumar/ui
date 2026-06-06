@@ -10,7 +10,7 @@ import { accordionItems } from './data'
 const items = accordionItems
 
 function SingleOpenExample() {
-  return <AccordionWrapper items={items} className="w-80" />
+  return <AccordionWrapper items={items} className="w-80" indicatorAt='' />
 }
 
 function MultipleOpenExample() {

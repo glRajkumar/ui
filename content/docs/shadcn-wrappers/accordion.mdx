@@ -60,6 +60,7 @@ import { AccordionWrapper } from "@/components/ui/accordion"
 ```tsx
 <AccordionWrapper items={items} indicatorAt="left" />   // chevron left
 <AccordionWrapper items={items} indicatorAt="right" />  // default
+<AccordionWrapper items={items} indicatorAt="" />        // no chevron
 ```
 
 Per-item override:
@@ -175,7 +176,7 @@ type={`export type accordionSharedT = {
    * Placement of the chevron indicator.
    * @default "right"
    */
-  indicatorAt?: 'right' | 'left';
+  indicatorAt?: 'right' | 'left' | '';
 
   /**
    * Props forwarded to AccordionItem — all Accordion.Item.Props except value and className.

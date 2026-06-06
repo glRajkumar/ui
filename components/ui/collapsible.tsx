@@ -16,7 +16,7 @@ function CollapsibleTrigger({
   indicatorAt = 'right',
   ...props
 }: CollapsiblePrimitive.Trigger.Props & { indicatorAt?: indicatorAtT }) {
-  const icon = (
+  const icon = indicatorAt !== '' && (
     <ChevronDownIcon
       data-slot="collapsible-trigger-icon"
       className={cn(

@@ -162,8 +162,8 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
 }
 
 function ComboboxItem({
-  className,
   children,
+  className,
   indicatorAt,
   ...props
 }: ComboboxPrimitive.Item.Props & { indicatorAt?: indicatorAtT }) {
@@ -176,19 +176,21 @@ function ComboboxItem({
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
-        indicatorAt === 'right' ? 'pl-2 pr-8' : 'pl-8 pr-2',
+        indicatorAt === '' ? 'px-2' : indicatorAt === 'right' ? 'pl-2 pr-8' : 'pl-8 pr-2',
       )}
       {...props}
     >
       {children}
-      <ComboboxPrimitive.ItemIndicator
-        className={cn(
-          'pointer-events-none absolute flex size-4 items-center justify-center text-foreground',
-          indicatorAt === 'right' ? 'right-2' : 'left-2',
-        )}
-      >
-        <CheckIcon className="size-3.5" />
-      </ComboboxPrimitive.ItemIndicator>
+      {indicatorAt !== '' && (
+        <ComboboxPrimitive.ItemIndicator
+          className={cn(
+            'pointer-events-none absolute flex size-4 items-center justify-center text-foreground',
+            indicatorAt === 'right' ? 'right-2' : 'left-2',
+          )}
+        >
+          <CheckIcon className="size-3.5" />
+        </ComboboxPrimitive.ItemIndicator>
+      )}
     </ComboboxPrimitive.Item>
   )
 }
@@ -258,8 +260,8 @@ function ComboboxChips({
 }
 
 function ComboboxChip({
-  className,
   children,
+  className,
   showRemove = true,
   ...props
 }: ComboboxPrimitive.Chip.Props & { showRemove?: boolean }) {
@@ -321,16 +323,16 @@ function useComboboxAnchor() {
 }
 
 type OptionItemProps = {
-  option: allowedPrimitiveT | itemT
+  item: allowedPrimitiveT | itemT
   className?: string
   indicatorAt?: indicatorAtT
 }
 
-function OptionItem({ option, className, indicatorAt }: OptionItemProps) {
-  const value = getValue(option)
-  const label = getLabel(option)
-  const optCls = isOption(option) ? option.className : undefined
-  const disabled = isOption(option) ? option.disabled : undefined
+function OptionItem({ item, className, indicatorAt }: OptionItemProps) {
+  const value = getValue(item)
+  const label = getLabel(item)
+  const optCls = isOption(item) ? item.className : undefined
+  const disabled = isOption(item) ? item.disabled : undefined
 
   return (
     <ComboboxItem
@@ -364,7 +366,7 @@ function OptionsBody({ item, index, itemCls, groupCls, indicatorAt }: OptionsBod
           {(opt: allowedPrimitiveT | itemT, i) => (
             <OptionItem
               key={getKey(opt, i)}
-              option={opt}
+              item={opt}
               className={cn(itemCls)}
               indicatorAt={indicatorAt}
             />
@@ -381,7 +383,7 @@ function OptionsBody({ item, index, itemCls, groupCls, indicatorAt }: OptionsBod
   return (
     <OptionItem
       key={getKey(item as allowedPrimitiveT | itemT, index)}
-      option={item as allowedPrimitiveT | itemT}
+      item={item as allowedPrimitiveT | itemT}
       className={cn(itemCls)}
       indicatorAt={indicatorAt}
     />
@@ -400,12 +402,12 @@ type ComboboxWrapperProps<
   contentCls?: string
   groupCls?: string
   itemCls?: string
-  indicatorAt?: 'left' | 'right'
+  indicatorAt?: indicatorAtT
   showTrigger?: boolean
   showClear?: boolean
   inputProps?: React.ComponentProps<'input'>
   hideList?: boolean
-  renderValue?: (value: string, option: allowedPrimitiveT | itemT | undefined) => React.ReactNode
+  renderValue?: (value: string, item: allowedPrimitiveT | itemT | undefined) => React.ReactNode
   getItemLabel?: (value: string) => string
   renderStatus?: React.ReactNode
   renderEmpty?: React.ReactNode

@@ -134,6 +134,7 @@ const items = [
 ```tsx
 <ComboboxWrapper items={items} indicatorAt="left" placeholder="Left check" />
 <ComboboxWrapper items={items} indicatorAt="right" placeholder="Right check" /> {/* default */}
+<ComboboxWrapper items={items} indicatorAt="" placeholder="No indicator" />
 ```
 
 ### Disabled item
@@ -423,7 +424,7 @@ type={`export interface ComboboxWrapper {
    * Position of the checkmark indicator inside each item.
    * @default "right"
    */
-  indicatorAt?: "left" | "right";
+  indicatorAt?: "left" | "right" | "";
 
   /**
    * Show the chevron trigger button.

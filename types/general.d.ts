@@ -15,4 +15,4 @@ type groupT = {
 
 type itemsT = (allowedPrimitiveT | itemT | groupT)[]
 
-type indicatorAtT = 'right' | 'left'
+type indicatorAtT = 'right' | 'left' | ''

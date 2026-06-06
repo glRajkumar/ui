@@ -166,13 +166,13 @@ MenuCheckboxWrapper additional props:
   items: menuInputItemsT
   checked?: allowedPrimitiveT[]
   onCheckedChange?: (value, checked) => void
-  indicatorAt?: "left" | "right"  — default "left"
+  indicatorAt?: "left" | "right" | ""  — default "left"; "" hides indicator
 
 MenuRadioWrapper additional props:
   items: menuInputItemsT
   value?: allowedPrimitiveT
   onValueChange?: (value) => void
-  indicatorAt?: "left" | "right"  — default "left"
+  indicatorAt?: "left" | "right" | ""  — default "left"; "" hides indicator
 
 ---
 
@@ -237,7 +237,7 @@ Props:
   id?: string
   items: itemsT
   placeholder?: string
-  indicatorAt?: "left" | "right"  — default "right"
+  indicatorAt?: "left" | "right" | ""  — default "right"; "" hides indicator
   backdrop?: boolean               — default false
   multiple?: boolean               — multi-select; trigger shows chip badges, default false
   renderValue?: (value: string, option) => ReactNode  — custom trigger display
@@ -264,7 +264,7 @@ Props:
   placeholder?: string
   emptyMessage?: string        — default "No items found"
   isLoading?: boolean
-  indicatorAt?: "left" | "right"  — default "right"
+  indicatorAt?: "left" | "right" | ""  — default "right"; "" hides indicator
   showTrigger?: boolean        — chevron button, default true
   showClear?: boolean          — clear button, default false
   hideList?: boolean           — hide dropdown (for create-new patterns), default false

@@ -50,6 +50,14 @@ import { ChevronDown } from "lucide-react"
 </CollapsibleWrapper>
 ```
 
+### Indicator placement
+
+```tsx
+<CollapsibleWrapper trigger="Details" indicatorAt="left" />   // chevron left
+<CollapsibleWrapper trigger="Details" indicatorAt="right" />  // default
+<CollapsibleWrapper trigger="Details" indicatorAt="" />        // no chevron
+```
+
 ### Default open
 
 ```tsx
@@ -152,7 +160,7 @@ type={`export interface CollapsibleWrapper {
    * Position of the chevron indicator inside the trigger.
    * @default "right"
    */
-  indicatorAt?: "left" | "right";
+  indicatorAt?: "left" | "right" | "";
 
   /**
    * Props forwarded to CollapsibleTrigger — all Collapsible.Trigger.Props
