@@ -44,3 +44,5 @@ next-env.d.ts
 .source
 
 a
+
+pnpm-workspace.yaml
