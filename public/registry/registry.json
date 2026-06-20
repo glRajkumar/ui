@@ -959,6 +959,19 @@
       ]
     },
     {
+      "name": "hover-card",
+      "type": "registry:ui",
+      "title": "Hover Card",
+      "description": "Hover Card component with wrapper",
+      "registryDependencies": ["hover-card"],
+      "files": [
+        {
+          "path": "components/ui/hover-card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "radio",
       "type": "registry:ui",
       "title": "Radio",

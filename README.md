@@ -50,3 +50,7 @@ yarn dev
 
 The API will be available at: `http://localhost:PORT` (default: `3000`)
 
+```sh
+bun x shadcn@latest add @glrk-ui/accordion @glrk-ui/alert-dialog @glrk-ui/autocomplete @glrk-ui/breadcrumb @glrk-ui/card @glrk-ui/combobox @glrk-ui/empty @glrk-ui/dialog @glrk-ui/drawer @glrk-ui/menu @glrk-ui/number-field @glrk-ui/field-wrapper @glrk-ui/field-wrapper-rhf @glrk-ui/item @glrk-ui/hover-card @glrk-ui/popover @glrk-ui/select @glrk-ui/sheet @glrk-ui/tabs @glrk-ui/data-table @glrk-ui/date-picker @glrk-ui/toast
+```
+

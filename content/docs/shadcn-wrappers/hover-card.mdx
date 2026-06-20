@@ -1,0 +1,209 @@
+---
+title: Hover Card
+description: A wrapper for Base UI Preview Card with a convenience API for title, description, hover delay, and arrows.
+---
+
+import { HoverCardEx } from "@/components/examples";
+
+<HoverCardEx />
+
+## Installation
+
+<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+
+<Tab value="CLI">
+
+```npm
+npx shadcn@latest add @glrk-ui/hover-card
+```
+
+If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+
+</Tab>
+
+<Tab value="Manual">
+
+Copy and paste the following code into your project.
+
+<include cwd meta='title="ui/hover-card.tsx"'>
+  ./components/ui/hover-card.tsx
+</include>
+
+</Tab>
+</Tabs>
+
+
+## Usage
+
+### Basic
+
+```tsx
+import { HoverCardWrapper } from "@/components/ui/hover-card"
+
+<HoverCardWrapper
+  trigger="@glrk_ui"
+  triggerCls="px-4 py-1.5 border rounded text-sm"
+  title="Glrk UI"
+  description="Supporting description text."
+/>
+```
+
+### Title and description
+
+Pass `title` and `description` directly — renders as `HoverCardTitle` and `HoverCardDescription` inside a `HoverCardHeader`:
+
+```tsx
+<HoverCardWrapper
+  trigger="Hover me"
+  title="Card title"
+  description="Supporting description text."
+/>
+```
+
+For arbitrary content, use `content` instead — useful for things like a profile preview:
+
+```tsx
+<HoverCardWrapper
+  trigger="View profile"
+  content={
+    <div className="flex items-center gap-3">
+      <div className="size-9 rounded-full bg-foreground" />
+      <div className="flex flex-col gap-0.5">
+        <span className="text-sm font-medium">Alice Chen</span>
+        <span className="text-xs text-muted-foreground">Product Designer</span>
+      </div>
+    </div>
+  }
+/>
+```
+
+### Delay
+
+Opens on hover after `delay` ms, closes after `closeDelay` ms once the pointer leaves:
+
+```tsx
+<HoverCardWrapper
+  trigger="Hover (delayed)"
+  triggerProps={{ delay: 800, closeDelay: 500 }}
+  title="Delayed card"
+  description="800 ms open delay, 500 ms close grace."
+/>
+```
+
+### Controlled
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<HoverCardWrapper
+  open={open}
+  onOpenChange={setOpen}
+  trigger="Anchor"
+  title="Controlled"
+  description="Driven by external state."
+/>
+```
+
+### Arrow
+
+```tsx
+<HoverCardWrapper
+  trigger="Hover"
+  contentProps={{ showArrow: true, sideOffset: 10 }}
+  title="With arrow"
+  description="Arrow points toward the trigger."
+/>
+```
+
+Control placement with `side`:
+
+```tsx
+<HoverCardWrapper
+  trigger="Top"
+  contentProps={{ side: "top", showArrow: true, sideOffset: 10 }}
+  title="side: top"
+  description="Arrow points toward trigger."
+/>
+```
+
+### Positioning
+
+```tsx
+<HoverCardWrapper trigger="Top"    contentProps={{ side: "top" }}    title="Top" />
+<HoverCardWrapper trigger="Right"  contentProps={{ side: "right" }}  title="Right" />
+<HoverCardWrapper trigger="Bottom" contentProps={{ side: "bottom" }} title="Bottom" />
+<HoverCardWrapper trigger="Left"   contentProps={{ side: "left" }}   title="Left" />
+```
+
+## Reference
+
+#### HoverCardWrapper
+<AutoTypeTable
+name="HoverCardWrapper"
+type={`export interface HoverCardWrapper {
+  /**
+   * Content for the trigger element. Renders as an anchor (<a>) under the hood.
+   */
+  trigger?: React.ReactNode;
+
+  /**
+   * Rendered as HoverCardTitle inside a HoverCardHeader above content.
+   * Omit to skip.
+   */
+  title?: React.ReactNode;
+
+  /**
+   * Rendered as HoverCardDescription inside a HoverCardHeader above content.
+   * Omit to skip.
+   */
+  description?: React.ReactNode;
+
+  /**
+   * Arbitrary content rendered below title/description.
+   */
+  content?: React.ReactNode;
+
+  /**
+   * CSS classes for the trigger element.
+   */
+  triggerCls?: string;
+
+  /**
+   * Props forwarded to HoverCardTrigger — all PreviewCard.Trigger.Props except className and children.
+   *
+   * Delay control:
+   * \`\`\`tsx
+   * triggerProps={{ delay: 600, closeDelay: 300 }}
+   * \`\`\`
+   */
+  triggerProps?: Omit<PreviewCardPrimitive.Trigger.Props, 'className' | 'children'>;
+
+  /**
+   * CSS classes for the popup element.
+   */
+  contentCls?: string;
+
+  /**
+   * Props forwarded to HoverCardContent — positioning, alignment, and arrow options.
+   *
+   * \`\`\`tsx
+   * contentProps={{ side: "top", sideOffset: 8, showArrow: true }}
+   * \`\`\`
+   *
+   * Available: side, sideOffset, align, alignOffset, arrowPadding,
+   * showArrow, arrowClassName, collisionPadding, collisionBoundary, collisionAvoidance.
+   */
+  contentProps?: Omit<hoverCardContentType, 'className'>;
+
+  /**
+   * ...rootProps: All Base UI PreviewCard.Root props forwarded to the root.
+   * Includes: open, onOpenChange, defaultOpen, actionsRef, handle, etc.
+   */
+  otherProps?: never;
+}`}
+/>
+
+## Related Components
+
+- [Base UI Preview Card](https://base-ui.com/react/components/preview-card)
+- [Shadcn Hover Card](https://ui.shadcn.com/docs/components/hover-card)

@@ -18,6 +18,7 @@ import { ContextExample } from './context-menu'
 import { TooltipExample } from './tooltip'
 import { MenubarExample } from './menubar'
 import { PopoverExample } from './popover'
+import { HoverCardExample } from './hover-card'
 import { ToggleExample } from './toggle'
 import { SelectExample } from './select'
 import { DialogExample } from './dialog'
@@ -232,6 +233,14 @@ export function PopoverEx() {
   return (
     <Wrapper path="/components/examples/popover.tsx">
       <PopoverExample />
+    </Wrapper>
+  )
+}
+
+export function HoverCardEx() {
+  return (
+    <Wrapper path="/components/examples/hover-card.tsx">
+      <HoverCardExample />
     </Wrapper>
   )
 }
