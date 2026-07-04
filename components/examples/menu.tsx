@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 
-import { ExRow, ExItem } from '@/components/examples/common'
 import { dropdownOptions } from './data'
+
+import { ExRow, ExItem } from '@/components/examples/common'
+
 import { MenuCheckboxWrapper, MenuRadioWrapper, MenuWrapper } from '@/components/ui/menu-wrapper'
 import { buttonVariants } from '@/components/ui/button'
 

@@ -103,9 +103,7 @@ function RadioLeftExample() {
 
 function RadioGroupedExample() {
   const [val, setVal] = useState<allowedPrimitiveT>('Default')
-  const opts: menubarRadioitemsT = [
-    { key: 'theme', trigger: 'Theme', items: groupedRadioOptions },
-  ]
+  const opts: menubarRadioitemsT = [{ key: 'theme', trigger: 'Theme', items: groupedRadioOptions }]
   return <MenubarRadioWrapper items={opts} value={val} onValueChange={setVal} />
 }
 

@@ -365,7 +365,6 @@ export function FormEx() {
   )
 }
 
-
 export function InputOTPEx() {
   return (
     <Wrapper path="/components/examples/input-otp.tsx">

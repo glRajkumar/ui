@@ -21,11 +21,6 @@ export function IndicatorRightExample() {
 
 export function IndicatorLeftExample() {
   return (
-    <SelectWrapper
-      items={fruits}
-      placeholder="Select fruit"
-      triggerCls="w-44"
-      indicatorAt="left"
-    />
+    <SelectWrapper items={fruits} placeholder="Select fruit" triggerCls="w-44" indicatorAt="left" />
   )
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { type VirtualizerOptions, useVirtualizer } from '@tanstack/react-virtual'
-import { flexRender, Table as TanstackTable } from '@tanstack/react-table'
+import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
 import { Loader } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -27,7 +27,7 @@ export function DataTableVirtualized<TData>({
   hasNextPage = false,
   emptyMessage = 'No matching results.',
   isFetchingNextPage = false,
-  fetchNextPage = () => { },
+  fetchNextPage = () => {},
   virtualizerOptions,
 }: DataTableProps<TData>) {
   const rows = table.getRowModel().rows

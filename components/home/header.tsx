@@ -13,8 +13,8 @@ function Header() {
         </h1>
 
         <p className="my-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Type-safe UI wrappers built on Base UI and Shadcn primitives.
-          Consistent APIs, shared utilities, and improved DX for real-world web development.
+          Type-safe UI wrappers built on Base UI and Shadcn primitives. Consistent APIs, shared
+          utilities, and improved DX for real-world web development.
         </p>
 
         <Button

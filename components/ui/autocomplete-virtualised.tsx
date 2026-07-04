@@ -1,9 +1,9 @@
 'use client'
 
 import * as React from 'react'
-import { Loader2 } from 'lucide-react'
-import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomplete'
 import { useVirtualizer, type VirtualizerOptions } from '@tanstack/react-virtual'
+import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomplete'
+import { Loader2 } from 'lucide-react'
 
 import { cn, extractText, getLabel, getValue, isGroup, isOption } from '@/lib/utils'
 import {
@@ -151,10 +151,10 @@ function AutocompleteVirtualisedWrapper({
           {renderStatus !== undefined
             ? renderStatus
             : isLoading && (
-              <p className="flex items-center justify-center gap-2 py-6">
-                <Loader2 className="size-4 animate-spin" /> Loading...
-              </p>
-            )}
+                <p className="flex items-center justify-center gap-2 py-6">
+                  <Loader2 className="size-4 animate-spin" /> Loading...
+                </p>
+              )}
         </AutocompleteStatus>
 
         <AutocompleteEmpty>
