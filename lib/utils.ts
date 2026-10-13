@@ -1,10 +1,6 @@
 import { isValidElement, type ReactNode } from 'react'
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+export { cn } from "cn"
 
 export function isAllowedPrimitive(value: unknown): value is allowedPrimitiveT {
   return ['string', 'number', 'boolean'].includes(typeof value)
