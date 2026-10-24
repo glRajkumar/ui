@@ -1,6 +1,6 @@
 {
   "name": "@glraj/ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Opinionated, type-safe wrappers around shadcn/ui (Base UI) components.",
   "license": "MIT",
   "type": "module",
