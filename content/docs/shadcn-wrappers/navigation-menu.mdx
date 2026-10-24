@@ -9,7 +9,7 @@ import { NavigationMenuEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'npm']}>
 
 <Tab value="CLI">
 
@@ -32,6 +32,20 @@ Copy and paste the following code into your project.
 <include cwd meta='title="ui/navigation-menu-wrapper.tsx"'>
   ./components/ui/navigation-menu-wrapper.tsx
 </include>
+
+</Tab>
+
+<Tab value="npm">
+
+```npm
+npm i @glraj/ui
+```
+
+Import from `@glraj/ui/navigation-menu`, `@glraj/ui/navigation-menu-wrapper`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
+
+Requires Next.js (uses `next/link`).
+
+If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
 
 </Tab>
 </Tabs>

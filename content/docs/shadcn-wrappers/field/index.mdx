@@ -19,7 +19,7 @@ import { FieldEx, Field_RHF_Ex, Field_TF_Ex } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'npm']}>
 
 <Tab value="CLI">
 
@@ -54,6 +54,18 @@ For TanStack Form integration:
 <include cwd meta='title="ui/field-wrapper-tf.tsx"'>
   ./components/ui/field-wrapper-tf.tsx
 </include>
+
+</Tab>
+
+<Tab value="npm">
+
+```npm
+npm i @glraj/ui @daypicker/react @tanstack/react-form date-fns react-hook-form
+```
+
+Import from `@glraj/ui/field-wrapper`, `@glraj/ui/field-wrapper-rhf`, `@glraj/ui/field-wrapper-tf`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
+
+If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
 
 </Tab>
 </Tabs>

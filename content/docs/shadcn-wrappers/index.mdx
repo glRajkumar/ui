@@ -1,6 +1,6 @@
 ---
 title: Introduction
-description: Type-safe UI component wrappers built on Base UI and Shadcn primitives, installed via the shadcn CLI
+description: Type-safe UI component wrappers built on Base UI and Shadcn primitives, installed via the shadcn CLI or as the @glraj/ui npm package
 ---
 
 # UI Component Wrappers
@@ -29,6 +29,69 @@ These are opinionated wrappers built on top of [Base UI](https://base-ui.com) an
   }
 }
 ```
+
+---
+
+## npm Package
+
+Prefer a dependency over copied source? Every wrapper is also published as [`@glraj/ui`](https://www.npmjs.com/package/@glraj/ui). Same code as the registry — you get fixes by bumping the version instead of re-adding files.
+
+| | Registry (shadcn CLI) | npm package |
+| --- | --- | --- |
+| Code lives in | your project | `node_modules` |
+| Customise | edit the files directly | `className` / props only |
+| Updates | re-run `shadcn add` (overwrites edits) | bump `@glraj/ui` |
+
+### Install
+
+```npm
+npm i @glraj/ui @base-ui/react lucide-react
+```
+
+Some wrappers need extra peer dependencies. Each component page lists them in its **npm** install tab.
+
+| Component | Peer dependencies |
+| --- | --- |
+| `data-table` | `@tanstack/react-table`, `@tanstack/react-virtual` |
+| `autocomplete-virtualised`, `combobox-virtualised` | `@tanstack/react-virtual` |
+| `date-picker`, `field-wrapper*` | `@daypicker/react`, `date-fns` |
+| `carousel` | `embla-carousel-react` |
+| `field-wrapper-rhf` | `react-hook-form` |
+| `field-wrapper-tf` | `@tanstack/react-form` |
+| `navigation-menu-wrapper` | `next` (uses `next/link`) |
+
+### Styles
+
+Requires Tailwind CSS v4. Add to your global CSS:
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* shadcn theme tokens — skip if your app already defines them */
+@import "@glraj/ui/theme.css";
+
+/* lets Tailwind scan the package's classes */
+@import "@glraj/ui/styles.css";
+```
+
+<Callout type="warn">
+  Without `@glraj/ui/styles.css`, Tailwind never sees the package's class names and the components render unstyled.
+</Callout>
+
+### Usage
+
+Each wrapper has its own entry point, so you only bundle what you import:
+
+```tsx
+import { SelectWrapper } from "@glraj/ui/select"
+import { DataTable } from "@glraj/ui/data-table"
+import { cn, parseAllowedPrimitive } from "@glraj/ui/utils"
+```
+
+In the examples across these docs, replace `@/components/ui/` with `@glraj/ui/` and `@/lib/utils` with `@glraj/ui/utils`.
+
+The [types](#type-definitions) below (`itemT`, `itemsT`, `allowedPrimitiveT`, …) are global — available without an import once any `@glraj/ui` module is imported.
 
 ---
 

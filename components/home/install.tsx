@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react'
+import Link from 'next/link'
 import path from 'path'
 import fs from 'fs'
 import { CodeBlock } from '../extended/code-block'
@@ -48,6 +49,17 @@ async function Install() {
   }
 }`}
         </CodeBlock>
+      </div>
+
+      <div className="mt-8 text-center">
+        <p className="pb-2">
+          Prefer a dependency? Install the{' '}
+          <Link href="/docs/shadcn-wrappers#npm-package" className="font-medium underline">
+            npm package
+          </Link>
+          .
+        </p>
+        <div className="w-fit mx-auto px-6 py-3 rounded-xl shadow border">npm i @glraj/ui</div>
       </div>
     </section>
   )

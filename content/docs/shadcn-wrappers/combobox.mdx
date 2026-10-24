@@ -9,7 +9,7 @@ import { ComboboxEx } from "@/components/examples";
 
 ## Installation
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'npm']}>
 
 <Tab value="CLI">
 
@@ -38,13 +38,25 @@ Copy and paste the following code into your project.
 </include>
 
 </Tab>
+
+<Tab value="npm">
+
+```npm
+npm i @glraj/ui
+```
+
+Import from `@glraj/ui/combobox`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
+
+If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
+
+</Tab>
 </Tabs>
 
 ## Virtualised Installation
 
 `ComboboxVirtualisedWrapper` renders large flat lists efficiently using `@tanstack/react-virtual`. Install separately — grouping is not supported.
 
-<Tabs className="plain-tabs" items={['CLI', 'Manual']}>
+<Tabs className="plain-tabs" items={['CLI', 'Manual', 'npm']}>
 
 <Tab value="CLI">
 
@@ -59,6 +71,18 @@ npx shadcn@latest add @glrk-ui/combobox-virtual
 <include cwd meta='title="ui/combobox-virtualised.tsx"'>
   ./components/ui/combobox-virtualised.tsx
 </include>
+
+</Tab>
+
+<Tab value="npm">
+
+```npm
+npm i @glraj/ui @tanstack/react-virtual
+```
+
+Import from `@glraj/ui/combobox-virtualised`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
+
+If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
 
 </Tab>
 </Tabs>
