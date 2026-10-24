@@ -3,7 +3,10 @@
     "allow": [
       "WebFetch(domain:base-ui.com)",
       "Bash(npx tsc *)",
-      "Bash(pnpm exec *)"
+      "Bash(pnpm exec *)",
+      "Bash(pnpm -v)",
+      "Bash(sed -i 's/\"tsdown\": \"\\\\^0.23.1\"/\"tsdown\": \"0.23.1\"/' packages/ui/package.json)",
+      "Bash(pnpm install *)"
     ]
   }
 }

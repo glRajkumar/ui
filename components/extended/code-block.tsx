@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 type props = { children: string } & Base.CodeBlockProps
 
 export function CodeBlock({ children, title, className, ...rest }: props) {
-  const lang = title?.split('.')?.pop() || 'tsx'
+  const lang = (typeof title === 'string' && title.split('.').pop()) || 'tsx'
 
   return (
     <ServerCodeBlock
