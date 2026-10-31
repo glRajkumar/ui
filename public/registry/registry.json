@@ -24,6 +24,10 @@
       "registryDependencies": ["alert-dialog"],
       "files": [
         {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/alert-dialog.tsx",
           "type": "registry:ui"
         }
@@ -35,6 +39,10 @@
       "title": "Autocomplete",
       "description": "Autocomplete with type-to-filter suggestions, grouped options, async search, inline mode, and clear/trigger controls.",
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "types/general.d.ts",
           "type": "registry:file",
@@ -57,6 +65,10 @@
       "description": "Virtualised autocomplete wrapper using @tanstack/react-virtual — renders large flat lists efficiently without grouping.",
       "dependencies": ["@tanstack/react-virtual"],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "types/general.d.ts",
           "type": "registry:file",
@@ -150,6 +162,10 @@
       "registryDependencies": ["carousel"],
       "files": [
         {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/carousel.tsx",
           "type": "registry:ui"
         }
@@ -184,6 +200,10 @@
       "registryDependencies": [],
       "files": [
         {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "types/general.d.ts",
           "type": "registry:file",
           "target": "types/general.d.ts"
@@ -205,6 +225,10 @@
       "description": "Virtualised combobox wrapper using @tanstack/react-virtual — renders large flat lists efficiently without grouping.",
       "dependencies": ["@tanstack/react-virtual"],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "types/general.d.ts",
           "type": "registry:file",
@@ -265,9 +289,13 @@
       "type": "registry:ui",
       "title": "Data Table Wrapper",
       "description": "Data Table componet with wrapper",
-      "dependencies": ["@tanstack/react-table"],
+      "dependencies": ["@tanstack/react-table@^9"],
       "registryDependencies": ["select", "popover", "button", "badge", "table"],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "types/general.d.ts",
           "type": "registry:file",
@@ -343,6 +371,11 @@
           "path": "components/ui/data-table/index-no-virt.tsx",
           "type": "registry:ui",
           "target": "components/ui/data-table/index.tsx"
+        },
+        {
+          "path": "components/ui/data-table/table-features.ts",
+          "type": "registry:ui",
+          "target": "components/ui/data-table/table-features.ts"
         }
       ]
     },
@@ -353,6 +386,10 @@
       "description": "Data Table Virtualized componet with wrapper",
       "dependencies": ["@tanstack/react-virtual"],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "components/ui/data-table/data-table-virtualized.tsx",
           "type": "registry:ui"
@@ -371,6 +408,10 @@
       "dependencies": ["@daypicker/react", "date-fns"],
       "registryDependencies": ["button", "popover", "select", "scroll-area"],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "components/ui/date-picker/utils.ts",
           "type": "registry:ui"
@@ -409,6 +450,10 @@
       "registryDependencies": ["dialog", "button"],
       "files": [
         {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/dialog.tsx",
           "type": "registry:ui"
         }
@@ -421,6 +466,10 @@
       "description": "drawer componet with wrapper",
       "registryDependencies": [],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "components/ui/drawer.tsx",
           "type": "registry:ui"
@@ -468,6 +517,10 @@
         "slider"
       ],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "types/general.d.ts",
           "type": "registry:file",
@@ -571,6 +624,10 @@
         "slider"
       ],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "types/general.d.ts",
           "type": "registry:file",
@@ -678,6 +735,10 @@
         "slider"
       ],
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "types/general.d.ts",
           "type": "registry:file",
@@ -931,6 +992,10 @@
       "registryDependencies": ["pagination"],
       "files": [
         {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "types/general.d.ts",
           "type": "registry:file",
           "target": "types/general.d.ts"
@@ -1034,6 +1099,10 @@
       "registryDependencies": ["sheet"],
       "files": [
         {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
+        {
           "path": "components/ui/sheet.tsx",
           "type": "registry:ui"
         }
@@ -1058,6 +1127,10 @@
       "title": "Toast",
       "description": "Toast componet with wrapper",
       "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
+          "type": "registry:ui"
+        },
         {
           "path": "components/ui/toast.tsx",
           "type": "registry:ui"
@@ -1095,6 +1168,18 @@
       "files": [
         {
           "path": "components/ui/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "ui-provider",
+      "type": "registry:ui",
+      "title": "UI Provider",
+      "description": "Overrides default UI text (placeholders, empty/loading states, aria labels) for i18n.",
+      "files": [
+        {
+          "path": "components/ui/ui-provider.tsx",
           "type": "registry:ui"
         }
       ]

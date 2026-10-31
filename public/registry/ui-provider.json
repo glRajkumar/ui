@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ui-provider",
+  "title": "UI Provider",
+  "description": "Overrides default UI text (placeholders, empty/loading states, aria labels) for i18n.",
+  "files": [
+    {
+      "path": "components/ui/ui-provider.tsx",
+      "content": "'use client'\r\n\r\nimport * as React from 'react'\r\n\r\ntype uiTextT = {\r\n  enterPlaceholder: (label: string) => string\r\n  selectPlaceholder: (label: string) => string\r\n  loading: string\r\n  noItems: string\r\n  noResults: string\r\n  cancel: string\r\n  confirm: string\r\n  close: string\r\n  remove: string\r\n  confirmTitle: string\r\n  confirmDescription: string\r\n  pickDate: string\r\n  pickDateTime: string\r\n  time: string\r\n  selectTime: string\r\n  previous: string\r\n  next: string\r\n  previousSlide: string\r\n  nextSlide: string\r\n  totalRows: (count: number) => string\r\n  rowsPerPage: string\r\n  pageOf: (page: number, pageCount: number) => string\r\n  firstPage: string\r\n  previousPage: string\r\n  nextPage: string\r\n  lastPage: string\r\n  toggleSidebar: string\r\n}\r\n\r\nconst defaultUIText: uiTextT = {\r\n  enterPlaceholder: label => `Enter ${label}`,\r\n  selectPlaceholder: label => `Select ${label}`,\r\n  loading: 'Loading...',\r\n  noItems: 'No items found',\r\n  noResults: 'No matching results.',\r\n  cancel: 'Cancel',\r\n  confirm: 'Confirm',\r\n  close: 'Close',\r\n  remove: 'Remove',\r\n  confirmTitle: 'Are you absolutely sure?',\r\n  confirmDescription:\r\n    'This action cannot be undone. This will permanently remove your data from our servers.',\r\n  pickDate: 'Pick a date',\r\n  pickDateTime: 'Pick date & time',\r\n  time: 'Time',\r\n  selectTime: 'Select time',\r\n  previous: 'Previous',\r\n  next: 'Next',\r\n  previousSlide: 'Previous slide',\r\n  nextSlide: 'Next slide',\r\n  totalRows: count => `Total: ${count} row(s)`,\r\n  rowsPerPage: 'Rows per page',\r\n  pageOf: (page, pageCount) => `Page ${page} of ${pageCount}`,\r\n  firstPage: 'Go to first page',\r\n  previousPage: 'Go to previous page',\r\n  nextPage: 'Go to next page',\r\n  lastPage: 'Go to last page',\r\n  toggleSidebar: 'Toggle Sidebar',\r\n}\r\n\r\nconst UITextContext = React.createContext<uiTextT>(defaultUIText)\r\n\r\ntype UIProviderProps = {\r\n  text?: Partial<uiTextT>\r\n  children: React.ReactNode\r\n}\r\n\r\nfunction UIProvider({ text, children }: UIProviderProps) {\r\n  const parent = React.useContext(UITextContext)\r\n  const value = React.useMemo(() => ({ ...parent, ...text }), [parent, text])\r\n\r\n  return <UITextContext.Provider value={value}>{children}</UITextContext.Provider>\r\n}\r\n\r\nfunction useUIText() {\r\n  return React.useContext(UITextContext)\r\n}\r\n\r\nexport { UIProvider, useUIText, defaultUIText, type uiTextT, type UIProviderProps }\r\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
