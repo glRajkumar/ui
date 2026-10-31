@@ -1,7 +1,6 @@
 'use client'
 
 import { CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react'
-import { ColumnDef } from '@tanstack/react-table'
 
 import { Employee, employees } from './data'
 
@@ -15,7 +14,8 @@ import {
   DataTable,
   FilterGroup,
   Pagination,
-  useTable,
+  useDataTable,
+  type AppColumnDef,
 } from '@/components/ui/data-table'
 
 const StatusBadge = ({ status }: { status: Employee['status'] }) => {
@@ -37,7 +37,7 @@ const StatusBadge = ({ status }: { status: Employee['status'] }) => {
   )
 }
 
-const columns: ColumnDef<Employee>[] = [
+const columns: AppColumnDef<Employee>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => <ColumnHeader column={column} title="ID" />,
@@ -126,14 +126,14 @@ const filterOptions = [
 ]
 
 export function DataTableExample() {
-  const table = useTable({ data: employees, columns })
+  const table = useDataTable({ data: employees, columns })
 
   return (
     <div className="w-full">
       <div className="flex items-center flex-wrap gap-4 mb-3">
         <Input
           className="w-60"
-          value={table.getState().globalFilter}
+          value={table.state.globalFilter}
           onChange={e => table.setGlobalFilter(e.target.value)}
           placeholder="Search anything..."
         />

@@ -1,7 +1,10 @@
 'use client'
 
-import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
+import { flexRender, type RowData } from '@tanstack/react-table'
 
+import { type AppTable as TanstackTable } from './table-features'
+
+import { useUIText } from '@/components/ui/ui-provider'
 import {
   Table,
   TableBody,
@@ -11,17 +14,18 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-interface DataTableProps<TData> {
+interface DataTableProps<TData extends RowData> {
   table: TanstackTable<TData>
   className?: string
   emptyMessage?: string
 }
 
-export function DataTable<TData>({
+export function DataTable<TData extends RowData>({
   table,
   className = '',
-  emptyMessage = 'No matching results.',
+  emptyMessage,
 }: DataTableProps<TData>) {
+  const text = useUIText()
   const columnCount = table?.getAllColumns()?.length
   const rows = table?.getRowModel()?.rows
   const hasRows = rows?.length > 0
@@ -32,7 +36,7 @@ export function DataTable<TData>({
         {table?.getHeaderGroups().map(headerGroup => (
           <TableRow key={headerGroup.id} className="hover:bg-transparent">
             {headerGroup.headers.map(header => (
-              <TableHead key={header.id} className="text-theme-grey-text">
+              <TableHead key={header.id}>
                 {header.isPlaceholder
                   ? null
                   : flexRender(header.column.columnDef.header, header.getContext())}
@@ -56,7 +60,9 @@ export function DataTable<TData>({
         ) : (
           <TableRow className="hover:bg-transparent">
             <TableCell colSpan={columnCount} className="border-b">
-              <div className="dc h-32 my-4 text-sm text-center">{emptyMessage}</div>
+              <div className="flex items-center justify-center h-32 my-4 text-sm text-center">
+                {emptyMessage ?? text.noResults}
+              </div>
             </TableCell>
           </TableRow>
         )}

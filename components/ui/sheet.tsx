@@ -5,6 +5,7 @@ import { Dialog as SheetPrimitive } from '@base-ui/react/dialog'
 import { Loader, XIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import { useUIText } from '@/components/ui/ui-provider'
 
 import { Button } from '@/components/ui/button'
 
@@ -47,6 +48,7 @@ function SheetContent({
   side?: 'top' | 'right' | 'bottom' | 'left'
   showCloseButton?: boolean
 }) {
+  const text = useUIText()
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -66,7 +68,7 @@ function SheetContent({
             render={<Button variant="ghost" className="absolute top-3 right-3" size="icon-sm" />}
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{text.close}</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>
@@ -186,7 +188,7 @@ function SheetWrapper({
   headerCls,
   titleCls,
   descriptionCls,
-  cancel = 'Cancel',
+  cancel: cancelProp,
   action,
   loading = false,
   triggerCls,
@@ -201,6 +203,8 @@ function SheetWrapper({
   showCloseButton,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Root> & SheetWrapperProps) {
+  const text = useUIText()
+  const cancel = cancelProp === undefined ? text.cancel : cancelProp
   return (
     <Sheet
       {...props}

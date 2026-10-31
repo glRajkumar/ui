@@ -6,6 +6,7 @@ import { Loader } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
+import { useUIText } from '@/components/ui/ui-provider'
 import { Button } from '@/components/ui/button'
 
 function AlertDialog(props: AlertDialogPrimitive.Root.Props) {
@@ -177,8 +178,8 @@ function AlertDialogFooterWrapper({
   footerCls,
   actionCls,
   cancelCls,
-  onAction = () => {},
-  onCancel = () => {},
+  onAction = () => { },
+  onCancel = () => { },
 }: AlertDialogFooterWrapperProps) {
   return (
     <AlertDialogFooter className={cn(footerCls)}>
@@ -214,8 +215,8 @@ type AlertDialogWrapperProps = {
 
 function AlertDialogWrapper({
   trigger,
-  title = 'Are you absolutely sure?',
-  description = 'This action cannot be undone. This will permanently remove your data from our servers.',
+  title: titleProp,
+  description: descriptionProp,
   children,
   media,
   triggerCls,
@@ -224,8 +225,8 @@ function AlertDialogWrapper({
   headerCls,
   titleCls,
   descriptionCls,
-  cancel = 'Cancel',
-  action = 'Confirm',
+  cancel: cancelProp,
+  action: actionProp,
   loading = false,
   footerCls,
   actionCls,
@@ -235,6 +236,11 @@ function AlertDialogWrapper({
   onOpenChange,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root> & AlertDialogWrapperProps) {
+  const text = useUIText()
+  const title = titleProp === undefined ? text.confirmTitle : titleProp
+  const action = actionProp === undefined ? text.confirm : actionProp
+  const cancel = cancelProp === undefined ? text.cancel : cancelProp
+  const description = descriptionProp === undefined ? text.confirmDescription : descriptionProp
   return (
     <AlertDialog
       {...props}

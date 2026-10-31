@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { CircleHelpIcon, Info, LayoutDashboard, Settings, ShieldCheck } from 'lucide-react'
 
 import { ExRow, ExItem } from '@/components/examples/common'
@@ -18,6 +19,7 @@ function GroupLabelContent() {
         Platform
       </p>
       <NavList
+        linkAs={Link}
         wrapperCls="mb-3"
         items={[
           {
@@ -42,6 +44,7 @@ function GroupLabelContent() {
         Security
       </p>
       <NavList
+        linkAs={Link}
         items={[
           {
             href: '/audit',
@@ -61,6 +64,7 @@ function GroupLabelContent() {
 function BasicExample() {
   return (
     <NavigationMenuWrapper
+      linkAs={Link}
       items={[
         {
           key: 'home',
@@ -68,6 +72,7 @@ function BasicExample() {
           content: (
             <div className="p-2 w-56">
               <NavList
+                linkAs={Link}
                 items={[
                   { href: '/', children: 'Dashboard' },
                   { href: '/about', children: 'About Us' },
@@ -84,6 +89,7 @@ function BasicExample() {
             <div className="p-2 w-72">
               <p className="text-sm font-semibold mb-1">Product Features</p>
               <NavList
+                linkAs={Link}
                 items={[
                   { href: '/fast', children: 'Fast Performance' },
                   { href: '/secure', children: 'Secure Infrastructure' },
@@ -108,6 +114,7 @@ function BasicExample() {
 function GroupLabelExample() {
   return (
     <NavigationMenuWrapper
+      linkAs={Link}
       items={[
         {
           key: 'platform',
@@ -123,6 +130,7 @@ function GroupLabelExample() {
 function DefaultOpenExample() {
   return (
     <NavigationMenuWrapper
+      linkAs={Link}
       defaultValue="tools"
       items={[
         {
@@ -131,6 +139,7 @@ function DefaultOpenExample() {
           content: (
             <div className="p-2 w-48">
               <NavList
+                linkAs={Link}
                 items={[
                   { href: '/formatter', children: 'Formatter' },
                   { href: '/linter', children: 'Linter' },
@@ -145,6 +154,7 @@ function DefaultOpenExample() {
           content: (
             <div className="p-2 w-48">
               <NavList
+                linkAs={Link}
                 items={[
                   { href: '/api', children: 'API Reference' },
                   { href: '/guides', children: 'Guides' },
@@ -161,6 +171,7 @@ function DefaultOpenExample() {
 function InstantHoverExample() {
   return (
     <NavigationMenuWrapper
+      linkAs={Link}
       delay={0}
       closeDelay={150}
       items={[
@@ -170,6 +181,7 @@ function InstantHoverExample() {
           content: (
             <div className="p-2 w-56">
               <NavList
+                linkAs={Link}
                 items={[
                   { href: '/analytics', children: 'Analytics' },
                   { href: '/reporting', children: 'Reporting' },
@@ -184,6 +196,7 @@ function InstantHoverExample() {
           content: (
             <div className="p-2 w-56">
               <NavList
+                linkAs={Link}
                 items={[
                   { href: '/about', children: 'About' },
                   { href: '/careers', children: 'Careers' },
@@ -219,6 +232,7 @@ function ControlledExample() {
       </div>
 
       <NavigationMenuWrapper
+        linkAs={Link}
         value={value}
         onValueChange={v => setValue(v)}
         items={[
@@ -228,6 +242,7 @@ function ControlledExample() {
             content: (
               <div className="p-2 w-56">
                 <NavList
+                  linkAs={Link}
                   items={[
                     { href: '/formatter', children: 'Formatter' },
                     { href: '/linter', children: 'Linter' },
@@ -242,6 +257,7 @@ function ControlledExample() {
             content: (
               <div className="p-2 w-48">
                 <NavList
+                  linkAs={Link}
                   items={[
                     { href: '/api', children: 'API Reference' },
                     { href: '/guides', children: 'Guides' },
@@ -259,6 +275,7 @@ function ControlledExample() {
 function NavListExample() {
   return (
     <NavList
+      linkAs={Link}
       wrapperCls="space-y-1"
       items={[
         {
@@ -311,7 +328,7 @@ export function NavigationMenuExample() {
           <NavListExample />
         </ExItem>
         <ExItem label="NavLinkItem">
-          <NavLinkItem href="/about">About Us</NavLinkItem>
+          <NavLinkItem linkAs={Link} href="/about">About Us</NavLinkItem>
         </ExItem>
       </ExRow>
     </div>

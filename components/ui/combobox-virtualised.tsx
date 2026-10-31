@@ -6,6 +6,8 @@ import { Combobox as ComboboxPrimitive } from '@base-ui/react'
 import { useVirtualizer, type VirtualizerOptions } from '@tanstack/react-virtual'
 
 import { cn, extractText, getLabel, getValue, isGroup, isOption, isSeparator } from '@/lib/utils'
+
+import { useUIText } from '@/components/ui/ui-provider'
 import {
   ComboboxRoot,
   ComboboxInput,
@@ -126,6 +128,7 @@ function ComboboxVirtualisedWrapper({
   virtualizerOptions,
   ...props
 }: ComboboxVirtualisedWrapperProps) {
+  const text = useUIText()
   const labelStringMap = React.useMemo(() => {
     const map: Record<string, string> = {}
     if (!items) return map
@@ -174,16 +177,16 @@ function ComboboxVirtualisedWrapper({
           {renderStatus !== undefined
             ? renderStatus
             : isLoading && (
-                <p className="flex items-center justify-center gap-2 py-6">
-                  <Loader2 className="size-4 animate-spin" /> Loading...
-                </p>
-              )}
+              <p className="flex items-center justify-center gap-2 py-6">
+                <Loader2 className="size-4 animate-spin" /> {text.loading}
+              </p>
+            )}
         </ComboboxStatus>
 
         <ComboboxEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className="py-6">{emptyMessage ?? 'No items found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? text.noItems}</p>}
         </ComboboxEmpty>
 
         <ComboboxVirtualList

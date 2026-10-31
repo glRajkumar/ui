@@ -14,6 +14,7 @@ import {
   isOption,
   isSeparator,
 } from '@/lib/utils'
+import { useUIText } from '@/components/ui/ui-provider'
 
 const ComboboxRoot = ComboboxPrimitive.Root
 
@@ -265,6 +266,7 @@ function ComboboxChip({
   showRemove = true,
   ...props
 }: ComboboxPrimitive.Chip.Props & { showRemove?: boolean }) {
+  const text = useUIText()
   return (
     <ComboboxPrimitive.Chip
       data-slot="combobox-chip"
@@ -286,7 +288,7 @@ function ComboboxChip({
             'transition-colors hover:bg-accent hover:text-foreground',
             '[&_svg]:pointer-events-none',
           )}
-          aria-label="Remove"
+          aria-label={text.remove}
         >
           <XIcon className="size-3" />
         </ComboboxPrimitive.ChipRemove>
@@ -435,6 +437,7 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
   items,
   ...props
 }: ComboboxWrapperProps<Value, Multiple>) {
+  const text = useUIText()
   const multiAnchor = React.useRef<HTMLDivElement | null>(null)
 
   const { labelMap, labelStringMap, optionMap } = React.useMemo(() => {
@@ -570,7 +573,7 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
             ? renderStatus
             : isLoading && (
                 <p className="flex items-center justify-center gap-2 py-6">
-                  <Loader2 className="size-4 animate-spin" /> Loading...
+                  <Loader2 className="size-4 animate-spin" /> {text.loading}
                 </p>
               )}
         </ComboboxStatus>
@@ -578,7 +581,7 @@ function ComboboxWrapper<Value, Multiple extends boolean | undefined = false>({
         <ComboboxEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className="py-6">{emptyMessage ?? 'No items found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? text.noItems}</p>}
         </ComboboxEmpty>
 
         <ComboboxList>

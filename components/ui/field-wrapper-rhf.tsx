@@ -25,9 +25,28 @@ type BaseProps<T extends FieldValues> = {
   label?: React.ReactNode
 }
 
+type ControlledKeys = 'name' | 'value' | 'error' | 'invalid'
+
+// Runs the form handler first, then the caller's own handler with the same arguments.
+function chain<A extends unknown[]>(
+  formHandler: (...args: A) => void,
+  ownHandler?: (...args: A) => void,
+) {
+  return (...args: A) => {
+    formHandler(...args)
+    ownHandler?.(...args)
+  }
+}
+
 type InputProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name' | 'value' | 'onChange' | 'onBlur'>
-export function InputWrapper<T extends FieldValues>({ name, control, ...props }: InputProps<T>) {
+  Omit<React.ComponentProps<typeof Input>, ControlledKeys>
+export function InputWrapper<T extends FieldValues>({
+  name,
+  control,
+  onChange,
+  onBlur,
+  ...props
+}: InputProps<T>) {
   return (
     <Controller
       name={name}
@@ -37,8 +56,11 @@ export function InputWrapper<T extends FieldValues>({ name, control, ...props }:
           {...props}
           name={name}
           value={field.value ?? ''}
-          onChange={field.onChange}
-          onBlur={field.onBlur}
+          onChange={chain(field.onChange, onChange)}
+          onBlur={e => {
+            field.onBlur()
+            onBlur?.(e)
+          }}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -48,10 +70,12 @@ export function InputWrapper<T extends FieldValues>({ name, control, ...props }:
 }
 
 type TextareaProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'name' | 'value' | 'onChange' | 'onBlur'>
+  Omit<React.ComponentProps<typeof Textarea>, ControlledKeys>
 export function TextareaWrapper<T extends FieldValues>({
   name,
   control,
+  onChange,
+  onBlur,
   ...props
 }: TextareaProps<T>) {
   return (
@@ -63,8 +87,11 @@ export function TextareaWrapper<T extends FieldValues>({
           {...props}
           name={name}
           value={field.value ?? ''}
-          onChange={field.onChange}
-          onBlur={field.onBlur}
+          onChange={chain(field.onChange, onChange)}
+          onBlur={e => {
+            field.onBlur()
+            onBlur?.(e)
+          }}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -73,10 +100,14 @@ export function TextareaWrapper<T extends FieldValues>({
   )
 }
 
-type RadioProps<T extends FieldValues> = BaseProps<T> & {
-  items: (allowedPrimitiveT | itemT)[]
-}
-export function RadioWrapper<T extends FieldValues>({ name, control, ...props }: RadioProps<T>) {
+type RadioProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof Radio>, ControlledKeys>
+export function RadioWrapper<T extends FieldValues>({
+  name,
+  control,
+  onValueChange,
+  ...props
+}: RadioProps<T>) {
   return (
     <Controller
       name={name}
@@ -86,7 +117,7 @@ export function RadioWrapper<T extends FieldValues>({ name, control, ...props }:
           {...props}
           name={name}
           value={field.value}
-          onValueChange={field.onChange}
+          onValueChange={chain(field.onChange, onValueChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -95,12 +126,12 @@ export function RadioWrapper<T extends FieldValues>({ name, control, ...props }:
   )
 }
 
-type CheckboxProps<T extends FieldValues> = BaseProps<T> & {
-  items: (allowedPrimitiveT | itemT)[]
-}
+type CheckboxProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof Checkbox>, ControlledKeys>
 export function CheckboxWrapper<T extends FieldValues>({
   name,
   control,
+  onValueChange,
   ...props
 }: CheckboxProps<T>) {
   return (
@@ -112,7 +143,7 @@ export function CheckboxWrapper<T extends FieldValues>({
           {...props}
           name={name}
           value={field.value ?? []}
-          onValueChange={field.onChange}
+          onValueChange={chain(field.onChange, onValueChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -121,8 +152,14 @@ export function CheckboxWrapper<T extends FieldValues>({
   )
 }
 
-type SwitchProps<T extends FieldValues> = BaseProps<T>
-export function SwitchWrapper<T extends FieldValues>({ name, control, ...props }: SwitchProps<T>) {
+type SwitchProps<T extends FieldValues> = BaseProps<T> &
+  Omit<React.ComponentProps<typeof Switch>, ControlledKeys | 'checked'>
+export function SwitchWrapper<T extends FieldValues>({
+  name,
+  control,
+  onCheckedChange,
+  ...props
+}: SwitchProps<T>) {
   return (
     <Controller
       name={name}
@@ -132,7 +169,7 @@ export function SwitchWrapper<T extends FieldValues>({ name, control, ...props }
           {...props}
           name={name}
           checked={field.value ?? false}
-          onCheckedChange={field.onChange}
+          onCheckedChange={chain(field.onChange, onCheckedChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -142,11 +179,13 @@ export function SwitchWrapper<T extends FieldValues>({ name, control, ...props }
 }
 
 type SelectProps<T extends FieldValues> = BaseProps<T> &
-  Omit<
-    React.ComponentProps<typeof Select>,
-    'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
-  >
-export function SelectWrapper<T extends FieldValues>({ name, control, ...props }: SelectProps<T>) {
+  Omit<React.ComponentProps<typeof Select>, ControlledKeys>
+export function SelectWrapper<T extends FieldValues>({
+  name,
+  control,
+  onValueChange,
+  ...props
+}: SelectProps<T>) {
   return (
     <Controller
       name={name}
@@ -156,7 +195,7 @@ export function SelectWrapper<T extends FieldValues>({ name, control, ...props }
           {...props}
           name={name}
           value={field.value}
-          onValueChange={field.onChange}
+          onValueChange={chain(field.onChange, onValueChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -166,10 +205,11 @@ export function SelectWrapper<T extends FieldValues>({ name, control, ...props }
 }
 
 type DatePickerProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof DatePicker>, 'name' | 'value' | 'onSelect' | 'error' | 'invalid'>
+  Omit<React.ComponentProps<typeof DatePicker>, ControlledKeys>
 export function DatePickerWrapper<T extends FieldValues>({
   name,
   control,
+  onSelect,
   ...props
 }: DatePickerProps<T>) {
   return (
@@ -181,7 +221,7 @@ export function DatePickerWrapper<T extends FieldValues>({
           {...props}
           name={name}
           value={field.value}
-          onSelect={field.onChange}
+          onSelect={chain(field.onChange, onSelect)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -191,15 +231,15 @@ export function DatePickerWrapper<T extends FieldValues>({
 }
 
 type ComboboxProps<T extends FieldValues> = BaseProps<T> &
-  Omit<
-    React.ComponentProps<typeof Combobox>,
-    'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
-  >
+  Omit<React.ComponentProps<typeof Combobox>, ControlledKeys>
 export function ComboboxWrapper<T extends FieldValues>({
   name,
   control,
+  onValueChange,
   ...props
 }: ComboboxProps<T>) {
+  const empty = props.multiple ? [] : ''
+
   return (
     <Controller
       name={name}
@@ -208,8 +248,11 @@ export function ComboboxWrapper<T extends FieldValues>({
         <Combobox
           {...props}
           name={name}
-          value={field.value}
-          onValueChange={field.onChange}
+          value={field.value ?? empty}
+          onValueChange={(value, eventDetails) => {
+            field.onChange(value ?? empty)
+            onValueChange?.(value, eventDetails)
+          }}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -219,11 +262,13 @@ export function ComboboxWrapper<T extends FieldValues>({
 }
 
 type NumberProps<T extends FieldValues> = BaseProps<T> &
-  Omit<
-    React.ComponentProps<typeof NumberInput>,
-    'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
-  >
-export function NumberWrapper<T extends FieldValues>({ name, control, ...props }: NumberProps<T>) {
+  Omit<React.ComponentProps<typeof NumberInput>, ControlledKeys>
+export function NumberWrapper<T extends FieldValues>({
+  name,
+  control,
+  onValueChange,
+  ...props
+}: NumberProps<T>) {
   return (
     <Controller
       name={name}
@@ -233,7 +278,7 @@ export function NumberWrapper<T extends FieldValues>({ name, control, ...props }
           {...props}
           name={name}
           value={field.value ?? null}
-          onValueChange={field.onChange}
+          onValueChange={chain(field.onChange, onValueChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -243,11 +288,13 @@ export function NumberWrapper<T extends FieldValues>({ name, control, ...props }
 }
 
 type SliderProps<T extends FieldValues> = BaseProps<T> &
-  Omit<
-    React.ComponentProps<typeof Slider>,
-    'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
-  >
-export function SliderWrapper<T extends FieldValues>({ name, control, ...props }: SliderProps<T>) {
+  Omit<React.ComponentProps<typeof Slider>, ControlledKeys>
+export function SliderWrapper<T extends FieldValues>({
+  name,
+  control,
+  onValueChange,
+  ...props
+}: SliderProps<T>) {
   return (
     <Controller
       name={name}
@@ -257,7 +304,7 @@ export function SliderWrapper<T extends FieldValues>({ name, control, ...props }
           {...props}
           name={name}
           value={field.value}
-          onValueChange={field.onChange}
+          onValueChange={chain(field.onChange, onValueChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -267,13 +314,11 @@ export function SliderWrapper<T extends FieldValues>({ name, control, ...props }
 }
 
 type AutocompleteProps<T extends FieldValues> = BaseProps<T> &
-  Omit<
-    React.ComponentProps<typeof Autocomplete>,
-    'name' | 'value' | 'onValueChange' | 'error' | 'invalid'
-  >
+  Omit<React.ComponentProps<typeof Autocomplete>, ControlledKeys>
 export function AutocompleteWrapper<T extends FieldValues>({
   name,
   control,
+  onValueChange,
   ...props
 }: AutocompleteProps<T>) {
   return (
@@ -285,7 +330,7 @@ export function AutocompleteWrapper<T extends FieldValues>({
           {...props}
           name={name}
           value={field.value ?? ''}
-          onValueChange={field.onChange}
+          onValueChange={chain(field.onChange, onValueChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -295,8 +340,13 @@ export function AutocompleteWrapper<T extends FieldValues>({
 }
 
 type OTPProps<T extends FieldValues> = BaseProps<T> &
-  Omit<React.ComponentProps<typeof OTP>, 'name' | 'value' | 'onValueChange' | 'error' | 'invalid'>
-export function OTPWrapper<T extends FieldValues>({ name, control, ...props }: OTPProps<T>) {
+  Omit<React.ComponentProps<typeof OTP>, ControlledKeys>
+export function OTPWrapper<T extends FieldValues>({
+  name,
+  control,
+  onValueChange,
+  ...props
+}: OTPProps<T>) {
   return (
     <Controller
       name={name}
@@ -306,7 +356,7 @@ export function OTPWrapper<T extends FieldValues>({ name, control, ...props }: O
           {...props}
           name={name}
           value={field.value ?? ''}
-          onValueChange={value => field.onChange(value)}
+          onValueChange={chain(field.onChange, onValueChange)}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />
@@ -316,13 +366,12 @@ export function OTPWrapper<T extends FieldValues>({ name, control, ...props }: O
 }
 
 type InputGroupProps<T extends FieldValues> = BaseProps<T> &
-  Omit<
-    React.ComponentProps<typeof InputGroup>,
-    'name' | 'value' | 'onChange' | 'onBlur' | 'error' | 'invalid'
-  >
+  Omit<React.ComponentProps<typeof InputGroup>, ControlledKeys>
 export function InputGroupWrapper<T extends FieldValues>({
   name,
   control,
+  onChange,
+  onBlur,
   ...props
 }: InputGroupProps<T>) {
   return (
@@ -334,8 +383,11 @@ export function InputGroupWrapper<T extends FieldValues>({
           {...props}
           name={name}
           value={field.value ?? ''}
-          onChange={field.onChange}
-          onBlur={field.onBlur}
+          onChange={chain(field.onChange, onChange)}
+          onBlur={e => {
+            field.onBlur()
+            onBlur?.(e)
+          }}
           error={fieldState.error}
           invalid={fieldState.invalid}
         />

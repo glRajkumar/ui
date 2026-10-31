@@ -7,6 +7,7 @@ import { Loader } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 import { Button, buttonVariants } from '@/components/ui/button'
+import { useUIText } from '@/components/ui/ui-provider'
 
 type DrawerSide = 'bottom' | 'top' | 'left' | 'right'
 
@@ -138,8 +139,8 @@ function DrawerFooterWrapper({
   footerCls,
   actionCls,
   cancelCls,
-  onAction = () => {},
-  onCancel = () => {},
+  onAction = () => { },
+  onCancel = () => { },
 }: DrawerFooterWrapperProps) {
   return (
     <DrawerFooter className={cn(footerCls)}>
@@ -191,7 +192,7 @@ function DrawerWrapper({
   headerCls,
   titleCls,
   descriptionCls,
-  cancel = 'Cancel',
+  cancel: cancelProp,
   action,
   loading = false,
   footerCls,
@@ -203,6 +204,8 @@ function DrawerWrapper({
   side,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root> & DrawerWrapperProps) {
+  const text = useUIText()
+  const cancel = cancelProp === undefined ? text.cancel : cancelProp
   return (
     <Drawer
       {...props}

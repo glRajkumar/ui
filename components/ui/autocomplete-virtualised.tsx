@@ -6,6 +6,8 @@ import { Autocomplete as AutocompletePrimitive } from '@base-ui/react/autocomple
 import { Loader2 } from 'lucide-react'
 
 import { cn, extractText, getLabel, getValue, isGroup, isOption } from '@/lib/utils'
+
+import { useUIText } from '@/components/ui/ui-provider'
 import {
   AutocompleteRoot,
   AutocompleteInput,
@@ -120,6 +122,7 @@ function AutocompleteVirtualisedWrapper({
   disabled,
   ...props
 }: AutocompleteVirtualisedWrapperProps) {
+  const text = useUIText()
   const itemsForBase = React.useMemo(() => {
     if (!items) return []
     return items.filter(item => !isGroup(item)) as (allowedPrimitiveT | itemT)[]
@@ -151,16 +154,16 @@ function AutocompleteVirtualisedWrapper({
           {renderStatus !== undefined
             ? renderStatus
             : isLoading && (
-                <p className="flex items-center justify-center gap-2 py-6">
-                  <Loader2 className="size-4 animate-spin" /> Loading...
-                </p>
-              )}
+              <p className="flex items-center justify-center gap-2 py-6">
+                <Loader2 className="size-4 animate-spin" /> {text.loading}
+              </p>
+            )}
         </AutocompleteStatus>
 
         <AutocompleteEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className="py-6">{emptyMessage ?? 'No items found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? text.noItems}</p>}
         </AutocompleteEmpty>
 
         <AutocompleteVirtualList

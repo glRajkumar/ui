@@ -8,6 +8,7 @@ import { type Selected, formatSelected, getDefaultMonth } from './utils'
 import { cn } from '@/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useUIText } from '@/components/ui/ui-provider'
 import { Button } from '@/components/ui/button'
 
 import { Calendar } from './calendar'
@@ -34,11 +35,12 @@ function DatePicker({
   triggerProps,
   align = 'start',
   dateFormat = 'dd/MM/yyyy',
-  placeholder = 'Pick a date',
+  placeholder,
   onSelect,
   onOpenChange,
   ...calendarProps
 }: DatePickerProps) {
+  const text = useUIText()
   const [internalOpen, setInternalOpen] = React.useState(false)
   const isControlled = open !== undefined
   const open_ = isControlled ? open : internalOpen
@@ -75,7 +77,7 @@ function DatePicker({
               triggerClassName,
             )}
           >
-            {label ?? <span>{placeholder}</span>}
+            {label ?? <span>{placeholder ?? text.pickDate}</span>}
             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" aria-hidden="true" />
           </Button>
         }

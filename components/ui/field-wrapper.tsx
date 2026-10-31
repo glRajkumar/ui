@@ -2,6 +2,7 @@
 
 import { cn, parseAllowedPrimitive } from '@/lib/utils'
 
+import { useUIText } from './ui-provider'
 import { Field, FieldLabel, FieldSet, FieldLegend, FieldError } from './field'
 import { AutocompleteWrapper as Autocomplete } from './autocomplete'
 import { InputGroupWrapper as InputGroup } from './input-group'
@@ -25,8 +26,9 @@ type BaseProps = {
   className?: string
 }
 
-function labelString(label: React.ReactNode): string | undefined {
-  return typeof label === 'string' ? label : undefined
+function usePlaceholder(kind: 'enterPlaceholder' | 'selectPlaceholder', label: React.ReactNode) {
+  const text = useUIText()
+  return typeof label === 'string' ? text[kind](label) : undefined
 }
 
 type InputProps = BaseProps & React.InputHTMLAttributes<HTMLInputElement>
@@ -41,6 +43,7 @@ export function InputWrapper({
   ...props
 }: InputProps) {
   const isInvalid = invalid || !!error
+  const defaultPlaceholder = usePlaceholder('enterPlaceholder', label)
 
   return (
     <Field className={className} invalid={isInvalid}>
@@ -49,7 +52,7 @@ export function InputWrapper({
         id={name}
         name={name}
         type={type}
-        placeholder={placeholder || (labelString(label) && `Enter ${labelString(label)}`)}
+        placeholder={placeholder || defaultPlaceholder}
         aria-invalid={isInvalid}
         {...props}
       />
@@ -69,6 +72,7 @@ export function TextareaWrapper({
   ...rest
 }: TextareaProps) {
   const isInvalid = invalid || !!error
+  const defaultPlaceholder = usePlaceholder('enterPlaceholder', label)
 
   return (
     <Field className={className} invalid={isInvalid}>
@@ -76,7 +80,7 @@ export function TextareaWrapper({
       <Textarea
         id={name}
         name={name}
-        placeholder={placeholder || (labelString(label) && `Enter ${labelString(label)}`)}
+        placeholder={placeholder || defaultPlaceholder}
         aria-invalid={isInvalid}
         {...rest}
       />
@@ -148,10 +152,11 @@ export function CheckboxWrapper({
   )
 }
 
-type SwitchProps = BaseProps & {
-  checked?: boolean
-  onCheckedChange?: (checked: boolean) => void
-}
+type SwitchProps = BaseProps &
+  Omit<React.ComponentProps<typeof Switch>, 'checked' | 'onCheckedChange' | 'className' | 'id'> & {
+    checked?: boolean
+    onCheckedChange?: (checked: boolean) => void
+  }
 export function SwitchWrapper({
   name,
   label,
@@ -160,6 +165,7 @@ export function SwitchWrapper({
   className,
   checked,
   onCheckedChange,
+  ...props
 }: SwitchProps) {
   const isInvalid = invalid || !!error
 
@@ -173,6 +179,8 @@ export function SwitchWrapper({
         )}
         <Switch
           id={name}
+          name={name}
+          {...props}
           checked={checked}
           onCheckedChange={onCheckedChange}
           aria-label={typeof label === 'string' ? label : name}
@@ -202,6 +210,7 @@ export function SelectWrapper({
   ...props
 }: SelectProps) {
   const isInvalid = invalid || !!error
+  const defaultPlaceholder = usePlaceholder('selectPlaceholder', label)
 
   return (
     <Field className={className} invalid={isInvalid}>
@@ -211,7 +220,7 @@ export function SelectWrapper({
         id={name}
         items={items}
         value={value != null ? String(value) : undefined}
-        placeholder={placeholder ?? (labelString(label) && `Select ${labelString(label)}`)}
+        placeholder={placeholder ?? defaultPlaceholder}
         onValueChange={val => onValueChange?.(parseAllowedPrimitive(val as any))}
         aria-invalid={isInvalid}
       />
@@ -264,6 +273,7 @@ export function ComboboxWrapper({
   ...rest
 }: ComboboxProps) {
   const isInvalid = invalid || !!error
+  const defaultPlaceholder = usePlaceholder('selectPlaceholder', label)
 
   return (
     <Field className={className} invalid={isInvalid}>
@@ -272,7 +282,7 @@ export function ComboboxWrapper({
         {...rest}
         id={name}
         value={value}
-        placeholder={placeholder || (labelString(label) && `Select ${labelString(label)}`)}
+        placeholder={placeholder || defaultPlaceholder}
         onValueChange={onValueChange}
         aria-invalid={isInvalid}
       />

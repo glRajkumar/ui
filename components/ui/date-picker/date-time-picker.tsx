@@ -16,6 +16,7 @@ import {
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useUIText } from '@/components/ui/ui-provider'
 import { Button } from '@/components/ui/button'
 
 import { Calendar } from './calendar'
@@ -51,12 +52,13 @@ function DateTimePicker({
   align = 'start',
   minuteStep = 5,
   hourFormat = 24,
-  placeholder = 'Pick date & time',
+  placeholder,
   disablePast = false,
   onSelect,
   onOpenChange,
   ...calendarProps
 }: DateTimePickerProps) {
+  const text = useUIText()
   const [internalOpen, setInternalOpen] = React.useState(false)
   const isControlled = open !== undefined
   const open_ = isControlled ? open : internalOpen
@@ -216,7 +218,11 @@ function DateTimePicker({
               triggerClassName,
             )}
           >
-            {internalDate ? format(internalDate, fmt) : <span>{placeholder}</span>}
+            {internalDate ? (
+              format(internalDate, fmt)
+            ) : (
+              <span>{placeholder ?? text.pickDateTime}</span>
+            )}
             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" aria-hidden="true" />
           </Button>
         }
@@ -246,11 +252,15 @@ function DateTimePicker({
             >
               <div className="flex items-center justify-center gap-1.5 px-2 pt-3 pb-2 text-xs font-medium">
                 <Clock className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
-                <span>Time</span>
+                <span>{text.time}</span>
               </div>
 
               <ScrollArea className="flex-1 min-h-0 max-h-64 pb-2">
-                <div role="listbox" aria-label="Select time" className="flex flex-col gap-0.5 px-1">
+                <div
+                  role="listbox"
+                  aria-label={text.selectTime}
+                  className="flex flex-col gap-0.5 px-1"
+                >
                   {timeSlots.map(({ hour, minute }) => {
                     const key = hour * 60 + minute
                     const active = key === selectedSlotKey
@@ -271,7 +281,7 @@ function DateTimePicker({
                           'hover:bg-accent hover:text-accent-foreground',
                           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                           active &&
-                            'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-xs',
+                          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground shadow-xs',
                           disabled && 'pointer-events-none opacity-30',
                         )}
                       >

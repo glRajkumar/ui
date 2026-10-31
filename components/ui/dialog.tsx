@@ -6,6 +6,7 @@ import { Loader, XIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
+import { useUIText } from '@/components/ui/ui-provider'
 import { Button } from '@/components/ui/button'
 
 function Dialog(props: DialogPrimitive.Root.Props) {
@@ -45,6 +46,7 @@ function DialogContent({
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean
 }) {
+  const text = useUIText()
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -63,7 +65,7 @@ function DialogContent({
             render={<Button variant="ghost" className="absolute top-2 right-2" size="icon-sm" />}
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{text.close}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
@@ -131,8 +133,8 @@ function DialogFooterWrapper({
   footerCls,
   actionCls,
   cancelCls,
-  onAction = () => {},
-  onCancel = () => {},
+  onAction = () => { },
+  onCancel = () => { },
 }: DialogFooterWrapperProps) {
   return (
     <DialogFooter className={footerCls}>
@@ -187,7 +189,7 @@ function DialogWrapper({
   titleCls,
   descriptionCls,
   showCloseButton,
-  cancel = 'Cancel',
+  cancel: cancelProp,
   action,
   loading = false,
   footerCls,
@@ -198,6 +200,8 @@ function DialogWrapper({
   onOpenChange,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root> & DialogWrapperProps) {
+  const text = useUIText()
+  const cancel = cancelProp === undefined ? text.cancel : cancelProp
   return (
     <Dialog
       {...props}

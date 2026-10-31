@@ -13,6 +13,7 @@ import type { ToastManagerAddOptions, ToastManagerPromiseOptions } from '@base-u
 import { Toast as ToastPrimitive } from '@base-ui/react/toast'
 
 import { cn } from '@/lib/utils'
+import { useUIText } from '@/components/ui/ui-provider'
 
 type toastTypeT = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading'
 
@@ -226,10 +227,11 @@ function ToastAction({ className, ...props }: ToastPrimitive.Action.Props) {
 }
 
 function ToastClose({ className, ...props }: ToastPrimitive.Close.Props) {
+  const text = useUIText()
   return (
     <ToastPrimitive.Close
       data-slot="toast-close"
-      aria-label="Close"
+      aria-label={text.close}
       className={cn(
         'absolute top-2 right-2 flex h-5 w-5 cursor-pointer items-center justify-center rounded-sm',
         'text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground',

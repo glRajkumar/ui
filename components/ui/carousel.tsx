@@ -6,6 +6,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
+import { useUIText } from '@/components/ui/ui-provider'
 import { Button } from '@/components/ui/button'
 
 type CarouselApi = UseEmblaCarouselType[1]
@@ -167,6 +168,7 @@ function CarouselPrevious({
   size = 'icon-sm',
   ...props
 }: React.ComponentProps<typeof Button>) {
+  const text = useUIText()
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
   return (
@@ -185,8 +187,8 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <ChevronLeftIcon />
-      <span className="sr-only">Previous slide</span>
+      <ChevronLeftIcon className="pointer-events-none" />
+      <span className="sr-only">{text.previousSlide}</span>
     </Button>
   )
 }
@@ -197,6 +199,7 @@ function CarouselNext({
   size = 'icon-sm',
   ...props
 }: React.ComponentProps<typeof Button>) {
+  const text = useUIText()
   const { orientation, scrollNext, canScrollNext } = useCarousel()
 
   return (
@@ -215,8 +218,8 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <ChevronRightIcon />
-      <span className="sr-only">Next slide</span>
+      <ChevronRightIcon className="pointer-events-none" />
+      <span className="sr-only">{text.nextSlide}</span>
     </Button>
   )
 }

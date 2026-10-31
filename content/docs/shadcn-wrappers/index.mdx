@@ -52,13 +52,14 @@ Some wrappers need extra peer dependencies. Each component page lists them in it
 
 | Component | Peer dependencies |
 | --- | --- |
-| `data-table` | `@tanstack/react-table`, `@tanstack/react-virtual` |
+| `data-table` | `@tanstack/react-table` (v9), `@tanstack/react-virtual` |
 | `autocomplete-virtualised`, `combobox-virtualised` | `@tanstack/react-virtual` |
 | `date-picker`, `field-wrapper*` | `@daypicker/react`, `date-fns` |
 | `carousel` | `embla-carousel-react` |
 | `field-wrapper-rhf` | `react-hook-form` |
 | `field-wrapper-tf` | `@tanstack/react-form` |
-| `navigation-menu-wrapper` | `next` (uses `next/link`) |
+
+No framework lock-in: nothing depends on Next.js. Router-aware links are passed in (see [Links](#links)).
 
 ### Styles
 
@@ -91,7 +92,64 @@ import { cn, parseAllowedPrimitive } from "@glraj/ui/utils"
 
 In the examples across these docs, replace `@/components/ui/` with `@glraj/ui/` and `@/lib/utils` with `@glraj/ui/utils`.
 
-The [types](#type-definitions) below (`itemT`, `itemsT`, `allowedPrimitiveT`, …) are global — available without an import once any `@glraj/ui` module is imported.
+The [types](#type-definitions) below (`itemT`, `itemsT`, `allowedPrimitiveT`, …) are exported from `@glraj/ui/types` — the package adds nothing to your global scope:
+
+```tsx
+import type { itemsT, menuItemsT } from "@glraj/ui/types"
+```
+
+### Text and i18n
+
+Every built-in string (field placeholders, loading / empty states, pagination labels, close / cancel buttons, screen-reader labels) comes from `UIProvider`. Override any subset once at the app root — props on a component still win:
+
+```tsx title="providers.tsx"
+"use client"
+
+import { UIProvider } from "@glraj/ui/ui-provider"
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("common") // any i18n library
+
+  return (
+    <UIProvider
+      text={{
+        enterPlaceholder: label => t("enterPlaceholder", { label }),
+        selectPlaceholder: label => t("selectPlaceholder", { label }),
+        noItems: t("noItems"),
+        rowsPerPage: t("rowsPerPage"),
+      }}
+    >
+      {children}
+    </UIProvider>
+  )
+}
+```
+
+### Links
+
+`NavigationMenuWrapper`, `NavList` and `NavLinkItem` render a plain `<a>` by default. Pass your router's link for client-side navigation:
+
+```tsx
+import Link from "next/link" // or react-router, TanStack Router, …
+
+<NavigationMenuWrapper linkAs={Link} items={items} />
+```
+
+### Overriding styles
+
+Pass `className` (and the `*Cls` props on wrappers) for one-off changes. To restyle a component everywhere without forking it, target its `data-slot` from your global CSS. Keep these rules outside any `@layer` — unlayered CSS wins over Tailwind utilities (including per-instance `className`, so use it only for app-wide defaults):
+
+```css title="globals.css"
+[data-slot="button"] {
+  @apply rounded-full;
+}
+
+[data-slot="card-footer"] {
+  @apply border-t bg-muted/50;
+}
+```
+
+Theme colours, radius and fonts come from CSS variables (`--primary`, `--radius`, …), so a theme change needs no component overrides at all.
 
 ---
 

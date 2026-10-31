@@ -30,7 +30,7 @@ If you haven't set up the prerequisites yet, check out [Prerequest section](/doc
 <Tab value="Manual">
 
 ```npm
-npm install @tanstack/react-table
+npm install @tanstack/react-table@^9
 ```
 
 Add following shadcn components: `button`, `table`, `popover`, `dropdown-menu`, `select`, `badge`.
@@ -71,6 +71,10 @@ Update same components from our site.
 
 <include cwd meta='title="ui/data-table/use-table.ts"'>
   ./components/ui/data-table/use-table.ts
+</include>
+
+<include cwd meta='title="ui/data-table/table-features.ts"'>
+  ./components/ui/data-table/table-features.ts
 </include>
 
 <include cwd meta='title="ui/data-table/index.tsx"'>
@@ -126,19 +130,12 @@ If you haven't set up the package yet, check out [npm package section](/docs/sha
 
 ### DataTable
 ```tsx
-import {
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { useTable } from "@tanstack/react-table";
 
-import { DataTable } from '@/components/ui/data-table';
+import { DataTable, appTableFeatures } from '@/components/ui/data-table';
 
 function MyTable() {
-  const table = useReactTable({ 
-    data, 
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+  const table = useTable({ features: appTableFeatures, data, columns })
   
   return <DataTable table={table} />
 }
@@ -146,12 +143,9 @@ function MyTable() {
 
 ### DataTableVirtualized
 ```tsx
-import {
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { useTable } from "@tanstack/react-table";
 
-import { DataTableVirtualized } from '@/components/ui/data-table';
+import { DataTableVirtualized, appTableFeatures } from '@/components/ui/data-table';
 
 function MyTable() {
   const {
@@ -161,10 +155,10 @@ function MyTable() {
     isFetchingNextPage,
   } = useInfiniteQuery()
   
-  const table = useReactTable({ 
-    data: data.pages.flat(), 
+  const table = useTable({
+    features: appTableFeatures,
+    data: data.pages.flat(),
     columns,
-    getCoreRowModel: getCoreRowModel(),
   })
   
   return (
@@ -179,15 +173,15 @@ function MyTable() {
 }
 ```
 
-### useTable Hook
-Custom hook for managing table state and configuration. Pre-configured with `columnVisibility`, `columnFilters` (Faceted), `sorting`, `rowSelection`,  `globalFilter`, `pagination`. 
+### useDataTable Hook
+Custom hook (TanStack Table v9) for managing table state and configuration. Registers the sorted, filtered, paginated and faceted row models through `appTableFeatures`. Pre-configured with `columnVisibility`, `columnFilters` (Faceted), `sorting`, `rowSelection`,  `globalFilter`, `pagination`. 
 So you can use most of the functionality of `tanstack-table` just using this hook.
 
 ```tsx
-import { useTable, DataTable } from '@/components/ui/data-table';
+import { useDataTable, DataTable } from '@/components/ui/data-table';
 
 function MyTable() {
-  const table = useTable({ data, columns })
+  const table = useDataTable({ data, columns })
   
   return (
     <>
@@ -203,7 +197,7 @@ function MyTable() {
 Simple column header with sorting functionality.
 
 ```tsx
-const columns: ColumnDef<User>[] = [
+const columns: AppColumnDef<User>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
@@ -217,7 +211,7 @@ const columns: ColumnDef<User>[] = [
 Advanced column header with dropdown menu for sorting and visibility.
 
 ```tsx
-const columns: ColumnDef<User>[] = [
+const columns: AppColumnDef<User>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
@@ -390,10 +384,10 @@ type={`export type props = {
 } `} 
 />
 
-#### useTable
+#### useDataTable
 <AutoTypeTable 
-name="useTable" 
-type={`export type useTable = {
+name="useDataTable" 
+type={`export type useDataTable = {
   /**
    * data for the table
    */
@@ -402,7 +396,7 @@ type={`export type useTable = {
   /**
    * Column definitions for the table
    */
-  columns: ColumnDef[]
+  columns: AppColumnDef[]
 }`} 
 />
 

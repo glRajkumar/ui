@@ -15,6 +15,8 @@ import {
   isSeparator,
 } from '@/lib/utils'
 
+import { useUIText } from '@/components/ui/ui-provider'
+
 const AutocompleteRoot = AutocompletePrimitive.Root
 
 function AutocompleteTrigger({
@@ -308,6 +310,7 @@ function AutocompleteWrapper({
   openOnInputClick = true,
   ...props
 }: AutocompleteWrapperProps) {
+  const text = useUIText()
   return (
     <AutocompleteRoot
       items={(items ?? []) as unknown[]}
@@ -334,16 +337,16 @@ function AutocompleteWrapper({
           {renderStatus !== undefined
             ? renderStatus
             : isLoading && (
-                <p className="flex items-center justify-center gap-2 py-6">
-                  <Loader2 className="size-4 animate-spin" /> Loading...
-                </p>
-              )}
+              <p className="flex items-center justify-center gap-2 py-6">
+                <Loader2 className="size-4 animate-spin" /> {text.loading}
+              </p>
+            )}
         </AutocompleteStatus>
 
         <AutocompleteEmpty>
           {renderEmpty !== undefined
             ? renderEmpty
-            : !isLoading && <p className="py-6">{emptyMessage ?? 'No options found'}</p>}
+            : !isLoading && <p className="py-6">{emptyMessage ?? text.noItems}</p>}
         </AutocompleteEmpty>
 
         <AutocompleteList>

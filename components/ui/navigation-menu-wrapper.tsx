@@ -1,7 +1,5 @@
 'use client'
 
-import Link, { type LinkProps } from 'next/link'
-
 import { cn } from '@/lib/utils'
 
 import {
@@ -14,10 +12,14 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 
-type navLinkItemT = LinkProps & {
+type navLinkItemT = Omit<React.ComponentProps<'a'>, 'href' | 'children'> & {
+  href: string
   children: React.ReactNode
   className?: string
 }
+
+// Pass your router's link (e.g. next/link, react-router Link) to get client-side navigation.
+type linkAsT = { linkAs?: React.ElementType }
 type navLinkItemsT = navLinkItemT[]
 
 type navMenuItemT = {
@@ -40,37 +42,46 @@ type navMenuItemT = {
 
 type navMenuItemsT = navMenuItemT[]
 
-function NavLinkItem({ children, className, ...props }: navLinkItemT) {
+function NavLinkItem({
+  children,
+  className,
+  linkAs: LinkComp = 'a',
+  ...props
+}: navLinkItemT & linkAsT) {
   return (
-    <Link {...props} className={cn('flex items-center gap-2 text-sm', className)}>
+    <LinkComp {...props} className={cn('flex items-center gap-2 text-sm', className)}>
       {children}
-    </Link>
+    </LinkComp>
   )
 }
 
-type listWrapperProps = {
+type listWrapperProps = linkAsT & {
   items: navLinkItemsT
   wrapperCls?: string
 }
 
-function NavList({ items, wrapperCls }: listWrapperProps) {
+function NavList({ items, wrapperCls, linkAs }: listWrapperProps) {
   return (
     <ul className={cn(wrapperCls)}>
       {items.map((item, i) => (
-        <li key={`${String(item.href)}-${i}`}>
-          <NavLinkItem {...item} className={cn(item.className)} />
+        <li key={`${item.href}-${i}`}>
+          <NavLinkItem {...item} linkAs={linkAs} className={cn(item.className)} />
         </li>
       ))}
     </ul>
   )
 }
 
-type wrapperProps = React.ComponentProps<typeof NavigationMenu> & {
-  items: navMenuItemsT
-  triggerCls?: string
-  contentCls?: string
-  triggerProps?: Omit<React.ComponentProps<typeof NavigationMenuTrigger>, 'children' | 'className'>
-}
+type wrapperProps = React.ComponentProps<typeof NavigationMenu> &
+  linkAsT & {
+    items: navMenuItemsT
+    triggerCls?: string
+    contentCls?: string
+    triggerProps?: Omit<
+      React.ComponentProps<typeof NavigationMenuTrigger>,
+      'children' | 'className'
+    >
+  }
 
 function NavigationMenuWrapper({
   items,
@@ -78,6 +89,7 @@ function NavigationMenuWrapper({
   triggerCls,
   contentCls,
   triggerProps: globalTriggerProps,
+  linkAs: LinkComp = 'a',
   ...props
 }: wrapperProps) {
   return (
@@ -115,7 +127,7 @@ function NavigationMenuWrapper({
           return (
             <NavigationMenuItem key={key} {...itemProps}>
               <NavigationMenuLink
-                render={<Link {...linkProps} />}
+                render={<LinkComp {...linkProps} />}
                 className={cn(navigationMenuTriggerStyle(), linkCls)}
               >
                 {linkChildren}

@@ -1,33 +1,40 @@
+'use client'
+
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
-import { type Table } from '@tanstack/react-table'
+import { type RowData } from '@tanstack/react-table'
+
+import { type AppReactTable as Table } from './table-features'
 
 import { SelectWrapper } from '@/components/ui/select'
+import { useUIText } from '@/components/ui/ui-provider'
 import { Button } from '@/components/ui/button'
 
-interface PaginationProps<TData> {
+interface PaginationProps<TData extends RowData> {
   table: Table<TData>
 }
 
-export function Pagination<TData>({ table }: PaginationProps<TData>) {
+export function Pagination<TData extends RowData>({ table }: PaginationProps<TData>) {
+  const text = useUIText()
+
   return (
     <div className="flex items-center justify-between flex-wrap gap-2 px-2 mt-4">
       <div className="flex-1 whitespace-nowrap text-sm text-muted-foreground">
-        Total: {table.getFilteredRowModel().rows.length} row(s)
+        {text.totalRows(table.getFilteredRowModel().rows.length)}
       </div>
 
       <div className="flex items-center gap-2">
-        <p className="text-xs">Rows per page</p>
+        <p className="text-xs">{text.rowsPerPage}</p>
         <SelectWrapper
-          value={`${table.getState().pagination.pageSize}`}
+          value={`${table.state.pagination.pageSize}`}
           onValueChange={value => table.setPageSize(Number(value))}
           items={[10, 20, 30, 40, 50]}
-          placeholder={`${table.getState().pagination.pageSize}`}
+          placeholder={`${table.state.pagination.pageSize}`}
           triggerCls="h-8 w-[70px]"
         />
       </div>
 
       <div className="text-xs mx-2">
-        Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+        {text.pageOf(table.state.pagination.pageIndex + 1, table.getPageCount())}
       </div>
 
       <div className="flex items-center gap-2">
@@ -37,7 +44,7 @@ export function Pagination<TData>({ table }: PaginationProps<TData>) {
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
-          <span className="sr-only">Go to first page</span>
+          <span className="sr-only">{text.firstPage}</span>
           <ChevronsLeft className="size-4" />
         </Button>
 
@@ -47,7 +54,7 @@ export function Pagination<TData>({ table }: PaginationProps<TData>) {
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          <span className="sr-only">Go to previous page</span>
+          <span className="sr-only">{text.previousPage}</span>
           <ChevronLeft className="size-4" />
         </Button>
 
@@ -57,7 +64,7 @@ export function Pagination<TData>({ table }: PaginationProps<TData>) {
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          <span className="sr-only">Go to next page</span>
+          <span className="sr-only">{text.nextPage}</span>
           <ChevronRight className="size-4" />
         </Button>
 
@@ -67,7 +74,7 @@ export function Pagination<TData>({ table }: PaginationProps<TData>) {
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >
-          <span className="sr-only">Go to last page</span>
+          <span className="sr-only">{text.lastPage}</span>
           <ChevronsRight className="size-4" />
         </Button>
       </div>

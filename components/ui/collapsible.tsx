@@ -13,7 +13,7 @@ function Collapsible(props: CollapsiblePrimitive.Root.Props) {
 function CollapsibleTrigger({
   children,
   className,
-  indicatorAt = 'right',
+  indicatorAt = '',
   ...props
 }: CollapsiblePrimitive.Trigger.Props & { indicatorAt?: indicatorAtT }) {
   const icon = indicatorAt !== '' && (
@@ -30,7 +30,8 @@ function CollapsibleTrigger({
     <CollapsiblePrimitive.Trigger
       data-slot="collapsible-trigger"
       className={cn(
-        'group/collapsible-trigger flex w-full items-center gap-2 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer disabled:pointer-events-none disabled:opacity-50 **:data-[slot=collapsible-trigger-icon]:size-4 **:data-[slot=collapsible-trigger-icon]:text-muted-foreground',
+        'group/collapsible-trigger outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer disabled:pointer-events-none disabled:opacity-50 **:data-[slot=collapsible-trigger-icon]:size-4 **:data-[slot=collapsible-trigger-icon]:text-muted-foreground',
+        indicatorAt !== '' && 'flex w-full items-center gap-2',
         className,
       )}
       {...props}
@@ -77,7 +78,11 @@ function CollapsibleWrapper({
 }: CollapsibleWrapperProps) {
   return (
     <Collapsible {...props}>
-      <CollapsibleTrigger className={cn(triggerCls)} indicatorAt={indicatorAt} {...triggerProps}>
+      <CollapsibleTrigger
+        className={cn('flex w-full items-center gap-2 text-sm font-medium', triggerCls)}
+        indicatorAt={indicatorAt}
+        {...triggerProps}
+      >
         {trigger}
       </CollapsibleTrigger>
       <CollapsibleContent className={cn(contentCls)} {...contentProps}>

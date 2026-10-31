@@ -4,6 +4,7 @@ import * as React from 'react'
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from 'lucide-react'
 
 import { cn, getKey, isSeparator } from '@/lib/utils'
+import { useUIText } from '@/components/ui/ui-provider'
 
 import { Button } from '@/components/ui/button'
 
@@ -59,35 +60,37 @@ function PaginationLink({ className, isActive, size = 'icon', ...props }: Pagina
 
 function PaginationPrevious({
   className,
-  text = 'Previous',
+  text: textProp,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const text = useUIText()
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={text.previousPage}
       size="default"
       className={cn('pl-1.5!', className)}
       {...props}
     >
       <ChevronLeftIcon data-icon="inline-start" />
-      <span className="hidden sm:block">{text}</span>
+      <span className="hidden sm:block">{textProp ?? text.previous}</span>
     </PaginationLink>
   )
 }
 
 function PaginationNext({
   className,
-  text = 'Next',
+  text: textProp,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const text = useUIText()
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={text.nextPage}
       size="default"
       className={cn('pr-1.5!', className)}
       {...props}
     >
-      <span className="hidden sm:block">{text}</span>
+      <span className="hidden sm:block">{textProp ?? text.next}</span>
       <ChevronRightIcon data-icon="inline-end" />
     </PaginationLink>
   )

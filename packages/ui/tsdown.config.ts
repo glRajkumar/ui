@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { defineConfig } from 'tsdown'
 
@@ -17,22 +17,39 @@ async function listDts(dir: string): Promise<string[]> {
   return nested.flat()
 }
 
-// Components rely on ambient types from root `types/*.d.ts` (kept global for the shadcn registry).
-// Ship them in dist and reference them from every emitted declaration so consumers resolve them.
-async function linkGlobalTypes(outDir: string) {
+// Components use ambient types from root `types/*.d.ts` (kept global for the shadcn registry).
+// The package ships them as one module instead and imports them into every emitted declaration,
+// so consumers can import them and nothing leaks into their global scope.
+async function linkSharedTypes(outDir: string) {
   const typesDir = path.join(outDir, 'types')
   await mkdir(typesDir, { recursive: true })
-  await Promise.all(
-    globalTypes.map(file => copyFile(path.join(root, 'types', file), path.join(typesDir, file))),
+
+  const sources = await Promise.all(
+    globalTypes.map(file => readFile(path.join(root, 'types', file), 'utf8')),
   )
+  const body = sources.join('\n').replace(/^type /gm, 'export type ')
+  const names = [...body.matchAll(/^export type (\w+)/gm)].map(match => match[1])
+
+  await writeFile(
+    path.join(typesDir, 'index.d.ts'),
+    `import type * as React from 'react'\n\n${body}`,
+  )
+  await writeFile(path.join(typesDir, 'index.js'), 'export {}\n')
 
   const files = (await listDts(outDir)).filter(file => path.dirname(file) !== typesDir)
   await Promise.all(
     files.map(async file => {
-      const rel = path.relative(path.dirname(file), typesDir).replaceAll('\\', '/')
-      const refs = globalTypes.map(t => `/// <reference path="${rel}/${t}" />`).join('\n')
       const content = await readFile(file, 'utf8')
-      await writeFile(file, `${refs}\n${content}`)
+      const used = names.filter(
+        name =>
+          new RegExp(`\\b${name}\\b`).test(content) &&
+          !new RegExp(`^(?:declare )?(?:type|interface) ${name}\\b`, 'm').test(content),
+      )
+      if (!used.length) return
+
+      let rel = path.relative(path.dirname(file), typesDir).replaceAll('\\', '/')
+      if (!rel.startsWith('.')) rel = `./${rel}`
+      await writeFile(file, `import type { ${used.join(', ')} } from '${rel}/index.js'\n${content}`)
     }),
   )
 }
@@ -55,7 +72,7 @@ export const config = defineConfig({
   alias: { '@': root },
   checks: { moduleLevelDirective: false, pluginTimings: false },
   hooks: {
-    'build:done': ctx => linkGlobalTypes(ctx.options.outDir),
+    'build:done': ctx => linkSharedTypes(ctx.options.outDir),
   },
 })
 

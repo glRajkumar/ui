@@ -1,37 +1,36 @@
 'use client'
 
 import { useState } from 'react'
-
-import {
-  ColumnDef,
+import { useTable } from '@tanstack/react-table'
+import type {
   ColumnFiltersState,
   SortingState,
-  VisibilityState,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  ColumnVisibilityState,
+  RowData,
 } from '@tanstack/react-table'
 
-interface useTableProps<TData, TValue> {
+import { appTableFeatures, type AppColumnDef } from './table-features'
+
+interface useTableProps<TData extends RowData, TValue> {
   data: TData[]
-  columns: ColumnDef<TData, TValue>[]
+  columns: AppColumnDef<TData, TValue>[]
 }
 
-export function useTable<TData, TValue>({ data, columns }: useTableProps<TData, TValue>) {
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+export function useDataTable<TData extends RowData, TValue>({
+  data,
+  columns,
+}: useTableProps<TData, TValue>) {
+  const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
 
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
 
-  return useReactTable({
+  return useTable({
+    features: appTableFeatures,
     data,
-    columns,
+    columns: columns as unknown as AppColumnDef<TData, unknown>[],
     state: {
       sorting,
       columnVisibility,
@@ -45,13 +44,5 @@ export function useTable<TData, TValue>({ data, columns }: useTableProps<TData, 
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 }
-
-export default useTable
