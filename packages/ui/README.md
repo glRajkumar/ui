@@ -55,7 +55,45 @@ import type { itemsT, menuItemsT } from '@glraj/ui/types'
 
 - **Text / i18n** — wrap your app in `UIProvider` from `@glraj/ui/ui-provider` and override any default string (placeholders, empty / loading states, pagination, aria labels). Component props still win.
 - **Links** — `NavigationMenuWrapper`, `NavList` and `NavLinkItem` render `<a>` by default; pass `linkAs={Link}` from your router.
-- **Styles** — `className` / `*Cls` props per instance; target `[data-slot="…"]` in unlayered global CSS to restyle a component app-wide; theme via CSS variables.
+- **Styles** — theme via CSS variables; restyle `button`, `badge`, `toggle`, `input`, `textarea` app-wide with `configureUI` (below); per instance with `className` / `*Cls` props.
+
+### App-wide component styles (`configureUI`)
+
+`Button`, `Badge` and `Toggle` take their classes from a `cva()` function, `Input` and `Textarea` from a class string. Replace them once — every component that renders them (dialog footers, pagination, data-table menus, date picker, …) follows:
+
+```ts
+// src/lib/ui-config.ts
+import { cva } from 'class-variance-authority'
+import { configureUI } from '@glraj/ui/config'
+
+configureUI({
+  button: cva('inline-flex items-center justify-center rounded-md text-sm font-medium …', {
+    variants: {
+      variant: { default: 'bg-primary text-primary-foreground hover:bg-primary/80', brand: 'bg-pink-600 text-white' },
+      size: { default: 'h-9 px-2.5', sm: 'h-8 px-2.5' },
+    },
+    defaultVariants: { variant: 'default', size: 'default' },
+  }),
+  input: base => `${base} px-2.5 text-base md:text-sm`, // or a full string to replace it
+})
+```
+
+- Replace (pass a `cva`) or extend — the library's own function / class string arrives as `base`:
+  `button: (props, base) => cn(base(props), props?.variant === 'brand' && 'bg-pink-600 text-white')`.
+  Don't call the exported `buttonVariants` inside the override: it already routes through `configureUI`.
+- It is module-level state, not React context: import the file once from every runtime that renders components. In Next.js import it from the root `layout.tsx` (server) **and** from a `'use client'` provider (client/SSR).
+- Per-instance `className` still wins — it is merged last.
+- New variant names (`brand`) work at runtime; to type them, re-export a narrowed alias in your app:
+  ```ts
+  import { Button as UIButton } from '@glraj/ui/button'
+  export const Button = UIButton as (
+    props: Omit<React.ComponentProps<typeof UIButton>, 'variant'> & {
+      variant?: React.ComponentProps<typeof UIButton>['variant'] | 'brand'
+    },
+  ) => React.JSX.Element
+  ```
+
+The shadcn-registry (copy-paste) version is plain shadcn source with none of this — edit the files directly.
 
 ## Upgrading from 0.1
 

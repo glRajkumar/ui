@@ -54,13 +54,65 @@ async function linkSharedTypes(outDir: string) {
   )
 }
 
+// npm-only theming: the source (shared with the shadcn registry) stays plain shadcn. At build time these
+// files are patched to read app overrides from `configureUI` (src/config.ts). A missing anchor fails the
+// build, so upstream edits to these files can't silently drop the override.
+const configModule = path.join(import.meta.dirname, 'src/config.ts').replaceAll('\\', '/')
+
+function replaceOnce(file: string, code: string, search: string | RegExp, replace: string) {
+  const next = code.replace(search, replace)
+  if (next === code) throw new Error(`[npm-patch] anchor not found in ${file}: ${search}`)
+  return next
+}
+
+function addImport(code: string, name: string) {
+  const line = `import { ${name} } from '${configModule}'\n`
+  const directive = code.match(/^(['"])use client\1;?\r?\n/)
+  return directive ? directive[0] + line + code.slice(directive[0].length) : line + code
+}
+
+function patchVariants(file: string, code: string, key: string, name: string) {
+  const patched = replaceOnce(
+    file,
+    code,
+    `const ${name} = cva(`,
+    `const ${name} = resolveVariants('${key}', () => base_${name})\nconst base_${name} = cva(`,
+  )
+  return addImport(patched, 'resolveVariants')
+}
+
+function patchClass(file: string, code: string, key: string) {
+  const anchor = new RegExp(`(data-slot="${key}"[\\s\\S]*?cn\\(\\s*)('[^']*')`)
+  return addImport(replaceOnce(file, code, anchor, `$1resolveClass('${key}', $2)`), 'resolveClass')
+}
+
+const npmPatches: Record<string, (file: string, code: string) => string> = {
+  'components/ui/button.tsx': (file, code) => patchVariants(file, code, 'button', 'buttonVariants'),
+  'components/ui/badge.tsx': (file, code) => patchVariants(file, code, 'badge', 'badgeVariants'),
+  'components/ui/toggle.tsx': (file, code) => patchVariants(file, code, 'toggle', 'toggleVariants'),
+  'components/ui/input.tsx': (file, code) => patchClass(file, code, 'input'),
+  'components/ui/textarea.tsx': (file, code) => patchClass(file, code, 'textarea'),
+}
+
+const npmPatchPlugin = {
+  name: 'glraj-ui-npm-patch',
+  async load(id: string) {
+    const rel = path.relative(root, id).replaceAll('\\', '/')
+    const patch = npmPatches[rel]
+    if (!patch) return null
+    return patch(rel, await readFile(id, 'utf8'))
+  },
+}
+
 export const config = defineConfig({
   entry: [
     '../../components/ui/**/*.{ts,tsx}',
     '../../lib/utils.ts',
     '../../lib/menu.ts',
     '../../hooks/use-mobile.ts',
+    'src/config.ts',
   ],
+  plugins: [npmPatchPlugin],
   format: 'esm',
   platform: 'neutral',
   target: 'es2022',
