@@ -1,27 +1,53 @@
 # @glraj/ui
 
-Opinionated, type-safe wrappers around [shadcn/ui](https://ui.shadcn.com) components built on [Base UI](https://base-ui.com).
+Type-safe, batteries-included wrappers around [shadcn/ui](https://ui.shadcn.com) components built on [Base UI](https://base-ui.com) and Tailwind CSS v4.
 
-Docs: https://ui.glrk.dev
+Write one line instead of ten: pass an `items` array and get a fully composed Select, Combobox, Menu or form field — while every shadcn primitive stays available for full control.
 
-## Install
+**[Documentation & live examples →](https://ui.glrk.dev)**
 
-```bash
-pnpm add @glraj/ui @base-ui/react lucide-react
+```tsx
+import { SelectWrapper } from '@glraj/ui/select'
+
+<SelectWrapper
+  placeholder="Pick a fruit"
+  items={['Apple', 'Banana', { label: 'Cherry', value: 'cherry' }, { group: 'Citrus', items: ['Lemon', 'Lime'] }]}
+  onValueChange={value => console.log(value)}
+/>
 ```
 
-Some components need extra peer dependencies — install only what you use:
+## Features
 
-| Component                                      | Peer dependencies                                 |
-| ---------------------------------------------- | ------------------------------------------------- |
-| `data-table`                                   | `@tanstack/react-table` (v9), `@tanstack/react-virtual` |
-| `autocomplete-virtualised`, `combobox-virtualised` | `@tanstack/react-virtual`                     |
-| `date-picker`                                  | `@daypicker/react`, `date-fns`                    |
-| `carousel`                                     | `embla-carousel-react`                            |
-| `field-wrapper-rhf`                            | `react-hook-form`                                 |
-| `field-wrapper-tf`                             | `@tanstack/react-form`                            |
+- **45+ components** — accordion, dialog, sheet, drawer, select, combobox, autocomplete, date & date-time picker, data table (TanStack Table v9, optional virtualisation), menus, toast, sidebar and more.
+- **Wrappers + primitives** — every component exports the plain shadcn parts *and* an opinionated `*Wrapper` that composes them from props.
+- **One options format** — strings, numbers, `{ label, value }`, groups and separators work the same across Select, Combobox, Radio, Checkbox, Toggle and all menus.
+- **Form ready** — field wrappers for React Hook Form (`field-wrapper-rhf`) and TanStack Form (`field-wrapper-tf`), with labels, errors and value conversion handled.
+- **Framework-agnostic** — works with Next.js, Vite, Remix, TanStack Start; nothing depends on a router.
+- **i18n ready** — every built-in string can be translated through `UIProvider`.
+- **Themeable** — shadcn CSS variables for colours, `configureUI` for app-wide component styles, `className` for one-offs.
+- **Tree-shakable ESM** — one entry point per component, so you only ship what you import.
 
-## Styles (Tailwind CSS v4)
+## Installation
+
+```bash
+npm i @glraj/ui @base-ui/react lucide-react
+# or: pnpm add / yarn add / bun add
+```
+
+Requires **React 19** and **Tailwind CSS v4**. Some components need extra peer dependencies — install only the ones you use:
+
+| Component | Peer dependencies |
+| --- | --- |
+| `data-table` | `@tanstack/react-table` (v9), `@tanstack/react-virtual` |
+| `autocomplete-virtualised`, `combobox-virtualised` | `@tanstack/react-virtual` |
+| `date-picker`, `field-wrapper*` | `@daypicker/react`, `date-fns` |
+| `carousel` | `embla-carousel-react` |
+| `field-wrapper-rhf` | `react-hook-form` |
+| `field-wrapper-tf` | `@tanstack/react-form` |
+
+## Setup
+
+Add the package's styles to your global CSS:
 
 ```css
 @import "tailwindcss";
@@ -30,84 +56,139 @@ Some components need extra peer dependencies — install only what you use:
 /* shadcn theme tokens — skip if your app already defines them */
 @import "@glraj/ui/theme.css";
 
-/* lets Tailwind scan the package's classes */
+/* lets Tailwind see the package's class names — required */
 @import "@glraj/ui/styles.css";
 ```
 
+> Without `@glraj/ui/styles.css` Tailwind never scans the package and components render unstyled.
+
 ## Usage
+
+Import each component from its own entry point:
 
 ```tsx
 import { Button } from '@glraj/ui/button'
-import { SelectWrapper } from '@glraj/ui/select'
-import { DataTable } from '@glraj/ui/data-table'
+import { DialogWrapper } from '@glraj/ui/dialog'
+import { DataTable, useDataTable } from '@glraj/ui/data-table'
+import { DatePicker } from '@glraj/ui/date-picker'
 import { cn } from '@glraj/ui/utils'
 ```
 
-Each component has its own entry point (`@glraj/ui/<name>`), so you only bundle what you import.
+Shared types are importable — nothing is added to your global scope:
 
-Shared option types are exported from `@glraj/ui/types` — nothing is added to your global scope:
+```ts
+import type { itemsT, menuItemsT } from '@glraj/ui/types'
+```
+
+Every page on [ui.glrk.dev](https://ui.glrk.dev) shows the props and examples; replace `@/components/ui/<name>` with `@glraj/ui/<name>` in the snippets.
+
+### Forms (React Hook Form)
 
 ```tsx
-import type { itemsT, menuItemsT } from '@glraj/ui/types'
+import { useForm } from 'react-hook-form'
+import { InputWrapper, SelectWrapper } from '@glraj/ui/field-wrapper-rhf'
+
+function ProfileForm() {
+  const { control, handleSubmit } = useForm<{ name: string; country: string }>()
+
+  return (
+    <form onSubmit={handleSubmit(console.log)}>
+      <InputWrapper name="name" label="Name" control={control} />
+      <SelectWrapper name="country" label="Country" control={control} items={['India', 'Japan']} />
+    </form>
+  )
+}
 ```
 
 ## Customising
 
-- **Text / i18n** — wrap your app in `UIProvider` from `@glraj/ui/ui-provider` and override any default string (placeholders, empty / loading states, pagination, aria labels). Component props still win.
-- **Links** — `NavigationMenuWrapper`, `NavList` and `NavLinkItem` render `<a>` by default; pass `linkAs={Link}` from your router.
-- **Styles** — theme via CSS variables; restyle `button`, `badge`, `toggle`, `input`, `textarea` app-wide with `configureUI` (below); per instance with `className` / `*Cls` props.
+| What | How |
+| --- | --- |
+| Colours, radius, fonts, dark mode | shadcn CSS variables (`--primary`, `--radius`, …) |
+| App-wide look of `button`, `badge`, `toggle`, `input`, `textarea` | `configureUI` from `@glraj/ui/config` |
+| Text & translations | `UIProvider` from `@glraj/ui/ui-provider` |
+| Router links in navigation menus | `linkAs` prop |
+| One instance | `className` and the `*Cls` / `*Props` props on wrappers |
 
-### App-wide component styles (`configureUI`)
+### App-wide component styles — `configureUI`
 
-`Button`, `Badge` and `Toggle` take their classes from a `cva()` function, `Input` and `Textarea` from a class string. Replace them once — every component that renders them (dialog footers, pagination, data-table menus, date picker, …) follows:
+Extend or replace the classes of the base components once; everything that renders them (dialog footers, pagination, data-table menus, date picker, …) follows.
 
 ```ts
 // src/lib/ui-config.ts
-import { cva } from 'class-variance-authority'
 import { configureUI } from '@glraj/ui/config'
+import { cn } from '@glraj/ui/utils'
 
 configureUI({
-  button: cva('inline-flex items-center justify-center rounded-md text-sm font-medium …', {
-    variants: {
-      variant: { default: 'bg-primary text-primary-foreground hover:bg-primary/80', brand: 'bg-pink-600 text-white' },
-      size: { default: 'h-9 px-2.5', sm: 'h-8 px-2.5' },
-    },
-    defaultVariants: { variant: 'default', size: 'default' },
-  }),
-  input: base => `${base} px-2.5 text-base md:text-sm`, // or a full string to replace it
+  // extend: the library's own variants function arrives as `base`
+  button: (props, base) => cn(base(props), props?.size === 'sm' && 'h-8'),
+  // extend a class string
+  input: base => cn(base, 'px-2.5 text-base md:text-sm'),
+  // or replace completely with your own cva() / class string
+  // badge: cva('…', { variants: { … } }),
 })
 ```
 
-- Replace (pass a `cva`) or extend — the library's own function / class string arrives as `base`:
-  `button: (props, base) => cn(base(props), props?.variant === 'brand' && 'bg-pink-600 text-white')`.
-  Don't call the exported `buttonVariants` inside the override: it already routes through `configureUI`.
-- It is module-level state, not React context: import the file once from every runtime that renders components. In Next.js import it from the root `layout.tsx` (server) **and** from a `'use client'` provider (client/SSR).
-- Per-instance `className` still wins — it is merged last.
-- New variant names (`brand`) work at runtime; to type them, re-export a narrowed alias in your app:
-  ```ts
-  import { Button as UIButton } from '@glraj/ui/button'
-  export const Button = UIButton as (
-    props: Omit<React.ComponentProps<typeof UIButton>, 'variant'> & {
-      variant?: React.ComponentProps<typeof UIButton>['variant'] | 'brand'
-    },
-  ) => React.JSX.Element
-  ```
+- Import this file once in every runtime that renders components. **Next.js:** import it in the root `layout.tsx` (server) **and** in a `'use client'` provider.
+- Per-instance `className` is merged last, so it always wins.
+- Custom variant names (e.g. `variant="brand"`) work at runtime; type them by re-exporting a narrowed alias of the component in your app.
 
-The shadcn-registry (copy-paste) version is plain shadcn source with none of this — edit the files directly.
+### Text & translations — `UIProvider`
+
+```tsx
+'use client'
+import { UIProvider } from '@glraj/ui/ui-provider'
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <UIProvider
+      text={{
+        enterPlaceholder: label => `Saisir ${label}`,
+        selectPlaceholder: label => `Choisir ${label}`,
+        noItems: 'Aucun résultat',
+      }}
+    >
+      {children}
+    </UIProvider>
+  )
+}
+```
+
+### Router links
+
+```tsx
+import Link from 'next/link' // or react-router, TanStack Router, …
+import { NavigationMenuWrapper } from '@glraj/ui/navigation-menu-wrapper'
+
+<NavigationMenuWrapper linkAs={Link} items={items} />
+```
+
+## Prefer copying the source?
+
+Every component is also published to a [shadcn registry](https://ui.shadcn.com/docs/registry) — copy it into your project and edit freely:
+
+```bash
+npx shadcn@latest add https://ui.glrk.dev/registry/select.json
+```
+
+The registry version is plain shadcn source; `configureUI` is an npm-package feature.
 
 ## Upgrading from 0.1
 
 - `data-table` targets TanStack Table v9: `useTable` → `useDataTable`, column types are `AppColumnDef`, read state from `table.state`.
 - Option types are no longer global — import them from `@glraj/ui/types` (or keep your own global declarations).
 - `CollapsibleTrigger` no longer adds a chevron by default (`CollapsibleWrapper` still does); pass `indicatorAt`.
-- `navigation-menu-wrapper` no longer imports `next/link`; pass `linkAs`.
-- `Button`, `Input`, `Textarea`, `Card`, `Switch` follow current shadcn styles; `Switch` gains `size`.
+- `navigation-menu-wrapper` no longer imports `next/link`; pass `linkAs`. The `next` peer dependency is gone.
+- `Card` and `Switch` follow current shadcn styles; `Switch` gains a `size` prop.
 - `field-wrapper-rhf` wrappers accept every prop of the underlying field and call your own `onChange` / `onBlur` / `onValueChange` after updating the form.
+- New: `@glraj/ui/config` (`configureUI`) and `@glraj/ui/ui-provider` (`UIProvider`).
 
-## Prefer copying the source?
+## Links
 
-Every component is also available through the shadcn registry:
+- Docs: https://ui.glrk.dev
+- Source: https://github.com/glRajkumar/ui
+- Issues: https://github.com/glRajkumar/ui/issues
 
-```bash
-npx shadcn@latest add https://ui.glrk.dev/registry/select.json
-```
+## License
+
+MIT

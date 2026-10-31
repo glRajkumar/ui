@@ -1,13 +1,33 @@
 {
   "name": "@glraj/ui",
   "version": "0.2.0",
-  "description": "Opinionated, type-safe wrappers around shadcn/ui (Base UI) components.",
+  "description": "Type-safe shadcn/ui wrappers on Base UI and Tailwind CSS v4: one-line Select, Combobox, menus, form fields, date picker and data table.",
+  "keywords": [
+    "react",
+    "shadcn",
+    "shadcn-ui",
+    "base-ui",
+    "tailwindcss",
+    "tailwind-v4",
+    "components",
+    "ui",
+    "design-system",
+    "react-hook-form",
+    "tanstack-table",
+    "tanstack-form",
+    "nextjs",
+    "typescript"
+  ],
+  "author": "Raj kumar",
   "license": "MIT",
   "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "homepage": "https://ui.glrk.dev",
+  "bugs": {
+    "url": "https://github.com/glRajkumar/ui/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/glRajkumar/ui.git",
