@@ -1,0 +1,321 @@
+---
+title: npm package
+description: Install @glraj/ui as a dependency, set up styles, and theme the components app-wide with configureUI.
+---
+
+Prefer a dependency over copied source? Every wrapper is published as [`@glraj/ui`](https://www.npmjs.com/package/@glraj/ui). You get fixes by bumping the version, and you can still restyle the base components app-wide with [`configureUI`](#app-wide-styles-configureui).
+
+## Installation
+
+```npm
+npm i @glraj/ui @base-ui/react lucide-react
+```
+
+Requires **React 19** and **Tailwind CSS v4**. Some components need extra peer dependencies — install only the ones you use (each component page lists them in its **npm** tab):
+
+| Component | Peer dependencies |
+| --- | --- |
+| `data-table` | `@tanstack/react-table` (v9), `@tanstack/react-virtual` |
+| `autocomplete-virtualised`, `combobox-virtualised` | `@tanstack/react-virtual` |
+| `date-picker`, `field-wrapper*` | `@daypicker/react`, `date-fns` |
+| `carousel` | `embla-carousel-react` |
+| `field-wrapper-rhf` | `react-hook-form` |
+| `field-wrapper-tf` | `@tanstack/react-form` |
+
+## Styles
+
+Add to your global CSS:
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* shadcn theme tokens — skip if your app already defines them */
+@import "@glraj/ui/theme.css";
+
+/* lets Tailwind see the package's class names */
+@import "@glraj/ui/styles.css";
+```
+
+<Callout type="warn">
+  Without `@glraj/ui/styles.css`, Tailwind never scans the package and the components render unstyled.
+</Callout>
+
+`styles.css` makes Tailwind generate the classes of every component in the package. Classes shared with your app (`flex`, `px-2`, …) are generated once, so the extra CSS is only what's unique to components you don't use — typically a few kB gzipped.
+
+## Usage
+
+Each component has its own entry point, so you only bundle what you import:
+
+```tsx
+import { Button } from "@glraj/ui/button"
+import { SelectWrapper } from "@glraj/ui/select"
+import { DataTable, useDataTable } from "@glraj/ui/data-table"
+import { cn, parseAllowedPrimitive } from "@glraj/ui/utils"
+```
+
+In the examples across these docs, replace `@/components/ui/` with `@glraj/ui/` and `@/lib/utils` with `@glraj/ui/utils`.
+
+Option types are exported — the package adds nothing to your global scope:
+
+```tsx
+import type { itemsT, menuItemsT, allowedPrimitiveT } from "@glraj/ui/types"
+```
+
+<Callout>
+  Use `cn` from `@glraj/ui/utils` in your app too (e.g. `export { cn } from "@glraj/ui/utils"` in your own `lib/utils.ts`). Your app and the package then merge classes the same way, and you ship one class-merging library instead of two.
+</Callout>
+
+---
+
+## App-wide styles (`configureUI`)
+
+`configureUI` changes how the base components look **everywhere** — including inside composed components (dialog footers, pagination, data-table menus, date picker, …) — without forking the package.
+
+| Key | Accepts | Affects |
+| --- | --- | --- |
+| `button` | a `cva()` function, or `(props, base) => string` | `Button` and everything that renders or styles like it |
+| `badge` | same as `button` | `Badge` |
+| `toggle` | same as `button` | `Toggle`, `ToggleGroupItem` |
+| `input` | a class string, or `(base) => string` | `Input` (also inside `InputGroup`) |
+| `textarea` | a class string, or `(base) => string` | `Textarea` |
+
+Every key is optional — without `configureUI` the components use their default look. Calling it again merges keys (a later value for the same key replaces the earlier one).
+
+**Merge order:** library classes → your `configureUI` classes → per-instance `className`. Conflicting classes are resolved by tailwind-merge, so your config replaces library defaults and a `className` on one element still wins.
+
+### Where to call it
+
+Create one file and import it before any component renders.
+
+```ts title="src/lib/ui-config.ts"
+import { configureUI } from "@glraj/ui/config"
+import { cn } from "@glraj/ui/utils"
+
+configureUI({
+  // …see the use cases below
+})
+```
+
+It is module-level state (not React context), so import it once in every JavaScript runtime that renders components:
+
+<Tabs items={['Next.js (App Router)', 'Vite / SPA', 'Remix / TanStack Start']}>
+<Tab value="Next.js (App Router)">
+
+Server and client code run as separate module graphs — import it in both:
+
+```tsx title="app/layout.tsx"
+import "./globals.css"
+import "@/lib/ui-config" // server components (Badge, Input, Textarea, buttonVariants())
+```
+
+```tsx title="app/providers.tsx"
+"use client"
+
+import "@/lib/ui-config" // client components (SSR + browser)
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return children
+}
+```
+
+</Tab>
+<Tab value="Vite / SPA">
+
+```tsx title="src/main.tsx"
+import "./lib/ui-config"
+import { createRoot } from "react-dom/client"
+import { App } from "./App"
+
+createRoot(document.getElementById("root")!).render(<App />)
+```
+
+</Tab>
+<Tab value="Remix / TanStack Start">
+
+Import it at the top of your root route module (rendered on the server and in the browser):
+
+```tsx title="app/root.tsx"
+import "./lib/ui-config"
+```
+
+</Tab>
+</Tabs>
+
+<Callout type="warn">
+  If a runtime misses the import, nothing breaks — components rendered there just use the default look. Missing the server import in Next.js shows up as default-styled `Badge` / `Input` in server components.
+</Callout>
+
+### Use case: tweak one variant
+
+Extend the library's classes — the original function arrives as `base`:
+
+```ts
+configureUI({
+  button: (props, base) =>
+    cn(base(props), props?.variant === "outline" && "shadow-xs"),
+})
+```
+
+### Use case: change sizes and spacing
+
+```ts
+const buttonSizes: Record<string, string> = {
+  default: "h-10 px-4",
+  sm: "h-8 px-3 text-sm",
+  lg: "h-12 px-6 text-base",
+}
+
+configureUI({
+  button: (props, base) => cn(base(props), buttonSizes[props?.size ?? "default"]),
+})
+```
+
+### Use case: replace a variant completely
+
+Extending can't remove a class that doesn't conflict with yours — e.g. the default variant's `[a]:hover:bg-primary/80` keeps winning over a custom `hover:bg-*` on link buttons. Ask `base` for no variant classes and supply your own:
+
+```ts
+const ownVariants: Record<string, string> = {
+  default: "bg-primary text-primary-foreground hover:bg-primary/90",
+}
+
+configureUI({
+  button: (props, base) => {
+    const variant = props?.variant ?? "default"
+    const own = ownVariants[variant]
+    return cn(base(own ? { ...props, variant: null } : props), own)
+  },
+})
+```
+
+### Use case: add a new variant
+
+```ts
+configureUI({
+  button: (props, base) =>
+    props?.variant === "brand"
+      ? cn(base({ ...props, variant: null }), "bg-pink-600 text-white hover:bg-pink-700")
+      : base(props),
+})
+```
+
+`variant="brand"` works at runtime. To type it, re-export a narrowed alias once and import `Button` from there:
+
+```tsx title="src/components/ui/button.tsx"
+import { Button as UIButton } from "@glraj/ui/button"
+
+type Props = Omit<React.ComponentProps<typeof UIButton>, "variant"> & {
+  variant?: React.ComponentProps<typeof UIButton>["variant"] | "brand"
+}
+
+export const Button = UIButton as (props: Props) => React.JSX.Element
+```
+
+### Use case: your own design system
+
+Pass a full `cva()` to replace the library's classes entirely:
+
+```ts
+import { cva } from "class-variance-authority"
+
+configureUI({
+  button: cva(
+    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors disabled:opacity-50",
+    {
+      variants: {
+        variant: {
+          default: "bg-primary text-primary-foreground hover:bg-primary/90",
+          outline: "border border-input bg-background hover:bg-muted",
+          secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          ghost: "hover:bg-muted",
+          destructive: "bg-destructive text-white hover:bg-destructive/90",
+          link: "text-primary underline-offset-4 hover:underline",
+        },
+        size: {
+          default: "h-10 px-5",
+          xs: "h-7 px-2 text-xs",
+          sm: "h-8 px-3 text-sm",
+          lg: "h-12 px-7",
+          icon: "size-10",
+          "icon-xs": "size-7",
+          "icon-sm": "size-8",
+          "icon-lg": "size-12",
+        },
+      },
+      defaultVariants: { variant: "default", size: "default" },
+    },
+  ),
+})
+```
+
+Keep every variant and size name the library uses — composed components pass them (e.g. dialog footers use `outline`, the calendar uses `ghost`).
+
+### Use case: form fields
+
+`input` and `textarea` receive the library's class string as `base`:
+
+```ts
+const fieldCls = "h-10 px-3 text-base md:text-sm rounded-lg"
+
+configureUI({
+  input: base => cn(base, fieldCls),     // extend
+  textarea: base => cn(base, fieldCls),
+  // input: "h-10 w-full rounded-lg border …", // or replace with a full string
+})
+```
+
+### Use case: badges and toggles
+
+```ts
+configureUI({
+  badge: (props, base) => cn(base(props), "rounded-md px-2.5"),
+  toggle: (props, base) => cn(base(props), "data-pressed:bg-primary data-pressed:text-primary-foreground"),
+})
+```
+
+### Use case: one theme across several apps
+
+Put the config in a shared package (or a workspace package in a monorepo) and import it from each app's entry points:
+
+```ts title="packages/theme/index.ts"
+import { configureUI } from "@glraj/ui/config"
+
+configureUI({ /* … */ })
+```
+
+```tsx title="apps/web/app/layout.tsx"
+import "@acme/theme"
+```
+
+### Rules of thumb
+
+- Don't call the exported `buttonVariants` / `badgeVariants` inside an override — they already route through `configureUI`. Use the `base` argument.
+- Per-instance `className` is always merged last, so one-off tweaks keep working without `!`.
+- Colours belong in the theme CSS variables (`--primary`, `--radius`, …); use `configureUI` for shape, spacing, sizes and states.
+
+---
+
+## Text and i18n
+
+`UIProvider` from `@glraj/ui/ui-provider` overrides every built-in string — see [Text and i18n](/docs/shadcn-wrappers#text-and-i18n).
+
+## Router links
+
+`NavigationMenuWrapper`, `NavList` and `NavLinkItem` render a plain `<a>` by default. Pass your router's link for client-side navigation:
+
+```tsx
+import Link from "next/link" // or react-router, TanStack Router, …
+
+<NavigationMenuWrapper linkAs={Link} items={items} />
+```
+
+## Upgrading from 0.1
+
+- `data-table` targets TanStack Table v9: `useTable` → `useDataTable`, column types are `AppColumnDef`, read state from `table.state`.
+- Option types are no longer global — import them from `@glraj/ui/types` (or keep your own global declarations).
+- `CollapsibleTrigger` no longer adds a chevron by default (`CollapsibleWrapper` still does); pass `indicatorAt`.
+- `navigation-menu-wrapper` no longer imports `next/link`; pass `linkAs`. The `next` peer dependency is gone.
+- `Card` and `Switch` follow current shadcn styles; `Switch` gains a `size` prop.
+- `field-wrapper-rhf` wrappers accept every prop of the underlying field and call your own `onChange` / `onBlur` / `onValueChange` after updating the form.
+- New: `@glraj/ui/config` (`configureUI`) and `@glraj/ui/ui-provider` (`UIProvider`).

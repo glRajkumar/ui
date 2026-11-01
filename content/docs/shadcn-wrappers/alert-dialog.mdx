@@ -18,7 +18,7 @@ import { AlertDialogEx } from "@/components/examples";
 npx shadcn@latest add @glrk-ui/alert-dialog
 ```
 
-If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+If you haven't set up the prerequisites yet, check out [registry setup](/docs/shadcn-wrappers/registry).
 
 </Tab>
 
@@ -40,7 +40,7 @@ npm i @glraj/ui
 
 Import from `@glraj/ui/alert-dialog`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
 
-If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
+If you haven't set up the package yet, check out [npm setup](/docs/shadcn-wrappers/npm).
 
 </Tab>
 </Tabs>
@@ -226,14 +226,14 @@ type={`export interface AlertDialogFooterWrapper {
   /**
    * Text or element for the cancel button.
    * Set to \`""\` or \`null\` to hide.
-   * @default "Cancel"
+   * @default "Cancel" — set app-wide via \`UIProvider\` \`cancel\`
    */
   cancel?: React.ReactNode;
 
   /**
    * Text or element for the action button.
    * Set to \`""\` or \`null\` to hide.
-   * @default "Confirm"
+   * @default "Confirm" — set app-wide via \`UIProvider\` \`confirm\`
    */
   action?: React.ReactNode;
 
@@ -305,7 +305,7 @@ type={`export interface AlertDialogWrapper {
 
   /**
    * Dialog title.
-   * @default "Are you absolutely sure?"
+   * @default "Are you absolutely sure?" — set app-wide via \`UIProvider\` \`confirmTitle\`
    */
   title?: React.ReactNode;
 

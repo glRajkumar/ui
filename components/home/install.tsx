@@ -4,11 +4,13 @@ import path from 'path'
 import fs from 'fs'
 import { CodeBlock } from '../extended/code-block'
 
+const nonComponentPages = ['index.mdx', 'registry.mdx', 'npm.mdx']
+
 async function Install() {
   const folderPath = path.join(process.cwd(), 'content/docs/shadcn-wrappers')
   const files = await fs.promises.readdir(folderPath)
   const filtered = files
-    .filter(f => f.endsWith('.mdx') && f !== 'index.mdx' && f !== 'meta.json')
+    .filter(f => f.endsWith('.mdx') && !nonComponentPages.includes(f))
     .map(f => f.replace('.mdx', ''))
 
   return (
@@ -54,7 +56,7 @@ async function Install() {
       <div className="mt-8 text-center">
         <p className="pb-2">
           Prefer a dependency? Install the{' '}
-          <Link href="/docs/shadcn-wrappers#npm-package" className="font-medium underline">
+          <Link href="/docs/shadcn-wrappers/npm" className="font-medium underline">
             npm package
           </Link>
           .

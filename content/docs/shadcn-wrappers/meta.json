@@ -4,7 +4,10 @@
   "icon": "Blocks",
   "root": true,
   "pages": [
+    "---Getting Started---",
     "index",
+    "registry",
+    "npm",
     "---Overlays---",
     "alert-dialog",
     "dialog",

@@ -17,7 +17,7 @@ import { NavigationMenuEx } from "@/components/examples";
 npx shadcn@latest add @glrk-ui/navigation-menu
 ```
 
-If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+If you haven't set up the prerequisites yet, check out [registry setup](/docs/shadcn-wrappers/registry).
 
 </Tab>
 
@@ -43,9 +43,9 @@ npm i @glraj/ui
 
 Import from `@glraj/ui/navigation-menu`, `@glraj/ui/navigation-menu-wrapper`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
 
-Requires Next.js (uses `next/link`).
+Renders plain `<a>` links by default. Pass `linkAs={Link}` from your router (Next.js, React Router, TanStack Router, …) for client-side navigation.
 
-If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
+If you haven't set up the package yet, check out [npm setup](/docs/shadcn-wrappers/npm).
 
 </Tab>
 </Tabs>
@@ -202,6 +202,18 @@ import { NavLinkItem } from "@/components/ui/navigation-menu-wrapper"
 <NavLinkItem href="/dashboard">Dashboard</NavLinkItem>
 ```
 
+### Router links
+
+Links render a plain `<a>` by default. Pass your router's link component for client-side navigation:
+
+```tsx
+import Link from "next/link" // or react-router, TanStack Router, …
+
+<NavigationMenuWrapper linkAs={Link} items={items} />
+<NavList linkAs={Link} items={links} />
+<NavLinkItem linkAs={Link} href="/dashboard">Dashboard</NavLinkItem>
+```
+
 ## Reference
 
 #### NavigationMenuWrapper
@@ -230,6 +242,12 @@ type={`export interface NavigationMenuWrapper {
    * \`\`\`
    */
   items: navMenuItemsT;
+
+  /**
+   * Link component used for link items, e.g. \`Link\` from next/link or react-router.
+   * @default "a"
+   */
+  linkAs?: React.ElementType;
 
   /**
    * Uncontrolled initial open item. Use the item's key value.
@@ -312,6 +330,12 @@ type={`export interface NavList {
    * CSS class applied to the \`<ul>\` wrapper.
    */
   wrapperCls?: string;
+
+  /**
+   * Link component used for every item.
+   * @default "a"
+   */
+  linkAs?: React.ElementType;
 }`}
 />
 
@@ -330,7 +354,13 @@ type={`export interface NavLinkItem {
   className?: string;
 
   /**
-   * ...otherProps: All Next.js Link props (href, prefetch, replace, etc.)
+   * Link component to render.
+   * @default "a"
+   */
+  linkAs?: React.ElementType;
+
+  /**
+   * ...otherProps: All anchor props (href, target, rel, …)
    */
   otherProps?: never;
 }`}

@@ -17,7 +17,7 @@ import { DatePickerEx } from "@/components/examples";
 npx shadcn@latest add @glrk-ui/date-picker
 ```
 
-If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+If you haven't set up the prerequisites yet, check out [registry setup](/docs/shadcn-wrappers/registry).
 
 </Tab>
 
@@ -59,7 +59,7 @@ npm i @glraj/ui @daypicker/react date-fns
 
 Import from `@glraj/ui/date-picker`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
 
-If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
+If you haven't set up the package yet, check out [npm setup](/docs/shadcn-wrappers/npm).
 
 </Tab>
 </Tabs>
@@ -305,7 +305,7 @@ type={`export interface DatePicker {
 
   /**
    * Text shown in the trigger when no date is selected.
-   * @default "Pick a date"
+   * @default "Pick a date" — set app-wide via \`UIProvider\` \`pickDate\`
    */
   placeholder?: string;
 

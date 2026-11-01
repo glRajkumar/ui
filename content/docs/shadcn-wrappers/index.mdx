@@ -1,155 +1,49 @@
 ---
 title: Introduction
-description: Type-safe UI component wrappers built on Base UI and Shadcn primitives, installed via the shadcn CLI or as the @glraj/ui npm package
+description: Type-safe UI component wrappers built on Base UI and shadcn primitives — copy them with the shadcn CLI or install the @glraj/ui npm package.
 ---
-
-# UI Component Wrappers
 
 ## Overview
 
-These are opinionated wrappers built on top of [Base UI](https://base-ui.com) and [Shadcn](https://ui.shadcn.com) primitives. Directly composing raw primitives throughout an application leads to verbose, repetitive code — these wrappers give you a clean, consistent API while keeping full access to the underlying Base UI or Shadcn UI components when you need advanced control.
+These are opinionated wrappers built on top of [Base UI](https://base-ui.com) and [shadcn/ui](https://ui.shadcn.com) primitives. Composing raw primitives throughout an application leads to verbose, repetitive code — the wrappers give you a clean, consistent API while keeping full access to the underlying primitives when you need advanced control.
+
+```tsx
+<SelectWrapper
+  placeholder="Pick a fruit"
+  items={["Apple", "Banana", { label: "Cherry", value: "cherry" }]}
+/>
+```
 
 ## Key Benefits
 
-- **Reduced Boilerplate**: Eliminate repetitive primitive composition patterns
-- **Type Safety**: Built-in TypeScript support for common value types
-- **Consistent API**: Standardized interface across similar components
-- **Flexibility**: Preserve access to underlying Base UI and shadcn primitives for advanced use cases
+- **Reduced boilerplate** — pass an `items` array instead of composing triggers, portals, lists and items by hand.
+- **Type safety** — built-in types for option values, groups, separators and menus.
+- **Consistent API** — the same item format works across Select, Combobox, Autocomplete, Radio, Checkbox, Toggle and every menu.
+- **Flexibility** — every file also exports the plain shadcn parts for advanced use cases.
+- **Framework-agnostic** — nothing depends on Next.js; router links are passed in.
+- **i18n ready** — every built-in string can be translated through `UIProvider`.
 
----
+## Get started
 
-## Prerequest
-- shadcn base setup
-- add following to your `components.json` at `registries` block
+Use the components in one of two ways — pick the one that fits your project:
 
-```json
-{
-  "registries": {
-    "@glrk-ui": "https://ui.glrk.dev/registry/{name}.json"
-  }
-}
-```
+<Cards>
+  <Card title="shadcn registry" href="/docs/shadcn-wrappers/registry">
+    Copy the source into your project with the shadcn CLI. Full control: edit the files directly.
+  </Card>
+  <Card title="npm package" href="/docs/shadcn-wrappers/npm">
+    Install `@glraj/ui` as a dependency. Update by bumping the version; theme app-wide with `configureUI`.
+  </Card>
+</Cards>
 
----
-
-## npm Package
-
-Prefer a dependency over copied source? Every wrapper is also published as [`@glraj/ui`](https://www.npmjs.com/package/@glraj/ui). Same code as the registry — you get fixes by bumping the version instead of re-adding files.
-
-| | Registry (shadcn CLI) | npm package |
+| | shadcn registry | npm package |
 | --- | --- | --- |
 | Code lives in | your project | `node_modules` |
-| Customise | edit the files directly | `className` / props only |
-| Updates | re-run `shadcn add` (overwrites edits) | bump `@glraj/ui` |
+| Customise | edit the files directly | `configureUI`, `className` / `*Cls` props |
+| Updates | re-run `shadcn add` (overwrites your edits) | bump `@glraj/ui` |
+| Imports | `@/components/ui/<name>` | `@glraj/ui/<name>` |
 
-### Install
-
-```npm
-npm i @glraj/ui @base-ui/react lucide-react
-```
-
-Some wrappers need extra peer dependencies. Each component page lists them in its **npm** install tab.
-
-| Component | Peer dependencies |
-| --- | --- |
-| `data-table` | `@tanstack/react-table` (v9), `@tanstack/react-virtual` |
-| `autocomplete-virtualised`, `combobox-virtualised` | `@tanstack/react-virtual` |
-| `date-picker`, `field-wrapper*` | `@daypicker/react`, `date-fns` |
-| `carousel` | `embla-carousel-react` |
-| `field-wrapper-rhf` | `react-hook-form` |
-| `field-wrapper-tf` | `@tanstack/react-form` |
-
-No framework lock-in: nothing depends on Next.js. Router-aware links are passed in (see [Links](#links)).
-
-### Styles
-
-Requires Tailwind CSS v4. Add to your global CSS:
-
-```css title="globals.css"
-@import "tailwindcss";
-@import "tw-animate-css";
-
-/* shadcn theme tokens — skip if your app already defines them */
-@import "@glraj/ui/theme.css";
-
-/* lets Tailwind scan the package's classes */
-@import "@glraj/ui/styles.css";
-```
-
-<Callout type="warn">
-  Without `@glraj/ui/styles.css`, Tailwind never sees the package's class names and the components render unstyled.
-</Callout>
-
-### Usage
-
-Each wrapper has its own entry point, so you only bundle what you import:
-
-```tsx
-import { SelectWrapper } from "@glraj/ui/select"
-import { DataTable } from "@glraj/ui/data-table"
-import { cn, parseAllowedPrimitive } from "@glraj/ui/utils"
-```
-
-In the examples across these docs, replace `@/components/ui/` with `@glraj/ui/` and `@/lib/utils` with `@glraj/ui/utils`.
-
-The [types](#type-definitions) below (`itemT`, `itemsT`, `allowedPrimitiveT`, …) are exported from `@glraj/ui/types` — the package adds nothing to your global scope:
-
-```tsx
-import type { itemsT, menuItemsT } from "@glraj/ui/types"
-```
-
-### Text and i18n
-
-Every built-in string (field placeholders, loading / empty states, pagination labels, close / cancel buttons, screen-reader labels) comes from `UIProvider`. Override any subset once at the app root — props on a component still win:
-
-```tsx title="providers.tsx"
-"use client"
-
-import { UIProvider } from "@glraj/ui/ui-provider"
-
-export function Providers({ children }: { children: React.ReactNode }) {
-  const t = useTranslations("common") // any i18n library
-
-  return (
-    <UIProvider
-      text={{
-        enterPlaceholder: label => t("enterPlaceholder", { label }),
-        selectPlaceholder: label => t("selectPlaceholder", { label }),
-        noItems: t("noItems"),
-        rowsPerPage: t("rowsPerPage"),
-      }}
-    >
-      {children}
-    </UIProvider>
-  )
-}
-```
-
-### Links
-
-`NavigationMenuWrapper`, `NavList` and `NavLinkItem` render a plain `<a>` by default. Pass your router's link for client-side navigation:
-
-```tsx
-import Link from "next/link" // or react-router, TanStack Router, …
-
-<NavigationMenuWrapper linkAs={Link} items={items} />
-```
-
-### Overriding styles
-
-Pass `className` (and the `*Cls` props on wrappers) for one-off changes. To restyle a component everywhere without forking it, target its `data-slot` from your global CSS. Keep these rules outside any `@layer` — unlayered CSS wins over Tailwind utilities (including per-instance `className`, so use it only for app-wide defaults):
-
-```css title="globals.css"
-[data-slot="button"] {
-  @apply rounded-full;
-}
-
-[data-slot="card-footer"] {
-  @apply border-t bg-muted/50;
-}
-```
-
-Theme colours, radius and fonts come from CSS variables (`--primary`, `--radius`, …), so a theme change needs no component overrides at all.
+Examples across these docs use the registry paths (`@/components/ui/…`). With the npm package, replace `@/components/ui/` with `@glraj/ui/` and `@/lib/utils` with `@glraj/ui/utils`.
 
 ---
 
@@ -163,19 +57,13 @@ The wrapper system supports three primitive value types that cover the majority 
   ./types/general.d.ts
 </include>
 
+With the registry these are global declaration files; the npm package exports them instead (`import type { itemsT } from "@glraj/ui/types"`).
+
 ### Design Rationale
 
 **Primitive Type Restriction**: The system intentionally limits allowed values to `string`, `number`, and `boolean`. These types handle the vast majority of form scenarios.
 
 **Empty Values**: Use empty strings (`""`) for empty values, or omit the property entirely. Extend the type system as needed for your specific requirements.
-
----
-
-## Utility Functions
-
-<include cwd meta='title="lib/utils.ts"'>
-  ./lib/utils.ts
-</include>
 
 ---
 
@@ -191,31 +79,31 @@ const items: itemsT = [
   "Data 1",
   false,
   12,
-  
+
   // Visual separator
   "---",
-  
+
   // Object format with custom label
   {
     label: "Obj 1",
-    value: "obj-1", 
+    value: "obj-1",
   },
-  
+
   // Object with custom styling
   {
     label: "Obj 2",
     value: "obj-2",
     className: "bg-red-50",
   },
-  
+
   // Rich content with React nodes
   {
     value: "apple",
     label: <><Apple className="mr-2" /> Apple</>
   },
-  
+
   "---",
-  
+
   // Grouped items
   {
     group: "Group 1",
@@ -226,7 +114,7 @@ const items: itemsT = [
       { value: "banana", label: <><Banana className="mr-2" /> Banana</> }
     ],
   },
-  
+
   // Grouped items with styling
   {
     group: "Group 2",
@@ -289,6 +177,43 @@ const [value, setValue] = useState<allowedPrimitiveT>(true)
 
 ---
 
-### Next Steps
+## Text and i18n
 
-With this foundation in place, you can use the wrapper components for common UI elements. Checkout the wrappers.
+Every built-in string — field placeholders, loading / empty states, pagination labels, close / cancel buttons, screen-reader labels — comes from `UIProvider`. Wrap your app once and override any subset; props on a component still win. Works the same with the registry (`@/components/ui/ui-provider`) and the npm package (`@glraj/ui/ui-provider`).
+
+```tsx title="providers.tsx"
+"use client"
+
+import { UIProvider } from "@/components/ui/ui-provider"
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("common") // any i18n library
+
+  return (
+    <UIProvider
+      text={{
+        enterPlaceholder: label => t("enterPlaceholder", { label }),
+        selectPlaceholder: label => t("selectPlaceholder", { label }),
+        loading: t("loading"),
+        noItems: t("noItems"),
+        rowsPerPage: t("rowsPerPage"),
+        pageOf: (page, pageCount) => t("pageOf", { page, pageCount }),
+      }}
+    >
+      {children}
+    </UIProvider>
+  )
+}
+```
+
+<include cwd meta='title="ui/ui-provider.tsx (available keys and defaults)"'>
+  ./components/ui/ui-provider.tsx
+</include>
+
+---
+
+## Utility Functions
+
+<include cwd meta='title="lib/utils.ts"'>
+  ./lib/utils.ts
+</include>

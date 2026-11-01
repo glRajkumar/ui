@@ -1,0 +1,67 @@
+---
+title: shadcn registry
+description: Copy the components into your project with the shadcn CLI and own the source.
+---
+
+The registry copies each component's source into your project — the same way shadcn/ui works. You own the code: change classes, variants or behaviour by editing the files.
+
+## Prerequisites
+
+- A project with the [shadcn base setup](https://ui.shadcn.com/docs/installation) (React 19, Tailwind CSS v4, `components.json`). The components are built on [Base UI](https://base-ui.com), so pick a Base UI style (e.g. `base-nova`) when initialising.
+- Add the registry to the `registries` block of your `components.json`:
+
+```json title="components.json"
+{
+  "registries": {
+    "@glrk-ui": "https://ui.glrk.dev/registry/{name}.json"
+  }
+}
+```
+
+## Add components
+
+```npm
+npx shadcn@latest add @glrk-ui/select
+```
+
+Add several at once:
+
+```npm
+npx shadcn@latest add @glrk-ui/select @glrk-ui/combobox @glrk-ui/dialog
+```
+
+The CLI installs everything a component needs:
+
+- the component file(s) in `components/ui/`
+- shared helpers — `lib/utils.ts`, `lib/menu.ts`, `components/ui/ui-provider.tsx`
+- the global option types in `types/general.d.ts` and `types/menu.d.ts`
+- npm dependencies (e.g. `@tanstack/react-table` for the data table)
+
+Each component page lists its exact command in the **CLI** tab, and the **Manual** tab shows every file if you prefer copying by hand.
+
+<Callout type="warn">
+  Re-running `shadcn add` for a component overwrites your local edits to its files. Commit before updating, then re-apply your changes.
+</Callout>
+
+## Usage
+
+Import from your own `components/ui` folder:
+
+```tsx
+import { SelectWrapper } from "@/components/ui/select"
+import { DialogWrapper } from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
+```
+
+Option types (`itemT`, `itemsT`, `allowedPrimitiveT`, …) are global declarations, available without an import.
+
+## Customising
+
+- **Styles and variants** — edit the `cva()` / class strings in the copied files directly. To add a variant, add it to the `variants` object; TypeScript picks it up automatically.
+- **Theme** — colours, radius and fonts come from the shadcn CSS variables (`--primary`, `--radius`, …) in your global CSS.
+- **Text / i18n** — wrap your app in `UIProvider`; see [Text and i18n](/docs/shadcn-wrappers#text-and-i18n).
+- **Router links** — `NavigationMenuWrapper`, `NavList` and `NavLinkItem` take a `linkAs` prop, e.g. `linkAs={Link}` from `next/link`.
+
+## Updating
+
+To pull in fixes, re-run the add command for the components you want to update and review the diff. Components you never edited can be updated safely; for edited ones, merge your changes back in.

@@ -23,7 +23,7 @@ Data table with virtualization.
 npx shadcn@latest add @glrk-ui/data-table @glrk-ui/data-table-virtual
 ```
 
-If you haven't set up the prerequisites yet, check out [Prerequest section](/docs/shadcn-wrappers#prerequest).
+If you haven't set up the prerequisites yet, check out [registry setup](/docs/shadcn-wrappers/registry).
 
 </Tab>
 
@@ -114,12 +114,12 @@ export * from "./use-table";
 <Tab value="npm">
 
 ```npm
-npm i @glraj/ui @tanstack/react-table @tanstack/react-virtual
+npm i @glraj/ui @tanstack/react-table@^9 @tanstack/react-virtual
 ```
 
 Import from `@glraj/ui/data-table`. In the usage examples below, replace `@/components/ui/` with `@glraj/ui/`.
 
-If you haven't set up the package yet, check out [npm package section](/docs/shadcn-wrappers#npm-package).
+If you haven't set up the package yet, check out [npm setup](/docs/shadcn-wrappers/npm).
 
 </Tab>
 </Tabs>
@@ -411,7 +411,7 @@ type={`export interface DataTable {
 
   /**
    * Message displayed when search returns no results or shown when no rows
-   * @default No matching results.
+   * @default No matching results. — set app-wide via \`UIProvider\` \`noResults\`
    */
   emptyMessage?: string
 
@@ -433,7 +433,7 @@ type={`export interface DataTableVirtualized {
 
   /**
    * Message displayed when search returns no results or shown when no rows
-   * @default No matching results.
+   * @default No matching results. — set app-wide via \`UIProvider\` \`noResults\`
    */
   emptyMessage?: string
 
