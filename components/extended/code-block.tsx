@@ -17,9 +17,6 @@ export function CodeBlock({ children, title, className, ...rest }: props) {
         title,
         className: cn('my-0', className),
       }}
-      components={{
-        pre: Base.Pre,
-      }}
     />
   )
 }

@@ -309,13 +309,3 @@ import Link from "next/link" // or react-router, TanStack Router, …
 
 <NavigationMenuWrapper linkAs={Link} items={items} />
 ```
-
-## Upgrading from 0.1
-
-- `data-table` targets TanStack Table v9: `useTable` → `useDataTable`, column types are `AppColumnDef`, read state from `table.state`.
-- Option types are no longer global — import them from `@glraj/ui/types` (or keep your own global declarations).
-- `CollapsibleTrigger` no longer adds a chevron by default (`CollapsibleWrapper` still does); pass `indicatorAt`.
-- `navigation-menu-wrapper` no longer imports `next/link`; pass `linkAs`. The `next` peer dependency is gone.
-- `Card` and `Switch` follow current shadcn styles; `Switch` gains a `size` prop.
-- `field-wrapper-rhf` wrappers accept every prop of the underlying field and call your own `onChange` / `onBlur` / `onValueChange` after updating the form.
-- New: `@glraj/ui/config` (`configureUI`) and `@glraj/ui/ui-provider` (`UIProvider`).

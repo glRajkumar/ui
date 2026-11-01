@@ -44,7 +44,7 @@ async function Install() {
           <strong className="font-medium">Note:</strong> Before proceeding, make sure you have the
           shadcn base setup and apply the following updates.
         </p>
-        <CodeBlock title="components.json" className="max-w-md mx-auto">
+        <CodeBlock title="components.json" className="max-w-lg mx-auto">
           {`{
   "registries": {
     "@glrk-ui": "https://ui.glrk.dev/registry/{name}.json"
